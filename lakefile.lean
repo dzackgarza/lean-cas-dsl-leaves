@@ -12,7 +12,7 @@ package «cas_leaves» where
   version := v!"0.1.0"
 
 require cas_leaf_contracts from git
-  "https://github.com/dzackgarza/lean-cas-dsl-leaf-contracts" @ "32e01399fd182b4dc9faf06ae8f7534042a5e1c9"
+  "https://github.com/dzackgarza/lean-cas-dsl-leaf-contracts" @ "d9a2bc6a72d4c561338666efda86359ee07dbb40"
 
 require lean_categories from git
   "https://github.com/dzackgarza/lean-categories" @ "9ab8693e97ac0c6ec76ac8b4b696ddc3455becd7"
