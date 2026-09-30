@@ -1,5 +1,12 @@
 # Computational leaves of lean-cas-dsl
 
+> **You have no memory.** Nothing that exists only in chat survives compaction or the session.
+> Every correction, finding and decision request is committed to its owning document first
+> ([`lean-cas-dsl/AGENTS.md`](https://github.com/dzackgarza/lean-cas-dsl/blob/main/AGENTS.md),
+> "You have no memory"). The orchestrator is inside the threat model
+> (`lean-cas-dsl/specs/architecture.md`).
+
+
 [`lean-cas-dsl/specs/architecture.md`](https://github.com/dzackgarza/lean-cas-dsl/blob/main/specs/architecture.md)
 owns the separation of concerns. A leaf is a realization: it says how presentations of objects
 that are already formal in `lean-categories` are computed, in any language, arbitrarily ugly
