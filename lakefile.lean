@@ -15,7 +15,7 @@ require cas_leaf_contracts from git
   "https://github.com/dzackgarza/lean-cas-dsl-leaf-contracts" @ "5388ca311db9d136e1e1801264f1eeb51f4f3554"
 
 require lean_categories from git
-  "https://github.com/dzackgarza/lean-categories" @ "fa10a86516abeef73cd671afd5adb7aaef332249"
+  "https://github.com/dzackgarza/lean-categories" @ "efc02e86b09867161a47dc14557236813293ee39"
 
 @[default_target]
 lean_lib CasLeaves where
