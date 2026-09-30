@@ -1,0 +1,5 @@
+# The leaves ship no Lean. This file exists only so that `lean-cas-dsl` can `require cas_leaves`
+# as a Lake package and find `leaves.json` at its root (`Realize.Harness.load`). It has no
+# targets and no dependencies.
+name = "cas_leaves"
+version = "0.2.0"

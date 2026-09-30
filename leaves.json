@@ -1,0 +1,26 @@
+{
+  "backends": [
+    {"name": "sage", "command": "python3", "args": ["backends/sage_backend.py"]},
+    {"name": "gap", "command": "python3", "args": ["backends/gap_backend.py"]}
+  ],
+  "registrations": [
+    {"operation": "meth.cardinality", "input": "obj.sets.fin", "backend": "sage"},
+    {"operation": "meth.cardinality", "input": "obj.sets.naturals", "backend": "sage"},
+    {"operation": "meth.cardinality", "input": "obj.sets.positive_naturals", "backend": "sage"},
+    {"operation": "meth.cardinality", "input": "obj.sets.primes", "backend": "sage"},
+    {"operation": "meth.cardinality", "input": "obj.sets.integers", "backend": "sage"},
+    {"operation": "meth.cardinality", "input": "obj.sets.rationals", "backend": "sage"},
+    {"operation": "meth.cardinality", "input": "obj.sets.integers_mod", "backend": "gap"},
+    {"operation": "meth.cardinality", "input": "obj.sets.integers_mod_power", "backend": "gap"},
+    {"operation": "prop.is_finite", "input": "obj.sets.fin", "backend": "sage"},
+    {"operation": "prop.is_finite", "input": "obj.sets.naturals", "backend": "sage"},
+    {"operation": "prop.is_finite", "input": "obj.sets.positive_naturals", "backend": "sage"},
+    {"operation": "prop.is_finite", "input": "obj.sets.primes", "backend": "sage"},
+    {"operation": "prop.is_finite", "input": "obj.sets.integers", "backend": "sage"},
+    {"operation": "prop.is_finite", "input": "obj.sets.rationals", "backend": "sage"},
+    {"operation": "prop.is_finite", "input": "obj.sets.reals", "backend": "sage"},
+    {"operation": "prop.is_finite", "input": "obj.sets.complexes", "backend": "sage"},
+    {"operation": "prop.is_finite", "input": "obj.sets.integers_mod", "backend": "gap"},
+    {"operation": "prop.is_finite", "input": "obj.sets.integers_mod_power", "backend": "gap"}
+  ]
+}
