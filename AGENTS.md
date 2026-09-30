@@ -110,6 +110,28 @@ goes that meets the type of its contract: the system runs it and believes nothin
 its answers cross, and they are checked against the formal side, `lean-cas-dsl`'s acceptance suite,
 never believed.
 
+**A leaf is glue over existing backends.** This is what a leaf is for, following the precedent of
+`sage-categories` (`specs/leaves.md`, "Computation-engine boundary"; `AGENTS.md`, "Leaf categories
+and hand-rolled mathematics"):
+- **Wire, don't write.** A leaf wires a registered operation to a mature system that already
+  computes it: GAP, Sage, Singular, Macaulay2, Julia, SymPy or published research code. Its shape
+  is: declared input form, then engine input, then the engine's routine, then the engine result,
+  then the declared result form. The leaf owns that translation and the choice of routine, and
+  nothing else.
+- **No hand-rolled algorithms.** A leaf does not reimplement what an engine provides, and each
+  computation names the engine and routine it calls. New algorithmic code is written only when no
+  existing system supplies the computation, and the leaf says so with the evidence.
+- **No kernel machinery.** Dispatch, placement, propagation, composition, refinement and caching
+  are the kernel's, done generically. A leaf that finds itself doing any of them has found a gap in
+  the kernel or the contract, and reports it upstream (the litmus role below). It is never absorbed
+  into the leaf.
+- **Engine values stay private.** Engine objects and types live inside the leaf's program; only a
+  value of the declared result form crosses the port.
+
+This guides how leaves are written, and a separate engineering review checks it. Following it earns
+no trust. Correctness is judged only by the acceptance suite (the evidence model above, 9), and the
+firewall holds even for a leaf that ignores all of it.
+
 * **Authors.** Only the leaf subagent writes here, against the contract and catalogue on `main`.
   It is blind to the tests and never edits the contract, the kernel or `lean-categories`. The
   orchestrator delegates leaves and never writes, ports or polishes one
