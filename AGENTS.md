@@ -5,6 +5,13 @@ owns the separation of concerns. A leaf is a realization: it says how presentati
 that are already formal in `lean-categories` are computed, in any language, arbitrarily ugly
 internally. It contributes zero mathematics.
 
+* **Authors.** Only the leaf subagent writes here, against the released contract and catalogue.
+  It is blind to the tests and never edits the contract, the kernel or `lean-categories`. The
+  orchestrator delegates leaves and never writes, ports or polishes one
+  (`lean-cas-dsl/specs/architecture.md`, "Authors: one role per agent"). The leaves present in
+  this repository were written or kept alive by the orchestrator (`b818e4c`). They are quarantined
+  and are to be rewritten under this workflow, not ported (`gov-leaf-rewrite`).
+* **All leaves live here.** Probe leaves included; none belongs in `lean-cas-dsl`.
 * **Dependencies.** This package depends on the leaf contract (`lean-cas-dsl-leaf-contracts`) and
   `lean-categories` only. A leaf module imports `CasContract.Leaf`, `lean-categories` (with its
   catalogue), Mathlib and `CasLeaves.*`, and nothing else (`leafImportAllowed`, enforced by
