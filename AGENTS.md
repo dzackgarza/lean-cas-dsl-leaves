@@ -99,9 +99,13 @@ Consequences:
 
 
 [`lean-cas-dsl/specs/architecture.md`](https://github.com/dzackgarza/lean-cas-dsl/blob/main/specs/architecture.md)
-owns the separation of concerns. A leaf is a realization: it says how presentations of objects
-that are already formal in `lean-categories` are computed, in any language, arbitrarily ugly
-internally. It contributes zero mathematics.
+owns the separation of concerns. A leaf is a registration: it names an operation already formal in
+`lean-categories` and an input form, and supplies an opaque implementation computing the
+operation's declared result form, in any language, arbitrarily ugly internally. It contributes
+zero mathematics and ships no Lean. A leaf lives on the leaf side of the firewall, where anything
+goes that meets the type of its contract: the system runs it and believes nothing about it. Only
+its answers cross, and they are checked against the formal side, `lean-cas-dsl`'s acceptance suite,
+never believed.
 
 * **Authors.** Only the leaf subagent writes here, against the contract and catalogue on `main`.
   It is blind to the tests and never edits the contract, the kernel or `lean-categories`. The
@@ -111,21 +115,27 @@ internally. It contributes zero mathematics.
   and are to be rewritten under this workflow, not ported (`gov-leaf-rewrite`).
 * **All leaves live here.** Probe leaves included; none belongs in `lean-cas-dsl`.
 * **Dependencies.** This package depends on the leaf contract (`lean-cas-dsl-leaf-contracts`) and
-  `lean-categories` only. A leaf module imports `CasContract.Leaf`, `lean-categories` (with its
-  catalogue), Mathlib and `CasLeaves.*`, and nothing else (`leafImportAllowed`, enforced by
-  `register_leaf` and again by `cas-harness`).
+  `lean-categories` only. Every operation a leaf names is a row of `lean-categories`' catalogue.
+* **Nothing a leaf says is believed.** A leaf supplies no proof, denotation, identification of
+  values, presentation or observation proof, decision evidence, status, trust level, certificate
+  or checker, and nothing reads such a thing from it. A computation that can be carried out
+  entirely in Lean is not a leaf's: `lean-categories` proves it or the kernel discharges it.
 * **Blind to the tests.** The permanent acceptance suite lives in `lean-cas-dsl`, which depends on
-  this package; nothing here depends on it or can reach it. A leaf is never written or changed to
-  make a test pass: `lean-cas-dsl`'s harness measures the installed leaves and reports gaps.
+  this package; nothing here depends on it, runs it or can reach it. A leaf is never written or
+  changed to make a test pass: `lean-cas-dsl`'s harness measures the installed leaves and reports
+  gaps. A leaf may keep whatever internal tests it wants; they are its own business and are
+  evidence of nothing.
 * **Missing mathematics goes upstream.** If a leaf seems to need a new category, method,
   placement, forwarding or edge, the defect is upstream: formalize it in `lean-categories`,
-  merge it to `main`, and only then realize it here.
+  merge it to `main`, and only then register an implementation here.
 * **Litmus role.** These leaves also probe the kernel: change one when that exposes a deficiency
   of the contract, the kernel or `lean-categories`, and name the deficiency in the commit.
-* **Programs.** A leaf's backend program lives beside it (`CasLeaves/**/<leaf>/*.py`) and is
-  located with `Backend.packageFile "cas_leaves" …`; it speaks the contract's port protocol
-  (`cas_port`, put on its `PYTHONPATH` by `Backend.connect`). Engines: `CAS_GAP_PYTHON`,
-  `CAS_SAGE_PYTHON` (default `.venv/bin/python` of the running workspace).
+* **Programs.** A leaf's implementation is a backend program in this repository, in whatever
+  language its engine needs; it speaks the contract's port protocol (`cas_port`, put on its
+  `PYTHONPATH` by `Backend.connect`). Engines: `CAS_GAP_PYTHON`, `CAS_SAGE_PYTHON` (default
+  `.venv/bin/python` of the running workspace).
 
-Every `require` tracks `main`. `just test-ci` builds on Mathlib's prebuilt cache and runs the
-kernel-axiom audit (`CasLeaves/AxiomAudit.lean`); the commit and push tiers compile nothing.
+Every `require` tracks `main`. The commit and push tiers compile nothing.
+
+The leaves' code does not yet have this form; its replacement is tracked by the plan node
+`gov-leaf-authority` in `lean-cas-dsl/specs/computational-core-plan.md`.
