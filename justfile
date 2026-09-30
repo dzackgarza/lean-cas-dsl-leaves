@@ -21,4 +21,4 @@ test-ci:
 # Kernel-axiom audit, consumed by lean.just's lean-axiom-audit.
 [private]
 _lean-axiom-audit:
-    @lake build AxiomAudit
+    @lake build CasLeaves.AxiomAudit

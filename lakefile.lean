@@ -25,5 +25,3 @@ lean_lib CasLeaves where
     ⟨`weak.linter.mathlibStandardSet, true⟩,
     ⟨`weak.linter.style.header, false⟩,
     ⟨`maxSynthPendingDepth, (3 : Nat)⟩]
-
-lean_lib AxiomAudit

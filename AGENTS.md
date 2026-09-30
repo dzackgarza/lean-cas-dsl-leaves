@@ -37,4 +37,4 @@ internally. It contributes zero mathematics.
   `CAS_SAGE_PYTHON` (default `.venv/bin/python` of the running workspace).
 
 Every `require` tracks `main`. `just test-ci` builds on Mathlib's prebuilt cache and runs the
-kernel-axiom audit (`AxiomAudit.lean`); the commit and push tiers compile nothing.
+kernel-axiom audit (`CasLeaves/AxiomAudit.lean`); the commit and push tiers compile nothing.

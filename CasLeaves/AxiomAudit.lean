@@ -19,6 +19,8 @@ establish that a Lean statement has the intended mathematical meaning.
 
 open Lean Elab Command
 
+namespace CasLeaves.AxiomAudit
+
 /-- The standard Lean axioms. -/
 def permitted : Array Name := #[``propext, ``Classical.choice, ``Quot.sound]
 
@@ -35,3 +37,5 @@ run_cmd do
       violations := violations.push (name, unexpected.qsort Name.lt)
   if !violations.isEmpty then
     throwError m!"nonstandard axiom dependencies: {violations.toList}"
+
+end CasLeaves.AxiomAudit
