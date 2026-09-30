@@ -14,7 +14,7 @@ internally. It contributes zero mathematics.
   make a test pass: `lean-cas-dsl`'s harness measures the installed leaves and reports gaps.
 * **Missing mathematics goes upstream.** If a leaf seems to need a new category, method,
   placement, forwarding or edge, the defect is upstream: formalize it in `lean-categories`,
-  release, re-pin, and only then realize it here.
+  merge it to `main`, and only then realize it here.
 * **Litmus role.** These leaves also probe the kernel: change one when that exposes a deficiency
   of the contract, the kernel or `lean-categories`, and name the deficiency in the commit.
 * **Programs.** A leaf's backend program lives beside it (`CasLeaves/**/<leaf>/*.py`) and is
@@ -22,4 +22,5 @@ internally. It contributes zero mathematics.
   (`cas_port`, put on its `PYTHONPATH` by `Backend.connect`). Engines: `CAS_GAP_PYTHON`,
   `CAS_SAGE_PYTHON` (default `.venv/bin/python` of the running workspace).
 
-Build: `lake build`, with the same Lean toolchain and pins as `lean-cas-dsl`.
+Every `require` tracks `main`. `just test-ci` builds on Mathlib's prebuilt cache and runs the
+kernel-axiom audit (`AxiomAudit.lean`); the commit and push tiers compile nothing.

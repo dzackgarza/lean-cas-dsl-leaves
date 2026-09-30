@@ -12,10 +12,10 @@ package «cas_leaves» where
   version := v!"0.1.0"
 
 require cas_leaf_contracts from git
-  "https://github.com/dzackgarza/lean-cas-dsl-leaf-contracts" @ "6588a86ca5d0ade8ffdabf5f7f95640d426d18f4"
+  "https://github.com/dzackgarza/lean-cas-dsl-leaf-contracts" @ "main"
 
 require lean_categories from git
-  "https://github.com/dzackgarza/lean-categories" @ "c06aeedc8ebc16c787481a5c15a86526341a4b4e"
+  "https://github.com/dzackgarza/lean-categories" @ "main"
 
 @[default_target]
 lean_lib CasLeaves where
@@ -25,3 +25,5 @@ lean_lib CasLeaves where
     ⟨`weak.linter.mathlibStandardSet, true⟩,
     ⟨`weak.linter.style.header, false⟩,
     ⟨`maxSynthPendingDepth, (3 : Nat)⟩]
+
+lean_lib AxiomAudit
