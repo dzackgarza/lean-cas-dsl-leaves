@@ -31,6 +31,8 @@ namespace CasCatalogue.Foundation.Equality
 def decEq : (a : SetHandle) → DecidableEq a.carrier
   | .intPow n => inferInstanceAs (DecidableEq (Fin n → ℤ))
   | .finite n => inferInstanceAs (DecidableEq (Fin n))
+  | .naturals => inferInstanceAs (DecidableEq ℕ)
+  | .rationals => inferInstanceAs (DecidableEq ℚ)
   | .zmod n => inferInstanceAs (DecidableEq (ZMod n))
   | .zmodPow n k => inferInstanceAs (DecidableEq (Fin k → ZMod n))
   | .list a => haveI := decEq a; inferInstanceAs (DecidableEq (List a.carrier))

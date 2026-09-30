@@ -10,6 +10,7 @@ public import CasLeaves.Foundation.Actions
 public import LeanCategories.Foundation.Cardinality
 public import Mathlib.SetTheory.Cardinal.Arithmetic
 public import Mathlib.Data.ZMod.Basic
+public import Mathlib.Data.Rat.Encodable
 public import LeanCategories.Catalogue.Semantics.Foundation.Cardinality
 public meta import CasContract.Leaf
 public meta import LeanCategories.Catalogue.Semantics.ConstructorCatalogue
@@ -60,6 +61,7 @@ def cardinalityOf : SetHandle → CardinalHandle
   | .intPow 0 => .finite 1
   | .intPow (_ + 1) => .aleph0
   | .finite n => .finite n
+  | .naturals | .rationals => .aleph0
   | .zmod 0 => .aleph0
   | .zmod (n + 1) => .finite (n + 1)
   | .zmodPow _ 0 => .finite 1
@@ -78,6 +80,8 @@ def cardinalityOf : SetHandle → CardinalHandle
 theorem _root_.CasCatalogue.Foundation.Actions.SetHandle.countable :
     ∀ a : SetHandle, Countable a.carrier
   | .intPow _ | .finite _ => inferInstance
+  | .naturals => inferInstanceAs (Countable ℕ)
+  | .rationals => inferInstanceAs (Countable ℚ)
   | .zmod 0 => inferInstanceAs (Countable ℤ)
   | .zmod (_ + 1) => inferInstance
   | .zmodPow 0 _ => inferInstanceAs (Countable (Fin _ → ℤ))
@@ -98,6 +102,8 @@ theorem cardinalityOf_denote : ∀ a : SetHandle,
   | .intPow 0 => by simp [cardinalityOf, CardinalHandle.denote]
   | .intPow (n + 1) => (Cardinal.mk_eq_aleph0 (Fin (n + 1) → ℤ)).symm
   | .finite n => by simp [cardinalityOf, CardinalHandle.denote]
+  | .naturals => Cardinal.mk_nat.symm
+  | .rationals => (Cardinal.mk_eq_aleph0 ℚ).symm
   | .zmod 0 => (Cardinal.mk_eq_aleph0 ℤ).symm
   | .zmod (n + 1) => by simp [cardinalityOf, CardinalHandle.denote, SetHandle.carrier, ZMod.card]
   | .zmodPow n 0 => by simp [cardinalityOf, CardinalHandle.denote]

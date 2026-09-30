@@ -9,6 +9,7 @@ public import LeanCategories.Foundation.Mathlib
 public import Mathlib.CategoryTheory.InducedCategory
 public import Mathlib.Data.Int.Basic
 public import Mathlib.Data.ZMod.Defs
+public import Mathlib.Data.Rat.Defs
 public meta import CasContract.Leaf
 
 @[expose] public section
@@ -31,6 +32,10 @@ inductive SetHandle
   | intPow (n : ℕ)
   /-- The finite set `{0, …, n-1}`, as `Fin n`. -/
   | finite (n : ℕ)
+  /-- The set `ℕ`. -/
+  | naturals
+  /-- The set `ℚ`, as Lean's exact rationals. -/
+  | rationals
   /-- The set `ℤ/n`, as `ZMod n` (`ℤ` itself when `n = 0`). -/
   | zmod (n : ℕ)
   /-- The set `(ℤ/n)ᵏ`, as functions `Fin k → ZMod n`. -/
@@ -45,6 +50,8 @@ inductive SetHandle
 abbrev SetHandle.carrier : SetHandle → Type
   | .intPow n => Fin n → ℤ
   | .finite n => Fin n
+  | .naturals => ℕ
+  | .rationals => ℚ
   | .zmod n => ZMod n
   | .zmodPow n k => Fin k → ZMod n
   | .list a => List a.carrier
