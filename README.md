@@ -18,7 +18,14 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
   * `gap_backend.py`: GAP through Sage's libgap (passagemath-gap), under `CAS_GAP_PYTHON`.
 
   Both default to `.venv/bin/python` of the running workspace (`backends/engine_python.py`).
-* **`lakefile.toml`** only makes this directory a Lake package that `lean-cas-dsl` can require; it
-  has no targets.
+* **`lakefile.toml`** only makes this directory a Lake package; it has no targets. `lean-cas-dsl`
+  requires no leaf package: it reads a manifest at run time (`CAS_LEAVES`).
+
+* **Blind to the tests.** The permanent acceptance suite lives in `lean-cas-dsl`; nothing here
+  depends on it, runs it or can reach it. A leaf is never written or changed to make a test pass:
+  `lean-cas-dsl`'s harness measures the installed leaves and reports gaps. A leaf's own tests are
+  evidence of nothing.
+* **Litmus role.** These leaves also probe the kernel: change one when that exposes a deficiency of
+  the contract, the kernel or `lean-categories`, and name the deficiency in the commit.
 
 Missing mathematics or missing forms go upstream to `lean-categories`; a leaf never absorbs them.
