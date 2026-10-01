@@ -1,24 +1,17 @@
-# Lean QC delegates to ~/ai-review-ci/justfiles/lean.just. The commit and push
-# tiers are static scans; CI builds on Mathlib's prebuilt cache and runs the
-# kernel-axiom audit.
+# The leaves are a manifest (`leaves.json`) and Python backend programs; they ship no Lean.
+# These tiers check only that the manifest is JSON and the programs compile.
 
 # List available recipes.
 default:
     @just --list
 
-# Scan staged Lean source.
+# Check the manifest and the backend programs.
 test-commit:
-    @just -f ~/ai-review-ci/justfiles/lean.just -d . test-commit
+    python3 -m json.tool leaves.json > /dev/null
+    python3 -m py_compile backends/*.py
 
-# Static Lean scans before push.
-test-push:
-    @just -f ~/ai-review-ci/justfiles/lean.just -d . test-push
+# Same as the commit tier.
+test-push: test-commit
 
-# Build and run the full Lean gate.
-test-ci:
-    @just -f ~/ai-review-ci/justfiles/lean.just -d . test-ci
-
-# Kernel-axiom audit, consumed by lean.just's lean-axiom-audit.
-[private]
-_lean-axiom-audit:
-    @lake build CasLeaves.AxiomAudit
+# Same as the commit tier.
+test-ci: test-commit

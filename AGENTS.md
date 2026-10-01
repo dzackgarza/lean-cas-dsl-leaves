@@ -157,10 +157,8 @@ firewall holds even for a leaf that ignores all of it.
   of the contract, the kernel or `lean-categories`, and name the deficiency in the commit.
 * **Programs.** A leaf's implementation is a backend program in this repository, in whatever
   language its engine needs; it speaks the contract's port protocol (`cas_port`, put on its
-  `PYTHONPATH` by `Backend.connect`). Engines: `CAS_GAP_PYTHON`, `CAS_SAGE_PYTHON` (default
+  `PYTHONPATH` by the kernel). Engines: `CAS_GAP_PYTHON`, `CAS_SAGE_PYTHON` (default
   `.venv/bin/python` of the running workspace).
 
 Every `require` tracks `main`. The commit and push tiers compile nothing.
 
-The leaves' code does not yet have this form; its replacement is tracked by the plan node
-`gov-leaf-authority` in `lean-cas-dsl/specs/computational-core-plan.md`.
