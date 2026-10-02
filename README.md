@@ -23,7 +23,8 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
     `DisjointUnionEnumeratedSets` and `ConditionSet` (passagemath-combinat), under
     `CAS_SAGE_PYTHON`. Finite residue-power inputs use Sage's `FreeModule`.
   * `sage_root_lattices.py`: rank, cardinality and finiteness on the released named
-    `A(n)` form, by Sage's `RootSystem(...).root_lattice()` and its parent methods,
+    `A(n)` and `A_dual(n)` forms, by Sage's `RootSystem(...).root_lattice()` or
+    `.weight_lattice()` and its parent methods,
     under `CAS_SAGE_PYTHON`.
 
   Both default to `.venv/bin/python` of the running workspace (`backends/engine_python.py`).

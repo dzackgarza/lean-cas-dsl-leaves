@@ -1,11 +1,12 @@
 """Sage root-lattice operations on the released named A-family form.
 
-Interface: released-interface-b249 registry, obj.bil_wform.root_lattice_a,
-LeanCategories.Lattices.Integral.rootA (n : Nat). The input is a named object
-with one numeral parameter. Cardinality and rank return lit.cardinals.
+Interface: released-interface-b249 registry, obj.bil_wform.root_lattice_a and
+obj.bil_wform.root_lattice_a_dual, the public rootA/rootADual declarations
+with parameter (n : Nat). Cardinality and rank return lit.cardinals.
 
 Engine routines: RootSystem(['A', n]).root_lattice(), Parent.cardinality(),
-Parent.rank(), Parent.is_finite(). No engine value crosses the port.
+Parent.rank(), Parent.is_finite(); the A-family dual uses weight_lattice().
+No engine value crosses the port.
 """
 
 from engine_python import require_engine
@@ -17,12 +18,17 @@ from sage.all__sagemath_combinat import Infinity  # noqa: E402
 from sage.combinat.root_system.root_system import RootSystem  # noqa: E402
 from sage.version import version as SAGE_VERSION  # noqa: E402
 
-from wire import aleph0, constructor, decision, finite_cardinal, numeral  # noqa: E402
+from wire import aleph0, decision, finite_cardinal, named_object, numeral  # noqa: E402
 
 
 def lattice(value):
-    n, = constructor(value, "obj.bil_wform.root_lattice_a", 1)
-    return RootSystem(["A", numeral(n)]).root_lattice()
+    ctor, args = named_object(value)
+    routines = {"obj.bil_wform.root_lattice_a": "root_lattice",
+                "obj.bil_wform.root_lattice_a_dual": "weight_lattice"}
+    if ctor not in routines or len(args) != 1:
+        raise ValueError("expected a released A-family object with one numeral")
+    root_system = RootSystem(["A", numeral(args[0])])
+    return getattr(root_system, routines[ctor])()
 
 
 def op_cardinality(value):
