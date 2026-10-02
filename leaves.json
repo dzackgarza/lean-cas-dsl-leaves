@@ -4,7 +4,8 @@
     {"name": "gap", "command": "python3", "args": ["backends/gap_backend.py"]},
     {"name": "sage-power-set", "command": "python3", "args": ["backends/sage_power_set.py"]},
     {"name": "sage-set-limits", "command": "python3", "args": ["backends/sage_set_limits.py"]},
-    {"name": "sage-root-lattices", "command": "python3", "args": ["backends/sage_root_lattices.py"]}
+    {"name": "sage-root-lattices", "command": "python3", "args": ["backends/sage_root_lattices.py"]},
+    {"name": "sage-field-presentations", "command": "python3", "args": ["backends/sage_field_presentations.py"]}
   ],
   "registrations": [
     {"operation": "meth.cardinality", "input": "obj.sets.fin", "backend": "sage"},
@@ -53,6 +54,15 @@
     {"operation": "prop.is_finite", "input": "obj.subgroups.kernel", "backend": "gap"},
     {"operation": "prop.is_abelian", "input": "obj.subgroups.kernel", "backend": "gap"},
     {"operation": "meth.cardinality", "input": "obj.sets.permutations", "backend": "gap"},
-    {"operation": "prop.is_finite", "input": "obj.sets.permutations", "backend": "gap"}
+    {"operation": "prop.is_finite", "input": "obj.sets.permutations", "backend": "gap"},
+    {"operation": "meth.cardinality", "input": "obj.sets.f9_x", "backend": "sage-field-presentations"},
+    {"operation": "prop.is_finite", "input": "obj.sets.f9_x", "backend": "sage-field-presentations"},
+    {"operation": "meth.cardinality", "input": "obj.sets.f9_y", "backend": "sage-field-presentations"},
+    {"operation": "prop.is_finite", "input": "obj.sets.f9_y", "backend": "sage-field-presentations"},
+    {"operation": "meth.cardinality", "input": "obj.commutative_rings.f9_x", "backend": "sage-field-presentations"},
+    {"operation": "prop.is_finite", "input": "obj.commutative_rings.f9_x", "backend": "sage-field-presentations"},
+    {"operation": "meth.cardinality", "input": "obj.commutative_rings.f9_y", "backend": "sage-field-presentations"},
+    {"operation": "prop.is_finite", "input": "obj.commutative_rings.f9_y", "backend": "sage-field-presentations"},
+    {"operation": "lim.groups.kernel", "input": "cat.groups", "backend": "gap"}
   ]
 }

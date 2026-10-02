@@ -17,7 +17,9 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
   * `sage_backend.py`: Sage (passagemath), under `CAS_SAGE_PYTHON`;
   * `gap_backend.py`: GAP through Sage's libgap (passagemath-gap), under `CAS_GAP_PYTHON`;
     residue-domain operations and released named group/subgroup properties use GAP's
-    domain, homomorphism and kernel routines.
+    domain, homomorphism and kernel routines. Finite group-kernel cones include the
+    defining inclusion and both maps from GAP's computed isomorphism to an available
+    named group presentation.
   * `sage_power_set.py`: `meth.cardinality` on `obj.sets.power_set` by Sage's
     `Subsets(S).cardinality()` (passagemath-combinat), under `CAS_SAGE_PYTHON`;
   * `sage_set_limits.py`: `lim.sets.product`, `colim.sets.coproduct` and `lim.sets.pullback` on
@@ -28,6 +30,8 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
     `A(n)`, `A_dual(n)` and `E8` forms, by Sage's `RootSystem(...).root_lattice()` or
     `.weight_lattice()` and its parent methods,
     under `CAS_SAGE_PYTHON`.
+  * `sage_field_presentations.py`: cardinality and finiteness of the released named
+    polynomial quotient presentations, by Sage `GF` with each selected modulus.
 
   Both default to `.venv/bin/python` of the running workspace (`backends/engine_python.py`).
 
