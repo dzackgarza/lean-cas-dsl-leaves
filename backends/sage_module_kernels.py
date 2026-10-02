@@ -15,7 +15,9 @@ from wire import constructor, named_object, numeral
 
 def module(value):
     edge, selected = constructor(value, "functorAction", 2)
-    parameters = constructor(edge, "fun.bil_wform.carrier", 1)
+    scalar_type, = constructor(edge, "fun.bil_wform.carrier", 1)
+    if scalar_type != {"ctor": "obj.sets.integers", "args": []}:
+        raise ValueError("selected integral root lattices require the exact integer scalar type")
     ctor, args = named_object(selected)
     if ctor not in {"obj.bil_wform.root_lattice_a", "obj.bil_wform.root_lattice_a_dual"} or len(args) != 1:
         raise ValueError("no Sage Module carrier model for this selected object")
@@ -55,6 +57,8 @@ def op_kernel(value):
     operation, parameters = named_object(value)
     if operation != "fun.arrows_modules.kernel" or len(parameters) != 1 or "receiver" not in value:
         raise ValueError("expected the registered kernel object action with its explicit ring")
+    if parameters != [{"ctor": "obj.rings.integers", "args": []}]:
+        raise ValueError("selected integral Module kernel requires the exact integer ring")
     receiver = value["receiver"]
     source, target, arrow = constructor(receiver, "arrow", 3)
     hom = linear_map(arrow, source, target)
