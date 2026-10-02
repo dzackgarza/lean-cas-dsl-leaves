@@ -23,6 +23,13 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
     `DisjointUnionEnumeratedSets` (passagemath-combinat), under `CAS_SAGE_PYTHON`.
 
   Both default to `.venv/bin/python` of the running workspace (`backends/engine_python.py`).
+
+The modular passagemath environment uses version `10.8.12`. Root-system matrix routines
+also require `passagemath-graphs==10.8.12`; finite extension fields require
+`passagemath-pari==10.8.12` (with `conway-polynomials==0.10`). These are engine
+dependencies, installed in the ignored `.venv`, rather than declarations of mathematical
+operations. Engine initialization must import the matching `sage.all__sagemath_*`
+module before importing low-level extension modules such as `sage.libs.gap.libgap`.
 * **`lakefile.toml`** only makes this directory a Lake package; it has no targets. `lean-cas-dsl`
   requires no leaf package: it reads a manifest at run time (`CAS_LEAVES`).
 

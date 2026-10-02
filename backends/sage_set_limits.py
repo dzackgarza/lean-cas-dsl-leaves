@@ -8,7 +8,8 @@ workspace's `.venv/bin/python` (`engine_python`). Routines:
 * `colim.sets.coproduct` on `pair X Y`: `DisjointUnionEnumeratedSets(..., keepkey=True)`
   (`sage.sets.disjoint_union_enumerated_sets`);
 * `lim.sets.pullback` on `cospan f g`: the pairs `(x, y)` with `f x = g y`, selected from Sage's
-  enumeration of `cartesian_product([dom f, dom g])` (`FiniteEnumeratedSet` of each domain).
+  `cartesian_product([dom f, dom g])` by Sage's `ConditionSet` enumeration
+  (`FiniteEnumeratedSet` of each domain).
 
 Wire (`CasContract/Port.lean`, "The wire encoding of inputs and answers"): a diagram is
 `{"ctor": "pair", "args": [X, Y]}` with named objects, or `{"ctor": "cospan", "args": [f, g]}`
@@ -30,10 +31,12 @@ require_engine("CAS_SAGE_PYTHON", "sage.all__sagemath_combinat")
 from cas_port import serve  # noqa: E402  the leaf contract's reference port
 from sage.all__sagemath_combinat import Zmod, cartesian_product  # noqa: E402
 from sage.sets.disjoint_union_enumerated_sets import DisjointUnionEnumeratedSets  # noqa: E402
+from sage.sets.condition_set import ConditionSet  # noqa: E402
 from sage.sets.family import Family  # noqa: E402
 from sage.sets.finite_enumerated_set import FiniteEnumeratedSet  # noqa: E402
 from sage.sets.integer_range import IntegerRange  # noqa: E402
 from sage.version import version as SAGE_VERSION  # noqa: E402
+from sage.modules.free_module import FreeModule  # noqa: E402
 
 from wire import constructor, named_object, numeral  # noqa: E402
 
@@ -51,6 +54,9 @@ def residues(n):
 PARENTS = {
     "obj.sets.fin": (lambda n: IntegerRange(0, numeral(n)), int),
     "obj.sets.integers_mod": (residues, lambda r: int(r.lift())),
+    "obj.sets.integers_mod_power": (
+        lambda n, k: FreeModule(residues(n), numeral(k)),
+        lambda row: [int(r.lift()) for r in row]),
 }
 
 
@@ -113,9 +119,9 @@ def graph(value):
 
 def op_pullback(value):
     f, g = (graph(m) for m in diagram(value, "cospan", 2))
-    # Sage: the pairs of cartesian_product([dom f, dom g]) with f x = g y
-    P = [p for p in cartesian_product([FiniteEnumeratedSet(f), FiniteEnumeratedSet(g)])
-         if f[p[0]] == g[p[1]]]
+    # Sage owns the constrained-set enumeration; the predicate applies the wire graphs.
+    universe = cartesian_product([FiniteEnumeratedSet(f), FiniteEnumeratedSet(g)])
+    P = list(ConditionSet(universe, lambda p: f[p[0]] == g[p[1]]))
     return answer("cone", len(P),
                   [[k, json.loads(p[0])] for k, p in enumerate(P)],
                   [[k, json.loads(p[1])] for k, p in enumerate(P)])
