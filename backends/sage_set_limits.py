@@ -147,6 +147,8 @@ def graph(value):
     """A morphism's graph as a dict over canonical JSON keys, with its domain in order."""
     if isinstance(value, dict):
         ctor, params = named_object(value)
+        if ctor == "mor.sets.fin_rev":
+            return graph(op_fin_rev(value))
         if ctor == "map":
             edge, arrow = constructor(value, "map", 2)
             carrier_edge(edge)
