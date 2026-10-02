@@ -29,7 +29,7 @@ from engine_python import require_engine
 require_engine("CAS_SAGE_PYTHON", "sage.all__sagemath_combinat")
 
 from cas_port import serve  # noqa: E402  the leaf contract's reference port
-from sage.all__sagemath_combinat import Zmod, cartesian_product  # noqa: E402
+from sage.all__sagemath_combinat import Zmod, cartesian_product, Permutations  # noqa: E402
 from sage.sets.disjoint_union_enumerated_sets import DisjointUnionEnumeratedSets  # noqa: E402
 from sage.sets.condition_set import ConditionSet  # noqa: E402
 from sage.sets.family import Family  # noqa: E402
@@ -135,6 +135,14 @@ def carrier_edge(value):
         raise ValueError("no carrier model for this functor edge")
 
 
+def op_fin_rev(value):
+    n, = constructor(value, "mor.sets.fin_rev", 1)
+    n = numeral(n)
+    permutation = Permutations(n).first().reverse()
+    # Sage permutation points are one-based; the registered Fin carrier is zero-based.
+    return [[index, int(image) - 1] for index, image in enumerate(permutation)]
+
+
 def graph(value):
     """A morphism's graph as a dict over canonical JSON keys, with its domain in order."""
     if isinstance(value, dict):
@@ -204,4 +212,4 @@ def op_pullback(value):
 if __name__ == "__main__":
     serve("sage", SAGE_VERSION, ADAPTER_VERSION,
           {"lim.sets.product": op_product, "colim.sets.coproduct": op_coproduct,
-           "lim.sets.pullback": op_pullback})
+           "lim.sets.pullback": op_pullback, "mor.sets.fin_rev": op_fin_rev})

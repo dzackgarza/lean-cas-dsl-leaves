@@ -59,6 +59,7 @@
     {"operation": "colim.bil_w_form.cokernel", "input": "cat.bil_wform", "backend": "sage-root-lattices"},
     {"operation": "meth.cardinality", "input": "colim.bil_w_form.cokernel", "backend": "sage-root-lattices"},
     {"operation": "prop.is_finite", "input": "colim.bil_w_form.cokernel", "backend": "sage-root-lattices"},
-    {"operation": "fun.arrows_modules.kernel", "input": "cat.arrows_modules_r", "backend": "sage-module-kernels"}
+    {"operation": "fun.arrows_modules.kernel", "input": "cat.arrows_modules_r", "backend": "sage-module-kernels"},
+    {"operation": "mor.sets.fin_rev", "input": "mor.sets.fin_rev", "backend": "sage-set-limits"}
   ]
 }

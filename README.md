@@ -25,7 +25,9 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
   * `sage_set_limits.py`: `lim.sets.product`, `colim.sets.coproduct` and `lim.sets.pullback` on
     `cat.sets`, finite diagrams only, by Sage's `cartesian_product` and
     `DisjointUnionEnumeratedSets` and `ConditionSet` (passagemath-combinat), under
-    `CAS_SAGE_PYTHON`. Finite residue-power inputs use Sage's `FreeModule`.
+    `CAS_SAGE_PYTHON`. Finite residue-power inputs use Sage's `FreeModule`. The primitive
+    `mor.sets.fin_rev` uses Sage `Permutations(n).first().reverse()` and returns
+    its graph on the selected zero-based Fin carrier.
   * `sage_root_lattices.py`: rank, cardinality and finiteness on the released named
     `A(n)`, `A_dual(n)` and `E8` forms, by Sage's `RootSystem(...).root_lattice()` or
     `.weight_lattice()` and its parent methods,
