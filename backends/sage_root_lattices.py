@@ -16,9 +16,12 @@ require_engine("CAS_SAGE_PYTHON", "sage.all__sagemath_combinat")
 from cas_port import serve  # noqa: E402
 from sage.all__sagemath_combinat import Infinity  # noqa: E402
 from sage.combinat.root_system.root_system import RootSystem  # noqa: E402
+from sage.combinat.root_system.cartan_type import CartanType  # noqa: E402
+from sage.modules.free_module import FreeModule  # noqa: E402
+from sage.rings.integer_ring import ZZ  # noqa: E402
 from sage.version import version as SAGE_VERSION  # noqa: E402
 
-from wire import aleph0, decision, finite_cardinal, named_object, numeral  # noqa: E402
+from wire import aleph0, constructor, decision, finite_cardinal, named_object, numeral  # noqa: E402
 
 
 def lattice(value):
@@ -36,7 +39,9 @@ def lattice(value):
 
 
 def op_cardinality(value):
-    size = lattice(value).cardinality()
+    ctor, _ = named_object(value)
+    parent = canonical_quotient(value) if ctor == "limitApex" else lattice(value)
+    size = parent.cardinality()
     return aleph0() if size == Infinity else finite_cardinal(size)
 
 
@@ -45,9 +50,43 @@ def op_rank(value):
 
 
 def op_is_finite(value):
-    return decision(bool(lattice(value).is_finite()))
+    ctor, _ = named_object(value)
+    parent = canonical_quotient(value) if ctor == "limitApex" else lattice(value)
+    return decision(bool(parent.is_finite()))
+
+
+def a_quotient(diagram):
+    inclusion, zero = constructor(diagram, "parallelPair", 2)
+    n, = constructor(inclusion, "mor.bil_wform.root_lattice_a_to_dual", 1)
+    n = numeral(n)
+    source = {"ctor": "obj.bil_wform.root_lattice_a", "args": [n]}
+    target = {"ctor": "obj.bil_wform.root_lattice_a_dual", "args": [n]}
+    if constructor(zero, "zero", 2) != [source, target]:
+        raise ValueError("cokernel zero arrow changes the selected lattice endpoints")
+    gram = CartanType(["A", n]).cartan_matrix()
+    # In the chosen dual basis, the inclusion is the Cartan Gram map.
+    # Sage owns the row-module and quotient computations.
+    return FreeModule(ZZ, gram.nrows()).quotient(gram.row_module())
+
+
+def canonical_quotient(value):
+    operation, diagram = constructor(value, "limitApex", 2)
+    if operation != "colim.bil_w_form.cokernel":
+        raise ValueError("no Sage quotient translation for this canonical apex")
+    return a_quotient(diagram)
+
+
+def op_cokernel(diagram):
+    # Construct the engine quotient, then raise it in the declared canonical
+    # presentation. These are references to independently registered data,
+    # not engine objects or a leaf proof of a universal property.
+    a_quotient(diagram)
+    operation = "colim.bil_w_form.cokernel"
+    apex = {"ctor": "limitApex", "args": [operation, diagram]}
+    projection = {"ctor": "limitLeg", "args": [operation, diagram, 0]}
+    return {"ctor": "cocone", "args": [apex, projection]}
 
 
 serve("sage", SAGE_VERSION, "0.1.0",
       {"meth.cardinality": op_cardinality, "meth.rank": op_rank,
-       "prop.is_finite": op_is_finite})
+       "prop.is_finite": op_is_finite, "colim.bil_w_form.cokernel": op_cokernel})

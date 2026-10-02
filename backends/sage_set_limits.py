@@ -103,10 +103,72 @@ def op_coproduct(value):
                   [[ey(y), position[(1, ey(y))]] for y in T])
 
 
+def native_point(value):
+    """Decode field arithmetic before comparing points or applying a native map."""
+    if isinstance(value, dict) and value.get("ctor") == "element":
+        from sage_field_presentations import field, selected_element
+        descriptor, _ = constructor(value, "element", 2)
+        return selected_element(value, descriptor, field(descriptor))
+    return json.dumps(value, sort_keys=True)
+
+
+def field_arrow(value):
+    """Released selected F9 arrow, evaluated as a Sage homomorphism."""
+    from sage_field_presentations import field
+    comparison, parameters, inverse = constructor(value, "presentation", 3)
+    if comparison != "cmp.f9.translation" or parameters or not isinstance(inverse, bool):
+        raise ValueError("no selected field arrow model for this comparison")
+    source = field({"ctor": "obj.sets.f9_y" if inverse else "obj.sets.f9_x", "args": []})
+    target = field({"ctor": "obj.sets.f9_x" if inverse else "obj.sets.f9_y", "args": []})
+    return source.hom([target.gen() - 2 if inverse else target.gen() + 2], target)
+
+
+def carrier_edge(value):
+    """Only released forgetful routes with unchanged underlying points."""
+    ctor, args = named_object(value)
+    if ctor == "classifierForget":
+        if len(args) != 2 or args[1] != [] or args[0] not in {
+                "clf.magmas.associative", "clf.sets.binary_operation"}:
+            raise ValueError("no carrier model for this instantiated classifier")
+    elif ctor not in {"fun.commutative_rings.ring", "fun.rings.multiplicative_monoid",
+                      "fun.monoids.semigroup"} or args:
+        raise ValueError("no carrier model for this functor edge")
+
+
 def graph(value):
     """A morphism's graph as a dict over canonical JSON keys, with its domain in order."""
     if isinstance(value, dict):
         ctor, params = named_object(value)
+        if ctor == "map":
+            edge, arrow = constructor(value, "map", 2)
+            carrier_edge(edge)
+            return graph(arrow)
+        if ctor == "compose":
+            first, second = constructor(value, "compose", 2)
+            table = graph(first)
+            # A presentation is applied by its selected native Sage field map.
+            mapped = second
+            while isinstance(mapped, dict) and mapped.get("ctor") == "map":
+                edge, mapped = constructor(mapped, "map", 2)
+                carrier_edge(edge)
+            if isinstance(mapped, dict) and mapped.get("ctor") == "presentation":
+                hom = field_arrow(mapped)
+                return {key: hom(point) for key, point in table.items()}
+            later = graph(second)
+            return {key: later[json.dumps(point, sort_keys=True)] for key, point in table.items()}
+        if ctor == "presentation":
+            hom = field_arrow(value)
+            from sage_field_presentations import arithmetic_data
+            source_id = "obj.sets.f9_y" if params[2] else "obj.sets.f9_x"
+            descriptor = {"ctor": source_id, "args": []}
+            return {json.dumps({"ctor": "element", "args": [descriptor, arithmetic_data(x)]},
+                               sort_keys=True): hom(x) for x in hom.domain()}
+        if ctor == "generator":
+            object_id, explicit = constructor(value, "generator", 2)
+            if object_id not in {"obj.sets.f9_x", "obj.sets.f9_y"} or explicit:
+                raise ValueError("no selected field generator arrow model")
+            from sage_field_presentations import field
+            return {"0": field({"ctor": object_id, "args": []}).gen()}
         fields = {"mor.sets.f9_x_constants": "obj.sets.f9_x",
                   "mor.sets.f9_y_constants": "obj.sets.f9_y"}
         if ctor in fields and not params:
@@ -125,7 +187,7 @@ def graph(value):
         key = json.dumps(pair[0], sort_keys=True)
         if key in table:
             raise ValueError("the graph lists %s twice" % key)
-        table[key] = json.dumps(pair[1], sort_keys=True)
+        table[key] = native_point(pair[1])
     return table
 
 
@@ -139,6 +201,7 @@ def op_pullback(value):
                   [[k, json.loads(p[1])] for k, p in enumerate(P)])
 
 
-serve("sage", SAGE_VERSION, ADAPTER_VERSION,
-      {"lim.sets.product": op_product, "colim.sets.coproduct": op_coproduct,
-       "lim.sets.pullback": op_pullback})
+if __name__ == "__main__":
+    serve("sage", SAGE_VERSION, ADAPTER_VERSION,
+          {"lim.sets.product": op_product, "colim.sets.coproduct": op_coproduct,
+           "lim.sets.pullback": op_pullback})
