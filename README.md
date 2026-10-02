@@ -16,6 +16,8 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
   form. Each names the engine and routine it calls.
   * `sage_backend.py`: Sage (passagemath), under `CAS_SAGE_PYTHON`;
   * `gap_backend.py`: GAP through Sage's libgap (passagemath-gap), under `CAS_GAP_PYTHON`;
+    residue-domain operations and released named group/subgroup properties use GAP's
+    domain, homomorphism and kernel routines.
   * `sage_power_set.py`: `meth.cardinality` on `obj.sets.power_set` by Sage's
     `Subsets(S).cardinality()` (passagemath-combinat), under `CAS_SAGE_PYTHON`;
   * `sage_set_limits.py`: `lim.sets.product`, `colim.sets.coproduct` and `lim.sets.pullback` on
@@ -23,7 +25,7 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
     `DisjointUnionEnumeratedSets` and `ConditionSet` (passagemath-combinat), under
     `CAS_SAGE_PYTHON`. Finite residue-power inputs use Sage's `FreeModule`.
   * `sage_root_lattices.py`: rank, cardinality and finiteness on the released named
-    `A(n)` and `A_dual(n)` forms, by Sage's `RootSystem(...).root_lattice()` or
+    `A(n)`, `A_dual(n)` and `E8` forms, by Sage's `RootSystem(...).root_lattice()` or
     `.weight_lattice()` and its parent methods,
     under `CAS_SAGE_PYTHON`.
 

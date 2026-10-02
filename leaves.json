@@ -36,6 +36,23 @@
     {"operation": "meth.rank", "input": "obj.bil_wform.root_lattice_a_dual", "backend": "sage-root-lattices"},
     {"operation": "prop.is_finite", "input": "obj.bil_wform.root_lattice_a_dual", "backend": "sage-root-lattices"},
     {"operation": "meth.cardinality", "input": "obj.finite_sets.fin", "backend": "sage"},
-    {"operation": "prop.is_finite", "input": "obj.finite_sets.fin", "backend": "sage"}
+    {"operation": "prop.is_finite", "input": "obj.finite_sets.fin", "backend": "sage"},
+    {"operation": "meth.cardinality", "input": "obj.integral_lattice.e8", "backend": "sage-root-lattices"},
+    {"operation": "meth.rank", "input": "obj.integral_lattice.e8", "backend": "sage-root-lattices"},
+    {"operation": "prop.is_finite", "input": "obj.integral_lattice.e8", "backend": "sage-root-lattices"},
+    {"operation": "meth.cardinality", "input": "obj.groups.symmetric", "backend": "gap"},
+    {"operation": "prop.is_finite", "input": "obj.groups.symmetric", "backend": "gap"},
+    {"operation": "prop.is_abelian", "input": "obj.groups.symmetric", "backend": "gap"},
+    {"operation": "meth.cardinality", "input": "obj.groups.cyclic", "backend": "gap"},
+    {"operation": "prop.is_finite", "input": "obj.groups.cyclic", "backend": "gap"},
+    {"operation": "prop.is_abelian", "input": "obj.groups.cyclic", "backend": "gap"},
+    {"operation": "meth.cardinality", "input": "obj.subgroups.alternating", "backend": "gap"},
+    {"operation": "prop.is_finite", "input": "obj.subgroups.alternating", "backend": "gap"},
+    {"operation": "prop.is_abelian", "input": "obj.subgroups.alternating", "backend": "gap"},
+    {"operation": "meth.cardinality", "input": "obj.subgroups.kernel", "backend": "gap"},
+    {"operation": "prop.is_finite", "input": "obj.subgroups.kernel", "backend": "gap"},
+    {"operation": "prop.is_abelian", "input": "obj.subgroups.kernel", "backend": "gap"},
+    {"operation": "meth.cardinality", "input": "obj.sets.permutations", "backend": "gap"},
+    {"operation": "prop.is_finite", "input": "obj.sets.permutations", "backend": "gap"}
   ]
 }

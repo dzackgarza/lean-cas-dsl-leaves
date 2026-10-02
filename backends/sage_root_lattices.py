@@ -23,6 +23,10 @@ from wire import aleph0, decision, finite_cardinal, named_object, numeral  # noq
 
 def lattice(value):
     ctor, args = named_object(value)
+    if ctor == "obj.integral_lattice.e8":
+        if args:
+            raise ValueError("E8 has no explicit parameters")
+        return RootSystem(["E", 8]).root_lattice()
     routines = {"obj.bil_wform.root_lattice_a": "root_lattice",
                 "obj.bil_wform.root_lattice_a_dual": "weight_lattice"}
     if ctor not in routines or len(args) != 1:
