@@ -20,7 +20,11 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
     `Subsets(S).cardinality()` (passagemath-combinat), under `CAS_SAGE_PYTHON`;
   * `sage_set_limits.py`: `lim.sets.product`, `colim.sets.coproduct` and `lim.sets.pullback` on
     `cat.sets`, finite diagrams only, by Sage's `cartesian_product` and
-    `DisjointUnionEnumeratedSets` (passagemath-combinat), under `CAS_SAGE_PYTHON`.
+    `DisjointUnionEnumeratedSets` and `ConditionSet` (passagemath-combinat), under
+    `CAS_SAGE_PYTHON`. Finite residue-power inputs use Sage's `FreeModule`.
+  * `sage_root_lattices.py`: rank, cardinality and finiteness on the released named
+    `A(n)` form, by Sage's `RootSystem(...).root_lattice()` and its parent methods,
+    under `CAS_SAGE_PYTHON`.
 
   Both default to `.venv/bin/python` of the running workspace (`backends/engine_python.py`).
 
