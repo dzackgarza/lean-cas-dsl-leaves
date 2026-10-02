@@ -34,6 +34,8 @@
     {"operation": "prop.is_finite", "input": "obj.bil_wform.root_lattice_a", "backend": "sage-root-lattices"},
     {"operation": "meth.cardinality", "input": "obj.bil_wform.root_lattice_a_dual", "backend": "sage-root-lattices"},
     {"operation": "meth.rank", "input": "obj.bil_wform.root_lattice_a_dual", "backend": "sage-root-lattices"},
-    {"operation": "prop.is_finite", "input": "obj.bil_wform.root_lattice_a_dual", "backend": "sage-root-lattices"}
+    {"operation": "prop.is_finite", "input": "obj.bil_wform.root_lattice_a_dual", "backend": "sage-root-lattices"},
+    {"operation": "meth.cardinality", "input": "obj.finite_sets.fin", "backend": "sage"},
+    {"operation": "prop.is_finite", "input": "obj.finite_sets.fin", "backend": "sage"}
   ]
 }

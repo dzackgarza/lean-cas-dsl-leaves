@@ -53,6 +53,7 @@ def residues(n):
 # of an element (a point of `Fin n`, and of `ZMod n = Fin n` for n > 0, is its number).
 PARENTS = {
     "obj.sets.fin": (lambda n: IntegerRange(0, numeral(n)), int),
+    "obj.finite_sets.fin": (lambda n: IntegerRange(0, numeral(n)), int),
     "obj.sets.integers_mod": (residues, lambda r: int(r.lift())),
     "obj.sets.integers_mod_power": (
         lambda n, k: FreeModule(residues(n), numeral(k)),
