@@ -15,7 +15,9 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
   encoding of the input, calls the engine's routine, and encodes the engine's answer in the result
   form. Each names the engine and routine it calls.
   * `sage_backend.py`: Sage (passagemath), under `CAS_SAGE_PYTHON`;
-  * `gap_backend.py`: GAP through Sage's libgap (passagemath-gap), under `CAS_GAP_PYTHON`.
+  * `gap_backend.py`: GAP through Sage's libgap (passagemath-gap), under `CAS_GAP_PYTHON`;
+  * `sage_power_set.py`: `meth.cardinality` on `obj.sets.power_set` by Sage's
+    `Subsets(S).cardinality()` (passagemath-combinat), under `CAS_SAGE_PYTHON`.
 
   Both default to `.venv/bin/python` of the running workspace (`backends/engine_python.py`).
 * **`lakefile.toml`** only makes this directory a Lake package; it has no targets. `lean-cas-dsl`
