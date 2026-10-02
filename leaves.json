@@ -5,7 +5,8 @@
     {"name": "sage-power-set", "command": "python3", "args": ["backends/sage_power_set.py"]},
     {"name": "sage-set-limits", "command": "python3", "args": ["backends/sage_set_limits.py"]},
     {"name": "sage-root-lattices", "command": "python3", "args": ["backends/sage_root_lattices.py"]},
-    {"name": "sage-field-presentations", "command": "python3", "args": ["backends/sage_field_presentations.py"]}
+    {"name": "sage-field-presentations", "command": "python3", "args": ["backends/sage_field_presentations.py"]},
+    {"name": "sage-module-kernels", "command": "python3", "args": ["backends/sage_module_kernels.py"]}
   ],
   "registrations": [
     {"operation": "meth.cardinality", "input": "obj.sets.fin", "backend": "sage"},
@@ -57,6 +58,7 @@
     {"operation": "cmp.polynomial_quotient.translation", "input": "obj.commutative_rings.polynomial_quotient", "backend": "sage-field-presentations"},
     {"operation": "colim.bil_w_form.cokernel", "input": "cat.bil_wform", "backend": "sage-root-lattices"},
     {"operation": "meth.cardinality", "input": "colim.bil_w_form.cokernel", "backend": "sage-root-lattices"},
-    {"operation": "prop.is_finite", "input": "colim.bil_w_form.cokernel", "backend": "sage-root-lattices"}
+    {"operation": "prop.is_finite", "input": "colim.bil_w_form.cokernel", "backend": "sage-root-lattices"},
+    {"operation": "fun.arrows_modules.kernel", "input": "cat.arrows_modules_r", "backend": "sage-module-kernels"}
   ]
 }

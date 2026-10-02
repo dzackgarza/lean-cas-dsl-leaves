@@ -30,6 +30,11 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
     `A(n)`, `A_dual(n)` and `E8` forms, by Sage's `RootSystem(...).root_lattice()` or
     `.weight_lattice()` and its parent methods,
     under `CAS_SAGE_PYTHON`.
+  * `sage_module_kernels.py`: `fun.arrows_modules.kernel` on selected root-A
+    Module carrier actions and zero, identity or mapped named inclusion arrows,
+    by Sage's `FreeModule.hom(...).kernel()` and `basis_matrix()`. The complete
+    subobject uses the released canonical apex and inclusion projections at the
+    original action. The consumer performs the prescribed formed-structure lift.
   * `sage_field_presentations.py`: cardinality and finiteness of the released named
     polynomial quotient presentations, by Sage `GF` with each selected modulus.
 
