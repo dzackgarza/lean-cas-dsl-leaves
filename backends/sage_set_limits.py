@@ -155,7 +155,7 @@ def graph(value):
                 hom = field_arrow(mapped)
                 return {key: hom(point) for key, point in table.items()}
             later = graph(second)
-            return {key: later[json.dumps(point, sort_keys=True)] for key, point in table.items()}
+            return {key: later[point] for key, point in table.items()}
         if ctor == "presentation":
             hom = field_arrow(value)
             from sage_field_presentations import arithmetic_data
