@@ -83,7 +83,7 @@ def op_cokernel(diagram):
     a_quotient(diagram)
     operation = "colim.bil_w_form.cokernel"
     apex = {"ctor": "limitApex", "args": [operation, diagram]}
-    projection = {"ctor": "limitLeg", "args": [operation, diagram, 0]}
+    projection = {"ctor": "limitLeg", "args": [operation, diagram, {"ctor": "one", "args": []}]}
     return {"ctor": "cocone", "args": [apex, projection]}
 
 
