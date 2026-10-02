@@ -52,3 +52,15 @@ module before importing low-level extension modules such as `sage.libs.gap.libga
   the contract, the kernel or `lean-categories`, and name the deficiency in the commit.
 
 Missing mathematics or missing forms go upstream to `lean-categories`; a leaf never absorbs them.
+
+At the released `57c858` mathematical interface and `e485ad2` port contract, the remaining
+required interfaces are the presentation-comparison hom/inv arrow encoding and quotient-field
+point encoding for selected F9 transport; a zero arrow on infinite BilWForm carriers and a
+finite BilWForm quotient apex/point form for discriminants; and the Prop-valued carrier encoding
+for generic `Subgroup` parameters. Named F9 coefficient maps and named alternating/kernel
+subgroup inputs already have engine translations. These dependencies leave the complete B0
+assignment open; local engineering probes provide no mathematical acceptance evidence.
+
+An author source read accidentally included theorem bodies beyond the authorized FiniteGroups
+constructor definitions. This was reported; those bodies were not used as computational
+expectations. Later extraction was restricted to the authorized input-model definitions.
