@@ -2,7 +2,8 @@
   "backends": [
     {"name": "sage", "command": "python3", "args": ["backends/sage_backend.py"]},
     {"name": "gap", "command": "python3", "args": ["backends/gap_backend.py"]},
-    {"name": "sage-power-set", "command": "python3", "args": ["backends/sage_power_set.py"]}
+    {"name": "sage-power-set", "command": "python3", "args": ["backends/sage_power_set.py"]},
+    {"name": "sage-set-limits", "command": "python3", "args": ["backends/sage_set_limits.py"]}
   ],
   "registrations": [
     {"operation": "meth.cardinality", "input": "obj.sets.fin", "backend": "sage"},
@@ -23,6 +24,9 @@
     {"operation": "prop.is_finite", "input": "obj.sets.complexes", "backend": "sage"},
     {"operation": "prop.is_finite", "input": "obj.sets.integers_mod", "backend": "gap"},
     {"operation": "prop.is_finite", "input": "obj.sets.integers_mod_power", "backend": "gap"},
-    {"operation": "meth.cardinality", "input": "obj.sets.power_set", "backend": "sage-power-set"}
+    {"operation": "meth.cardinality", "input": "obj.sets.power_set", "backend": "sage-power-set"},
+    {"operation": "lim.sets.product", "input": "cat.sets", "backend": "sage-set-limits"},
+    {"operation": "colim.sets.coproduct", "input": "cat.sets", "backend": "sage-set-limits"},
+    {"operation": "lim.sets.pullback", "input": "cat.sets", "backend": "sage-set-limits"}
   ]
 }
