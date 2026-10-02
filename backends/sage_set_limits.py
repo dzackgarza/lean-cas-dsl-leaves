@@ -105,6 +105,17 @@ def op_coproduct(value):
 
 def graph(value):
     """A morphism's graph as a dict over canonical JSON keys, with its domain in order."""
+    if isinstance(value, dict):
+        ctor, params = named_object(value)
+        fields = {"mor.sets.f9_x_constants": "obj.sets.f9_x",
+                  "mor.sets.f9_y_constants": "obj.sets.f9_y"}
+        if ctor in fields and not params:
+            from sage_field_presentations import field
+            target = field({"ctor": fields[ctor], "args": []})
+            # The released constant map has domain ZMod 3. Sage performs the
+            # coefficient embedding into the selected quotient field model.
+            return {json.dumps(int(x.lift())): target(int(x.lift())) for x in Zmod(3)}
+        raise ValueError("no Sage finite graph translation for %s" % ctor)
     if not isinstance(value, list):
         raise ValueError("a morphism is a list of pairs: %r" % (value,))
     table = {}
