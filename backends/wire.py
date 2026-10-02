@@ -13,9 +13,18 @@ value of the operation's result form, a constructor application `{"ctor": <const
 
 def named_object(value):
     """The object id and the parameters of an input."""
-    if not isinstance(value, dict) or "ctor" not in value:
+    if (not isinstance(value, dict) or not isinstance(value.get("ctor"), str)
+            or not isinstance(value.get("args"), list)):
         raise ValueError("not a named object: %r" % (value,))
-    return value["ctor"], list(value.get("args") or [])
+    return value["ctor"], value["args"]
+
+
+def constructor(value, name, arity):
+    """Read an explicit constructor application from the released structural wire."""
+    ctor, args = named_object(value)
+    if ctor != name or len(args) != arity:
+        raise ValueError("expected %s with %d arguments: %r" % (name, arity, value))
+    return args
 
 
 def numeral(value):

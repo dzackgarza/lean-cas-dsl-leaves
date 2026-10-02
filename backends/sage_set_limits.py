@@ -35,7 +35,7 @@ from sage.sets.finite_enumerated_set import FiniteEnumeratedSet  # noqa: E402
 from sage.sets.integer_range import IntegerRange  # noqa: E402
 from sage.version import version as SAGE_VERSION  # noqa: E402
 
-from wire import named_object, numeral  # noqa: E402
+from wire import constructor, named_object, numeral  # noqa: E402
 
 ADAPTER_VERSION = "0.1.0"
 
@@ -63,12 +63,7 @@ def finite_set(value):
 
 
 def diagram(value, shape, arity):
-    if not isinstance(value, dict) or value.get("ctor") != shape:
-        raise ValueError("expected a %s diagram: %r" % (shape, value))
-    args = list(value.get("args") or [])
-    if len(args) != arity:
-        raise ValueError("%s takes %d arguments, got %d" % (shape, arity, len(args)))
-    return args
+    return constructor(value, shape, arity)
 
 
 def fin(m):
