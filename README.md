@@ -241,3 +241,8 @@ yet been checked. Unsupported inline coefficient data, general selected maps and
 other point representations are reported as computational gaps. Opaque factor
 collections remain native data; their further use requires an existing admitted
 operation, and tokens never create new mathematical interfaces.
+
+Matrix determinant and trace at published integer or positive-modulus residue
+endpoints return portable `valueData` numerals instead of session-local tokens.
+Other scalar representations await their actual published caller encoding; the
+adapter does not invent rational or truth-value serialization.

@@ -159,6 +159,16 @@ class PolynomialAdapter:
             result = value.trace()
         else:
             raise ValueError("unsupported released polynomial operation")
+        if operation in {"mor.sets.matrix_det", "mor.sets.matrix_trace"}:
+            target_form, target_parameters = named_object(target)
+            if target_form in {"obj.sets.integers", "obj.rings.integers",
+                               "obj.commutative_rings.integers"} and not target_parameters:
+                return value_data(int(result))
+            if target_form in {"obj.sets.integers_mod", "obj.rings.integers_mod",
+                               "obj.commutative_rings.integers_mod"}:
+                modulus, = target_parameters
+                if numeral(modulus) > 0:
+                    return value_data(int(result))
         return self.native.retain(target, result)
 
 
