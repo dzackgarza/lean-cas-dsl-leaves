@@ -191,3 +191,21 @@ This is an engineering gap observation, not successful realization or result
 decode. `just test-ci` passes. Completing pairing evaluation needs an actual
 public point/application request or a public computed-function result encoding;
 its mathematical signature and encoding must be supplied upstream.
+
+The separate public `ring-view-product-request.json` (SHA256
+`a8dc4cabf5be590674e434020be4378c895eb83145bcb0141c8556f42147d79d`)
+now executes through the existing `lim.sets.product` / `cat.sets` registration.
+Finite input lowering retains each complete `functorAction`, its exact supported
+forget edge, and its selected source, down to `obj.rings.integers_mod(3)`.
+Sage `Zmod` supplies the selected ring parent and `cartesian_product` supplies
+product enumeration. The product path retains those structured native input
+nodes while encoding the existing cone and its projection graphs. No new
+registration or inferred semantic route is introduced. Unsupported classifier
+arguments reject. A native inspection retains all four actual action nodes and
+the full selected ring descriptor.
+
+The exact public request was dispatched through the released framed port under
+Sage 10.8.12 and returned `ok`; its cone, finite apex and both complete graph
+shapes decoded structurally. No expected mathematical answer was provided or
+used. `just test-ci` and `git diff --check` pass. These are engineering execution
+checks only; the infinite pairing result-representation gap above remains open.

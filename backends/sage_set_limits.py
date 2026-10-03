@@ -23,6 +23,7 @@ Speaks the port protocol through the contract's `cas_port` (on `PYTHONPATH`).
 """
 
 import json
+from dataclasses import dataclass
 
 from engine_python import require_engine
 
@@ -61,12 +62,35 @@ PARENTS = {
 }
 
 
-def finite_set(value):
+@dataclass
+class SelectedFiniteSet:
+    descriptor: dict
+    parent: object
+    encode: object
+    edge: dict = None
+    source: object = None
+
+
+def selected_finite_set(value):
+    """Retain the chosen object and every public forget-action while lowering."""
+    if value.get("ctor") == "functorAction":
+        edge, receiver = constructor(value, "functorAction", 2)
+        carrier_edge(edge)
+        source = selected_finite_set(receiver)
+        return SelectedFiniteSet(value, source.parent, source.encode, edge, source)
     ctor, params = named_object(value)
+    if ctor == "obj.rings.integers_mod":
+        n, = constructor(value, ctor, 1)
+        return SelectedFiniteSet(value, residues(n), lambda r: int(r.lift()))
     if ctor not in PARENTS:
         raise ValueError("no finite Sage parent for %s" % ctor)
     make, encode = PARENTS[ctor]
-    return make(*params), encode
+    return SelectedFiniteSet(value, make(*params), encode)
+
+
+def finite_set(value):
+    selected = selected_finite_set(value)
+    return selected.parent, selected.encode
 
 
 def diagram(value, shape, arity):
@@ -83,7 +107,9 @@ def answer(kind, apex_size, *legs):
 
 def op_product(value):
     X, Y = diagram(value, "pair", 2)
-    (S, ex), (T, ey) = finite_set(X), finite_set(Y)
+    left, right = selected_finite_set(X), selected_finite_set(Y)
+    S, ex = left.parent, left.encode
+    T, ey = right.parent, right.encode
     # Sage: cartesian_product([S, T]), enumerated
     P = list(cartesian_product([S, T]))
     return answer("cone", len(P),
