@@ -115,11 +115,20 @@ class PolynomialAdapter:
             if not value:
                 raise ValueError("zero is outside the published factorization input")
             factorization = value.factor()
+            parent = value.parent()
+            unit = parent(factorization.unit())
+            factors = [(parent(factor), count) for factor, count in factorization]
+            # Sage represents a constant integer polynomial as scalar content.
+            # Factor that content with its native integer engine as well, so the
+            # published unit field does not silently become a nonunit scalar.
+            if not unit.is_unit():
+                content = factorization.unit().factor()
+                unit = parent(content.unit())
+                factors = [(parent(factor), count) for factor, count in content] + factors
             if operation.endswith("_factors"):
-                result = tuple(factor for factor, _ in factorization)
+                result = tuple(factor for factor, _ in factors)
             else:
-                result = (value.parent()(factorization.unit()),
-                          tuple(factor for factor, count in factorization for _ in range(count)))
+                result = (unit, tuple(factor for factor, count in factors for _ in range(count)))
         elif operation == "mor.sets.polynomial_roots":
             if not value:
                 raise ValueError("zero is outside the published finite roots input")

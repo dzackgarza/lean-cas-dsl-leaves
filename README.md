@@ -222,3 +222,22 @@ Sage 10.8.12 and returned `ok`; its cone, finite apex and both complete graph
 shapes decoded structurally. No expected mathematical answer was provided or
 used. `just test-ci` and `git diff --check` pass. These are engineering execution
 checks only; the infinite pairing result-representation gap above remains open.
+
+The `sage-polynomials` adapter uses the released common `apply` point-invocation
+contract and retains native Sage values on their supplying live connection. The
+registered polynomial factorization returns the engine-computed unit and repeated
+factors; subsequent unit, factors and product operations consume that same data.
+Polynomial roots, degree, coefficient change, companion matrices and matrix
+characteristic polynomial, determinant and trace use Sage routines. Coefficient
+change currently lowers actual identity maps and the released integer-coefficient
+map; other selected maps remain computational gaps rather than endpoint casts.
+
+Python compilation, manifest JSON, and a framed same-process engineering probe
+cover construction, factorization, product/unit reuse, roots, companion and
+characteristic polynomial, with clean process exit. These are engineering checks,
+not independent mathematical acceptance evidence. An actual kernel-produced
+input-only request is still pending; exact codec descriptor integration has not
+yet been checked. Unsupported inline coefficient data, general selected maps and
+other point representations are reported as computational gaps. Opaque factor
+collections remain native data; their further use requires an existing admitted
+operation, and tokens never create new mathematical interfaces.
