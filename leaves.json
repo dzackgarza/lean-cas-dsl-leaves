@@ -65,6 +65,7 @@
     {"operation": "mor.sets.fin_rev", "input": "mor.sets.fin_rev", "backend": "sage-set-limits"},
     {"operation": "meth.cardinality", "input": "fun.modules.underlying", "backend": "sage-root-lattices"},
     {"operation": "fun.integral_lattice.forget_form", "input": "obj.integral_lattice.e8", "backend": "sage-root-lattices"},
+    {"operation": "mor.sets.equality", "input": "mor.sets.equality", "backend": "sage-polynomials"},
     {"operation": "mor.sets.polynomial_degree", "input": "obj.sets.polynomials", "backend": "sage-polynomials"},
     {"operation": "mor.sets.polynomial_factors", "input": "obj.sets.nonzero_polynomials", "backend": "sage-polynomials"},
     {"operation": "mor.sets.polynomial_factorization", "input": "obj.sets.nonzero_polynomials", "backend": "sage-polynomials"},

@@ -245,4 +245,21 @@ operation, and tokens never create new mathematical interfaces.
 Matrix determinant and trace at published integer or positive-modulus residue
 endpoints return portable `valueData` numerals instead of session-local tokens.
 Other scalar representations await their actual published caller encoding; the
-adapter does not invent rational or truth-value serialization.
+adapter does not invent rational serialization. The subsequently published truth-observation
+contract permits a JSON Boolean as computational data, never a proposition proof.
+
+The polynomial adapter also consumes the published `admittedPoint` context by
+lowering its actual original data at the retained original endpoint. Published
+`operationExpression` ring addition, multiplication, negation and power lower to
+Sage native operators at supported full selected named-ring parameters. No
+structural action or coefficient map is inferred from a carrier. Unknown selected
+actions remain unsupported pending the actual kernel input-only packet.
+
+The existing `mor.sets.equality` address consumes the published complete pair
+record at its explicit selected type and produces the contract's computational
+Boolean observation. A scalar Boolean is supported only for the published
+singleton/terminal generalized domains; other truth-valued points require further
+published pointwise or callable support. Native expression/parser and framing
+checks do not establish mathematical acceptance. Exact kernel-produced equality
+and polynomial-application packets remain pending; polynomial application is not
+registered using a guessed algebra or coefficient map.

@@ -7,7 +7,7 @@ mathematical identities. Formal signatures, arrows and composition are caller-ow
 from engine_python import require_engine
 require_engine("CAS_SAGE_PYTHON", "sage.all__sagemath_modules")
 
-from cas_port import opaque_data, point_invocation, serve, value_data
+from cas_port import admitted_point, operation_expression, opaque_data, point_invocation, serve, value_data
 from sage.matrix.constructor import companion_matrix
 from sage.rings.polynomial.polynomial_ring_constructor import PolynomialRing
 from sage.version import version as SAGE_VERSION
@@ -20,6 +20,7 @@ POLYNOMIAL_FORMS = {"obj.sets.polynomials", "obj.rings.polynomials",
 FACTORIZATION_FORM = "obj.sets.polynomial_factorization_data"
 MULTISET_FORM = "obj.sets.polynomial_factor_multisets"
 OPERATIONS = {
+    "mor.sets.equality": ["mor.sets.equality"],
     "mor.sets.polynomial_degree": ["obj.sets.polynomials"],
     "mor.sets.polynomial_factors": ["obj.sets.nonzero_polynomials"],
     "mor.sets.polynomial_factorization": ["obj.sets.nonzero_polynomials"],
@@ -59,6 +60,13 @@ class NativeValues:
                 if polynomial_coefficient(original) != polynomial_coefficient(descriptor):
                     raise ValueError("opaque value changes its selected computational endpoint")
             return native
+        if isinstance(data, dict) and data.get("ctor") == "admittedPoint":
+            object_id, parameters, original_domain, original_target, admitted_target, original = admitted_point(data)
+            if admitted_target != descriptor or descriptor != {"ctor": object_id, "args": parameters}:
+                raise ValueError("admitted point changes its full selected endpoint or parameters")
+            # Keep the caller's original data/endpoint; the admission context supplies
+            # no backend proof and does not authorize changing a selected coefficient.
+            return self.lower(original, original_target)
         form, parameters = named_object(descriptor)
         if form in POLYNOMIAL_FORMS or form == "obj.sets.monics":
             ring = PolynomialRing(base_ring(polynomial_coefficient(descriptor)), "t")
@@ -66,8 +74,67 @@ class NativeValues:
                 selected, data = constructor(data, "element", 2)
                 if selected != descriptor:
                     raise ValueError("element changes its full selected polynomial endpoint")
-            return arithmetic(data, ring)
+            return native_expression(data, ring, descriptor)
+        if form in {"obj.sets.integers", "obj.rings.integers", "obj.commutative_rings.integers",
+                    "obj.sets.integers_mod", "obj.rings.integers_mod",
+                    "obj.commutative_rings.integers_mod", "obj.sets.rationals",
+                    "obj.rings.rationals", "obj.commutative_rings.rationals"}:
+            # Set views have the same publicly selected named ring parameters.
+            ring_descriptor = {"ctor": form.replace("obj.sets.", "obj.rings."),
+                               "args": parameters}
+            parent = base_ring(ring_descriptor)
+            if isinstance(data, dict) and data.get("ctor") == "element":
+                selected, data = constructor(data, "element", 2)
+                if selected != descriptor:
+                    raise ValueError("element changes its full selected scalar endpoint")
+                return native_expression(data, parent, descriptor)
+            if isinstance(data, int) and not isinstance(data, bool):
+                return parent(data)
         raise ValueError("no published inline lowering for this selected endpoint")
+
+
+def native_expression(data, parent, selected):
+    """Translate published expression data to native Sage operators, not laws."""
+    if isinstance(data, dict) and data.get("ctor") == "element":
+        endpoint, expression = constructor(data, "element", 2)
+        if endpoint != selected:
+            raise ValueError("operand changes the full selected expression endpoint")
+        return native_expression(expression, parent, selected)
+    if isinstance(data, dict) and data.get("ctor") == "operationExpression":
+        operation, parameters, operands = operation_expression(data)
+        expected_ring = dict(selected)
+        form, arguments = named_object(selected)
+        if form in POLYNOMIAL_FORMS:
+            expected_ring = {"ctor": "obj.rings.polynomials", "args": arguments}
+        elif form.startswith("obj.sets."):
+            expected_ring = {"ctor": form.replace("obj.sets.", "obj.rings."), "args": arguments}
+        if not parameters or parameters[0] != expected_ring:
+            raise ValueError("no native lowering for this full selected ring action")
+        if operation == "op.rings.pow" and len(parameters) == 2 and len(operands) == 1:
+            exponent = parameters[1]
+            if isinstance(exponent, dict):
+                natural, expression = constructor(exponent, "element", 2)
+                if natural != {"ctor": "obj.sets.naturals", "args": []}:
+                    raise ValueError("power exponent changes its selected natural endpoint")
+                exponent, = constructor(expression, "numeral", 1)
+            return native_expression(operands[0], parent, selected) ** numeral(exponent)
+        if len(parameters) != 1:
+            raise ValueError("unsupported selected operation parameters")
+        values = [native_expression(operand, parent, selected) for operand in operands]
+        if operation == "op.rings.add" and len(values) == 2:
+            return values[0] + values[1]
+        if operation == "op.rings.mul" and len(values) == 2:
+            return values[0] * values[1]
+        if operation == "op.rings.neg" and len(values) == 1:
+            return -values[0]
+        raise ValueError("no native implementation of this published expression operation")
+    form, arguments = named_object(data)
+    if form in {"add", "mul"} and len(arguments) == 2:
+        left, right = (native_expression(operand, parent, selected) for operand in arguments)
+        return left + right if form == "add" else left * right
+    if form == "neg" and len(arguments) == 1:
+        return -native_expression(arguments[0], parent, selected)
+    return arithmetic(data, parent)
 
 
 def polynomial_coefficient(descriptor):
@@ -101,6 +168,19 @@ class PolynomialAdapter:
 
     def invoke(self, operation, request):
         _, parameters, arrow, domain, source, target, argument = point_invocation(request, operation)
+        if operation == "mor.sets.equality":
+            selected, = parameters
+            if target != {"ctor": "obj.sets.truth_values", "args": []}:
+                raise ValueError("equality observation changes its published truth target")
+            if domain not in ({"ctor": "obj.sets.fin", "args": [1]},
+                              {"ctor": "obj.sets.terminal", "args": []}):
+                raise ValueError("one Boolean cannot represent this generalized truth point")
+            if isinstance(argument, dict) and argument.get("ctor") == "valueData":
+                argument, = constructor(argument, "valueData", 1)
+            if not isinstance(argument, list) or len(argument) != 2:
+                raise ValueError("equality requires the published complete pair record")
+            left, right = (self.native.lower(point, selected) for point in argument)
+            return value_data(bool(left == right))
         form, _ = named_object(source)
         if form not in OPERATIONS[operation]:
             raise ValueError("operation has no registration for this input form")
