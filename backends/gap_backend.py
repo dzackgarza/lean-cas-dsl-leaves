@@ -71,6 +71,11 @@ def homomorphism(value):
         if H != H2:
             raise ValueError("group map composition changes the selected endpoint")
         return G, K, libgap.CompositionMapping(g, f)
+    if ctor == "identity":
+        G, H = constructor(value, "identity", 2)
+        if G != H:
+            raise ValueError("identity changes its selected group endpoint")
+        return G, H, libgap.IdentityMapping(domain(G))
     if ctor == "mor.groups.sign":
         n, = constructor(value, ctor, 1)
         G = {"ctor": "obj.groups.symmetric", "args": [numeral(n)]}
