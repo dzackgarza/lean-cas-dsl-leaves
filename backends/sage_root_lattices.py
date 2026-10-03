@@ -22,6 +22,7 @@ from sage.rings.integer_ring import ZZ  # noqa: E402
 from sage.version import version as SAGE_VERSION  # noqa: E402
 
 from wire import aleph0, constructor, decision, finite_cardinal, named_object, numeral  # noqa: E402
+from sage_fixed_forms import e8_module, formed, carrier, forget_form  # noqa: E402
 
 
 def lattice(value):
@@ -29,7 +30,7 @@ def lattice(value):
     if ctor == "obj.integral_lattice.e8":
         if args:
             raise ValueError("E8 has no explicit parameters")
-        return RootSystem(["E", 8]).root_lattice()
+        return e8_module()
     routines = {"obj.bil_wform.root_lattice_a": "root_lattice",
                 "obj.bil_wform.root_lattice_a_dual": "weight_lattice"}
     if ctor not in routines or len(args) != 1:
@@ -56,6 +57,11 @@ def underlying_module(value):
 def parent(value):
     ctor, _ = named_object(value)
     if ctor == "functorAction":
+        edge, _ = constructor(value, "functorAction", 2)
+        if edge.get("ctor") == "fun.integral_lattice.forget_form":
+            return formed(value).carrier
+        if edge.get("ctor") == "fun.bilin_module.forget":
+            return carrier(value).carrier
         return underlying_module(value)
     return canonical_quotient(value) if ctor == "limitApex" else lattice(value)
 
@@ -107,4 +113,5 @@ def op_cokernel(diagram):
 
 serve("sage", SAGE_VERSION, "0.1.0",
       {"meth.cardinality": op_cardinality, "meth.rank": op_rank,
-       "prop.is_finite": op_is_finite, "colim.bil_w_form.cokernel": op_cokernel})
+       "prop.is_finite": op_is_finite, "colim.bil_w_form.cokernel": op_cokernel,
+       "fun.integral_lattice.forget_form": forget_form})

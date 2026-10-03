@@ -76,3 +76,44 @@ provide no mathematical acceptance evidence.
 An author source read accidentally included theorem bodies beyond the authorized FiniteGroups
 constructor definitions. This was reported; those bodies were not used as computational
 expectations. Later extraction was restricted to the authorized input-model definitions.
+
+Released-interface engineering coverage:
+
+Input source: `released-interface-feb09e0-b1525e5`, mathematics revision
+`feb09e0f4d13ad40850b6bc9e5213c5dee85d1c7`, contract revision
+`b1525e5fae0ad28ec4cf95ef9cdbba7c9124c082`.
+The snapshot identifies a source-assessed candidate with protected admission pending.
+This note describes computational translation gaps only. It supplies no mathematical
+acceptance evidence, status, certificate, or proof for any computation.
+
+The public `module-underlying-cardinality` input can be decoded by the current
+root-lattice adapter. Its complete fibre inclusion, carrier action, canonical
+cokernel diagram and zero-arrow endpoints are retained. Native Sage quotient and
+cardinality routines execute in the modular engine environment. Native
+`FreeModule.hom(...).kernel().basis_matrix()` also executes there.
+
+The metadata-generated `fixed-w-view`, `fixed-w-object` and `fixed-w-carrier`
+inputs now have a native model in `sage_fixed_forms.py`. The chosen E8 form is
+negative in its released simple-root coordinates. Sage matrix multiplication and
+`FreeQuadraticModule` construct that exact form; the complete object, scalar and
+value descriptors remain distinct retained fields. The registered integral-lattice
+view returns the complete structural action. Changing the selected value-module
+descriptor is rejected. These input decoding and native execution checks are
+engineering observations only. Other fixed-value structures remain unsupported.
+
+Required trusted public input fixtures, without expected answers:
+
+- A defining arrow at its exact endpoints, including any retained subobject or
+  construction inclusion needed by subsequent computation.
+- A chosen coefficient arrow and a chosen presentation arrow with complete
+  parameters and endpoints. In particular, `fun.bilin_module.change_value` has
+  explicit parameters `(R, W, W', f)`; the map `f` cannot be discarded.
+- A complete `pointView` with its source element and generalized-point domain.
+- A complete `operationPoint` with its actual presentation comparison, original
+  domain and selected target.
+- A complete `createdCone` inside a `constructionLeg`, including the original
+  source diagram, returned target cone, realized source apex and typed leg index.
+
+The contract documents these envelopes but the released public-wire directory
+now additionally provides the three selected fixed-W E8 inputs described above. Unsupported descriptors remain computational gaps; no carrier-based
+reconstruction or guessed envelope is introduced.
