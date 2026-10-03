@@ -48,6 +48,9 @@ def underlying_module(value):
             {"ctor": "obj.rings.integers", "args": []}]}:
         raise ValueError("no native module model for this selected scalar ring")
     carrier, formed = constructor(fibre, "functorAction", 2)
+    if carrier.get("ctor") == "fun.bilin_module.forget":
+        from sage_fixed_forms import carrier as fixed_carrier
+        return fixed_carrier(fibre).carrier
     if carrier != {"ctor": "fun.bil_wform.carrier", "args": [
             {"ctor": "obj.sets.integers", "args": []}]}:
         raise ValueError("no native formed-module carrier model for this exact edge")
@@ -56,6 +59,8 @@ def underlying_module(value):
 
 def parent(value):
     ctor, _ = named_object(value)
+    if ctor == "subobjectApex":
+        return formed(value).carrier
     if ctor == "functorAction":
         edge, _ = constructor(value, "functorAction", 2)
         if edge.get("ctor") == "fun.integral_lattice.forget_form":

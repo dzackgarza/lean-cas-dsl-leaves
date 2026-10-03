@@ -24,6 +24,15 @@ class SelectedForm:
     value_module: object
 
 
+@dataclass
+class SelectedSubobject:
+    descriptor: dict
+    apex: SelectedForm
+    ambient: SelectedForm
+    inclusion_descriptor: dict
+    inclusion: object
+
+
 def e8_module():
     coordinates = matrix(ZZ, [
         [1, -1, -1, -1, -1, -1, -1, 1],
@@ -39,6 +48,9 @@ def e8_module():
 
 
 def formed(value):
+    if value.get("ctor") == "subobjectApex":
+        receiver, = constructor(value, "subobjectApex", 1)
+        return lifted_subobject(receiver).apex
     edge, source = constructor(value, "functorAction", 2)
     scalar, = constructor(edge, "fun.integral_lattice.forget_form", 1)
     if scalar != INTEGER or source != E8:
@@ -46,6 +58,42 @@ def formed(value):
     # This registered integral-lattice view has value module R itself.
     # Retain its separate dependent role even when its descriptor equals R.
     return SelectedForm(value, scalar, scalar, e8_module(), ZZ)
+
+
+def lifted_subobject(value):
+    """Use the actual prescribed restriction, retaining its full defining map."""
+    from sage_module_kernels import module_arrow, linear_map
+    original, receiver, lifts = constructor(value, "liftedSubobject", 3)
+    if lifts != ["lift.bilin_module.restrict"]:
+        raise ValueError("no native model for this complete prescribed lift route")
+    action, transported = constructor(original, "functorAction", 2)
+    if action != {"ctor": "fun.arrows_modules.kernel", "args": [
+            {"ctor": "obj.rings.integers", "args": []}]}:
+        raise ValueError("unsupported lifted subobject construction or scalar")
+    transport, original_receiver = constructor(transported, "functorAction", 2)
+    if original_receiver != receiver:
+        raise ValueError("lift changes its actual source arrow receiver")
+    source, target, arrow = module_arrow(transported)
+    ambient_descriptor, _, _ = constructor(receiver, "arrow", 3)
+    ambient = formed(ambient_descriptor)
+    kernel = linear_map(arrow, source, target).kernel()
+    # Sage restricts the ambient quadratic module along the actual kernel basis.
+    # This keeps its chosen coordinates and inherited negative bilinear form.
+    restricted = ambient.carrier.submodule(kernel.basis_matrix().rows())
+    apex_descriptor = {"ctor": "subobjectApex", "args": [value]}
+    inclusion_descriptor = {"ctor": "subobjectInclusion", "args": [value]}
+    apex = SelectedForm(apex_descriptor, ambient.scalar_descriptor,
+                        ambient.value_descriptor, restricted, ambient.value_module)
+    inclusion = restricted.hom(restricted.basis_matrix(), ambient.carrier)
+    return SelectedSubobject(value, apex, ambient, inclusion_descriptor, inclusion)
+
+
+def defining_inclusion(value, source, target):
+    receiver, = constructor(value, "subobjectInclusion", 1)
+    selected = lifted_subobject(receiver)
+    if source != selected.apex.descriptor or target != selected.ambient.descriptor:
+        raise ValueError("lifted inclusion changes its complete selected endpoints")
+    return selected.inclusion
 
 
 def carrier(value):

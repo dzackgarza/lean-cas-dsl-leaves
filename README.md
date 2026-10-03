@@ -135,3 +135,20 @@ The public request and subsequent projection lowering execute in the native
 engine; changed scalar/value arguments and unsupported arrow data reject.
 `just test-ci` checks the manifest JSON and Python compilation. These checks
 provide engineering execution findings only.
+
+The `58f753b-7a25454` public lifted-subobject, lifted-apex and
+lifted-inclusion inputs now lower through the exact `lift.bilin_module.restrict`
+route. Native Sage computes the original transported kernel, restricts the
+chosen ambient quadratic module with `submodule(kernel.basis_matrix().rows())`,
+and constructs its actual inclusion with the restricted basis and `hom`.
+The complete source receiver must match the retained transported action; changed
+scalar/value roles or lift routes are rejected. The selected apex retains its
+complete descriptor, chosen restricted form, separate scalar/value descriptors
+and value module. Native cardinality and vector `inner_product` routines execute
+on that restricted module. The root adapter can lower its apex and the exact
+fixed-W carrier under the existing full module-underlying route. General
+noncanonical presentations remain unsupported, including supplied comparisons
+for which no native model exists; they are not silently discarded. Actual
+outgoing apex/inclusion, inherited cardinality and pairing application request
+fixtures are needed before adding their dispatch registrations or point-wire
+parsers. These observations are native engineering execution findings only.

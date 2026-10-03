@@ -11,7 +11,7 @@ from sage.matrix.constructor import matrix
 from sage.combinat.root_system.cartan_type import CartanType
 from sage.version import version as SAGE_VERSION
 from wire import constructor, named_object, numeral
-from sage_fixed_forms import carrier, formed, INTEGER
+from sage_fixed_forms import carrier, formed, defining_inclusion, INTEGER
 
 
 def module_arrow(value):
@@ -35,6 +35,9 @@ def module_arrow(value):
 def module(value):
     if value.get("ctor") == "subobjectApex":
         action, = constructor(value, "subobjectApex", 1)
+        if action.get("ctor") == "liftedSubobject":
+            selected_form = formed(value)
+            return selected_form.carrier, action, value
         edge, receiver = constructor(action, "functorAction", 2)
         if edge != {"ctor": "fun.arrows_modules.kernel", "args": [
                 {"ctor": "obj.rings.integers", "args": []}]}:
@@ -42,6 +45,9 @@ def module(value):
         source, target, arrow = module_arrow(receiver)
         return linear_map(arrow, source, target).kernel(), edge, receiver
     edge, selected = constructor(value, "functorAction", 2)
+    if edge.get("ctor") == "fun.integral_lattice.forget_form":
+        selected_form = formed(value)
+        return selected_form.carrier, edge, selected
     if edge.get("ctor") == "fun.bilin_module.forget":
         selected_form = carrier(value)
         return selected_form.carrier, edge, selected
@@ -56,6 +62,10 @@ def module(value):
 
 
 def linear_map(value, source, target):
+    if value.get("ctor") == "subobjectInclusion":
+        action, = constructor(value, "subobjectInclusion", 1)
+        if action.get("ctor") == "liftedSubobject":
+            return defining_inclusion(value, source, target)
     domain, source_edge, source_selected = module(source)
     codomain, target_edge, target_selected = module(target)
     ctor, args = named_object(value)
