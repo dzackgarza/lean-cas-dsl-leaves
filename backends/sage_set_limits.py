@@ -8,7 +8,8 @@ workspace's `.venv/bin/python` (`engine_python`). Routines:
 * `colim.sets.coproduct` on `pair X Y`: `DisjointUnionEnumeratedSets(..., keepkey=True)`
   (`sage.sets.disjoint_union_enumerated_sets`);
 * `lim.sets.pullback` on `cospan f g`: the pairs `(x, y)` with `f x = g y`, selected from Sage's
-  enumeration of `cartesian_product([dom f, dom g])` (`FiniteEnumeratedSet` of each domain).
+  `cartesian_product([dom f, dom g])` by Sage's `ConditionSet` enumeration
+  (`FiniteEnumeratedSet` of each domain).
 
 Wire (`CasContract/Port.lean`, "The wire encoding of inputs and answers"): a diagram is
 `{"ctor": "pair", "args": [X, Y]}` with named objects, or `{"ctor": "cospan", "args": [f, g]}`
@@ -22,20 +23,23 @@ Speaks the port protocol through the contract's `cas_port` (on `PYTHONPATH`).
 """
 
 import json
+from dataclasses import dataclass
 
 from engine_python import require_engine
 
 require_engine("CAS_SAGE_PYTHON", "sage.all__sagemath_combinat")
 
 from cas_port import serve  # noqa: E402  the leaf contract's reference port
-from sage.all__sagemath_combinat import Zmod, cartesian_product  # noqa: E402
+from sage.all__sagemath_combinat import Zmod, cartesian_product, Permutations  # noqa: E402
 from sage.sets.disjoint_union_enumerated_sets import DisjointUnionEnumeratedSets  # noqa: E402
+from sage.sets.condition_set import ConditionSet  # noqa: E402
 from sage.sets.family import Family  # noqa: E402
 from sage.sets.finite_enumerated_set import FiniteEnumeratedSet  # noqa: E402
 from sage.sets.integer_range import IntegerRange  # noqa: E402
 from sage.version import version as SAGE_VERSION  # noqa: E402
+from sage.modules.free_module import FreeModule  # noqa: E402
 
-from wire import named_object, numeral  # noqa: E402
+from wire import constructor, named_object, numeral  # noqa: E402
 
 ADAPTER_VERSION = "0.1.0"
 
@@ -50,25 +54,47 @@ def residues(n):
 # of an element (a point of `Fin n`, and of `ZMod n = Fin n` for n > 0, is its number).
 PARENTS = {
     "obj.sets.fin": (lambda n: IntegerRange(0, numeral(n)), int),
+    "obj.finite_sets.fin": (lambda n: IntegerRange(0, numeral(n)), int),
     "obj.sets.integers_mod": (residues, lambda r: int(r.lift())),
+    "obj.sets.integers_mod_power": (
+        lambda n, k: FreeModule(residues(n), numeral(k)),
+        lambda row: [int(r.lift()) for r in row]),
 }
 
 
-def finite_set(value):
+@dataclass
+class SelectedFiniteSet:
+    descriptor: dict
+    parent: object
+    encode: object
+    edge: dict = None
+    source: object = None
+
+
+def selected_finite_set(value):
+    """Retain the chosen object and every public forget-action while lowering."""
+    if value.get("ctor") == "functorAction":
+        edge, receiver = constructor(value, "functorAction", 2)
+        carrier_edge(edge)
+        source = selected_finite_set(receiver)
+        return SelectedFiniteSet(value, source.parent, source.encode, edge, source)
     ctor, params = named_object(value)
+    if ctor == "obj.rings.integers_mod":
+        n, = constructor(value, ctor, 1)
+        return SelectedFiniteSet(value, residues(n), lambda r: int(r.lift()))
     if ctor not in PARENTS:
         raise ValueError("no finite Sage parent for %s" % ctor)
     make, encode = PARENTS[ctor]
-    return make(*params), encode
+    return SelectedFiniteSet(value, make(*params), encode)
+
+
+def finite_set(value):
+    selected = selected_finite_set(value)
+    return selected.parent, selected.encode
 
 
 def diagram(value, shape, arity):
-    if not isinstance(value, dict) or value.get("ctor") != shape:
-        raise ValueError("expected a %s diagram: %r" % (shape, value))
-    args = list(value.get("args") or [])
-    if len(args) != arity:
-        raise ValueError("%s takes %d arguments, got %d" % (shape, arity, len(args)))
-    return args
+    return constructor(value, shape, arity)
 
 
 def fin(m):
@@ -81,7 +107,9 @@ def answer(kind, apex_size, *legs):
 
 def op_product(value):
     X, Y = diagram(value, "pair", 2)
-    (S, ex), (T, ey) = finite_set(X), finite_set(Y)
+    left, right = selected_finite_set(X), selected_finite_set(Y)
+    S, ex = left.parent, left.encode
+    T, ey = right.parent, right.encode
     # Sage: cartesian_product([S, T]), enumerated
     P = list(cartesian_product([S, T]))
     return answer("cone", len(P),
@@ -101,8 +129,91 @@ def op_coproduct(value):
                   [[ey(y), position[(1, ey(y))]] for y in T])
 
 
+def native_point(value):
+    """Decode field arithmetic before comparing points or applying a native map."""
+    if isinstance(value, dict) and value.get("ctor") == "element":
+        from sage_field_presentations import field, selected_element
+        descriptor, _ = constructor(value, "element", 2)
+        return selected_element(value, descriptor, field(descriptor))
+    return json.dumps(value, sort_keys=True)
+
+
+def field_arrow(value):
+    """Released selected F9 arrow, evaluated as a Sage homomorphism."""
+    from sage_field_presentations import field
+    comparison, parameters, inverse = constructor(value, "presentation", 3)
+    if comparison != "cmp.f9.translation" or parameters or not isinstance(inverse, bool):
+        raise ValueError("no selected field arrow model for this comparison")
+    source = field({"ctor": "obj.sets.f9_y" if inverse else "obj.sets.f9_x", "args": []})
+    target = field({"ctor": "obj.sets.f9_x" if inverse else "obj.sets.f9_y", "args": []})
+    return source.hom([target.gen() - 2 if inverse else target.gen() + 2], target)
+
+
+def carrier_edge(value):
+    """Only released forgetful routes with unchanged underlying points."""
+    ctor, args = named_object(value)
+    if ctor == "classifierForget":
+        if len(args) != 2 or args[1] != [] or args[0] not in {
+                "clf.magmas.associative", "clf.sets.binary_operation"}:
+            raise ValueError("no carrier model for this instantiated classifier")
+    elif ctor not in {"fun.commutative_rings.ring", "fun.rings.multiplicative_monoid",
+                      "fun.monoids.semigroup"} or args:
+        raise ValueError("no carrier model for this functor edge")
+
+
+def op_fin_rev(value):
+    n, = constructor(value, "mor.sets.fin_rev", 1)
+    n = numeral(n)
+    permutation = Permutations(n).first().reverse()
+    # Sage permutation points are one-based; the registered Fin carrier is zero-based.
+    return [[index, int(image) - 1] for index, image in enumerate(permutation)]
+
+
 def graph(value):
     """A morphism's graph as a dict over canonical JSON keys, with its domain in order."""
+    if isinstance(value, dict):
+        ctor, params = named_object(value)
+        if ctor == "mor.sets.fin_rev":
+            return graph(op_fin_rev(value))
+        if ctor == "map":
+            edge, arrow = constructor(value, "map", 2)
+            carrier_edge(edge)
+            return graph(arrow)
+        if ctor == "compose":
+            first, second = constructor(value, "compose", 2)
+            table = graph(first)
+            # A presentation is applied by its selected native Sage field map.
+            mapped = second
+            while isinstance(mapped, dict) and mapped.get("ctor") == "map":
+                edge, mapped = constructor(mapped, "map", 2)
+                carrier_edge(edge)
+            if isinstance(mapped, dict) and mapped.get("ctor") == "presentation":
+                hom = field_arrow(mapped)
+                return {key: hom(point) for key, point in table.items()}
+            later = graph(second)
+            return {key: later[point] for key, point in table.items()}
+        if ctor == "presentation":
+            hom = field_arrow(value)
+            from sage_field_presentations import arithmetic_data
+            source_id = "obj.sets.f9_y" if params[2] else "obj.sets.f9_x"
+            descriptor = {"ctor": source_id, "args": []}
+            return {json.dumps({"ctor": "element", "args": [descriptor, arithmetic_data(x)]},
+                               sort_keys=True): hom(x) for x in hom.domain()}
+        if ctor == "generator":
+            object_id, explicit = constructor(value, "generator", 2)
+            if object_id not in {"obj.sets.f9_x", "obj.sets.f9_y"} or explicit:
+                raise ValueError("no selected field generator arrow model")
+            from sage_field_presentations import field
+            return {"0": field({"ctor": object_id, "args": []}).gen()}
+        fields = {"mor.sets.f9_x_constants": "obj.sets.f9_x",
+                  "mor.sets.f9_y_constants": "obj.sets.f9_y"}
+        if ctor in fields and not params:
+            from sage_field_presentations import field
+            target = field({"ctor": fields[ctor], "args": []})
+            # The released constant map has domain ZMod 3. Sage performs the
+            # coefficient embedding into the selected quotient field model.
+            return {json.dumps(int(x.lift())): target(int(x.lift())) for x in Zmod(3)}
+        raise ValueError("no Sage finite graph translation for %s" % ctor)
     if not isinstance(value, list):
         raise ValueError("a morphism is a list of pairs: %r" % (value,))
     table = {}
@@ -112,20 +223,21 @@ def graph(value):
         key = json.dumps(pair[0], sort_keys=True)
         if key in table:
             raise ValueError("the graph lists %s twice" % key)
-        table[key] = json.dumps(pair[1], sort_keys=True)
+        table[key] = native_point(pair[1])
     return table
 
 
 def op_pullback(value):
     f, g = (graph(m) for m in diagram(value, "cospan", 2))
-    # Sage: the pairs of cartesian_product([dom f, dom g]) with f x = g y
-    P = [p for p in cartesian_product([FiniteEnumeratedSet(f), FiniteEnumeratedSet(g)])
-         if f[p[0]] == g[p[1]]]
+    # Sage owns the constrained-set enumeration; the predicate applies the wire graphs.
+    universe = cartesian_product([FiniteEnumeratedSet(f), FiniteEnumeratedSet(g)])
+    P = list(ConditionSet(universe, lambda p: f[p[0]] == g[p[1]]))
     return answer("cone", len(P),
                   [[k, json.loads(p[0])] for k, p in enumerate(P)],
                   [[k, json.loads(p[1])] for k, p in enumerate(P)])
 
 
-serve("sage", SAGE_VERSION, ADAPTER_VERSION,
-      {"lim.sets.product": op_product, "colim.sets.coproduct": op_coproduct,
-       "lim.sets.pullback": op_pullback})
+if __name__ == "__main__":
+    serve("sage", SAGE_VERSION, ADAPTER_VERSION,
+          {"lim.sets.product": op_product, "colim.sets.coproduct": op_coproduct,
+           "lim.sets.pullback": op_pullback, "mor.sets.fin_rev": op_fin_rev})
