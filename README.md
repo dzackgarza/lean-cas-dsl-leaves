@@ -3,8 +3,11 @@
 [`lean-cas-dsl/specs/architecture.md`](https://github.com/dzackgarza/lean-cas-dsl/blob/main/specs/architecture.md)
 owns the separation of concerns. A leaf is a registration: a catalogue operation of
 `lean-categories`, an input form, and a backend program that computes the operation's result form.
-It contributes no mathematics and ships no Lean. Nothing it says is believed; only its answers are
-checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
+It contributes no mathematics and ships no Lean. Registration is a computational claim checked
+against the published contract, not a theorem that the implementation is correct. The kernel uses
+declarations and outputs for dispatch and computation; they carry no semantic authority. Independent
+`lean-cas-dsl` acceptance checks observed answers against mathematics; this package never sees it.
+A well-formed wrong answer remains possible.
 
 * **`leaves.json`** is the manifest the kernel reads (`CasContract/Registration.lean` of
   `lean-cas-dsl-leaf-contracts`): the backend programs, and for each registration exactly its
@@ -56,11 +59,18 @@ module before importing low-level extension modules such as `sage.libs.gap.libga
 * **Blind to the tests.** The permanent acceptance suite lives in `lean-cas-dsl`; nothing here
   depends on it, runs it or can reach it. A leaf is never written or changed to make a test pass:
   `lean-cas-dsl`'s harness measures the installed leaves and reports gaps. A leaf's own tests are
-  evidence of nothing.
+  not independent mathematical acceptance evidence.
 * **Litmus role.** These leaves also probe the kernel: change one when that exposes a deficiency of
   the contract, the kernel or `lean-categories`, and name the deficiency in the commit.
 
-Missing mathematics or missing forms go upstream to `lean-categories`; a leaf never absorbs them.
+Missing mathematics and abstract computational obligations belong to `lean-categories`, which may
+improve its API without tailoring meaning to a backend. Concrete representations and invocation
+belong to the leaf contract; generic interpretation, composition and result lifting belong to the
+kernel. Leaves preserve required selected data and implement declared operations. They do not
+reproduce generic inheritance or forwarding mechanisms. Complete callable interfaces need not
+eagerly enumerate infinite objects or evaluate forms on every pair, and computational structure
+is never promoted into a proof of its laws. Available verified Lean computations may be used
+within their scope; theoretical Lean implementability does not bar external engines.
 
 The released `b76ec3d` mathematical interface and updated port provide selected F9
 comparison arrows, generator-relative element data, instantiated carrier-forget edges,
@@ -190,7 +200,10 @@ native Sage module backend: it announced Sage 10.8.12, returned the existing
 This is an engineering gap observation, not successful realization or result
 decode. `just test-ci` passes. Completing pairing evaluation needs an actual
 public point/application request or a public computed-function result encoding;
-its mathematical signature and encoding must be supplied upstream.
+the existing mathematical signature does not require enumerating its infinite domain. A callable
+representation and its invocation belong to the contract and generic kernel machinery. Completing
+that interface requires its owner to provide the representation and execution path, not a new
+mathematical operation, a proof of backend correctness or one workaround per leaf.
 
 The separate public `ring-view-product-request.json` (SHA256
 `a8dc4cabf5be590674e434020be4378c895eb83145bcb0141c8556f42147d79d`)
