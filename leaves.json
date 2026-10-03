@@ -60,6 +60,7 @@
     {"operation": "meth.cardinality", "input": "colim.bil_w_form.cokernel", "backend": "sage-root-lattices"},
     {"operation": "prop.is_finite", "input": "colim.bil_w_form.cokernel", "backend": "sage-root-lattices"},
     {"operation": "fun.arrows_modules.kernel", "input": "cat.arrows_modules_r", "backend": "sage-module-kernels"},
+    {"operation": "meth.kernel", "input": "cat.arrows_modules_r", "backend": "sage-module-kernels"},
     {"operation": "mor.sets.fin_rev", "input": "mor.sets.fin_rev", "backend": "sage-set-limits"},
     {"operation": "meth.cardinality", "input": "fun.modules.underlying", "backend": "sage-root-lattices"},
     {"operation": "fun.integral_lattice.forget_form", "input": "obj.integral_lattice.e8", "backend": "sage-root-lattices"}

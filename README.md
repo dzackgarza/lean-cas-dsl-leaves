@@ -117,3 +117,21 @@ Required trusted public input fixtures, without expected answers:
 The contract documents these envelopes but the released public-wire directory
 now additionally provides the three selected fixed-W E8 inputs described above. Unsupported descriptors remain computational gaps; no carrier-based
 reconstruction or guessed envelope is introduced.
+
+The subsequent released `feb09e0-4b93ebb` public `fixed-w-kernel-request`
+provides the actual `meth.kernel` request at `cat.arrows_modules_r`. The native
+module adapter retains its Arrow constructor action, complete selected fixed-W
+endpoints, scalar and value arguments, and actual mapped arrow. Supported
+identity and zero arrow data is evaluated through Sage module homomorphisms;
+other original arrow data is explicitly unsupported. Sage computes the kernel
+and its defining basis. The complete returned subobject uses the canonical
+apex/inclusion projections of the original transported request, with its exact
+mapped ambient object. Subsequent native lowering of those projections computes
+the same kernel and defining inclusion through Sage's basis and hom routines.
+No alternative apex or presentation identification is chosen; optional
+presentation maps are not fabricated. General returned/lifted subobjects with
+noncanonical presentations still require actual public lowering input data.
+The public request and subsequent projection lowering execute in the native
+engine; changed scalar/value arguments and unsupported arrow data reject.
+`just test-ci` checks the manifest JSON and Python compilation. These checks
+provide engineering execution findings only.
