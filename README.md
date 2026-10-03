@@ -263,6 +263,11 @@ record at its explicit selected type and produces the contract's computational
 Boolean observation. A scalar Boolean is supported only for the published
 singleton/terminal generalized domains; other truth-valued points require further
 published pointwise or callable support. Native expression/parser and framing
-checks do not establish mathematical acceptance. Exact kernel-produced equality
-and polynomial-application packets remain pending; polynomial application is not
+checks do not establish mathematical acceptance. The actual input-only factorization/product/degree/equality packet now
+executes in order on one live connection. Degree data lower to native Sage
+naturals or minus infinity, and the selected `incl.sets.naturals_degrees` route
+retains its preceding natural identity maps. Other maps are unsupported, rather
+than erased or inferred from their endpoints. The equality reply is checked only
+for its published computational Boolean shape, not against an expected answer.
+Polynomial-application packets remain pending; polynomial application is not
 registered using a guessed algebra or coefficient map.

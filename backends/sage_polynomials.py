@@ -11,6 +11,8 @@ from cas_port import admitted_point, operation_expression, opaque_data, point_in
 from sage.matrix.constructor import companion_matrix
 from sage.rings.polynomial.polynomial_ring_constructor import PolynomialRing
 from sage.version import version as SAGE_VERSION
+from sage.rings.infinity import minus_infinity
+from sage.rings.integer_ring import ZZ
 from sage_field_presentations import arithmetic, base_ring
 from wire import constructor, named_object, numeral
 
@@ -68,6 +70,8 @@ class NativeValues:
             # no backend proof and does not authorize changing a selected coefficient.
             return self.lower(original, original_target)
         form, parameters = named_object(descriptor)
+        if form == "obj.sets.degrees" and not parameters:
+            return native_degree(data)
         if form in POLYNOMIAL_FORMS or form == "obj.sets.monics":
             ring = PolynomialRing(base_ring(polynomial_coefficient(descriptor)), "t")
             if isinstance(data, dict) and data.get("ctor") == "element":
@@ -91,6 +95,37 @@ class NativeValues:
             if isinstance(data, int) and not isinstance(data, bool):
                 return parent(data)
         raise ValueError("no published inline lowering for this selected endpoint")
+
+
+def native_degree(data):
+    """Lower WithBot Nat data and its actual published natural inclusion."""
+    form, arguments = named_object(data)
+    if form == "none" and not arguments:
+        return minus_infinity
+    if form == "some" and len(arguments) == 1:
+        return ZZ(numeral(arguments[0]))
+    if form == "compose" and len(arguments) == 2:
+        point, selected_map = arguments
+        natural = {"ctor": "obj.sets.naturals", "args": []}
+
+        def inclusion(arrow):
+            arrow_form, fields = named_object(arrow)
+            if arrow_form == "incl.sets.naturals_degrees" and not fields:
+                return
+            if arrow_form == "compose" and len(fields) == 2:
+                identity, rest = fields
+                if identity != {"ctor": "identity", "args": [natural, natural]}:
+                    raise ValueError("unsupported actual map before the natural-degree inclusion")
+                return inclusion(rest)
+            raise ValueError("no native lowering for this selected degree map")
+
+        inclusion(selected_map)
+        endpoint, expression = constructor(point, "element", 2)
+        if endpoint not in (natural, {"ctor": "obj.semirings.naturals", "args": []}):
+            raise ValueError("degree inclusion changes its complete selected natural source")
+        number, = constructor(expression, "numeral", 1)
+        return ZZ(numeral(number))
+    raise ValueError("unsupported published degree-point data")
 
 
 def native_expression(data, parent, selected):
