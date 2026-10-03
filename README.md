@@ -149,6 +149,15 @@ on that restricted module. The root adapter can lower its apex and the exact
 fixed-W carrier under the existing full module-underlying route. General
 noncanonical presentations remain unsupported, including supplied comparisons
 for which no native model exists; they are not silently discarded. Actual
-outgoing apex/inclusion, inherited cardinality and pairing application request
-fixtures are needed before adding their dispatch registrations or point-wire
-parsers. These observations are native engineering execution findings only.
+outgoing apex/inclusion and pairing application request fixtures are needed
+before adding their dispatch registrations or point-wire parsers. These observations are native engineering execution findings only.
+
+The actual public `fixed-w-lifted-cardinality-request` dispatches through the
+existing `meth.cardinality` / `fun.modules.underlying` registration. Its full
+forward route additionally retains `fun.subobjects_bilin_module.domain(R,W)`;
+the native decoder checks both roles against the chosen lifted apex before
+retaining that complete structural descriptor. The exact manifest-selected
+backend and request have executed through the released contract's framed
+`cas_port.py` protocol, and its structural reply envelope decodes. No
+mathematical output expectation was used. `just test-ci` and `git diff --check`
+also pass. Pairing/point and further operation request fixtures remain pending.

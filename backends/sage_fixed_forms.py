@@ -52,6 +52,12 @@ def formed(value):
         receiver, = constructor(value, "subobjectApex", 1)
         return lifted_subobject(receiver).apex
     edge, source = constructor(value, "functorAction", 2)
+    if edge.get("ctor") == "fun.subobjects_bilin_module.domain":
+        scalar, values = constructor(edge, "fun.subobjects_bilin_module.domain", 2)
+        selected = lifted_subobject(source).apex
+        if scalar != selected.scalar_descriptor or values != selected.value_descriptor:
+            raise ValueError("subobject domain action changes its exact scalar or value role")
+        return SelectedForm(value, scalar, values, selected.carrier, selected.value_module)
     scalar, = constructor(edge, "fun.integral_lattice.forget_form", 1)
     if scalar != INTEGER or source != E8:
         raise ValueError("no native model for this complete selected integral form")
