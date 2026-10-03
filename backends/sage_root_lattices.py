@@ -38,10 +38,30 @@ def lattice(value):
     return getattr(root_system, routines[ctor])()
 
 
-def op_cardinality(value):
+def underlying_module(value):
+    underlying, total = constructor(value, "functorAction", 2)
+    if underlying != {"ctor": "fun.modules.underlying", "args": []}:
+        raise ValueError("expected the exact zero-parameter Module underlying edge")
+    inclusion, fibre = constructor(total, "functorAction", 2)
+    if inclusion != {"ctor": "fun.modules.fibre_inclusion", "args": [
+            {"ctor": "obj.rings.integers", "args": []}]}:
+        raise ValueError("no native module model for this selected scalar ring")
+    carrier, formed = constructor(fibre, "functorAction", 2)
+    if carrier != {"ctor": "fun.bil_wform.carrier", "args": [
+            {"ctor": "obj.sets.integers", "args": []}]}:
+        raise ValueError("no native formed-module carrier model for this exact edge")
+    return canonical_quotient(formed) if formed.get("ctor") == "limitApex" else lattice(formed)
+
+
+def parent(value):
     ctor, _ = named_object(value)
-    parent = canonical_quotient(value) if ctor == "limitApex" else lattice(value)
-    size = parent.cardinality()
+    if ctor == "functorAction":
+        return underlying_module(value)
+    return canonical_quotient(value) if ctor == "limitApex" else lattice(value)
+
+
+def op_cardinality(value):
+    size = parent(value).cardinality()
     return aleph0() if size == Infinity else finite_cardinal(size)
 
 
@@ -50,9 +70,7 @@ def op_rank(value):
 
 
 def op_is_finite(value):
-    ctor, _ = named_object(value)
-    parent = canonical_quotient(value) if ctor == "limitApex" else lattice(value)
-    return decision(bool(parent.is_finite()))
+    return decision(bool(parent(value).is_finite()))
 
 
 def a_quotient(diagram):

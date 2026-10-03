@@ -31,7 +31,9 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
   * `sage_root_lattices.py`: rank, cardinality and finiteness on the released named
     `A(n)`, `A_dual(n)` and `E8` forms, by Sage's `RootSystem(...).root_lattice()` or
     `.weight_lattice()` and its parent methods,
-    under `CAS_SAGE_PYTHON`.
+    under `CAS_SAGE_PYTHON`. The Module-underlying image preserves the complete
+    registered fibre inclusion and carrier actions and computes quotient carrier
+    cardinality through the same native Sage quotient model.
   * `sage_module_kernels.py`: `fun.arrows_modules.kernel` on selected root-A
     Module carrier actions and zero, identity or mapped named inclusion arrows,
     by Sage's `FreeModule.hom(...).kernel()` and `basis_matrix()`. The complete
