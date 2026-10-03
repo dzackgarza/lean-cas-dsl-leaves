@@ -161,3 +161,33 @@ backend and request have executed through the released contract's framed
 `cas_port.py` protocol, and its structural reply envelope decodes. No
 mathematical output expectation was used. `just test-ci` and `git diff --check`
 also pass. Pairing/point and further operation request fixtures remain pending.
+
+The released `11da81d-7a25454` public `fixed-w-pairing-request.json`
+(SHA256 `817d923d144e2379f243ff31019edc5864b9b732a105234c5b3375407e5260c5`)
+provides the complete `mor.sets.bilin_module_pairing(R,W,L)` request. Its
+public declaration returns a Sets morphism from the product of two selected
+carrier sets to the chosen value module. It does not supply two points or ask
+for a pairing value. The chosen integer ring, its regular module through the
+full ring functor action, and the full formed E8 receiver are retained.
+Native Sage lowering of that receiver and `inner_product_matrix()` execute;
+the native value parent is the integer ring and the resulting matrix has
+shape 8 by 8. No expected mathematical result was consulted.
+
+This request exposes a result-representation gap for a computational leaf.
+The released Port permits a function graph when its domain has an independently
+synthesized finite enumeration, and permits a registered named morphism
+encoding. This request's carrier is infinite. Returning its original named
+morphism descriptor would defer reconstruction of the already formal pairing
+to the kernel rather than transmit an engine-computed function. No released
+representation for a computed infinite pairing function, or actual pairing
+application request with its two typed points, is provided. An engine matrix
+is not the declared Sets morphism result. No matrix, guessed point envelope,
+new operation, or echo-only registration has been introduced.
+
+The exact input was sent through the released framed port to the existing
+native Sage module backend: it announced Sage 10.8.12, returned the existing
+`unsupported` response for this unregistered operation, and exited cleanly.
+This is an engineering gap observation, not successful realization or result
+decode. `just test-ci` passes. Completing pairing evaluation needs an actual
+public point/application request or a public computed-function result encoding;
+its mathematical signature and encoding must be supplied upstream.
