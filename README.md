@@ -235,9 +235,12 @@ map; other selected maps remain computational gaps rather than endpoint casts.
 Python compilation, manifest JSON, and a framed same-process engineering probe
 cover construction, factorization, product/unit reuse, roots, companion and
 characteristic polynomial, with clean process exit. These are engineering checks,
-not independent mathematical acceptance evidence. An actual kernel-produced
-input-only request is still pending; exact codec descriptor integration has not
-yet been checked. Unsupported inline coefficient data, general selected maps and
+not independent mathematical acceptance evidence. The actual kernel-produced
+factor request (SHA256 `c04c75c5cd5dca50262b4a292ee49dffbbe3d4c923150559bdb619020d5eb95c`)
+now executes through the framed adapter and returns a computational packet with
+clean process exit. Its complete admission and selected power-expression context
+needed no adapter framing change. This establishes caller/protocol integration,
+not mathematical acceptance. Unsupported inline coefficient data, general selected maps and
 other point representations are reported as computational gaps. Opaque factor
 collections remain native data; their further use requires an existing admitted
 operation, and tokens never create new mathematical interfaces.
