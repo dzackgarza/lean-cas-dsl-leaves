@@ -11,7 +11,8 @@ workspace's `.venv/bin/python` (`engine_python`). Routines:
   enumeration of `cartesian_product([dom f, dom g])` (`FiniteEnumeratedSet` of each domain).
 
 Wire (`CasContract/Port.lean`, "The wire encoding of inputs and answers"): a diagram is
-`{"ctor": "pair", "args": [X, Y]}` with named objects, or `{"ctor": "cospan", "args": [f, g]}`
+`{"ctor": "pair", "args": [X, Y]}` with complete object descriptors (including retained
+`functorAction` and `objectPresentation`), or `{"ctor": "cospan", "args": [f, g]}`
 with morphisms as graphs `[[x, f x], ...]`. The answer is `{"ctor": "cone" | "cocone",
 "args": [apex, leg, leg]}`, the two legs of Mathlib's `BinaryFan.mk`, `BinaryCofan.mk` and
 `PullbackCone.mk`. The catalogue names no object of `cat.sets` for `X × Y`, `X ⊕ Y` or a pullback,
@@ -46,16 +47,42 @@ def residues(n):
     return Zmod(n)
 
 
-# The finite named sets accepted as objects of a `pair`: their Sage parent, and the wire encoding
+# The finite primitive sets accepted as objects of a `pair`: their Sage parent, and the wire encoding
 # of an element (a point of `Fin n`, and of `ZMod n = Fin n` for n > 0, is its number).
 PARENTS = {
     "obj.sets.fin": (lambda n: IntegerRange(0, numeral(n)), int),
     "obj.sets.integers_mod": (residues, lambda r: int(r.lift())),
+    "obj.rings.integers_mod": (residues, lambda r: int(r.lift())),
 }
 
 
 def finite_set(value):
     ctor, params = named_object(value)
+    if ctor == "functorAction":
+        if len(params) != 2:
+            raise ValueError("functorAction requires an edge and a source object")
+        edge, source = params
+        if not isinstance(edge, dict) or not isinstance(edge.get("ctor"), str):
+            raise ValueError("functorAction has no edge descriptor")
+        # Compute an enumeration of the selected source's points. The retained
+        # edge is semantic data validated by the caller, not a leaf assertion
+        # that the source and image are identified.
+        return finite_set(source)
+    if ctor == "objectPresentation":
+        if len(params) != 2:
+            raise ValueError("objectPresentation requires an action and actual data")
+        action, actual = params
+        if not isinstance(action, dict) or action.get("ctor") != "functorAction":
+            raise ValueError("objectPresentation has no selected action")
+        return finite_set(actual)
+    if ctor == "subobject":
+        if len(params) != 3:
+            raise ValueError("subobject requires apex, ambient, and inclusion")
+        return finite_set(params[0])
+    if ctor == "valueData":
+        if len(params) != 1:
+            raise ValueError("valueData requires its data")
+        return finite_set(params[0])
     if ctor not in PARENTS:
         raise ValueError("no finite Sage parent for %s" % ctor)
     make, encode = PARENTS[ctor]
