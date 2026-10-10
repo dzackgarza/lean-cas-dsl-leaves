@@ -4,7 +4,8 @@
     {"name": "gap", "command": "python3", "args": ["backends/gap_backend.py"]},
     {"name": "sage-power-set", "command": "python3", "args": ["backends/sage_power_set.py"]},
     {"name": "sage-set-limits", "command": "python3", "args": ["backends/sage_set_limits.py"]},
-    {"name": "sage-discriminant", "command": "python3", "args": ["backends/sage_discriminant.py"]}
+    {"name": "sage-discriminant", "command": "python3", "args": ["backends/sage_discriminant.py"]},
+    {"name": "sage-fin-rev", "command": "python3", "args": ["backends/sage_fin_rev.py"]}
   ],
   "registrations": [
     {"operation": "meth.cardinality", "input": "obj.sets.fin", "backend": "sage"},
@@ -30,6 +31,7 @@
     {"operation": "colim.sets.coproduct", "input": "cat.sets", "backend": "sage-set-limits"},
     {"operation": "lim.sets.pullback", "input": "cat.sets", "backend": "sage-set-limits"},
     {"operation": "colim.bil_w_form.cokernel", "input": "cat.bil_wform", "backend": "sage-discriminant"},
-    {"operation": "meth.cardinality", "input": "obj.bil_wform.root_lattice_a_discriminant", "backend": "sage-discriminant"}
+    {"operation": "meth.cardinality", "input": "obj.bil_wform.root_lattice_a_discriminant", "backend": "sage-discriminant"},
+    {"operation": "mor.sets.fin_rev", "input": "mor.sets.fin_rev", "backend": "sage-fin-rev"}
   ]
 }

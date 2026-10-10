@@ -8,7 +8,7 @@ The released catalogue now includes the complete **requested input**: `obj.bil_w
 
 ## Fin reversal
 
-`mor.sets.fin_rev` **is** a released named-morphism row, declared by `CasCatalogue.Foundation.Morphisms.finRev` in `LeanCategories/Catalogue/Semantics/Foundation/Morphisms.lean`, with parameter `n : ℕ` and type `Fin n ⟶ Fin n`. `CasCatalogue/Admission.lean` permits registration of a named morphism on its own form (`{"operation":"mor.sets.fin_rev","input":"mor.sets.fin_rev",...}`), so absence of a registration form is **not** the obstacle. Nevertheless its declaration is `TypeCat.ofHom Fin.rev`, and composing it twice is entirely a Lean computation. Per `AGENTS.md` evidence-model item 6, computations dischargeable in Lean belong to `lean-categories` or the generic kernel, not an external leaf. Upstream owner: kernel for generic evaluation/composition of named morphisms.
+`mor.sets.fin_rev` is a released named morphism on `Fin n`. `CasCatalogue/Admission.lean` permits registration on its own form. The `sage-fin-rev` registration invokes Sage's `Permutation` and returns its finite graph as a list of pairs, including the empty graph for `Fin 0`. This is an implementation, not a proof or assertion of correctness. B0 criterion 3 requires registered implementation execution for `sets.eq.rev_rev`; a Lean proof of reversal involutivity does not satisfy that execution requirement. Generic Lean evaluation remains the kernel's responsibility where applicable, without excluding the explicitly admitted implementation.
 
 ## Finite diagrams of sets
 
