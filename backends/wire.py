@@ -10,6 +10,8 @@ value of the operation's result form, a constructor application `{"ctor": <const
 * a property is decided as `Option Bool`: `some true`, `some false`, or `none`.
 """
 
+import json
+
 
 def named_object(value):
     """The object id and the parameters of an input."""
@@ -35,7 +37,69 @@ def carrier_object(value):
         return carrier_object(args[1])
     if ctor in {"subobject", "valueData"} and args:
         return carrier_object(args[0])
+    if ctor == "finiteData" and len(args) == 2:
+        return carrier_object(args[0])
     return ctor, args
+
+
+def finite_inventory(value):
+    """An actual supplied finite inventory, without enumerating formal objects."""
+    ctor, args = named_object(value)
+    if ctor == "finiteData" and len(args) == 2:
+        if not isinstance(args[1], list):
+            raise ValueError("a finite carrier inventory must be a list")
+        keys = [json.dumps(point, sort_keys=True) for point in args[1]]
+        if len(set(keys)) != len(keys):
+            raise ValueError("a finite carrier inventory repeats a point")
+        return args[1]
+    if ctor in {"functorAction", "objectPresentation"} and len(args) == 2:
+        return finite_inventory(args[1])
+    if ctor in {"subobject", "valueData"} and args:
+        return finite_inventory(args[0])
+    if ctor == "liftedSubobject":
+        if len(args) != 4 or not args[3]:
+            raise ValueError("a completed liftedSubobject needs its actual component outputs")
+        step_ctor, step_args = named_object(args[3][-1])
+        if step_ctor != "liftStep" or len(step_args) != 5 or len(step_args[4]) != 4:
+            raise ValueError("a completed lift step needs all four actual outputs")
+        return finite_inventory(step_args[4][0])
+    return None
+
+
+def finite_data(descriptor, points):
+    return {"ctor": "finiteData", "args": [descriptor, points]}
+
+
+def finite_graph(points, graph):
+    return {"ctor": "finiteGraph", "args": [points, graph]}
+
+
+def graph_data(value):
+    """Unpack released finite framing; establish no mathematical carrier claim."""
+    inventory = None
+    if isinstance(value, dict):
+        ctor, args = named_object(value)
+        if ctor == "typedMap" and len(args) == 3:
+            return graph_data(args[2])
+        if ctor != "finiteGraph" or len(args) != 2:
+            raise ValueError("expected a finite graph or its declared framing")
+        inventory, value = args
+        if not isinstance(inventory, list):
+            raise ValueError("a finite graph inventory must be a list")
+    if not isinstance(value, list):
+        raise ValueError("a finite graph requires point-image pairs")
+    keys = []
+    for pair in value:
+        if not isinstance(pair, list) or len(pair) != 2:
+            raise ValueError("a graph entry requires its point and image")
+        keys.append(json.dumps(pair[0], sort_keys=True))
+    if len(set(keys)) != len(keys):
+        raise ValueError("a finite graph repeats a domain point")
+    if inventory is not None:
+        expected = [json.dumps(point, sort_keys=True) for point in inventory]
+        if len(set(expected)) != len(expected) or set(keys) != set(expected):
+            raise ValueError("a graph must contain exactly its actual supplied domain inventory")
+    return value
 
 
 def finite_cardinal(n):
