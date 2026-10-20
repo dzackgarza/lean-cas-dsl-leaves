@@ -14,15 +14,16 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
   its `PYTHONPATH` by the kernel) and is glue over an existing engine: it decodes the kernel's
   encoding of the input, calls the engine's routine, and encodes the engine's answer in the result
   form. Each names the engine and routine it calls.
-  * `sage_backend.py`: Sage (passagemath), under `CAS_SAGE_PYTHON`;
-  * `gap_backend.py`: GAP through Sage's libgap (passagemath-gap), under `CAS_GAP_PYTHON`;
+  * `sage_backend.py`: Sage, under `CAS_SAGE_PYTHON`;
+  * `gap_backend.py`: GAP through Sage's libgap, under `CAS_GAP_PYTHON`;
   * `sage_power_set.py`: `meth.cardinality` on `obj.sets.power_set` by Sage's
-    `Subsets(S).cardinality()` (passagemath-combinat), under `CAS_SAGE_PYTHON`;
+    `Subsets(S).cardinality()` (Sage combinatorics), under `CAS_SAGE_PYTHON`;
   * `sage_set_limits.py`: `lim.sets.product`, `colim.sets.coproduct` and `lim.sets.pullback` on
     `cat.sets`, finite diagrams only, by Sage's `cartesian_product` and
-    `DisjointUnionEnumeratedSets` (passagemath-combinat), under `CAS_SAGE_PYTHON`.
+    `DisjointUnionEnumeratedSets` (Sage combinatorics), under `CAS_SAGE_PYTHON`.
 
-  Both default to `.venv/bin/python` of the running workspace (`backends/engine_python.py`).
+  The adapters use the public `sage.all` entrypoint of a full Sage installation.
+  Both engine variables default to `.venv/bin/python` of the running workspace (`backends/engine_python.py`).
 * **`lakefile.toml`** only makes this directory a Lake package; it has no targets. `lean-cas-dsl`
   requires no leaf package: it reads a manifest at run time (`CAS_LEAVES`).
 

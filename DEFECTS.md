@@ -1,21 +1,72 @@
 # Leaf-contract and upstream defects
 
-These are requests for the owning formalization or kernel, not permissions for leaves to invent semantics. No leaf result is correctness evidence.
+These findings concern published input forms and engine wiring. No leaf result is correctness evidence.
+
+## Published input review, 2026-10-20
+
+The published contract reviewed is `lean-cas-dsl-leaf-contracts` main
+`3c2159b510db2ca63455530ed0f4c28ba27da2f8`; the published catalogue is
+`lean-categories` main `a2123729df092e58b6fb0cd39c78db5e1714faf2`.
+They were obtained from each repository's main reference. These revisions identify
+this review; subsequent builds consume the latest main.
 
 ## Discriminant cokernel
 
-The released catalogue now includes the complete **requested input**: `obj.bil_wform.root_lattice_a`, `obj.bil_wform.root_lattice_a_dual`, and `mor.bil_wform.root_lattice_a_to_dual`, all taking `n : ℕ` (`LeanCategories/Catalogue/Semantics/Modules/Bilinear/Valued/Lattices.lean`). The colimit row `colim.bil_w_form.cokernel` is registered on `cat.bil_wform`, using `parallelPair f 0` (`Semantics/Limits/Registration.lean`). The released input envelope is consequently `{"ctor":"parallelPair","args":[{"ctor":"mor.bil_wform.root_lattice_a_to_dual","args":[n]},<zero map at identical endpoints>]}`; the zero-map descriptor and endpoints are specified by `CasContract/Port.lean`. The Gram matrix of `A_n` is already fixed upstream (`rootAGram` in `LeanCategories/Lattices/Integral.lean`), so the leaf must not accept its own new Gram-matrix semantics. **Remaining issue:** the cone output requires a registered formed-module apex object and a registered projection morphism, not merely Sage's Smith-normal-form invariants. No named cokernel/discriminant apex object or quotient-projection row was found in the released semantics; the mathematical object exists as `BilWFormCat.cokernelObject`, but is not a published named form. Adding a private `obj.bil_wform.discriminant` in this repository would violate the semantic firewall. Upstream owner: `lean-categories` for missing named output forms and projections; kernel owner for any problem decoding already released descriptors.
+The catalogue publishes `obj.bil_wform.root_lattice_a`,
+`obj.bil_wform.root_lattice_a_dual`, `mor.bil_wform.root_lattice_a_to_dual`,
+`obj.bil_wform.root_lattice_a_discriminant`, and
+`mor.bil_wform.root_lattice_a_to_discriminant`, all parameterized by `n : ℕ`
+(`LeanCategories/Catalogue/Semantics/Modules/Bilinear/Valued/Lattices.lean`).
+The projection's source is the dual lattice. The registered operation
+`colim.bil_w_form.cokernel` consumes `parallelPair` with the inclusion and the
+zero arrow at the same endpoints. `CasContract/Port.lean` specifies a cocone
+reply containing the apex and projection.
+
+The existing Sage adapter supplies these published object and arrow descriptors.
+For cardinality it builds the upstream negative root Gram matrix and calls
+Sage's `Matrix.elementary_divisors()`. The previous report that named output
+forms were missing is obsolete at the reviewed catalogue main. No missing
+published input was identified for these existing registrations.
 
 ## Fin reversal
 
-`mor.sets.fin_rev` is a released named morphism on `Fin n`. `CasCatalogue/Admission.lean` permits registration on its own form. The `sage-fin-rev` registration invokes Sage's `Permutation` and returns its finite graph as a list of pairs, including the empty graph for `Fin 0`. This is an implementation, not a proof or assertion of correctness. B0 criterion 3 requires registered implementation execution for `sets.eq.rev_rev`; a Lean proof of reversal involutivity does not satisfy that execution requirement. Generic Lean evaluation remains the kernel's responsibility where applicable, without excluding the explicitly admitted implementation.
+`mor.sets.fin_rev` is a published named morphism on `Fin n`. The existing adapter
+uses Sage's `Permutation` and emits its graph as a list of pairs, including the
+empty graph at `n = 0`. The contract permits this named-morphism form.
 
 ## Finite diagrams of sets
 
-`leaves.json` already registers `lim.sets.product`, `colim.sets.coproduct` and `lim.sets.pullback` on `cat.sets`, with `sage_set_limits.py` emitting `cone`/`cocone` envelopes. These rows are explicitly present in `LeanCategories/Catalogue/Semantics/Limits/Registration.lean` and the `pair`/`cospan` input envelopes are declared in `CasContract/Port.lean`. `CasCatalogue.Foundation.Morphisms.ofGraph`, registered as `graph.sets`, **does** support raw list-of-pairs graph morphisms, subject to complete-domain and no-duplicate proofs checked by the decoder. The original leaf defect was the input decoder: it accepted only primitive named sets and rejected the explicitly released `functorAction` and `objectPresentation` input envelopes. `sage_set_limits.py` now traverses these complete descriptors to its internal Sage enumeration, retaining the selected action in the caller's input rather than rewriting the formal descriptor. It also enumerates `obj.rings.integers_mod`, the named source of the released four-step ring-to-set action. Focused backend checks computed a `Fin 6` product and `Fin 5` coproduct using this nested input and a `Fin 3` graph pullback. These backend checks are not kernel acceptance evidence; the kernel must independently decode their returned cones and cocones. The separately observed coproduct error `the callable's point types require their released data representation` remains a kernel/output-decoding question rather than a reason to weaken the contract.
+The existing registrations are `lim.sets.product`, `colim.sets.coproduct`, and
+`lim.sets.pullback` on `cat.sets`. `CasContract/Port.lean` specifies their
+`pair` and `cospan` inputs and complete cone/cocone outputs. The adapter calls
+Sage's `cartesian_product` and `DisjointUnionEnumeratedSets` and emits finite
+graphs. It supports finite primitive carriers and retained input envelopes.
+The catalogue publishes `cat.finite_sets`, `obj.finite_sets.fin`,
+`graph.finite_sets`, and `lift.finite_sets.pullbacks`; no duplicate registration
+of a set limit under the finite-sets category is introduced here.
 
-For the finite-sets restatements, the pinned `lean-categories` already registers `cat.finite_sets`, `obj.finite_sets.fin`, `graph.finite_sets`, and the creation lift `lift.finite_sets.pullbacks` (`Semantics/Limits/Lifts.lean`, `Semantics/Foundation/FiniteObjects.lean`). Thus the expected route is **the registered creation lift from the `cat.sets` pullback**, not a duplicate `lim.sets.pullback` registration under `cat.finite_sets`. The unresolved issue is whether the kernel actually routes a valid `cat.sets` computational cone through that lift. Upstream owner for creation dispatch failures: kernel, not leaves.
+## Engine entrypoint repaired
 
-## Pending admission evidence
+The available full Sage runtime reports version `11.0.beta1` and imports
+`sage.all`. It lacks the `sage.all__sagemath_modules`,
+`sage.all__sagemath_combinat`, and `sage.all__sagemath_gap` entrypoints used by
+the existing adapters. This prevented them from announcing the port protocol
+before any request could run. Commit `85564f3` uses the public `sage.all`
+entrypoint throughout. This changes engine loading only.
 
-No new registration is claimed conforming until the exact released catalogue rows, input forms and output decoding are checked. The existing manifest entries remain unchanged; do not count them as new coverage.
+## Source provenance and separation
+
+Published leaf main initially resolved to
+`48a99b5bcb2b090e1c778db29f006b612bed02ed`; the clean local main already included
+five unpublished commits `def3657`, `06288c0`, `886879d`, `037f1e7`, and
+`d522046`. Their git author metadata alone does not establish independent
+original authorship. Their existing source was preserved and reviewed against
+the published contract, catalogue, and actual engine, without claiming a new
+original-author provenance.
+
+The prior version of this defect file included downstream acceptance-specific
+requirements, kernel source references, and harness observations. Those are
+outside a leaf author's permitted inputs and have been removed from the active
+leaf requirements and findings. This review did not inspect the acceptance
+suite, kernel source, or harness reports. It establishes engineering observations
+only; it does not establish mathematical correctness or B0 acceptance.
