@@ -1,8 +1,9 @@
 """Sage Smith-form realization of the registered A_n discriminant cokernel via elementary divisors."""
 from engine_python import require_engine
-require_engine('CAS_SAGE_PYTHON', 'sage.all')
+engine = require_engine("CAS_SAGE_PYTHON", ("sage.all__sagemath_modules", "sage.all"))
 from cas_port import serve
-from sage.all import ZZ, matrix
+ZZ = engine.ZZ
+matrix = engine.matrix
 from sage.version import version as SAGE_VERSION
 from wire import finite_cardinal, named_object, numeral
 ADAPTER_VERSION = '0.1.0'

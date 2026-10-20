@@ -26,10 +26,11 @@ import json
 
 from engine_python import require_engine
 
-require_engine("CAS_SAGE_PYTHON", "sage.all")
+engine = require_engine("CAS_SAGE_PYTHON", ("sage.all__sagemath_combinat", "sage.all"))
 
 from cas_port import serve  # noqa: E402  the leaf contract's reference port
-from sage.all import Zmod, cartesian_product  # noqa: E402
+Zmod = engine.Zmod
+cartesian_product = engine.cartesian_product
 from sage.sets.disjoint_union_enumerated_sets import DisjointUnionEnumeratedSets  # noqa: E402
 from sage.sets.family import Family  # noqa: E402
 from sage.sets.finite_enumerated_set import FiniteEnumeratedSet  # noqa: E402

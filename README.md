@@ -22,7 +22,9 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
     `cat.sets`, finite diagrams only, by Sage's `cartesian_product` and
     `DisjointUnionEnumeratedSets` (Sage combinatorics), under `CAS_SAGE_PYTHON`.
 
-  The adapters use the public `sage.all` entrypoint of a full Sage installation.
+  The adapters support modular passagemath entrypoints and the public `sage.all`
+  entrypoint of a full Sage installation. The selected interpreter must supply one
+  of these complete engine installations.
   Both engine variables default to `.venv/bin/python` of the running workspace (`backends/engine_python.py`).
 * **`lakefile.toml`** only makes this directory a Lake package; it has no targets. `lean-cas-dsl`
   requires no leaf package: it reads a manifest at run time (`CAS_LEAVES`).

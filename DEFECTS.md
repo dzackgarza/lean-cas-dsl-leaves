@@ -52,7 +52,12 @@ The available full Sage runtime reports version `11.0.beta1` and imports
 `sage.all__sagemath_combinat`, and `sage.all__sagemath_gap` entrypoints used by
 the existing adapters. This prevented them from announcing the port protocol
 before any request could run. Commit `85564f3` uses the public `sage.all`
-entrypoint throughout. This changes engine loading only.
+entrypoint throughout. The loader then retained the previously documented
+modular passagemath entrypoints as well: it imports the supported modular
+entrypoint when installed, or full Sage's `sage.all` when that entrypoint is
+absent. A missing dependency inside an installed entrypoint propagates as an
+error. This changes engine loading only. Modular Sage was not installed in
+this review environment and was not exercised.
 
 ## Source provenance and separation
 

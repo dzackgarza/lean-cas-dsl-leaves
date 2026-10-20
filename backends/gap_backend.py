@@ -15,7 +15,7 @@ Speaks the port protocol through the contract's `cas_port` (on `PYTHONPATH`).
 
 from engine_python import require_engine
 
-require_engine("CAS_GAP_PYTHON", "sage.all")
+require_engine("CAS_GAP_PYTHON", ("sage.all__sagemath_gap", "sage.all"))
 
 from cas_port import serve  # noqa: E402  the leaf contract's reference port
 from sage.libs.gap.libgap import libgap  # noqa: E402

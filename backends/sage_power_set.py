@@ -15,10 +15,12 @@ Speaks the port protocol through the contract's `cas_port` (on `PYTHONPATH`).
 
 from engine_python import require_engine
 
-require_engine("CAS_SAGE_PYTHON", "sage.all")
+engine = require_engine("CAS_SAGE_PYTHON", ("sage.all__sagemath_combinat", "sage.all"))
 
 from cas_port import serve  # noqa: E402  the leaf contract's reference port
-from sage.all import QQ, ZZ, Zmod  # noqa: E402
+QQ = engine.QQ
+ZZ = engine.ZZ
+Zmod = engine.Zmod
 from sage.combinat.subset import Subsets  # noqa: E402
 from sage.sets.integer_range import IntegerRange  # noqa: E402
 from sage.sets.non_negative_integers import NonNegativeIntegers  # noqa: E402

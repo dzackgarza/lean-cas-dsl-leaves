@@ -12,10 +12,12 @@ Speaks the port protocol through the contract's `cas_port` (on `PYTHONPATH`).
 
 from engine_python import require_engine
 
-require_engine("CAS_SAGE_PYTHON", "sage.all")
+engine = require_engine("CAS_SAGE_PYTHON", ("sage.all__sagemath_modules", "sage.all"))
 
 from cas_port import serve  # noqa: E402  the leaf contract's reference port
-from sage.all import QQ, ZZ, Infinity  # noqa: E402
+QQ = engine.QQ
+ZZ = engine.ZZ
+Infinity = engine.Infinity
 from sage.rings.cc import CC  # noqa: E402
 from sage.rings.real_mpfr import RR  # noqa: E402
 from sage.sets.integer_range import IntegerRange  # noqa: E402

@@ -12,6 +12,7 @@ import importlib
 import os
 import sys
 from pathlib import Path
+from types import ModuleType
 
 _REEXEC = "CAS_LEAVES_ENGINE_REEXEC"
 
@@ -25,13 +26,22 @@ def _candidates(env_var):
         yield directory / ".venv" / "bin" / "python"
 
 
-def require_engine(env_var, module):
-    """Import `module`, or re-run this program under an interpreter that can."""
-    try:
-        importlib.import_module(module)
-        return
-    except ImportError as exc:
-        missing = exc
+def require_engine(env_var: str, modules: tuple[str, ...]) -> ModuleType:
+    """Load a supported engine entrypoint, or re-run under its interpreter.
+
+    Modular passagemath and full Sage publish different aggregate entrypoints.
+    A missing entrypoint permits trying the other supported package layout;
+    a missing dependency inside an installed entrypoint remains an error.
+    """
+    assert modules, "an engine requires its supported entrypoints"
+    for module in modules:
+        try:
+            return importlib.import_module(module)
+        except ModuleNotFoundError as exc:
+            if exc.name not in {module, module.split(".")[0]}:
+                raise
+    module = " or ".join(modules)
+    missing = "no supported entrypoint is installed"
     if os.environ.get(_REEXEC):
         sys.stderr.write("%s: %s is not importable under %s: %s\n"
                          % (sys.argv[0], module, sys.executable, missing))
