@@ -145,10 +145,10 @@ claimed.
   defining-polynomial computational presentations have not been lowered by
   this adapter; this is an unimplemented generic route, not a claim that the
   published mathematical comparison is absent.
-* The F9 common `apply` branch supports closed singleton-domain points. A
-  general non-singleton point needs its pointwise/callable data consumed and
-  returned at the original domain; that branch is not implemented. The adapter
-  rejects it rather than returning one scalar for a function.
+* The F9 common `apply` branch supports closed terminal-source points and
+  finite pointwise callable data, retaining their original generalized domain.
+  Infinite or foreign-session callables have no native value owned by this
+  backend and remain unsupported; a scalar never stands in for that function.
 * Modular Sage in the supplied interpreter lacks `sage.libs.pari`; the native
   F9 constructor/hom path reports that missing dependency. Full Docker Sage
   supplies it. For integrated execution, use
@@ -292,7 +292,7 @@ requires a supported finite ambient point codec. Infinite named maps may still
 be returned as defining-map descriptors, but this supplies no foreign-session
 or infinite-callable lowering. Arbitrary other named set arrows/compositions,
 opaque sessions, arbitrary monoid units, arbitrary polynomial presentations,
-and non-closed F9 pointwise application remain unsupported as described above.
+and infinite/foreign-session F9 callable application remain unsupported as described above.
 No assertion is changed and no implementation gap changes the mathematical API.
 
 
@@ -308,3 +308,54 @@ rather than canonical-kernel substitution. Request/reply matching, native
 process exit, and framing were checked. This establishes native engineering
 behavior for these branches only, with no kernel decoding or mathematical
 acceptance claim.
+
+
+## F9 presentation-application compatibility
+
+Reference: released contract main `c6e78eb2e5939e58b6f18b5fc456320c65f10186`.
+The existing `cmp.f9.translation` registrations now consume both
+`presentationApply` and common `apply` requests with explicit published
+`presentation` direction, exact `typedMap` descriptors, and registered or typed
+comparison compositions. Intermediate endpoints come from the actual typed
+constituents or the fixed published comparison signature; no carrier equality
+or nearby presentation is inferred. Sage native map composition executes the
+actual maps, including both nonidentity comparison directions. A supplied finite
+typed-map table is executed through Sage `FiniteSetMaps`/`SetMorphism`, not
+replaced by the canonical comparison. The explicitly selected
+`fun.commutative_rings.ring` action is lowered through the actual native
+quotient-ring morphism with its exact full action endpoints retained.
+
+Finite generalized-point graphs, including typed graphs and retained
+`valueData`, `pointView`, and `admittedPoint` callable data, retain every actual
+domain point and return target-element data pointwise in a `valueData`/
+`finiteGraph` envelope. Closed common requests support the explicitly named
+terminal and `Fin 1` domains. Direct `presentationApply` keeps its declared
+closed-element reply form. Nested inline point envelopes and indexed native
+field generators are consumed without substituting a formal representative.
+Selected source/target descriptors and original generalized domains survive.
+
+Explicit unsupported cases remain: arbitrary selected functor actions have no
+native action lowering here; a nullary `operationPoint` with no implemented
+native source-value computation is not replaced by a guessed scalar; opaque
+tokens have no native F9 value owned by this backend's live session. A legacy
+raw comparison constituent lacking both an explicit direction and a complete
+typed intermediate endpoint cannot determine a composite request. Supply the
+already published explicit `presentation` or `typedMap` data rather than infer
+that missing choice. A generalized direct `presentationApply` request has no
+original-domain field; pointwise requests use the common `apply` envelope.
+These are input/lowering boundaries, not claims of missing mathematics and not
+new semantic operations or correctness evidence.
+
+
+Native engineering checks on Sage `11.0.beta1` completed 25 framed requests
+for the presentation changes: 20 successful replies and five explicit errors.
+Successful branches included both comparison directions, terminal-source and
+nested inline points, typed descriptor/table application, declared and typed
+native composition, exact selected commutative-ring action endpoints, retained
+point/admission wrappers, non-closed structured-domain graphs, and an empty
+point graph. Error cases covered mismatched typed endpoints, a foreign opaque
+token, a changed original point domain, a legacy composite missing direction/
+intermediate endpoint data, and an unimplemented selected action. Checks required
+native process exit, ready/reply framing, matching request ids, exact retained
+point-domain keys and target-envelope framing. No mathematical expected-answer
+assertion, kernel decoding, or acceptance suite was used.

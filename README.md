@@ -30,7 +30,10 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
   subgroup kernels and abelianness; `sage_modules.py` supplies module rank
   and formed-carrier cardinality; `sage_presentations.py` executes the
   published F9 comparison in both directions through native quotient-ring
-  homomorphisms. The latter needs Sage's PARI dependency; a partial modular
+  homomorphisms. Presentation application retains explicit direction, typed
+  descriptor endpoints, native composition, and finite generalized-point data
+  at the original domain. Unowned opaque callables and unimplemented selected
+  actions fail explicitly. This program needs Sage's PARI dependency; a partial modular
   installation lacking it cannot execute that route.
 
   `sage_bilinear_lift.py` supplies the four published
