@@ -26,13 +26,14 @@ from sage.sets.positive_integers import PositiveIntegers  # noqa: E402
 from sage.sets.primes import Primes  # noqa: E402
 from sage.version import version as SAGE_VERSION  # noqa: E402
 
-from wire import aleph0, decision, finite_cardinal, named_object, numeral  # noqa: E402
+from wire import aleph0, carrier_object, decision, finite_cardinal, named_object, numeral  # noqa: E402
 
 ADAPTER_VERSION = "0.2.0"
 
 # The Sage parent of each named set, from its numeral parameters.
 PARENTS = {
     "obj.sets.fin": lambda n: IntegerRange(0, numeral(n)),  # {0, …, n-1}: sage.sets.integer_range
+    "obj.finite_sets.fin": lambda n: IntegerRange(0, numeral(n)),
     "obj.sets.naturals": lambda: NonNegativeIntegers(),  # sage.sets.non_negative_integers
     "obj.sets.positive_naturals": lambda: PositiveIntegers(),  # sage.sets.positive_integers
     "obj.sets.primes": lambda: Primes(),  # sage.sets.primes
@@ -46,11 +47,11 @@ PARENTS = {
 # infinite cardinal. It is read as `aleph0` only on the countable named sets; on the others this
 # backend answers no cardinality (it is not registered there).
 COUNTABLE = {"obj.sets.fin", "obj.sets.naturals", "obj.sets.positive_naturals",
-             "obj.sets.primes", "obj.sets.integers", "obj.sets.rationals"}
+             "obj.sets.primes", "obj.sets.integers", "obj.sets.rationals", "obj.finite_sets.fin"}
 
 
 def parent(value):
-    ctor, params = named_object(value)
+    ctor, params = carrier_object(value)
     if ctor not in PARENTS:
         raise ValueError("no Sage parent for %s" % ctor)
     return ctor, PARENTS[ctor](*params)

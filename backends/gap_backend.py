@@ -20,7 +20,7 @@ require_engine("CAS_GAP_PYTHON", ("sage.all__sagemath_gap", "sage.all"))
 from cas_port import serve  # noqa: E402  the leaf contract's reference port
 from sage.libs.gap.libgap import libgap  # noqa: E402
 
-from wire import aleph0, decision, finite_cardinal, named_object, numeral  # noqa: E402
+from wire import aleph0, carrier_object, decision, finite_cardinal, named_object, numeral  # noqa: E402
 
 ADAPTER_VERSION = "0.2.0"
 GAP_VERSION = str(libgap.eval("GAPInfo.Version"))
@@ -34,12 +34,13 @@ def residue_ring(n):
 # The GAP domain of each named set, from its numeral parameters.
 DOMAINS = {
     "obj.sets.integers_mod": residue_ring,
+    "obj.rings.integers_mod": residue_ring,
     "obj.sets.integers_mod_power": lambda n, k: libgap.FullRowModule(residue_ring(n), numeral(k)),
 }
 
 
 def domain(value):
-    ctor, params = named_object(value)
+    ctor, params = carrier_object(value)
     if ctor not in DOMAINS:
         raise ValueError("no GAP domain for %s" % ctor)
     return DOMAINS[ctor](*params)

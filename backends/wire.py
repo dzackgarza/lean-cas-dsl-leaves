@@ -24,6 +24,20 @@ def numeral(value):
     return value
 
 
+def carrier_object(value):
+    """Read the retained computational object of a carrier-view request.
+
+    This does not select a formal path, compare presentations, or evaluate a
+    functor. Callers use it only for the carrier operations they register.
+    """
+    ctor, args = named_object(value)
+    if ctor in {"functorAction", "objectPresentation"} and len(args) == 2:
+        return carrier_object(args[1])
+    if ctor in {"subobject", "valueData"} and args:
+        return carrier_object(args[0])
+    return ctor, args
+
+
 def finite_cardinal(n):
     return {"ctor": "finite", "args": [int(n)]}
 

@@ -18,6 +18,10 @@ def named(identifier, n):
 
 def parameter(value, identifier):
     ctor, args = named_object(value)
+    if ctor in {'functorAction', 'objectPresentation'} and len(args) == 2:
+        return parameter(args[1], identifier)
+    if ctor in {'valueData', 'subobject'} and args:
+        return parameter(args[0], identifier)
     if ctor != identifier or len(args) != 1:
         raise ValueError('expected %s at one parameter' % identifier)
     return numeral(args[0])
