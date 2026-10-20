@@ -94,6 +94,12 @@
     {"operation": "meth.cardinality", "input": "obj.finite_sets.fin", "backend": "sage"},
     {"operation": "meth.cardinality", "input": "obj.rings.integers_mod", "backend": "gap"},
     {"operation": "prop.is_finite", "input": "obj.finite_sets.fin", "backend": "sage"},
-    {"operation": "prop.is_finite", "input": "obj.rings.integers_mod", "backend": "gap"}
+    {"operation": "prop.is_finite", "input": "obj.rings.integers_mod", "backend": "gap"},
+    {"operation": "meth.cardinality", "input": "obj.groups.units", "backend": "gap-groups"},
+    {"operation": "prop.is_finite", "input": "obj.groups.units", "backend": "gap-groups"},
+    {"operation": "prop.is_abelian", "input": "obj.groups.units", "backend": "gap-groups"},
+    {"operation": "prop.is_commutative", "input": "obj.groups.units", "backend": "gap-groups"},
+    {"operation": "meth.cardinality", "input": "obj.sets.units", "backend": "gap-groups"},
+    {"operation": "prop.is_finite", "input": "obj.sets.units", "backend": "gap-groups"}
   ]
 }
