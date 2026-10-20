@@ -159,7 +159,7 @@ all permanent mathematical assertions independently. This leaf inventory
 neither declares B0 complete nor substitutes engine checks for that judgment.
 
 
-## Resumed leaf input-boundary defect, 2026-10-21
+## Resumed leaf input-boundary defect
 
 The resumed launcher assignment restricted inputs to released leaf contract
 `c603ede9e51adaa3a1365d2d82aeebb3aa0f6d13`, existing native-engine APIs,
