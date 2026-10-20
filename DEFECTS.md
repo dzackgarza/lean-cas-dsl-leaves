@@ -199,32 +199,49 @@ none of those obligations. The remaining work is assigned to a fresh leaf-only
 context without the upstream-derived material.
 
 
-## Contract-only continuation: bilinear pairing data schema missing
+## Released finite bilinear restriction
 
-The leaf-only continuation consumes released leaf contract main
-`1770b6b0fa0e26aee361b6d57f9fd2967e03836a`, this repository's existing source,
+The contract-only continuation consumes released leaf contract main
+`c6e78eb2e5939e58b6f18b5fc456320c65f10186`, this repository's existing source,
 and native-engine APIs. It does not consume catalogue source, kernel source,
 acceptance assertions, expected answers, or downstream diagnostics.
 
 The released `api/declared-ports.json` resolves the earlier missing-address
-finding: `lift.bilin_module.restrict` publishes all four computation fields,
-registered on `lift.bilin_module.restrict#input`, with the selected
+and data-schema findings. `lift.bilin_module.restrict` publishes all four
+computation fields on `lift.bilin_module.restrict#input`, with the selected
 `fun.bilin_module.forget` action. The `lift.finite_sets.pullbacks` row has no
-computation or ports; it is not registered by the leaf.
+computation or ports and is not registered by the leaf.
 
-One concrete data-schema input remains missing. The published
-`obj.bilin_module.bilinear_form` constructor takes a
-`CasCatalogue.Modules.Bilinear.Valued.Constructions.bilinearMaps R M M W`
-argument. That declaration's exported result is only `Type u`; its underlying
-computational data fields are not in the exported `datatypes` inventory. The
-published `bilinearInclusion` and `admitBilinear` signatures describe conversion
-to and admission from a callable, but do not publish the argument's constructor
-data encoding. A callable signature alone does not determine that encoding.
-The missing input is the public data schema of this alias under the existing
-port's proof-erasure and record-field rules. No constructor layout is guessed.
-Finite native graph restriction can be developed with the published callable
-protocol; publishing its computed object parameter waits on this exact schema.
-No upstream implementation is consulted to fill the gap.
+The published `bilinearMaps` alias exposes a curried linear map. Under the
+existing port's proof-erasure and single-data-field record rules, its finite
+callable data are nested finite graphs. The adapter preserves that shape and
+uses Sage `FiniteSetMaps.from_dict`, native map evaluation,
+`cartesian_product`, and `FiniteSetMaps.one` to restrict the supplied pairing
+along the actual base inclusion and produce the three typed map replies.
+A published `admittedPoint` retains its original supplied uncurried callable
+rather than substituting a formal representative. Object output retains the
+actual base module and restricted pairing in the published
+`obj.bilin_module.bilinear_form` constructor, plus its actual finite inventory.
+Each field requires the exact actual preceding-output prefix; reply endpoints
+retain the full selected action, preceding object output, source and base.
+
+This adapter supports finite graph-backed source bilinear-form objects and
+actual base inclusions. It does not lower infinite opaque callables,
+foreign-session tokens, or other source-object presentations. Those remain
+explicit unsupported implementation cases, not missing mathematics or a
+reason to invent a lift. No monicity, bilinearity, inverse, factorization or
+universal-property law is reconstructed or certified here. The independent
+kernel and acceptance suite judge returned data; these registrations establish
+no correctness standing or B0 completion.
+
+The finite lift source completed 12 native field requests on one live Sage
+`11.0.beta1` connection with one-, two-, and five-point supplied inventories,
+including a nonidentity inclusion. Checks required all four advertised fields,
+matching request ids, successful replies, nested callable output framing, the
+actual returned object in subsequent typed endpoints, and the original supplied
+inclusion graph in the `hom` output. Two additional requests with wrong preceding
+output-prefix lengths returned explicit errors. These are protocol/data-retention
+engineering observations, without a mathematical expected-answer comparison.
 
 The finite-data adapter migration was exercised with 18 independently selected
 length-framed native requests across all nine manifest programs, using Sage
@@ -237,4 +254,4 @@ and group kernels additionally had their actual inventories and defining graph
 key coverage inspected. Inline framing checks rejected missing/repeated keys
 and an image outside a supplied codomain inventory. These are engineering
 observations only; no acceptance suite, expected mathematical answers or kernel
-decoder was consulted, and the missing lift implementation remains open.
+decoder was consulted. Infinite or otherwise unsupported lift realizations remain open.

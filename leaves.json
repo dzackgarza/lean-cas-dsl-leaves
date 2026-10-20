@@ -8,7 +8,8 @@
     {"name": "sage-fin-rev", "command": "python3", "args": ["backends/sage_fin_rev.py"]},
     {"name": "gap-groups", "command": "python3", "args": ["backends/gap_groups.py"]},
     {"name": "sage-modules", "command": "python3", "args": ["backends/sage_modules.py"]},
-    {"name": "sage-presentations", "command": "python3", "args": ["backends/sage_presentations.py"]}
+    {"name": "sage-presentations", "command": "python3", "args": ["backends/sage_presentations.py"]},
+    {"name": "sage-bilinear-lift", "command": "python3", "args": ["backends/sage_bilinear_lift.py"]}
   ],
   "registrations": [
     {"operation": "meth.cardinality", "input": "obj.sets.fin", "backend": "sage"},
@@ -100,6 +101,10 @@
     {"operation": "prop.is_abelian", "input": "obj.groups.units", "backend": "gap-groups"},
     {"operation": "prop.is_commutative", "input": "obj.groups.units", "backend": "gap-groups"},
     {"operation": "meth.cardinality", "input": "obj.sets.units", "backend": "gap-groups"},
-    {"operation": "prop.is_finite", "input": "obj.sets.units", "backend": "gap-groups"}
+    {"operation": "prop.is_finite", "input": "obj.sets.units", "backend": "gap-groups"},
+    {"operation": "lift.bilin_module.restrict#obj", "input": "lift.bilin_module.restrict#input", "backend": "sage-bilinear-lift"},
+    {"operation": "lift.bilin_module.restrict#hom", "input": "lift.bilin_module.restrict#input", "backend": "sage-bilinear-lift"},
+    {"operation": "lift.bilin_module.restrict#forward", "input": "lift.bilin_module.restrict#input", "backend": "sage-bilinear-lift"},
+    {"operation": "lift.bilin_module.restrict#backward", "input": "lift.bilin_module.restrict#input", "backend": "sage-bilinear-lift"}
   ]
 }
