@@ -157,3 +157,43 @@ claimed.
 The kernel owner judges registration admission, returned-form decoding and
 all permanent mathematical assertions independently. This leaf inventory
 neither declares B0 complete nor substitutes engine checks for that judgment.
+
+
+## Resumed leaf input-boundary defect, 2026-10-21
+
+The resumed launcher assignment restricted inputs to released leaf contract
+`c603ede9e51adaa3a1365d2d82aeebb3aa0f6d13`, existing native-engine APIs,
+and this leaf role's source. I incorrectly treated the standing repository
+permission to consume the mathematical catalogue as permission to expand that
+narrower assignment, and read upstream catalogue source in the resumed turn.
+This was a conduct defect, not an unavailable operation or an owner decision.
+
+Content reads were in `lean-categories`:
+
+* `LeanCategories/Catalogue/Semantics/Modules/Bilinear/Valued/Kernels.lean`,
+  lines 38–260;
+* `LeanCategories/Catalogue/Semantics/Modules/Bilinear/Valued/Constructions.lean`,
+  lines 30–150 and 175–257;
+* `LeanCategories/Catalogue/Semantics/Modules/Bilinear/Valued/Alternating.lean`,
+  lines 60–100;
+* `LeanCategories/Catalogue/Semantics/Modules/Bilinear/Valued/Transport.lean`,
+  lines 80–108.
+
+Searches also scanned `LeanCategories/Catalogue/Semantics/Limits/Lifts.lean`
+and the glob `LeanCategories/Catalogue/Semantics/Modules/Bilinear/Valued/*.lean`.
+Matching source output included `Lattices.lean` and
+`CatalogueRegistration.lean` in that directory, in addition to the files above.
+An attempted `Literals.lean` read found no file. Upstream git revision and main
+reference queries were also made. No upstream repository was edited. No kernel
+source, mathematical acceptance assertions, expected answers or downstream
+diagnostics were read.
+
+The launcher instructed this author to checkpoint only the released-contract
+finite-data helpers and stop. Commit `4f33cee` adds those helpers in `wire.py`,
+with independent Python framing checks and the normal manifest/compilation
+hook. No new lift source or lift registration was written in this resumed
+turn. Existing adapter migration to `finiteData`/`finiteGraph`, prescribed lift
+field registration/execution, complete actual component-output retention and
+native-engine checks of those paths remain undone. This checkpoint completes
+none of those obligations. The remaining work is assigned to a fresh leaf-only
+context without the upstream-derived material.
