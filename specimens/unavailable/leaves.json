@@ -1,0 +1,18 @@
+{
+  "backends": [
+    {
+      "name": "unavailable",
+      "command": "python3",
+      "args": [
+        "backend.py"
+      ]
+    }
+  ],
+  "registrations": [
+    {
+      "operation": "meth.cardinality",
+      "input": "obj.sets.fin",
+      "backend": "unavailable"
+    }
+  ]
+}
