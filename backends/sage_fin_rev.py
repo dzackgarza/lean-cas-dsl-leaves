@@ -35,10 +35,13 @@ def op_fin_rev(value):
             if point_source != source or arithmetic.get("ctor") != "numeral":
                 raise ValueError("expected a numeral point at the selected finite source")
             data = arithmetic["args"][0]
-        if isinstance(data, list) or (isinstance(data, dict) and data.get("ctor") == "finiteGraph"):
+        if isinstance(data, list) or (isinstance(data, dict) and data.get("ctor") in {"finiteGraph", "typedMap"}):
             graph = graph_data(data)
             return value_data(finite_graph([x for x, _ in graph],
                                           [[x, int(p(numeral(y) + 1)) - 1] for x, y in graph]))
+        if domain not in ({"ctor": "obj.sets.fin", "args": [1]},
+                          {"ctor": "obj.sets.terminal", "args": []}):
+            raise ValueError("a non-closed reversal invocation requires its actual callable data")
         return value_data(int(p(numeral(data) + 1)) - 1)
     p = permutation(value)
     n = len(p)

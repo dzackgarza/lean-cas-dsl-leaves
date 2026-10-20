@@ -36,6 +36,7 @@ cartesian_product = engine.cartesian_product
 from sage.sets.disjoint_union_enumerated_sets import DisjointUnionEnumeratedSets  # noqa: E402
 from sage.sets.family import Family  # noqa: E402
 from sage.sets.finite_enumerated_set import FiniteEnumeratedSet  # noqa: E402
+from sage.combinat.permutation import Permutation  # noqa: E402
 from sage.sets.integer_range import IntegerRange  # noqa: E402
 from sage.version import version as SAGE_VERSION  # noqa: E402
 
@@ -54,6 +55,7 @@ def residues(n):
 # of an element (a point of `Fin n`, and of `ZMod n = Fin n` for n > 0, is its number).
 PARENTS = {
     "obj.sets.fin": (lambda n: IntegerRange(0, numeral(n)), int),
+    "obj.finite_sets.fin": (lambda n: IntegerRange(0, numeral(n)), int),
     "obj.sets.integers_mod": (residues, lambda r: int(r.lift())),
     "obj.rings.integers_mod": (residues, lambda r: int(r.lift())),
 }
@@ -139,6 +141,13 @@ def op_coproduct(value):
 
 def graph(value):
     """A morphism's graph as a dict over canonical JSON keys, with its domain in order."""
+    if isinstance(value, dict) and value.get("ctor") == "mor.sets.fin_rev":
+        _, args = named_object(value)
+        if len(args) != 1:
+            raise ValueError("Fin reversal requires its complete parameter")
+        n = numeral(args[0])
+        p = Permutation(list(range(n, 0, -1)))
+        value = finite_graph(list(range(n)), [[i, int(p(i + 1)) - 1] for i in range(n)])
     value = graph_data(value)
     table = {}
     for pair in value:

@@ -33,6 +33,15 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
   homomorphisms. The latter needs Sage's PARI dependency; a partial modular
   installation lacking it cannot execute that route.
 
+  `sage_bilinear_lift.py` supplies the four published
+  `lift.bilin_module.restrict` fields for finite graph-backed bilinear forms.
+  Sage finite maps restrict the actual pairing along the supplied inclusion;
+  replies retain nested pairing graphs, actual carrier inventories, and all
+  three typed map endpoints. Infinite/foreign-session callables and other
+  source presentations remain unsupported. The released contract's
+  `api/declared-ports.json` supplies the exact field addresses and public types;
+  its `Port.lean` fixes their wire encodings.
+
   Both engine variables default to `.venv/bin/python` of the running workspace (`backends/engine_python.py`).
 * **`lakefile.toml`** only makes this directory a Lake package; it has no targets. `lean-cas-dsl`
   requires no leaf package: it reads a manifest at run time (`CAS_LEAVES`).

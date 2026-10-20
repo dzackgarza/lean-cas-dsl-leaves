@@ -36,6 +36,7 @@ ADAPTER_VERSION = "0.1.0"
 
 # The Sage parent of each named set accepted as `X`, from its parameters.
 PARENTS = {
+    "obj.finite_sets.fin": lambda n: IntegerRange(0, numeral(n)),
     "obj.sets.fin": lambda n: IntegerRange(0, numeral(n)),  # {0, …, n-1}
     "obj.sets.integers_mod": lambda n: Zmod(numeral(n)),  # Sage's Zmod(0) is ZZ, as ZMod 0 = ℤ
     "obj.sets.naturals": lambda: NonNegativeIntegers(),

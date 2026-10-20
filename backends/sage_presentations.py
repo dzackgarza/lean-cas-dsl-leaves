@@ -100,7 +100,8 @@ def translation(value: object) -> dict[str, object]:
         arrow_id, arrow_parameters = named_object(arrow)
         if arrow_id != "cmp.f9.translation" or arrow_parameters or parameters:
             raise ValueError("no native lowering for the supplied comparison arrow descriptor")
-        if domain != {"ctor": "obj.sets.fin", "args": [1]}:
+        if domain not in ({"ctor": "obj.sets.fin", "args": [1]},
+                          {"ctor": "obj.sets.terminal", "args": []}):
             raise ValueError("a non-singleton comparison invocation requires pointwise data")
         inverse = descriptor(source) == "y"
     else:

@@ -31,11 +31,11 @@ def receiver(value: object) -> object:
 
 def ring(value: object):
     ctor, args = named_object(receiver(value))
-    if ctor in {"obj.rings.integers", "obj.sets.integers"}:
+    if ctor in {"obj.rings.integers", "obj.commutative_rings.integers", "obj.sets.integers"}:
         return engine.ZZ
-    if ctor in {"obj.rings.rationals", "obj.sets.rationals", "obj.fields.rationals"}:
+    if ctor in {"obj.rings.rationals", "obj.commutative_rings.rationals", "obj.sets.rationals", "obj.fields.rationals"}:
         return engine.QQ
-    if ctor in {"obj.rings.integers_mod", "obj.sets.integers_mod"}:
+    if ctor in {"obj.rings.integers_mod", "obj.commutative_rings.integers_mod", "obj.sets.integers_mod"}:
         return Zmod(numeral(args[0]))
     raise ValueError("no Sage coefficient ring for the selected form %s" % ctor)
 

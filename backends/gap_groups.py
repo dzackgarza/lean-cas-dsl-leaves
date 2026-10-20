@@ -69,11 +69,11 @@ def group(value: object):
 
 def native_ring(value: object):
     ctor, args = named_object(receiver(value))
-    if ctor in {"obj.rings.integers", "obj.sets.integers"}:
+    if ctor in {"obj.rings.integers", "obj.commutative_rings.integers", "obj.sets.integers"}:
         return libgap.Integers
-    if ctor in {"obj.rings.rationals", "obj.sets.rationals"}:
+    if ctor in {"obj.rings.rationals", "obj.commutative_rings.rationals", "obj.sets.rationals"}:
         return libgap.Rationals
-    if ctor in {"obj.rings.integers_mod", "obj.sets.integers_mod"}:
+    if ctor in {"obj.rings.integers_mod", "obj.commutative_rings.integers_mod", "obj.sets.integers_mod"}:
         n = numeral(args[0])
         return libgap.Integers if n == 0 else libgap.ZmodnZ(n)
     raise ValueError("no GAP ring lowering for the selected units parameter %s" % ctor)
@@ -102,6 +102,10 @@ def units(value: object):
 
 
 def homomorphism(source: object, target: object, arrow: object):
+    for endpoint in (source, target):
+        actual, _ = named_object(actual_group_data(endpoint))
+        if actual in {"subobject", "finiteData"}:
+            raise ValueError("group-map lowering of retained result presentations is not implemented")
     G = group(source)
     H = G if source == target else group(target)
     return native_homomorphism(source, target, arrow, G, H)
@@ -132,6 +136,16 @@ def native_homomorphism(source: object, target: object, arrow: object, G, H):
         if args[0] != source or args[1] != target:
             raise ValueError("the typed map endpoints differ from the selected groups")
         return native_homomorphism(source, target, args[2], G, H)
+    if ctor == "identity":
+        if args != [source, target] or source != target:
+            raise ValueError("an identity descriptor requires the selected equal endpoints")
+        return libgap.IdentityMapping(G)
+    if ctor == "zero":
+        if args != [source, target]:
+            raise ValueError("a zero descriptor requires the selected complete endpoints")
+        generators = G.GeneratorsOfGroup()
+        return libgap.GroupHomomorphismByImages(G, H, generators,
+                                               [H.One() for _ in generators])
     if ctor == "mor.groups.identity":
         return libgap.IdentityMapping(G)
     if ctor == "mor.groups.trivial":
@@ -171,6 +185,8 @@ def endpoints(arrow: object) -> tuple[object, object] | None:
         return args[0], args[1]
     if ctor == "finiteGraph":
         return None
+    if ctor in {"identity", "zero"} and len(args) == 2:
+        return args[0], args[1]
     if ctor == "mor.groups.sign":
         return named("obj.groups.symmetric", args[0]), named("obj.groups.cyclic", 2)
     if ctor == "mor.groups.identity":
@@ -243,8 +259,40 @@ def finiteness(value: object) -> dict[str, object]:
     return decision(bool(group(value).IsFinite()))
 
 
+def actual_group_data(value: object) -> object:
+    """Retain supplied inventories/inclusions while reading an object view."""
+    if isinstance(value, dict) and "receiver" in value:
+        return actual_group_data(value["receiver"])
+    ctor, args = named_object(value)
+    if ctor in {"functorAction", "objectPresentation"} and len(args) == 2:
+        return actual_group_data(args[1])
+    if ctor == "valueData" and len(args) == 1:
+        return actual_group_data(args[0])
+    return value
+
+
 def abelianness(value: object) -> dict[str, object]:
-    return decision(bool(group(value).IsAbelian()))
+    actual = actual_group_data(value)
+    ctor, args = named_object(actual)
+    if ctor == "subobject" and len(args) == 3:
+        ambient = args[1]
+        points = [image for _, image in graph_data(args[2])]
+    elif ctor == "finiteData" and len(args) == 2:
+        descriptor, points = args
+        selected, parameters = named_object(receiver(descriptor))
+        # A supplied kernel inventory uses this adapter's ambient point codec.
+        # Do not rerun the defining kernel and replace the returned inventory.
+        ambient = parameters[0] if selected == "obj.subgroups.kernel" else descriptor
+    else:
+        return decision(bool(group(value).IsAbelian()))
+    G = group(ambient)
+    if not bool(G.IsFinite()):
+        raise ValueError("retained finite subgroup decoding needs a supported finite ambient point codec")
+    encode = encoder(ambient, G)
+    native_points = {json.dumps(encode(g), sort_keys=True): g for g in G.Elements()}
+    supplied = [native_points[json.dumps(point, sort_keys=True)] for point in points]
+    actual_subgroup = libgap.Subgroup(G, supplied)
+    return decision(bool(actual_subgroup.IsAbelian()))
 
 
 def kernel(value: object) -> dict[str, object]:

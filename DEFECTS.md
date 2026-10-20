@@ -101,7 +101,7 @@ discriminants with defining maps; module rank through structural forms;
 group-map kernels with complete subgroup data; abelianness; formed-module
 cardinality; and nonidentity finite-field presentation transport.
 
-The ordinary manifest now has nine programs and 90 registrations. These
+The ordinary manifest now has ten programs and 94 registrations. These
 counts describe supplied routes, not correctness or acceptance.
 
 | Assigned capability | Supplied engineering route |
@@ -114,6 +114,7 @@ counts describe supplied routes, not correctness or acceptance.
 | Group-map kernels | `gap_groups.py` lowers sign, identity, trivial, finite full-graph maps and named-map compositions. GAP `Kernel` supplies the subgroup. Finite replies contain the actual engine-enumerated inclusion graph, the original ambient descriptor, and the published kernel-domain descriptor. Infinite named-map cases retain the published defining inclusion descriptor. |
 | Abelianness | GAP `IsAbelian` on the registered symmetric/cyclic/subgroup, selected-units and formed-carrier forms; no leaf claim becomes a formal property. |
 | Formed-module cardinality | Sage free-module cardinality and the published root Gram matrix's Smith invariants on root-A, dual, discriminant and E8 forms. |
+| Prescribed bilinear restriction | `sage_bilinear_lift.py` registers the four published `lift.bilin_module.restrict` fields for finite supplied callable data, retaining the actual base module, restricted pairing, inclusion and both typed comparison directions. Unsupported presentations fail explicitly. |
 | Nonidentity finite-field transport | `sage_presentations.py` registers `cmp.f9.translation` on both published F9 presentations, in either direction. Sage quotient-ring homomorphisms execute the selected generator translation and return an element at the exact requested target descriptor. |
 
 At committed source `a990f7d`, all nine manifest programs completed 27
@@ -255,3 +256,55 @@ key coverage inspected. Inline framing checks rejected missing/repeated keys
 and an image outside a supplied codomain inventory. These are engineering
 observations only; no acceptance suite, expected mathematical answers or kernel
 decoder was consulted. Infinite or otherwise unsupported lift realizations remain open.
+
+
+## Bounded released-contract compatibility audit
+
+Reference: released contract main `c6e78eb2e5939e58b6f18b5fc456320c65f10186`,
+its declared API inventory, generic port rules, and native engine APIs only.
+All 94 registrations across ten programs were compared with the released
+operation/input address inventories: all 17 operation addresses and 36 input
+form addresses exist. Program branches were inspected for the corresponding
+named inputs and public framing variants; this is bounded engineering coverage,
+not exhaustive parameter coverage or mathematical acceptance.
+
+The audit repairs concrete decoding/lowering gaps for ordinary `identity` and
+`zero` group-map descriptors, named Fin reversal in finite set cospans,
+finite-set ordinals in finite constructions/power sets, explicitly selected
+commutative-ring views in existing module/units lowering, terminal-source
+point invocations, and typed finite graph point data. Scalar reversal requests
+at other generalized domains now fail rather than collapse the domain.
+No new mathematical operation or carrier identification is introduced.
+
+A separate returned-data defect affected group-property reuse: stripping the
+returned subobject down to its named kernel descriptor recomputed that kernel
+instead of consuming the actual supplied inventory/inclusion. Abelianness now
+constructs the native GAP subgroup from the supplied inclusion images or the
+adapter's retained ambient-encoded finite inventory and calls `IsAbelian` on
+that native subgroup. It does not treat the supplied data as proof or replace
+it with the canonical named kernel. Cardinality/finiteness already consume the
+retained finite inventory.
+
+Group-map lowering at retained `subobject`/`finiteData` endpoints remains
+unimplemented and is explicitly rejected, rather than silently using the named
+kernel's canonical representation. Native subgroup-property decoding currently
+requires a supported finite ambient point codec. Infinite named maps may still
+be returned as defining-map descriptors, but this supplies no foreign-session
+or infinite-callable lowering. Arbitrary other named set arrows/compositions,
+opaque sessions, arbitrary monoid units, arbitrary polynomial presentations,
+and non-closed F9 pointwise application remain unsupported as described above.
+No assertion is changed and no implementation gap changes the mathematical API.
+
+
+Engineering validation for these audit corrections completed 19 real-engine
+framed requests using Sage `11.0.beta1`/GAP `4.15.1`: nine constructor-variant
+requests plus ten result-reuse/point-invocation requests. Seventeen returned
+successful frames; two deliberately unsupported/incomplete requests returned
+explicit errors (a retained-result group-map endpoint and a non-closed scalar
+reversal request). One reuse check supplied a different actual carrier inventory
+under a retained named kernel descriptor and compared its native property
+response with the response from that actual carrier, exercising data reuse
+rather than canonical-kernel substitution. Request/reply matching, native
+process exit, and framing were checked. This establishes native engineering
+behavior for these branches only, with no kernel decoding or mathematical
+acceptance claim.
