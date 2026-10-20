@@ -90,3 +90,70 @@ outside a leaf author's permitted inputs and have been removed from the active
 leaf requirements and findings. This review did not inspect the acceptance
 suite, kernel source, or harness reports. It establishes engineering observations
 only; it does not establish mathematical correctness or B0 acceptance.
+
+
+## Approved realization inventory, 2026-10-20
+
+The launcher supplied these existing B0 capability requirements without
+assertions or expected answers: set/group cardinality and finiteness with
+finite constructions; finite reversal and composition; formed-module
+discriminants with defining maps; module rank through structural forms;
+group-map kernels with complete subgroup data; abelianness; formed-module
+cardinality; and nonidentity finite-field presentation transport.
+
+The ordinary manifest now has nine programs and 90 registrations. These
+counts describe supplied routes, not correctness or acceptance.
+
+| Assigned capability | Supplied engineering route |
+| --- | --- |
+| Set/group cardinality and finiteness | Existing primitive sets, residue powers and finite power sets; finite-set ordinals; symmetric/cyclic groups; alternating and kernel subgroups; named F9 presentations; units of selected integer/residue multiplicative monoids. Sage parent routines and GAP `Size`, `IsFinite`, `Units` supply the computations. |
+| Finite constructions | Existing finite `pair` product/coproduct and graph `cospan` pullback adapters return full cone/cocone data. Retained finite carrier data can be consumed by the primitive cardinality adapters. |
+| Reversal and composition | `sage_fin_rev.py` supports the published graph request and common point invocation. Native permutations execute retained compositions, including pointwise finite-domain graphs. |
+| Discriminant construction and reuse | The published root-A inclusion/zero pair returns the named formed quotient and its dual-to-quotient projection. Sage Smith invariants supply cardinality; native GAP abelian groups supply the inherited group-property route. |
+| Module rank | `sage_modules.py` registers `meth.rank` for regular/vector modules, root-A lattices and their duals/discriminants, and E8. Native free-module rank and quotient-vector-space dimension consume the selected forms. |
+| Group-map kernels | `gap_groups.py` lowers sign, identity, trivial, finite full-graph maps and named-map compositions. GAP `Kernel` supplies the subgroup. Finite replies contain the actual engine-enumerated inclusion graph, the original ambient descriptor, and the published kernel-domain descriptor. Infinite named-map cases retain the published defining inclusion descriptor. |
+| Abelianness | GAP `IsAbelian` on the registered symmetric/cyclic/subgroup, selected-units and formed-carrier forms; no leaf claim becomes a formal property. |
+| Formed-module cardinality | Sage free-module cardinality and the published root Gram matrix's Smith invariants on root-A, dual, discriminant and E8 forms. |
+| Nonidentity finite-field transport | `sage_presentations.py` registers `cmp.f9.translation` on both published F9 presentations, in either direction. Sage quotient-ring homomorphisms execute the selected generator translation and return an element at the exact requested target descriptor. |
+
+At committed source `a990f7d`, all nine manifest programs completed 27
+independently selected real-engine requests. The check required process exit,
+ready framing, matching request ids, successful reply framing, and that every
+registration's operation was advertised by its program. Eight programs used
+modular Sage 10.8.13/GAP 4.16.1; the presentation program used full Sage
+11.0.beta1. Additional units, finite defining-map and named-composition checks
+exercised the subsequent source changes. No result was compared with an
+acceptance assertion, and no decoder or mathematical acceptance result is
+claimed.
+
+## Remaining boundaries and exact missing inputs
+
+* A composition of two unlabelled group graphs carries no intermediate chosen
+  group in the published `compose` envelope. A carrier graph does not determine
+  that group structure. Named constituents retain their declared endpoints and
+  can be composed; the wholly unlabelled case requires the intermediate
+  structured endpoint from the contract owner. The leaf does not infer it.
+* `obj.groups.units` and `obj.sets.units` are parameterized by an arbitrary
+  chosen monoid. The current lowering supports selected integer/residue-ring
+  multiplicative monoids. GAP 4.16.1 has no `Units` method on the native groups
+  tried, and no bound `GroupOfUnits` operation in the available installation.
+  Such other monoid realizations remain unimplemented; the mathematical form
+  already exists. This is an engine/lowering limit, not missing mathematics.
+* The generic `cmp.polynomial_quotient.translation` row is not registered here.
+  The named F9 comparison is implemented. Arbitrary coefficient-ring and
+  defining-polynomial computational presentations have not been lowered by
+  this adapter; this is an unimplemented generic route, not a claim that the
+  published mathematical comparison is absent.
+* The F9 common `apply` branch supports closed singleton-domain points. A
+  general non-singleton point needs its pointwise/callable data consumed and
+  returned at the original domain; that branch is not implemented. The adapter
+  rejects it rather than returning one scalar for a function.
+* Modular Sage in the supplied interpreter lacks `sage.libs.pari`; the native
+  F9 constructor/hom path reports that missing dependency. Full Docker Sage
+  supplies it. For integrated execution, use
+  `CAS_SAGE_PYTHON=/home/dzack/.local/bin/sage-docker-python`; GAP can retain
+  `CAS_GAP_PYTHON=/home/dzack/gitclones/lean-cas-dsl/.venv/bin/python`.
+
+The kernel owner judges registration admission, returned-form decoding and
+all permanent mathematical assertions independently. This leaf inventory
+neither declares B0 complete nor substitutes engine checks for that judgment.

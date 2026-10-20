@@ -25,6 +25,14 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
   The adapters support modular passagemath entrypoints and the public `sage.all`
   entrypoint of a full Sage installation. The selected interpreter must supply one
   of these complete engine installations.
+  Additional programs implement the published B0 routes:
+  `gap_groups.py` uses GAP for symmetric/cyclic groups, selected units,
+  subgroup kernels and abelianness; `sage_modules.py` supplies module rank
+  and formed-carrier cardinality; `sage_presentations.py` executes the
+  published F9 comparison in both directions through native quotient-ring
+  homomorphisms. The latter needs Sage's PARI dependency; a partial modular
+  installation lacking it cannot execute that route.
+
   Both engine variables default to `.venv/bin/python` of the running workspace (`backends/engine_python.py`).
 * **`lakefile.toml`** only makes this directory a Lake package; it has no targets. `lean-cas-dsl`
   requires no leaf package: it reads a manifest at run time (`CAS_LEAVES`).
