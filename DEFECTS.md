@@ -56,8 +56,11 @@ entrypoint throughout. The loader then retained the previously documented
 modular passagemath entrypoints as well: it imports the supported modular
 entrypoint when installed, or full Sage's `sage.all` when that entrypoint is
 absent. A missing dependency inside an installed entrypoint propagates as an
-error. This changes engine loading only. Modular Sage was not installed in
-this review environment and was not exercised.
+error. This changes engine loading only. The existing modular Sage interpreter subsequently supplied by the launcher,
+`/home/dzack/gitclones/lean-cas-dsl/.venv/bin/python`, was used strictly as an
+engine, without inspecting that checkout. All six manifest programs also
+completed the same ten independently selected framed requests with both engine
+variables set to that interpreter. This exercises both supported engine layouts.
 
 At source revision `f4c0f86`, all six manifest programs were launched by host
 `python3`, with `CAS_SAGE_PYTHON` and `CAS_GAP_PYTHON` both set to
