@@ -59,6 +59,18 @@ absent. A missing dependency inside an installed entrypoint propagates as an
 error. This changes engine loading only. Modular Sage was not installed in
 this review environment and was not exercised.
 
+At source revision `f4c0f86`, all six manifest programs were launched by host
+`python3`, with `CAS_SAGE_PYTHON` and `CAS_GAP_PYTHON` both set to
+`/home/dzack/.local/bin/sage-docker-python` and `PYTHONPATH` set to the
+published contract's `python` directory. Ten length-framed requests completed:
+Sage cardinality, GAP cardinality, power-set cardinality, set product,
+set coproduct, set pullback, discriminant cocone, discriminant cardinality,
+and Fin reversal at nonempty and empty input. The check required clean
+process exit, a ready frame, matching request ids, and an `ok` response for
+each request. It did not compare answers against a mathematical oracle or
+exercise kernel decoding. Commit hooks also checked manifest JSON and Python
+compilation. These are engine/protocol observations only.
+
 ## Source provenance and separation
 
 Published leaf main initially resolved to
