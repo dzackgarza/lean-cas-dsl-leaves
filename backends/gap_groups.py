@@ -86,7 +86,16 @@ def units(value: object):
     edge, source = args
     edge_id, edge_parameters = named_object(edge)
     if edge_id == "fun.rings.multiplicative_monoid":
-        return libgap.Units(native_ring(source))
+        R = native_ring(source)
+        result = libgap.Units(R)
+        if bool(libgap.IsGroup(result)):
+            return result
+        if bool(libgap.IsFinite(result)):
+            # GAP returns the integer units as a finite scalar collection.
+            # Its native matrix-group constructor supplies a group-map parent;
+            # entries remain the original engine-computed units.
+            return libgap.Group([libgap.ImmutableMatrix(R, [[u]]) for u in result])
+        raise ValueError("the engine's infinite units collection has no native group-map representation")
     if edge_id == "fun.groups.monoid":
         return libgap.Units(group(source))
     raise ValueError("no native units lowering for the selected monoid action %s" % edge_id)
@@ -177,7 +186,11 @@ def encoder(descriptor: object, G):
         if monoid_ctor == "functorAction" and len(monoid_args) == 2:
             edge_id, _ = named_object(monoid_args[0])
             if edge_id == "fun.rings.multiplicative_monoid":
-                return lambda g: [int(libgap.Int(g)), int(libgap.Int(g ** -1))]
+                def scalar(g):
+                    return g[0][0] if bool(libgap.IsMatrix(g)) else g
+
+                return lambda g: [int(libgap.Int(scalar(g))),
+                                  int(libgap.Int(scalar(g ** -1)))]
             if edge_id == "fun.groups.monoid":
                 encode = encoder(monoid_args[1], group(monoid_args[1]))
                 return lambda g: [encode(g), encode(g ** -1)]
