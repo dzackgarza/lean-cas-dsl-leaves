@@ -15,9 +15,11 @@ Wire (`CasContract/Port.lean`, "The wire encoding of inputs and answers"): a dia
 `functorAction` and `objectPresentation`), or `{"ctor": "cospan", "args": [f, g]}`
 with morphisms as graphs `[[x, f x], ...]`. The answer is `{"ctor": "cone" | "cocone",
 "args": [apex, leg, leg]}`, the two legs of Mathlib's `BinaryFan.mk`, `BinaryCofan.mk` and
-`PullbackCone.mk`. The catalogue names no object of `cat.sets` for `X × Y`, `X ⊕ Y` or a pullback,
-so the apex is `Fin m` (`obj.sets.fin`) in Sage's enumeration order, and each leg is a finite graph:
-only finite diagrams are answered, and anything else fails.
+`PullbackCone.mk`. The returned computational apex uses `finiteData` around `obj.sets.fin`
+in Sage's enumeration order, and every defining leg uses `finiteGraph` with its
+actual domain inventory. Supplied finite inventories are retained as point data
+instead of being reconstructed from the object descriptor. Only finite diagrams
+are answered, and anything else fails.
 
 Speaks the port protocol through the contract's `cas_port` (on `PYTHONPATH`).
 """
@@ -37,7 +39,7 @@ from sage.sets.finite_enumerated_set import FiniteEnumeratedSet  # noqa: E402
 from sage.sets.integer_range import IntegerRange  # noqa: E402
 from sage.version import version as SAGE_VERSION  # noqa: E402
 
-from wire import named_object, numeral  # noqa: E402
+from wire import finite_data, finite_graph, finite_inventory, graph_data, named_object, numeral  # noqa: E402
 
 ADAPTER_VERSION = "0.1.0"
 
@@ -58,6 +60,10 @@ PARENTS = {
 
 
 def finite_set(value):
+    inventory = finite_inventory(value)
+    if inventory is not None:
+        keys = [json.dumps(point, sort_keys=True) for point in inventory]
+        return FiniteEnumeratedSet(keys), json.loads
     ctor, params = named_object(value)
     if ctor == "functorAction":
         if len(params) != 2:
@@ -104,7 +110,8 @@ def fin(m):
 
 
 def answer(kind, apex_size, *legs):
-    return {"ctor": kind, "args": [fin(apex_size), *legs]}
+    return {"ctor": kind, "args": [finite_data(fin(apex_size), list(range(apex_size))),
+                                    *[finite_graph([p[0] for p in leg], leg) for leg in legs]]}
 
 
 def op_product(value):
@@ -123,16 +130,16 @@ def op_coproduct(value):
     # Sage: DisjointUnionEnumeratedSets with keepkey, elements (i, x) for i in {0, 1}
     U = list(DisjointUnionEnumeratedSets(Family([S, T]), keepkey=True))
     encode = (ex, ey)
-    position = {(int(i), encode[int(i)](x)): k for k, (i, x) in enumerate(U)}
+    position = {(int(i), json.dumps(encode[int(i)](x), sort_keys=True)): k
+                for k, (i, x) in enumerate(U)}
     return answer("cocone", len(U),
-                  [[ex(x), position[(0, ex(x))]] for x in S],
-                  [[ey(y), position[(1, ey(y))]] for y in T])
+                  [[ex(x), position[(0, json.dumps(ex(x), sort_keys=True))]] for x in S],
+                  [[ey(y), position[(1, json.dumps(ey(y), sort_keys=True))]] for y in T])
 
 
 def graph(value):
     """A morphism's graph as a dict over canonical JSON keys, with its domain in order."""
-    if not isinstance(value, list):
-        raise ValueError("a morphism is a list of pairs: %r" % (value,))
+    value = graph_data(value)
     table = {}
     for pair in value:
         if not isinstance(pair, list) or len(pair) != 2:

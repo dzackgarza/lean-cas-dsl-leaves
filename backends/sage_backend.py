@@ -10,6 +10,8 @@ models it, and the operation to that parent's own routine:
 Speaks the port protocol through the contract's `cas_port` (on `PYTHONPATH`).
 """
 
+import json
+
 from engine_python import require_engine
 
 engine = require_engine("CAS_SAGE_PYTHON", ("sage.all__sagemath_modules", "sage.all"))
@@ -26,7 +28,7 @@ from sage.sets.positive_integers import PositiveIntegers  # noqa: E402
 from sage.sets.primes import Primes  # noqa: E402
 from sage.version import version as SAGE_VERSION  # noqa: E402
 
-from wire import aleph0, carrier_object, decision, finite_cardinal, named_object, numeral  # noqa: E402
+from wire import aleph0, carrier_object, decision, finite_cardinal, finite_inventory, named_object, numeral  # noqa: E402
 
 ADAPTER_VERSION = "0.2.0"
 
@@ -51,6 +53,10 @@ COUNTABLE = {"obj.sets.fin", "obj.sets.naturals", "obj.sets.positive_naturals",
 
 
 def parent(value):
+    inventory = finite_inventory(value)
+    if inventory is not None:
+        from sage.sets.finite_enumerated_set import FiniteEnumeratedSet
+        return "finiteData", FiniteEnumeratedSet([json.dumps(p, sort_keys=True) for p in inventory])
     ctor, params = carrier_object(value)
     if ctor not in PARENTS:
         raise ValueError("no Sage parent for %s" % ctor)
@@ -60,7 +66,7 @@ def parent(value):
 def op_cardinality(value):
     # Sage: Parent.cardinality()
     ctor, S = parent(value)
-    if ctor not in COUNTABLE:
+    if ctor not in COUNTABLE and ctor != "finiteData":
         raise ValueError("Sage's cardinality() does not distinguish infinite cardinals on %s"
                          % ctor)
     c = S.cardinality()

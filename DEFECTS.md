@@ -197,3 +197,39 @@ field registration/execution, complete actual component-output retention and
 native-engine checks of those paths remain undone. This checkpoint completes
 none of those obligations. The remaining work is assigned to a fresh leaf-only
 context without the upstream-derived material.
+
+
+## Contract-only continuation: concrete lift inputs missing
+
+The resumed leaf-only assignment consumes released leaf contract main
+`c603ede9e51adaa3a1365d2d82aeebb3aa0f6d13`, this repository's existing source,
+and native-engine APIs. It does not consume catalogue source, kernel source,
+acceptance assertions, expected answers, or downstream diagnostics.
+
+That contract's `CasContract/Port.lean` publishes `liftInput`, the four
+`MonoLiftComputation` field addresses, their output-prefix lengths, exact
+map-endpoint framing and completed component-output retention. Neither
+`CasContract/Port.lean` nor `CasContract/Registration.lean` publishes concrete
+prescribed lift ids, their selected action declarations/parameters, or the
+complete computational object/structure fields those lifts consume and return.
+The generic envelope alone does not determine those computations.
+
+The missing input is a released concrete lift-operation/form inventory with
+those declarations and complete computational data signatures. No lift is
+invented or registered here, and no catalogue implementation is consulted to
+fill this gap. All four prescribed-field implementations remain unimplemented
+until that input is released. This blocks the lift consumer only; migration of
+existing finite-data adapters proceeds against the published framing.
+
+The finite-data adapter migration was exercised with 18 independently selected
+length-framed native requests across all nine manifest programs, using Sage
+`11.0.beta1` and GAP `4.15.1` in the existing Docker engine. Requests covered
+structured supplied inventories, cardinality/finiteness consumers, power sets,
+finite reversal, set product/coproduct/pullback, a sign-map kernel, and a typed
+finite cyclic-group graph kernel. Checks required successful native process
+exit, ready/reply framing and matching request ids. Returned set constructions
+and group kernels additionally had their actual inventories and defining graph
+key coverage inspected. Inline framing checks rejected missing/repeated keys
+and an image outside a supplied codomain inventory. These are engineering
+observations only; no acceptance suite, expected mathematical answers or kernel
+decoder was consulted, and the missing lift implementation remains open.

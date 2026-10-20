@@ -13,6 +13,8 @@ infinite enumerated `S`.
 Speaks the port protocol through the contract's `cas_port` (on `PYTHONPATH`).
 """
 
+import json
+
 from engine_python import require_engine
 
 engine = require_engine("CAS_SAGE_PYTHON", ("sage.all__sagemath_combinat", "sage.all"))
@@ -28,7 +30,7 @@ from sage.sets.positive_integers import PositiveIntegers  # noqa: E402
 from sage.sets.primes import Primes  # noqa: E402
 from sage.version import version as SAGE_VERSION  # noqa: E402
 
-from wire import finite_cardinal, named_object, numeral  # noqa: E402
+from wire import carrier_object, finite_cardinal, finite_inventory, named_object, numeral  # noqa: E402
 
 ADAPTER_VERSION = "0.1.0"
 
@@ -54,14 +56,18 @@ def subsets(S):
 
 
 def parent(value):
-    ctor, params = named_object(value)
+    inventory = finite_inventory(value)
+    if inventory is not None:
+        from sage.sets.finite_enumerated_set import FiniteEnumeratedSet
+        return FiniteEnumeratedSet([json.dumps(p, sort_keys=True) for p in inventory])
+    ctor, params = carrier_object(value)
     if ctor not in PARENTS:
         raise ValueError("no Sage parent for %s" % ctor)
     return PARENTS[ctor](*params)
 
 
 def op_cardinality(value):
-    ctor, _ = named_object(value)
+    ctor, _ = carrier_object(value)
     if ctor != "obj.sets.power_set":
         raise ValueError("registered on obj.sets.power_set only, not %s" % ctor)
     # Sage: Subsets(S).cardinality(), 2^|S|

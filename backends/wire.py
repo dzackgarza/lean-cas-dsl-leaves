@@ -59,7 +59,9 @@ def finite_inventory(value):
     if ctor == "liftedSubobject":
         if len(args) != 4 or not args[3]:
             raise ValueError("a completed liftedSubobject needs its actual component outputs")
-        step_ctor, step_args = named_object(args[3][-1])
+        # Steps are retained in route order but executed in reverse order.
+        # The outermost (first) step supplies the completed result carrier.
+        step_ctor, step_args = named_object(args[3][0])
         if step_ctor != "liftStep" or len(step_args) != 5 or len(step_args[4]) != 4:
             raise ValueError("a completed lift step needs all four actual outputs")
         return finite_inventory(step_args[4][0])
@@ -80,7 +82,18 @@ def graph_data(value):
     if isinstance(value, dict):
         ctor, args = named_object(value)
         if ctor == "typedMap" and len(args) == 3:
-            return graph_data(args[2])
+            graph = graph_data(args[2])
+            source, target = finite_inventory(args[0]), finite_inventory(args[1])
+            if source is not None:
+                source_keys = {json.dumps(point, sort_keys=True) for point in source}
+                graph_keys = {json.dumps(pair[0], sort_keys=True) for pair in graph}
+                if source_keys != graph_keys:
+                    raise ValueError("a typed graph must contain its supplied domain inventory")
+            if target is not None:
+                target_keys = {json.dumps(point, sort_keys=True) for point in target}
+                if any(json.dumps(pair[1], sort_keys=True) not in target_keys for pair in graph):
+                    raise ValueError("a typed graph image is outside its supplied codomain inventory")
+            return graph
         if ctor != "finiteGraph" or len(args) != 2:
             raise ValueError("expected a finite graph or its declared framing")
         inventory, value = args

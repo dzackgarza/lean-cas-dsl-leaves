@@ -14,7 +14,7 @@ require_engine("CAS_GAP_PYTHON", ("sage.all__sagemath_gap", "sage.all"))
 
 from cas_port import serve
 from sage.libs.gap.libgap import libgap
-from wire import aleph0, decision, finite_cardinal, named_object, numeral
+from wire import aleph0, decision, finite_cardinal, finite_data, finite_graph, finite_inventory, graph_data, named_object, numeral
 
 
 def named(identifier: str, *parameters: object) -> dict[str, object]:
@@ -30,7 +30,7 @@ def receiver(value: object) -> object:
         if len(args) != 2:
             raise ValueError("incomplete retained object data")
         return receiver(args[1])
-    if ctor in {"subobject", "valueData"}:
+    if ctor in {"subobject", "valueData", "finiteData"}:
         if not args:
             raise ValueError("missing computational data")
         return receiver(args[0])
@@ -110,7 +110,8 @@ def homomorphism(source: object, target: object, arrow: object):
 def native_homomorphism(source: object, target: object, arrow: object, G, H):
     if not bool(libgap.IsGroup(G)) or not bool(libgap.IsGroup(H)):
         raise ValueError("the engine supplied a units collection without a native group-map representation")
-    if isinstance(arrow, list):
+    if isinstance(arrow, list) or (isinstance(arrow, dict) and arrow.get("ctor") == "finiteGraph"):
+        arrow = graph_data(arrow)
         encode_source, encode_target = encoder(source, G), encoder(target, H)
         target_points = {json.dumps(encode_target(h), sort_keys=True): h for h in H.Elements()}
         graph = {}
@@ -127,6 +128,10 @@ def native_homomorphism(source: object, target: object, arrow: object, G, H):
         images = [graph[json.dumps(encode_source(g), sort_keys=True)] for g in generators]
         return libgap.GroupHomomorphismByImages(G, H, generators, images)
     ctor, args = named_object(arrow)
+    if ctor == "typedMap" and len(args) == 3:
+        if args[0] != source or args[1] != target:
+            raise ValueError("the typed map endpoints differ from the selected groups")
+        return native_homomorphism(source, target, args[2], G, H)
     if ctor == "mor.groups.identity":
         return libgap.IdentityMapping(G)
     if ctor == "mor.groups.trivial":
@@ -162,6 +167,10 @@ def endpoints(arrow: object) -> tuple[object, object] | None:
     if isinstance(arrow, list):
         return None
     ctor, args = named_object(arrow)
+    if ctor == "typedMap" and len(args) == 3:
+        return args[0], args[1]
+    if ctor == "finiteGraph":
+        return None
     if ctor == "mor.groups.sign":
         return named("obj.groups.symmetric", args[0]), named("obj.groups.cyclic", 2)
     if ctor == "mor.groups.identity":
@@ -218,11 +227,19 @@ def encoder(descriptor: object, G):
 
 
 def cardinality(value: object) -> dict[str, object]:
+    inventory = finite_inventory(value)
+    if inventory is not None:
+        points = libgap.Set([json.dumps(p, sort_keys=True) for p in inventory])
+        return finite_cardinal(int(points.Size()))
     size = group(value).Size()
     return aleph0() if size == libgap.infinity else finite_cardinal(int(size))
 
 
 def finiteness(value: object) -> dict[str, object]:
+    inventory = finite_inventory(value)
+    if inventory is not None:
+        points = libgap.Set([json.dumps(p, sort_keys=True) for p in inventory])
+        return decision(bool(points.IsFinite()))
     return decision(bool(group(value).IsFinite()))
 
 
@@ -245,7 +262,9 @@ def kernel(value: object) -> dict[str, object]:
         return named("subobject", apex, source, named("subobjectInclusion", declared))
     encode = encoder(source, G)
     inclusion = [[encode(g), encode(g)] for g in K.Elements()]
-    return named("subobject", apex, source, inclusion)
+    inventory = [pair[0] for pair in inclusion]
+    return named("subobject", finite_data(apex, inventory), source,
+                 finite_graph(inventory, inclusion))
 
 
 serve("gap", str(libgap.eval("GAPInfo.Version")), "0.1.0", {

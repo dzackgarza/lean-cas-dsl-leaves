@@ -6,19 +6,23 @@ translation are published in Algebra/Concrete/PolynomialPresentation.lean.
 """
 from __future__ import annotations
 
+import json
+
 from engine_python import require_engine
 
 engine = require_engine("CAS_SAGE_PYTHON", ("sage.all__sagemath_modules", "sage.all"))
 
 from cas_port import point_invocation, serve
 from sage.version import version as SAGE_VERSION
-from wire import decision, finite_cardinal, named_object, numeral
+from wire import decision, finite_cardinal, finite_inventory, named_object, numeral
 
 
 def descriptor(value: object) -> str:
     ctor, args = named_object(value)
-    if ctor == "functorAction" and len(args) == 2:
+    if ctor in {"functorAction", "objectPresentation"} and len(args) == 2:
         return descriptor(args[1])
+    if ctor in {"finiteData", "valueData", "subobject"} and args:
+        return descriptor(args[0])
     if ctor in {"obj.sets.f9_x", "obj.commutative_rings.f9_x"}:
         return "x"
     if ctor in {"obj.sets.f9_y", "obj.commutative_rings.f9_y"}:
@@ -111,10 +115,18 @@ def translation(value: object) -> dict[str, object]:
 
 
 def cardinality(value: object) -> dict[str, object]:
+    inventory = finite_inventory(value)
+    if inventory is not None:
+        from sage.sets.finite_enumerated_set import FiniteEnumeratedSet
+        return finite_cardinal(FiniteEnumeratedSet([json.dumps(p, sort_keys=True) for p in inventory]).cardinality())
     return finite_cardinal(field(descriptor(value)).cardinality())
 
 
 def finiteness(value: object) -> dict[str, object]:
+    inventory = finite_inventory(value)
+    if inventory is not None:
+        from sage.sets.finite_enumerated_set import FiniteEnumeratedSet
+        return decision(bool(FiniteEnumeratedSet([json.dumps(p, sort_keys=True) for p in inventory]).is_finite()))
     return decision(bool(field(descriptor(value)).is_finite()))
 
 

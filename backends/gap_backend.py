@@ -13,6 +13,8 @@ to GAP domains, and the operation to GAP's own operation on them:
 Speaks the port protocol through the contract's `cas_port` (on `PYTHONPATH`).
 """
 
+import json
+
 from engine_python import require_engine
 
 require_engine("CAS_GAP_PYTHON", ("sage.all__sagemath_gap", "sage.all"))
@@ -20,7 +22,7 @@ require_engine("CAS_GAP_PYTHON", ("sage.all__sagemath_gap", "sage.all"))
 from cas_port import serve  # noqa: E402  the leaf contract's reference port
 from sage.libs.gap.libgap import libgap  # noqa: E402
 
-from wire import aleph0, carrier_object, decision, finite_cardinal, named_object, numeral  # noqa: E402
+from wire import aleph0, carrier_object, decision, finite_cardinal, finite_inventory, named_object, numeral  # noqa: E402
 
 ADAPTER_VERSION = "0.2.0"
 GAP_VERSION = str(libgap.eval("GAPInfo.Version"))
@@ -40,6 +42,9 @@ DOMAINS = {
 
 
 def domain(value):
+    inventory = finite_inventory(value)
+    if inventory is not None:
+        return libgap.Set([json.dumps(p, sort_keys=True) for p in inventory])
     ctor, params = carrier_object(value)
     if ctor not in DOMAINS:
         raise ValueError("no GAP domain for %s" % ctor)

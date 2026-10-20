@@ -7,7 +7,7 @@ require_engine("CAS_SAGE_PYTHON", ("sage.all__sagemath_combinat", "sage.all"))
 from cas_port import point_invocation, serve, value_data  # noqa: E402
 from sage.combinat.permutation import Permutation  # noqa: E402
 from sage.version import version as SAGE_VERSION  # noqa: E402
-from wire import named_object, numeral  # noqa: E402
+from wire import finite_graph, graph_data, named_object, numeral  # noqa: E402
 
 ADAPTER_VERSION = "0.1.0"
 
@@ -35,12 +35,14 @@ def op_fin_rev(value):
             if point_source != source or arithmetic.get("ctor") != "numeral":
                 raise ValueError("expected a numeral point at the selected finite source")
             data = arithmetic["args"][0]
-        if isinstance(data, list):
-            return value_data([[x, int(p(numeral(y) + 1)) - 1] for x, y in data])
+        if isinstance(data, list) or (isinstance(data, dict) and data.get("ctor") == "finiteGraph"):
+            graph = graph_data(data)
+            return value_data(finite_graph([x for x, _ in graph],
+                                          [[x, int(p(numeral(y) + 1)) - 1] for x, y in graph]))
         return value_data(int(p(numeral(data) + 1)) - 1)
     p = permutation(value)
     n = len(p)
-    return [[i, int(p(i + 1)) - 1] for i in range(n)]
+    return finite_graph(list(range(n)), [[i, int(p(i + 1)) - 1] for i in range(n)])
 
 
 serve("sage", SAGE_VERSION, ADAPTER_VERSION, {"mor.sets.fin_rev": op_fin_rev})

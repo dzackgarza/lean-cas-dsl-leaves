@@ -6,6 +6,8 @@ uses FreeModule.cardinality or the Smith invariants of that Gram matrix.
 """
 from __future__ import annotations
 
+import json
+
 from engine_python import require_engine
 
 engine = require_engine("CAS_SAGE_PYTHON", ("sage.all__sagemath_modules", "sage.all"))
@@ -13,7 +15,7 @@ engine = require_engine("CAS_SAGE_PYTHON", ("sage.all__sagemath_modules", "sage.
 from cas_port import serve
 from sage.rings.finite_rings.integer_mod_ring import Zmod
 from sage.version import version as SAGE_VERSION
-from wire import aleph0, finite_cardinal, named_object, numeral
+from wire import aleph0, finite_cardinal, finite_inventory, named_object, numeral
 
 
 def receiver(value: object) -> object:
@@ -22,7 +24,7 @@ def receiver(value: object) -> object:
     ctor, args = named_object(value)
     if ctor in {"functorAction", "objectPresentation"} and len(args) == 2:
         return receiver(args[1])
-    if ctor in {"valueData", "subobject"} and args:
+    if ctor in {"valueData", "subobject", "finiteData"} and args:
         return receiver(args[0])
     return value
 
@@ -70,6 +72,11 @@ def rank(value: object) -> dict[str, object]:
 
 
 def cardinality(value: object) -> dict[str, object]:
+    inventory = finite_inventory(value)
+    if inventory is not None:
+        from sage.sets.finite_enumerated_set import FiniteEnumeratedSet
+        points = FiniteEnumeratedSet([json.dumps(p, sort_keys=True) for p in inventory])
+        return finite_cardinal(points.cardinality())
     ctor, args = named_object(receiver(value))
     if ctor == "obj.bil_wform.root_lattice_a_discriminant":
         invariants = discriminant_gram(numeral(args[0])).elementary_divisors()
