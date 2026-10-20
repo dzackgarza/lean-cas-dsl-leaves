@@ -199,27 +199,32 @@ none of those obligations. The remaining work is assigned to a fresh leaf-only
 context without the upstream-derived material.
 
 
-## Contract-only continuation: concrete lift inputs missing
+## Contract-only continuation: bilinear pairing data schema missing
 
-The resumed leaf-only assignment consumes released leaf contract main
-`c603ede9e51adaa3a1365d2d82aeebb3aa0f6d13`, this repository's existing source,
+The leaf-only continuation consumes released leaf contract main
+`1770b6b0fa0e26aee361b6d57f9fd2967e03836a`, this repository's existing source,
 and native-engine APIs. It does not consume catalogue source, kernel source,
 acceptance assertions, expected answers, or downstream diagnostics.
 
-That contract's `CasContract/Port.lean` publishes `liftInput`, the four
-`MonoLiftComputation` field addresses, their output-prefix lengths, exact
-map-endpoint framing and completed component-output retention. Neither
-`CasContract/Port.lean` nor `CasContract/Registration.lean` publishes concrete
-prescribed lift ids, their selected action declarations/parameters, or the
-complete computational object/structure fields those lifts consume and return.
-The generic envelope alone does not determine those computations.
+The released `api/declared-ports.json` resolves the earlier missing-address
+finding: `lift.bilin_module.restrict` publishes all four computation fields,
+registered on `lift.bilin_module.restrict#input`, with the selected
+`fun.bilin_module.forget` action. The `lift.finite_sets.pullbacks` row has no
+computation or ports; it is not registered by the leaf.
 
-The missing input is a released concrete lift-operation/form inventory with
-those declarations and complete computational data signatures. No lift is
-invented or registered here, and no catalogue implementation is consulted to
-fill this gap. All four prescribed-field implementations remain unimplemented
-until that input is released. This blocks the lift consumer only; migration of
-existing finite-data adapters proceeds against the published framing.
+One concrete data-schema input remains missing. The published
+`obj.bilin_module.bilinear_form` constructor takes a
+`CasCatalogue.Modules.Bilinear.Valued.Constructions.bilinearMaps R M M W`
+argument. That declaration's exported result is only `Type u`; its underlying
+computational data fields are not in the exported `datatypes` inventory. The
+published `bilinearInclusion` and `admitBilinear` signatures describe conversion
+to and admission from a callable, but do not publish the argument's constructor
+data encoding. A callable signature alone does not determine that encoding.
+The missing input is the public data schema of this alias under the existing
+port's proof-erasure and record-field rules. No constructor layout is guessed.
+Finite native graph restriction can be developed with the published callable
+protocol; publishing its computed object parameter waits on this exact schema.
+No upstream implementation is consulted to fill the gap.
 
 The finite-data adapter migration was exercised with 18 independently selected
 length-framed native requests across all nine manifest programs, using Sage
