@@ -1,7 +1,7 @@
 """The Sage set-limits backend: `lim.sets.product`, `colim.sets.coproduct` and `lim.sets.pullback`
 on `cat.sets`.
 
-Engine: Sage (passagemath, `sage.all__sagemath_combinat`), run under `$CAS_SAGE_PYTHON` or the
+Engine: Sage (`sage.all`), run under `$CAS_SAGE_PYTHON` or the
 workspace's `.venv/bin/python` (`engine_python`). Routines:
 
 * `lim.sets.product` on `pair X Y`: `cartesian_product([S, T])` (`sage.sets.cartesian_product`);
@@ -26,10 +26,10 @@ import json
 
 from engine_python import require_engine
 
-require_engine("CAS_SAGE_PYTHON", "sage.all__sagemath_combinat")
+require_engine("CAS_SAGE_PYTHON", "sage.all")
 
 from cas_port import serve  # noqa: E402  the leaf contract's reference port
-from sage.all__sagemath_combinat import Zmod, cartesian_product  # noqa: E402
+from sage.all import Zmod, cartesian_product  # noqa: E402
 from sage.sets.disjoint_union_enumerated_sets import DisjointUnionEnumeratedSets  # noqa: E402
 from sage.sets.family import Family  # noqa: E402
 from sage.sets.finite_enumerated_set import FiniteEnumeratedSet  # noqa: E402

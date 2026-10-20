@@ -2,7 +2,7 @@
 
 from engine_python import require_engine
 
-require_engine("CAS_SAGE_PYTHON", "sage.all__sagemath_combinat")
+require_engine("CAS_SAGE_PYTHON", "sage.all")
 
 from cas_port import serve  # noqa: E402
 from sage.combinat.permutation import Permutation  # noqa: E402

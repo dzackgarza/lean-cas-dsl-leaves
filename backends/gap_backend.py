@@ -1,6 +1,6 @@
 """The GAP backend: `meth.cardinality` and `prop.is_finite` on `ℤ/n` and `(ℤ/n)^k`.
 
-Engine: GAP, through Sage's libgap (passagemath-gap, `sage.all__sagemath_gap`), run under
+Engine: GAP, through Sage's libgap (`sage.all`), run under
 `$CAS_GAP_PYTHON` or the workspace's `.venv/bin/python` (`engine_python`). The named sets are sent
 to GAP domains, and the operation to GAP's own operation on them:
 
@@ -15,7 +15,7 @@ Speaks the port protocol through the contract's `cas_port` (on `PYTHONPATH`).
 
 from engine_python import require_engine
 
-require_engine("CAS_GAP_PYTHON", "sage.all__sagemath_gap")
+require_engine("CAS_GAP_PYTHON", "sage.all")
 
 from cas_port import serve  # noqa: E402  the leaf contract's reference port
 from sage.libs.gap.libgap import libgap  # noqa: E402

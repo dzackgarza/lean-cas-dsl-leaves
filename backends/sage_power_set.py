@@ -1,6 +1,6 @@
 """The Sage power-set backend: `meth.cardinality` on `obj.sets.power_set`.
 
-Engine: Sage (passagemath, `sage.all__sagemath_combinat`), run under `$CAS_SAGE_PYTHON` or the
+Engine: Sage (`sage.all`), run under `$CAS_SAGE_PYTHON` or the
 workspace's `.venv/bin/python` (`engine_python`). The input `𝒫(X)` is sent to Sage's
 `Subsets(S)` (`sage.combinat.subset`), where `S` is the Sage parent of the named set `X`, itself
 possibly a power set; the operation goes to `Subsets(S).cardinality()`.
@@ -15,10 +15,10 @@ Speaks the port protocol through the contract's `cas_port` (on `PYTHONPATH`).
 
 from engine_python import require_engine
 
-require_engine("CAS_SAGE_PYTHON", "sage.all__sagemath_combinat")
+require_engine("CAS_SAGE_PYTHON", "sage.all")
 
 from cas_port import serve  # noqa: E402  the leaf contract's reference port
-from sage.all__sagemath_combinat import QQ, ZZ, Zmod  # noqa: E402
+from sage.all import QQ, ZZ, Zmod  # noqa: E402
 from sage.combinat.subset import Subsets  # noqa: E402
 from sage.sets.integer_range import IntegerRange  # noqa: E402
 from sage.sets.non_negative_integers import NonNegativeIntegers  # noqa: E402

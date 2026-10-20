@@ -1,6 +1,6 @@
 """The Sage backend: `meth.cardinality` and `prop.is_finite` on named sets of the catalogue.
 
-Engine: Sage (passagemath, `sage.all__sagemath_modules`), run under `$CAS_SAGE_PYTHON` or the
+Engine: Sage (`sage.all`), run under `$CAS_SAGE_PYTHON` or the
 workspace's `.venv/bin/python` (`engine_python`). Each named set is sent to the Sage parent that
 models it, and the operation to that parent's own routine:
 
@@ -12,10 +12,10 @@ Speaks the port protocol through the contract's `cas_port` (on `PYTHONPATH`).
 
 from engine_python import require_engine
 
-require_engine("CAS_SAGE_PYTHON", "sage.all__sagemath_modules")
+require_engine("CAS_SAGE_PYTHON", "sage.all")
 
 from cas_port import serve  # noqa: E402  the leaf contract's reference port
-from sage.all__sagemath_modules import QQ, ZZ, Infinity  # noqa: E402
+from sage.all import QQ, ZZ, Infinity  # noqa: E402
 from sage.rings.cc import CC  # noqa: E402
 from sage.rings.real_mpfr import RR  # noqa: E402
 from sage.sets.integer_range import IntegerRange  # noqa: E402
