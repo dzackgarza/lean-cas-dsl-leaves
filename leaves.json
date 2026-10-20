@@ -105,6 +105,8 @@
     {"operation": "lift.bilin_module.restrict#obj", "input": "lift.bilin_module.restrict#input", "backend": "sage-bilinear-lift"},
     {"operation": "lift.bilin_module.restrict#hom", "input": "lift.bilin_module.restrict#input", "backend": "sage-bilinear-lift"},
     {"operation": "lift.bilin_module.restrict#forward", "input": "lift.bilin_module.restrict#input", "backend": "sage-bilinear-lift"},
-    {"operation": "lift.bilin_module.restrict#backward", "input": "lift.bilin_module.restrict#input", "backend": "sage-bilinear-lift"}
+    {"operation": "lift.bilin_module.restrict#backward", "input": "lift.bilin_module.restrict#input", "backend": "sage-bilinear-lift"},
+    {"operation": "mor.sets.f9_x_constants", "input": "mor.sets.f9_x_constants", "backend": "sage-presentations"},
+    {"operation": "mor.sets.f9_y_constants", "input": "mor.sets.f9_y_constants", "backend": "sage-presentations"}
   ]
 }

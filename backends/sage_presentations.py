@@ -18,7 +18,7 @@ from sage.categories.morphism import IdentityMorphism, SetMorphism
 from sage.categories.sets_cat import Sets
 from sage.sets.finite_set_maps import FiniteSetMaps
 from sage.version import version as SAGE_VERSION
-from wire import decision, finite_cardinal, finite_graph, finite_inventory, graph_data, named_object, numeral
+from wire import carrier_object, decision, finite_cardinal, finite_graph, finite_inventory, graph_data, named_object, numeral
 
 
 def descriptor(value: object) -> str:
@@ -32,6 +32,41 @@ def descriptor(value: object) -> str:
     if ctor in {"obj.sets.f9_y", "obj.commutative_rings.f9_y"}:
         return "y"
     raise ValueError("no native field for the selected presentation %s" % ctor)
+
+
+def coefficient_source(value: object) -> bool:
+    ctor, args = carrier_object(value)
+    return ctor in {"obj.sets.integers_mod", "obj.rings.integers_mod",
+                    "obj.commutative_rings.integers_mod"} and args == [3]
+
+
+def native_kind(value: object) -> str:
+    return "coefficient3" if coefficient_source(value) else descriptor(value)
+
+
+def native_parent(value: object):
+    return engine.GF(3) if coefficient_source(value) else field(descriptor(value))
+
+
+def native_point(value: object, source: object, parent, domain: object):
+    if not coefficient_source(source):
+        return point(value, descriptor(source), parent, domain)
+    if isinstance(value, int) and not isinstance(value, bool):
+        return parent(value)
+    ctor, args = named_object(value)
+    if ctor == "valueData" and len(args) == 1:
+        return native_point(args[0], source, parent, domain)
+    if ctor == "element" and len(args) == 2 and coefficient_source(args[0]):
+        return arithmetic(args[1], parent)
+    if ctor == "pointView" and len(args) == 3:
+        if not coefficient_source(args[0]) or (domain is not None and args[2] != domain):
+            raise ValueError("a coefficient point view differs from its source or original domain")
+        return native_point(args[1], source, parent, domain)
+    if ctor == "admittedPoint" and len(args) == 6:
+        if not coefficient_source(args[4]) or (domain is not None and args[2] != domain):
+            raise ValueError("an admitted coefficient point differs from its source or original domain")
+        return native_point(args[5], source, parent, domain)
+    raise ValueError("the coefficient embedding requires actual ZMod 3 point data")
 
 
 def field(selected: str):
@@ -113,11 +148,23 @@ def comparison_map(source: object, target: object, inverse: bool):
     return F.hom([E.gen() + E(shift)], E)
 
 
+def constant_map(operation: str, source: object, target: object):
+    selected = {"mor.sets.f9_x_constants": "x", "mor.sets.f9_y_constants": "y"}[operation]
+    if not coefficient_source(source) or descriptor(target) != selected:
+        raise ValueError("the constant embedding differs from its published selected endpoints")
+    F = field(selected)
+    return F.coerce_map_from(F.base_ring())
+
+
 def arrow_endpoints(arrow: object) -> tuple[object, object] | None:
     """Read exact endpoints supplied or fixed by the published declaration."""
     ctor, args = named_object(arrow)
     if ctor == "typedMap" and len(args) == 3:
         return args[0], args[1]
+    if ctor in {"mor.sets.f9_x_constants", "mor.sets.f9_y_constants"} and not args:
+        target = "obj.sets.f9_x" if ctor == "mor.sets.f9_x_constants" else "obj.sets.f9_y"
+        return ({"ctor": "obj.sets.integers_mod", "args": [3]},
+                {"ctor": target, "args": []})
     if ctor == "presentation" and len(args) == 3:
         comparison, parameters, inverse = args
         if comparison == "cmp.f9.translation" and parameters == [] and isinstance(inverse, bool):
@@ -140,16 +187,18 @@ def arrow_endpoints(arrow: object) -> tuple[object, object] | None:
 
 def native_arrow(arrow: object, source: object, target: object):
     ctor, args = named_object(arrow)
+    if ctor in {"mor.sets.f9_x_constants", "mor.sets.f9_y_constants"} and not args:
+        return constant_map(ctor, source, target)
     if ctor == "typedMap" and len(args) == 3:
         if args[:2] != [source, target]:
             raise ValueError("the typed comparison map differs from the complete requested endpoints")
         callable_value = args[2]
         if isinstance(callable_value, list) or (isinstance(callable_value, dict) and
                                                callable_value.get("ctor") == "finiteGraph"):
-            F, E = field(descriptor(source)), field(descriptor(target))
+            F, E = native_parent(source), native_parent(target)
             rows = graph_data(arrow)
-            native_rows = [(point(x, descriptor(source), F, None),
-                            point(y, descriptor(target), E, None)) for x, y in rows]
+            native_rows = [(native_point(x, source, F, None),
+                            native_point(y, target, E, None)) for x, y in rows]
             table = dict(native_rows)
             if len(table) != len(rows):
                 raise ValueError("the supplied map repeats a native source point")
@@ -164,7 +213,7 @@ def native_arrow(arrow: object, source: object, target: object):
     if ctor == "cmp.f9.translation" and not args:
         return comparison_map(source, target, descriptor(source) == "y")
     if ctor == "identity" and args == [source, target] and source == target:
-        return IdentityMorphism(Hom(field(descriptor(source)), field(descriptor(target)), Sets()))
+        return IdentityMorphism(Hom(native_parent(source), native_parent(target), Sets()))
     if ctor == "compose" and len(args) == 2:
         first, second = arrow_endpoints(args[0]), arrow_endpoints(args[1])
         if first is None or second is None:
@@ -201,11 +250,11 @@ def invocation_payload(value: object, source: object, domain: object) -> object:
     if ctor == "valueData" and len(args) == 1:
         return invocation_payload(args[0], source, domain)
     if ctor == "pointView" and len(args) == 3:
-        if descriptor(args[0]) != descriptor(source) or args[2] != domain:
+        if native_kind(args[0]) != native_kind(source) or args[2] != domain:
             raise ValueError("a point view differs from the selected source or original domain")
         return invocation_payload(args[1], source, domain)
     if ctor == "admittedPoint" and len(args) == 6:
-        if descriptor(args[4]) != descriptor(source) or args[2] != domain:
+        if native_kind(args[4]) != native_kind(source) or args[2] != domain:
             raise ValueError("an admitted point differs from the selected source or original domain")
         return invocation_payload(args[5], source, domain)
     return value
@@ -226,6 +275,11 @@ def translation(value: object) -> dict[str, object]:
     if parameters != []:
         raise ValueError("the named F9 comparison has no explicit parameters")
     hom = native_arrow(arrow, source, target)
+    return apply_computational_point(hom, domain, source, target, data)
+
+
+def apply_computational_point(hom, domain: object, source: object, target: object,
+                              data: object) -> dict[str, object]:
     F = hom.domain()
     original_data = data
     inline_wrapper = isinstance(data, dict) and data.get("ctor") == "valueData"
@@ -242,11 +296,38 @@ def translation(value: object) -> dict[str, object]:
             rows = graph_data(data)
         else:
             rows = graph_data({"ctor": "typedMap", "args": [domain, source, data]})
-        result = [[x, encode(hom(point(y, descriptor(source), F, None)), target)] for x, y in rows]
+        result = [[x, encode(hom(native_point(y, source, F, None)), target)] for x, y in rows]
         return value_data(finite_graph([x for x, _ in rows], result))
     if domain not in closed_domains:
         raise ValueError("a non-closed comparison invocation requires its actual callable data")
-    return value_data(encode(hom(point(original_data, descriptor(source), F, domain)), target))
+    return value_data(encode(hom(native_point(original_data, source, F, domain)), target))
+
+
+def constant_application(value: object, operation: str) -> dict[str, object]:
+    ctor, args = named_object(value)
+    source = {"ctor": "obj.sets.integers_mod", "args": [3]}
+    target = {"ctor": "obj.sets.f9_x" if operation == "mor.sets.f9_x_constants"
+              else "obj.sets.f9_y", "args": []}
+    if ctor == operation and not args:
+        hom = constant_map(operation, source, target)
+        points = list(hom.domain())
+        return finite_graph([int(x) for x in points],
+                            [[int(x), encode(hom(x), target)] for x in points])
+    if ctor != "apply":
+        raise ValueError("a constant embedding requires its named map or common apply envelope")
+    actual_operation, parameters, arrow, domain, source, target, data = point_invocation(value, operation)
+    if parameters != []:
+        raise ValueError("the named coefficient embedding has no explicit parameters")
+    hom = native_arrow(arrow, source, target)
+    return apply_computational_point(hom, domain, source, target, data)
+
+
+def x_constants(value: object) -> dict[str, object]:
+    return constant_application(value, "mor.sets.f9_x_constants")
+
+
+def y_constants(value: object) -> dict[str, object]:
+    return constant_application(value, "mor.sets.f9_y_constants")
 
 
 def cardinality(value: object) -> dict[str, object]:
@@ -267,6 +348,8 @@ def finiteness(value: object) -> dict[str, object]:
 
 serve("sage", SAGE_VERSION, "0.1.0", {
     "cmp.f9.translation": translation,
+    "mor.sets.f9_x_constants": x_constants,
+    "mor.sets.f9_y_constants": y_constants,
     "meth.cardinality": cardinality,
     "prop.is_finite": finiteness,
 })

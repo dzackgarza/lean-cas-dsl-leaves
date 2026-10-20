@@ -101,7 +101,7 @@ discriminants with defining maps; module rank through structural forms;
 group-map kernels with complete subgroup data; abelianness; formed-module
 cardinality; and nonidentity finite-field presentation transport.
 
-The ordinary manifest now has ten programs and 94 registrations. These
+The ordinary manifest now has ten programs and 96 registrations. These
 counts describe supplied routes, not correctness or acceptance.
 
 | Assigned capability | Supplied engineering route |
@@ -359,3 +359,70 @@ intermediate endpoint data, and an unimplemented selected action. Checks require
 native process exit, ready/reply framing, matching request ids, exact retained
 point-domain keys and target-envelope framing. No mathematical expected-answer
 assertion, kernel decoding, or acceptance suite was used.
+
+
+## Released quotient-carrier map/point coverage audit
+
+Reference: released contract main `c6e78eb2e5939e58b6f18b5fc456320c65f10186`.
+The audit followed public presentation, morphism and named-object signatures,
+actual operation/input-form inventories, reachable datatype schemas, the port
+protocol, existing leaf source, and native Sage APIs. It read no upstream or
+downstream implementation or acceptance material.
+
+Two additional directly expressible map ports are now registered:
+`mor.sets.f9_x_constants` and `mor.sets.f9_y_constants`, each on its published
+own-address input form. Their signatures supply the actual source `ZMod 3`
+and the selected named F9 target. Native Sage quotient-ring
+`coerce_map_from(base_ring())` supplies the coefficient map; no embedding
+algorithm is implemented. Direct requests return the native finite domain
+inventory and complete map graph. Common applications retain the exact typed
+source/target and original generalized domain, including finite pointwise
+requests, supplied typed-map data, and actual native composition with the F9
+comparison. Primitive modular scalar data and explicit point/view/admission
+wrappers are consumed under the selected coefficient interface. All 96 current
+registration operation/input pairs have addresses in the released inventories.
+
+The named F9 generator declarations remain usable by their already published
+`generator` point descriptors; the released operation inventory supplies no
+separate concrete generator port address, and none is invented. Existing
+`operationExpression` point data continue to use native addition,
+multiplication, negation and power. The element-operation rows
+`op.rings.add`, `op.rings.mul`, `op.rings.neg` and `op.rings.pow` have operation
+addresses but no operation-specific input forms. That alone does not forbid a
+source-form registration; the unresolved input for a new direct handler is a
+documented concrete representation of these operation declarations in common
+`apply`'s actual-arrow slot, with their full selected parameters. A point's
+`operationExpression` contains operands and is not silently retyped as an
+arrow. No request encoding or direct arithmetic registration is guessed.
+
+Other inspected rows remain explicitly unsupported:
+
+* The rational-dual named rings, comparison and constant maps expose public
+  object/map types, but no lowerable defining polynomials or selected generator
+  image in this role's released reference or existing native carrier code.
+  Their names do not determine a shifted presentation or comparison. Those
+  concrete computational presentation data are missing; no modulus, shift or
+  equivalence with an existing native carrier is inferred.
+* Generic polynomial-quotient translation publishes complete mathematical
+  parameters `R`, `f`, `c`. The exposed polynomial data go through
+  `AddMonoidAlgebra` to `Finsupp`, with both a support inventory and a coefficient
+  callable `Nat → R`. A support list alone omits the coefficient values. An
+  infinite coefficient callable must have an owning live representation; this
+  backend owns no such polynomial/coefficient token supplied by those requests.
+  The released protocol provides no sparse-polynomial literal replacing that
+  callable. A finite graph only on the support is not silently retyped as a
+  function on all natural numbers, and no zero-extension codec is invented.
+* Other selected functor actions and nullary source-value computations retain
+  the explicit native-lowering limits recorded above. Sufficient mathematical
+  types alone are not a native value or a foreign-session access mechanism.
+
+Native engineering validation completed 38 length-framed requests on Sage
+`11.0.beta1`: 29 successful replies and nine explicit errors. This includes all
+25 prior presentation-variant requests, both direct coefficient-map graphs,
+closed and pointwise coefficient applications, typed supplied maps, and native
+coefficient-map/comparison composition. Additional errors covered the wrong
+coefficient source, an incomplete non-closed point, malformed named-map
+parameters and an unowned coefficient token. Framing, matching request ids,
+process exit and retained data fields were inspected. No mathematical oracle,
+kernel decoder or acceptance suite was consulted; these observations establish
+native execution/data retention only.

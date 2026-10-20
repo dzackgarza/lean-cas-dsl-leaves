@@ -36,6 +36,11 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
   actions fail explicitly. This program needs Sage's PARI dependency; a partial modular
   installation lacking it cannot execute that route.
 
+  The same presentation program now registers the published F9 coefficient
+  maps `mor.sets.f9_x_constants` and `mor.sets.f9_y_constants` through native
+  quotient-ring coercion maps. It supports their complete finite graphs and
+  common pointwise invocation without dropping selected comparison maps.
+
   `sage_bilinear_lift.py` supplies the four published
   `lift.bilin_module.restrict` fields for finite graph-backed bilinear forms.
   Sage finite maps restrict the actual pairing along the supplied inclusion;
