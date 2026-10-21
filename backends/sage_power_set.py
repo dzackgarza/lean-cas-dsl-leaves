@@ -56,12 +56,30 @@ def subsets(S):
     return Subsets(S)
 
 
+def literal(points):
+    """The distinct members of a finite literal (canonical JSON), as `FiniteEnumeratedSet`."""
+    from sage.sets.finite_enumerated_set import FiniteEnumeratedSet
+    return FiniteEnumeratedSet(sorted({json.dumps(p, sort_keys=True) for p in points}))
+
+
 def parent(value):
+    if isinstance(value, list):
+        return literal(value)
     inventory = finite_inventory(value)
     if inventory is not None:
-        from sage.sets.finite_enumerated_set import FiniteEnumeratedSet
-        return FiniteEnumeratedSet([json.dumps(p, sort_keys=True) for p in inventory])
+        return literal(inventory)
     ctor, params = carrier_object(value)
+    if ctor == "extent":
+        if len(params) != 3 or not isinstance(params[2], list):
+            raise ValueError("extent requires its power object, ambient set and literal members")
+        return literal(params[2])
+    if ctor == "constructionApex":
+        if len(params) != 3:
+            raise ValueError("constructionApex requires its limit, diagram and computed cone")
+        cone_ctor, cone = named_object(params[2])
+        if cone_ctor not in {"cone", "cocone"} or not cone:
+            raise ValueError("constructionApex requires the computed cone or cocone")
+        return parent(cone[0])
     if ctor not in PARENTS:
         raise ValueError("no Sage parent for %s" % ctor)
     return PARENTS[ctor](*params)

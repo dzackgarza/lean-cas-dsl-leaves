@@ -426,3 +426,58 @@ parameters and an unowned coefficient token. Framing, matching request ids,
 process exit and retained data fields were inspected. No mathematical oracle,
 kernel decoder or acceptance suite was consulted; these observations establish
 native execution/data retention only.
+
+
+## Number-system, polynomial and binder maps; infinite set constructions, 2026-10-21
+
+Reference: released contract `CasContract/Port.lean` at main `3382e4e` and its
+`api/declared-ports.json`, and the `lean-categories` catalogue at main `ee957329`.
+No kernel source, acceptance assertion or harness report was read.
+
+New registrations: `sage_symbolic.py` registers the named maps `mor.sets.complex_re|im|bar|abs`,
+`mor.sets.real_sqrt`, `mor.sets.polynomial_degree|derivative|differential|map|factors|roots`,
+`mor.sets.companion_matrix`, `mor.sets.mv_total_degree`, `mor.sets.nat_prime_factors`,
+`mor.sets.equality`, `mor.sets.span` on their declared source forms (equality on its own
+address), and the binders `bind.sets.integral|limit|limit_at_infinity` on `cat.sets`.
+`sage_set_limits.py` adds `meth.cardinality` on `cat.sets`, and `extent`, `constructionApex`,
+literal-list and infinite factors for `lim.sets.product`; `sage_power_set.py` accepts the same
+descriptors under `obj.sets.power_set`. The F9 coefficient maps are also registered on their
+source form `obj.sets.integers_mod`. The kernel refused at admission `cmp.f9.translation` on
+`obj.sets.f9_x`/`obj.sets.f9_y` and `prop.is_abelian` on `obj.subgroups.alternating`; those
+rows are removed.
+
+The contract leaves these encodings undetermined. Each choice below is the leaf's, is
+not evidence of anything, and is replaced as soon as the contract declares the form:
+
+* **Non-integral rationals and irrational reals in answers.** Element arithmetic has only
+  `numeral`, `generator`, `add`, `mul`, `neg`, `operationExpression` and `point`; no tag
+  denotes `p/q`, `√2`, `π` or `e`. The leaf answers `p/q` as
+  `operationExpression("mor.sets.divide", [multiplicative monoid], [p, q])`, `√a` as
+  `point(compose(element(ℝ, a), mor.sets.real_sqrt))`, `π`/`i` as `point` of
+  `mor.sets.real_pi`/`mor.sets.complex_i`, and a real point at `ℂ` through
+  `incl.sets.reals_complexes`. The operand types of `mor.sets.divide` (`M × Mˣ`) and the
+  morphism encoding of an `incl.*` row are not declared.
+* **`ℕ ∪ {-∞}` (`WithBot ℕ`) answers** of `polynomial_degree` use the `Option`
+  constructors `some n` / `none`.
+* **Kähler differentials** have no structural encoding; `d p` is answered as the point
+  `compose(element(R[x], p'), mor.sets.kaehler_from_coordinate)`.
+* **Matrices** are answered as nested finite graphs `Fin n → Fin n → K`.
+* **`span`** answers a point of `𝒫(Kⁿ)`, an infinite subset in general. The only declared
+  subset-value forms are `extent` (finite literals) and `powerObjectMap` `transpose`/`image`;
+  the leaf answers the `image` of `v ↦ A v` through `obj.sets.matrices#application`, `A`
+  the matrix of Sage's echelon basis padded with zero columns. The ordered `image`
+  parameters `[X, Y, f]` are the leaf's reading of the declaration `image X Y f`.
+* **Binder requests.** The port names binder addresses but not their request shape or the
+  encoding of the bound map (an infinite callable `ℝ → ℝ`). The leaf accepts the common
+  `apply` envelope with the bounds as parameters and the map as named-map composition
+  (`compose`, `mediator`, `identity`, the named real maps) or a pointwise
+  `operationExpression` over maps, possibly inside `admittedPoint`.
+* **Symbolic product apex.** A cone's apex is required to be "a named object at its
+  parameters" and each leg a morphism; an infinite factor admits neither a finite graph nor
+  a named projection. The leaf answers the apex `objectProduct(X, Y)` and each leg as a
+  connection-local `opaqueData` projection, and answers `apply` of such a token under
+  `lim.sets.product`. Neither the apex form nor the operation under which a leg token is
+  applied is declared.
+* **Closed points in morphism positions** (`compose` first argument, mediator components)
+  are written as `element` envelopes; the contract gives "the pair of their data" only for
+  mediators.

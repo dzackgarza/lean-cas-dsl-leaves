@@ -9,7 +9,8 @@
     {"name": "gap-groups", "command": "python3", "args": ["backends/gap_groups.py"]},
     {"name": "sage-modules", "command": "python3", "args": ["backends/sage_modules.py"]},
     {"name": "sage-presentations", "command": "python3", "args": ["backends/sage_presentations.py"]},
-    {"name": "sage-bilinear-lift", "command": "python3", "args": ["backends/sage_bilinear_lift.py"]}
+    {"name": "sage-bilinear-lift", "command": "python3", "args": ["backends/sage_bilinear_lift.py"]},
+    {"name": "sage-symbolic", "command": "python3", "args": ["backends/sage_symbolic.py"]}
   ],
   "registrations": [
     {"operation": "meth.cardinality", "input": "obj.sets.fin", "backend": "sage"},
@@ -49,7 +50,6 @@
     {"operation": "prop.is_finite", "input": "obj.subgroups.kernel", "backend": "gap-groups"},
     {"operation": "prop.is_abelian", "input": "obj.groups.symmetric", "backend": "gap-groups"},
     {"operation": "prop.is_abelian", "input": "obj.groups.cyclic", "backend": "gap-groups"},
-    {"operation": "prop.is_abelian", "input": "obj.subgroups.alternating", "backend": "gap-groups"},
     {"operation": "prop.is_abelian", "input": "obj.subgroups.kernel", "backend": "gap-groups"},
     {"operation": "prop.is_commutative", "input": "obj.groups.symmetric", "backend": "gap-groups"},
     {"operation": "prop.is_commutative", "input": "obj.groups.cyclic", "backend": "gap-groups"},
@@ -70,10 +70,8 @@
     {"operation": "meth.cardinality", "input": "obj.integral_lattice.e8", "backend": "sage-modules"},
     {"operation": "meth.cardinality", "input": "obj.sets.f9_x", "backend": "sage-presentations"},
     {"operation": "prop.is_finite", "input": "obj.sets.f9_x", "backend": "sage-presentations"},
-    {"operation": "cmp.f9.translation", "input": "obj.sets.f9_x", "backend": "sage-presentations"},
     {"operation": "meth.cardinality", "input": "obj.sets.f9_y", "backend": "sage-presentations"},
     {"operation": "prop.is_finite", "input": "obj.sets.f9_y", "backend": "sage-presentations"},
-    {"operation": "cmp.f9.translation", "input": "obj.sets.f9_y", "backend": "sage-presentations"},
     {"operation": "meth.cardinality", "input": "obj.commutative_rings.f9_x", "backend": "sage-presentations"},
     {"operation": "prop.is_finite", "input": "obj.commutative_rings.f9_x", "backend": "sage-presentations"},
     {"operation": "cmp.f9.translation", "input": "obj.commutative_rings.f9_x", "backend": "sage-presentations"},
@@ -107,6 +105,28 @@
     {"operation": "lift.bilin_module.restrict#forward", "input": "lift.bilin_module.restrict#input", "backend": "sage-bilinear-lift"},
     {"operation": "lift.bilin_module.restrict#backward", "input": "lift.bilin_module.restrict#input", "backend": "sage-bilinear-lift"},
     {"operation": "mor.sets.f9_x_constants", "input": "mor.sets.f9_x_constants", "backend": "sage-presentations"},
-    {"operation": "mor.sets.f9_y_constants", "input": "mor.sets.f9_y_constants", "backend": "sage-presentations"}
+    {"operation": "mor.sets.f9_y_constants", "input": "mor.sets.f9_y_constants", "backend": "sage-presentations"},
+    {"operation": "meth.cardinality", "input": "cat.sets", "backend": "sage-set-limits"},
+    {"operation": "mor.sets.f9_x_constants", "input": "obj.sets.integers_mod", "backend": "sage-presentations"},
+    {"operation": "mor.sets.f9_y_constants", "input": "obj.sets.integers_mod", "backend": "sage-presentations"},
+    {"operation": "mor.sets.complex_re", "input": "obj.sets.complexes", "backend": "sage-symbolic"},
+    {"operation": "mor.sets.complex_im", "input": "obj.sets.complexes", "backend": "sage-symbolic"},
+    {"operation": "mor.sets.complex_bar", "input": "obj.sets.complexes", "backend": "sage-symbolic"},
+    {"operation": "mor.sets.complex_abs", "input": "obj.sets.complexes", "backend": "sage-symbolic"},
+    {"operation": "mor.sets.real_sqrt", "input": "obj.sets.reals", "backend": "sage-symbolic"},
+    {"operation": "mor.sets.polynomial_degree", "input": "obj.sets.polynomials", "backend": "sage-symbolic"},
+    {"operation": "mor.sets.polynomial_derivative", "input": "obj.sets.polynomials", "backend": "sage-symbolic"},
+    {"operation": "mor.sets.polynomial_differential", "input": "obj.sets.polynomials", "backend": "sage-symbolic"},
+    {"operation": "mor.sets.polynomial_map", "input": "obj.sets.polynomials", "backend": "sage-symbolic"},
+    {"operation": "mor.sets.polynomial_factors", "input": "obj.sets.nonzero_polynomials", "backend": "sage-symbolic"},
+    {"operation": "mor.sets.polynomial_roots", "input": "obj.sets.nonzero_polynomials", "backend": "sage-symbolic"},
+    {"operation": "mor.sets.companion_matrix", "input": "obj.sets.monics", "backend": "sage-symbolic"},
+    {"operation": "mor.sets.mv_total_degree", "input": "obj.sets.mv_polynomials", "backend": "sage-symbolic"},
+    {"operation": "mor.sets.nat_prime_factors", "input": "obj.sets.positive_naturals", "backend": "sage-symbolic"},
+    {"operation": "mor.sets.equality", "input": "mor.sets.equality", "backend": "sage-symbolic"},
+    {"operation": "mor.sets.span", "input": "obj.sets.power_set", "backend": "sage-symbolic"},
+    {"operation": "bind.sets.integral", "input": "cat.sets", "backend": "sage-symbolic"},
+    {"operation": "bind.sets.limit", "input": "cat.sets", "backend": "sage-symbolic"},
+    {"operation": "bind.sets.limit_at_infinity", "input": "cat.sets", "backend": "sage-symbolic"}
   ]
 }

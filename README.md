@@ -19,8 +19,18 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
   * `sage_power_set.py`: `meth.cardinality` on `obj.sets.power_set` by Sage's
     `Subsets(S).cardinality()` (Sage combinatorics), under `CAS_SAGE_PYTHON`;
   * `sage_set_limits.py`: `lim.sets.product`, `colim.sets.coproduct` and `lim.sets.pullback` on
-    `cat.sets`, finite diagrams only, by Sage's `cartesian_product` and
-    `DisjointUnionEnumeratedSets` (Sage combinatorics), under `CAS_SAGE_PYTHON`.
+    `cat.sets`, by Sage's `cartesian_product` and `DisjointUnionEnumeratedSets` (Sage
+    combinatorics), under `CAS_SAGE_PYTHON`. Factors may be `extent` literals, `constructionApex`
+    descriptors or literal lists; a product with an infinite factor answers the
+    `objectProduct` apex with connection-local `opaqueData` projections. It also answers
+    `meth.cardinality` on `cat.sets` by Sage `cardinality()` of the enumerated carrier, or
+    `aleph0` on Sage's countable infinite parents;
+  * `sage_symbolic.py`: named maps of `Sets` on `ℂ`, `ℝ`, polynomials, multivariate
+    polynomials, monics, positive naturals and finite subsets of vectors (`re`, `im`, `bar`,
+    `abs`, `sqrt`, degree, derivative, differential, coefficient change, factors, roots,
+    companion matrix, total degree, prime factors, equality, span) and the binders `∫`,
+    `lim` and `lim` at infinity, by Sage's symbolic ring, `AA`/`QQbar` and polynomial
+    routines, under `CAS_SAGE_PYTHON` with full Sage (`sage.all`).
 
   The adapters support modular passagemath entrypoints and the public `sage.all`
   entrypoint of a full Sage installation. The selected interpreter must supply one
