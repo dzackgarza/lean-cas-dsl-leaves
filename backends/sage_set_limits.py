@@ -13,7 +13,12 @@ workspace's `.venv/bin/python` (`engine_python`). Routines:
 Wire (`CasContract/Port.lean`, "The wire encoding of inputs and answers"): a diagram is
 `{"ctor": "pair", "args": [X, Y]}` with complete object descriptors (including retained
 `functorAction` and `objectPresentation`), or `{"ctor": "cospan", "args": [f, g]}`
-with morphisms as graphs `[[x, f x], ...]`. The answer is `{"ctor": "cone" | "cocone",
+with morphisms as graphs `[[x, f x], ...]`, `finiteGraph` data, or complete
+`typedMap(source, target, callable)` wrappers around those existing callable forms.
+Nested typed wrappers retain the same complete endpoints, and two typed cospan
+arrows retain the same complete target. Source/codomain inventories validate
+supplied graph framing only; they establish no mathematical carrier or map law.
+The answer is `{"ctor": "cone" | "cocone",
 "args": [apex, leg, leg]}`, the two legs of Mathlib's `BinaryFan.mk`, `BinaryCofan.mk` and
 `PullbackCone.mk`. The returned computational apex uses `finiteData` around `obj.sets.fin`
 in Sage's enumeration order, and every defining leg uses `finiteGraph` with its
@@ -30,7 +35,7 @@ from engine_python import require_engine
 
 engine = require_engine("CAS_SAGE_PYTHON", ("sage.all__sagemath_combinat", "sage.all"))
 
-from cas_port import point_invocation, serve, value_data  # noqa: E402
+from cas_port import point_invocation, serve, typed_map, value_data  # noqa: E402
 Zmod = engine.Zmod
 cartesian_product = engine.cartesian_product
 from sage.sets.disjoint_union_enumerated_sets import DisjointUnionEnumeratedSets  # noqa: E402
@@ -49,7 +54,7 @@ from sage.version import version as SAGE_VERSION  # noqa: E402
 
 from wire import aleph0, finite_cardinal, finite_data, finite_graph, finite_inventory, graph_data, named_object, numeral  # noqa: E402
 
-ADAPTER_VERSION = "0.1.0"
+ADAPTER_VERSION = "0.1.1"
 
 
 def residues(n):
@@ -293,8 +298,57 @@ def op_coproduct(value):
                   [[ey(y), position[(1, json.dumps(ey(y), sort_keys=True))]] for y in T])
 
 
-def graph(value):
+def callable_context(value, source=None, target=None):
+    """Read public callable wrappers without replacing their endpoint descriptors."""
+    while isinstance(value, dict):
+        if value.get("ctor") == "valueData":
+            _, args = named_object(value)
+            if len(args) != 1:
+                raise ValueError("valueData requires its complete callable data")
+            value = args[0]
+        elif value.get("ctor") == "typedMap":
+            actual_source, actual_target, value = typed_map(value)
+            if source is not None and actual_source != source:
+                raise ValueError("a typed callable changed its complete source")
+            if target is not None and actual_target != target:
+                raise ValueError("a typed callable changed its complete target")
+            source, target = actual_source, actual_target
+        else:
+            break
+    return value, source, target
+
+
+def endpoint_inventory(value):
+    """Use an actual inventory or an existing primitive finite codec, never an image."""
+    if value is None:
+        return None
+    inventory = finite_inventory(value)
+    if inventory is None:
+        ctor, params = named_object(value)
+        if ctor == "functorAction":
+            if len(params) != 2:
+                raise ValueError("functorAction requires its selected edge and source")
+            edge, source = params
+            if edge == {"ctor": "classifierForget", "args": ["clf.sets.finite", []]}:
+                # This published forget action preserves the supplied finite
+                # point inventory; the complete action descriptor stays retained.
+                return endpoint_inventory(source)
+            return None
+        if ctor not in PARENTS:
+            return None
+        kind, S, encode = carrier(value)
+        if kind != "finite":
+            return None
+        inventory = [encode(point) for point in S]
+    keys = [json.dumps(point, sort_keys=True) for point in inventory]
+    if len(set(keys)) != len(keys):
+        raise ValueError("a supplied endpoint inventory repeats a point")
+    return set(keys)
+
+
+def graph(value, source=None, target=None):
     """A morphism's graph as a dict over canonical JSON keys, with its domain in order."""
+    value, source, target = callable_context(value, source, target)
     if isinstance(value, dict) and value.get("ctor") == "mor.sets.fin_rev":
         _, args = named_object(value)
         if len(args) != 1:
@@ -302,6 +356,7 @@ def graph(value):
         n = numeral(args[0])
         p = Permutation(list(range(n, 0, -1)))
         value = finite_graph(list(range(n)), [[i, int(p(i + 1)) - 1] for i in range(n)])
+    explicit_inventory = isinstance(value, dict) and value.get("ctor") == "finiteGraph"
     value = graph_data(value)
     table = {}
     for pair in value:
@@ -311,11 +366,23 @@ def graph(value):
         if key in table:
             raise ValueError("the graph lists %s twice" % key)
         table[key] = json.dumps(pair[1], sort_keys=True)
+    domain = endpoint_inventory(source)
+    if source is not None and domain is None and not explicit_inventory:
+        raise ValueError("a typed graph needs a source inventory or complete finiteGraph data")
+    if domain is not None and set(table) != domain:
+        raise ValueError("the graph must cover its supplied complete source exactly once")
+    codomain = endpoint_inventory(target)
+    if codomain is not None and not set(table.values()).issubset(codomain):
+        raise ValueError("the graph has an output outside its supplied target inventory")
     return table
 
 
 def op_pullback(value):
-    f, g = (graph(m) for m in diagram(value, "cospan", 2))
+    first, second = (callable_context(m) for m in diagram(value, "cospan", 2))
+    if first[2] is not None and second[2] is not None and first[2] != second[2]:
+        raise ValueError("a cospan must retain its complete common target")
+    common_target = first[2] if first[2] is not None else second[2]
+    f, g = (graph(data, source, common_target) for data, source, _target in (first, second))
     # Sage: the pairs of cartesian_product([dom f, dom g]) with f x = g y
     P = [p for p in cartesian_product([FiniteEnumeratedSet(f), FiniteEnumeratedSet(g)])
          if f[p[0]] == g[p[1]]]
