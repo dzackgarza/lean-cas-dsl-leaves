@@ -87,7 +87,7 @@ class NativeUnitData:
 
 class SageDiagnostic:
     NAME = "sage-v1-diagnostic"
-    VERSION = "0.4.0"
+    VERSION = "0.5.0"
     POINT_OPERATIONS = (
         "mor.sets.matrix_rows",
         "mor.sets.matrix_charpoly",
@@ -218,38 +218,141 @@ class SageDiagnostic:
             return self.carrier_descriptor(source)
         if tag_of(descriptor) == "constructionApex":
             operation, diagram, complete_cone = fields(descriptor, "constructionApex", 3)
-            actual_apex, _left, _right = self.product_cone(operation, diagram, complete_cone)
+            actual_apex, _targets, _legs = self.construction_cone(operation, diagram, complete_cone)
             return self.carrier_descriptor(actual_apex)
         return descriptor
 
-    def product_cone(self, operation, diagram, data):
-        """Read the returned fields through the explicitly published creation action."""
-        if operation != "lim.sets.product":
-            raise NotImplementedError("only returned product cones are supported")
-        targets = fields(diagram, "pair", 2)
+    def arrow_endpoints(self, arrow):
+        """Read supplied endpoint context without evaluating a diagram's arrows."""
+        arrow = unbox(arrow)
+        tag = tag_of(arrow)
+        if tag == "typedMap":
+            source, target, _callable = self.port.typed_map(arrow)
+            return source, target
+        if tag == "arrowHom":
+            receiver, = fields(arrow, "arrowHom", 1)
+            receiver = unbox(receiver)
+            if tag_of(receiver) not in ("arrow", "subobject"):
+                raise ValueError("arrowHom requires its complete returned Arrow record")
+            source, target, _callable = fields(receiver, tag_of(receiver), 3)
+            return source, target
+        if tag == "identity":
+            source, target = fields(arrow, "identity", 2)
+            if source != target:
+                raise ValueError("an identity arrow must retain equal complete endpoints")
+            return source, target
+        if tag == "map":
+            edge, inner = fields(arrow, "map", 2)
+            self.require_forget_edge(edge)
+            return tuple(node("functorAction", edge, endpoint) if endpoint is not None else None
+                         for endpoint in self.arrow_endpoints(inner))
+        if tag == "compose":
+            first, second = fields(arrow, "compose", 2)
+            source, middle = self.arrow_endpoints(first)
+            other_middle, target = self.arrow_endpoints(second)
+            if middle is not None and other_middle is not None and middle != other_middle:
+                raise ValueError("a diagram composition changed its complete intermediate endpoint")
+            return source, target
+        if tag == "incl.sets.fin_integers_mod":
+            modulus, = fields(arrow, tag, 1)
+            return node("obj.sets.fin", natural(modulus)), node("obj.sets.integers_mod", modulus)
+        inclusions = {
+            "incl.sets.naturals_integers": ("obj.sets.naturals", "obj.sets.integers"),
+            "incl.sets.integers_rationals": ("obj.sets.integers", "obj.sets.rationals"),
+            "incl.sets.naturals_degrees": ("obj.sets.naturals", "obj.sets.degrees"),
+        }
+        if tag in inclusions:
+            fields(arrow, tag, 0)
+            return tuple(node(endpoint) for endpoint in inclusions[tag])
+        # A graph's image, native parent, or operation spelling cannot supply a
+        # missing selected endpoint. A typed cone leg may retain that context.
+        if isinstance(arrow, list) or tag == "finiteGraph":
+            return None, None
+        if tag == "opaqueData":
+            self.entry(arrow)
+            return None, None
+        if tag in ("constructionLeg", "presentation", "objectField", "mediator",
+                   "element", "point", "generator", "mor.sets.tuple_empty",
+                   *self.POINT_OPERATIONS, *self.SEMIRING_OPERATIONS):
+            return None, None
+        raise NotImplementedError("this diagram arrow needs supported explicit endpoint context")
+
+    def diagram_targets(self, operation, diagram):
+        if operation == "lim.sets.product":
+            return fields(diagram, "pair", 2)
+        if operation != "lim.sets.pullback":
+            raise NotImplementedError("only returned product and pullback cones are supported")
+        first, second = fields(diagram, "cospan", 2)
+        left, common = self.arrow_endpoints(first)
+        right, other_common = self.arrow_endpoints(second)
+        if common is not None and other_common is not None and common != other_common:
+            raise ValueError("a cospan changed its complete common target")
+        for endpoint in (left, right, common, other_common):
+            if endpoint is not None:
+                self.carrier_descriptor(endpoint)
+        return left, right
+
+    def construction_cone(self, operation, diagram, data):
+        """Read the two defining fields fixed by the published constructors.
+
+        BinaryFan.mk and PullbackCone.mk both expose an apex and two non-proof
+        map fields. No commutation or universal-property evidence is consumed.
+        """
+        targets = self.diagram_targets(operation, diagram)
+        typed_targets = targets
         data = unbox(data)
         if tag_of(data) == "createdCone":
             lift, source_diagram, target_cone = fields(data, "createdCone", 3)
             if lift != "lift.finite_sets.pullbacks":
                 raise NotImplementedError("this creation lift has no diagnostic adapter")
+            if operation != "lim.sets.pullback":
+                raise NotImplementedError("the selected creation lift supplies pullback cones")
             if source_diagram != diagram:
                 raise ValueError("a created cone changed its complete source diagram")
-            # The published row selects finite-set forgetting. Read its actual
-            # target fields; do not manufacture a preferred target-apex spelling.
-            for selected in targets:
-                self.parent(selected)
+            edge = node("classifierForget", "clf.sets.finite", [])
+            self.require_forget_edge(edge)
             target_cone = unbox(target_cone)
             if tag_of(target_cone) == "createdCone":
                 _lift, inner_diagram, _cone = fields(target_cone, "createdCone", 3)
-                return self.product_cone(operation, inner_diagram, target_cone)
-            data, targets = target_cone, None
+                # Each layer retains its own source diagram and action. Do not
+                # replace it with an outer diagram or a guessed source apex.
+                return self.construction_cone(operation, inner_diagram, target_cone)
+            # The outer diagram is the retained source diagram. Plain target
+            # graphs use the explicitly selected forget action's mapped context;
+            # typed target legs retain their actual computational descriptors.
+            targets = [node("functorAction", edge, target) if target is not None else None
+                       for target in targets]
+            typed_targets = (None, None)
+            data = target_cone
         apex, left, right = fields(data, "cone", 3)
+        actual_targets = []
         for i, leg in enumerate((left, right)):
-            actual_source, actual_target, _callable = self.port.typed_map(unbox(leg))
-            if actual_source != apex or (targets is not None and actual_target != targets[i]):
-                raise ValueError("a returned product leg changed its complete endpoints")
+            leg = unbox(leg)
+            if tag_of(leg) == "typedMap":
+                actual_source, actual_target, _callable = self.port.typed_map(leg)
+                if actual_source != apex or (typed_targets[i] is not None
+                                             and actual_target != typed_targets[i]):
+                    raise ValueError("a returned cone leg changed its complete endpoints")
+            elif targets[i] is not None:
+                actual_target = targets[i]
+            else:
+                raise NotImplementedError("this unlabelled leg needs its complete selected target")
             self.parent(actual_target)
-        return apex, left, right
+            actual_targets.append(actual_target)
+        return apex, actual_targets, (left, right)
+
+    def construction_slot(self, operation, index):
+        if operation == "lim.sets.product":
+            indices = (node("left"), node("right"))
+        elif operation == "lim.sets.pullback":
+            indices = (node("some", node("left")), node("some", node("right")))
+            if index == node("none"):
+                raise NotImplementedError("the pullback center has no supplied defining leg")
+        else:
+            raise NotImplementedError("this construction has no diagnostic leg adapter")
+        if index not in indices:
+            raise ValueError("a construction leg needs its exact published shape index")
+        return indices.index(index)
 
     def parent(self, descriptor):
         descriptor = self.carrier_descriptor(descriptor)
@@ -844,15 +947,9 @@ class SageDiagnostic:
             return self.call_arrow(first, value, source=source), self.call_arrow(second, value, source=source)
         if tag == "constructionLeg":
             operation, diagram, complete_cone, index = fields(arrow, "constructionLeg", 4)
-            apex, left, right = self.product_cone(operation, diagram, complete_cone)
-            if index == node("left"):
-                leg = left
-            elif index == node("right"):
-                leg = right
-            else:
-                raise ValueError("a product leg uses its public WalkingPair index")
-            _source, actual_target, _callable = self.port.typed_map(unbox(leg))
-            return self.call_arrow(leg, value, source=apex, target=actual_target)
+            apex, targets, legs = self.construction_cone(operation, diagram, complete_cone)
+            slot = self.construction_slot(operation, index)
+            return self.call_arrow(legs[slot], value, source=apex, target=targets[slot])
         if tag == "arrowHom":
             receiver, = fields(arrow, "arrowHom", 1)
             receiver = unbox(receiver)

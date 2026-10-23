@@ -84,6 +84,26 @@ question files, acceptance assertions, runtime outcome reports or additional
 mathematical implementation. The nineteen registrations and every other leaf
 remain unchanged. All additions below consume already published data forms.
 
+### Complete cone consumer provenance
+
+The complete product/pullback consumer repair used the fresh public declaration
+snapshot at contract revision `ba8b91a70561c3e0888c66de30f0e6b2907c01e5`, whose
+`api/declared-ports.json` SHA-256 is
+`f3a17fd1d2fa98d72513fbe9ac333834f64b6b160a9ccd5206b97a5991802b19`.
+It also used the public creation-diagram clarification in `api/wire-examples.md`
+at the frozen contract revision `6780f9f0e0ac9acb7355d9281993df44f0d13b54`.
+The earlier snapshot omitted the complete pullback constructor metadata; its
+field order was not inferred. The refreshed export supplies `BinaryFan.mk`,
+`PullbackCone.mk`, `diagramIsoPair`, `diagramIsoCospan`, and the declared index
+types. Only those public interfaces and this existing diagnostic were used.
+
+The previous product-only consumer gate made the pullback-creation branch
+unreachable for its declared operation. The current decoder handles the two
+published constructors separately and consumes their actual returned fields.
+The finite-set pullback creation row is no longer accepted as a product creation
+row. This repairs a computational consumer; it adds no pullback construction
+registration or mathematical evidence.
+
 ## Launch
 
 Set the public contract checkout and the real Sage-capable interpreter in the
@@ -331,23 +351,60 @@ expressions. Selected `op.semirings.add`, `op.semirings.mul` and
 `op.semirings.pow` are also consumed as retained arrows or arithmetic
 expressions over the supported natural semiring. They add no standalone
 registration here.
-A `constructionLeg` consumes the complete returned product cone and its exact
-`left` or `right` WalkingPair index. It reads the actual returned apex and
-callable, checking the callable's supplied endpoints; it does not require the
-apex to have a canonical spelling, substitute `limitLeg`, or recompute a leg.
 
-`constructionApex` and `constructionLeg` also consume complete `createdCone`
-wrappers for the published `lift.finite_sets.pullbacks` selection. The wrapper
-must keep its exact source diagram; the consumer reads the actual returned
-target cone and its actual typed endpoints, including their `valueData`
-wrappers. It does not manufacture a preferred target-apex spelling or replace
-the supplied projection callable. The finite-set forget action may surround
-the retained apex or map, and `finiteData` may supply the actual apex inventory.
-Nested complete creation wrappers retain their own selected lift and diagram.
-An unknown creation selection is unsupported. This is a computational decoder,
-not an assertion that a selected lift applies to any particular diagram, that
-the returned apex is universal, or that an inventory is its mathematical carrier.
-The independently interpreted request owns those formal questions.
+`constructionApex` and `constructionLeg` consume the complete supplied cones of
+both `lim.sets.product` and `lim.sets.pullback`. Their published data constructors
+expose the same three non-proof slots, with different diagram and index types:
+
+| Selected construction | Complete diagram | Complete returned data | Stored leg indices |
+| --- | --- | --- | --- |
+| `lim.sets.product` / `BinaryFan.mk` | `pair(X,Y)` | `cone(apex,left,right)` | `left()` and `right()` in `WalkingPair` |
+| `lim.sets.pullback` / `PullbackCone.mk` | `cospan(f,g)` | `cone(apex,fst,snd)` | `some(left())` and `some(right())` in `Option WalkingPair` |
+
+The one-field `Discrete` wrapper of the product index follows the ordinary
+record codec. Pullback commutation is a proof field and is absent from the
+packet. The pullback center index `none()` has no separately supplied defining
+map in these slots; this specimen leaves that projection unsupported rather
+than choosing a composite or asserting that the two composites agree.
+
+A leg consumer uses the actual supplied apex and callable. Plain graphs,
+explicit `finiteGraph` data, and mixed typed/untyped legs are supported when
+their selected parents and callables have adapters. For a product graph leg,
+the complete `pair` object supplies its target. For a pullback graph leg, the
+source endpoint of the corresponding retained cospan arrow supplies its target.
+The endpoint reader handles `typedMap`, complete `arrowHom` receivers, explicit
+identity arrows, supported `map` actions, compositions retaining their endpoint
+context, and the four scalar inclusions already supported above. Explicit
+common cospan targets and intermediate composition endpoints must agree as
+complete descriptors. A graph's outputs do not determine any missing object.
+
+A supplied `typedMap` leg must use the actual returned apex as its source and
+must preserve the complete target selected by an ordinary diagram when that
+context is present. It can itself retain an otherwise absent target descriptor,
+including when the cospan's arrows are bare graphs. The consumer never compares
+native carrier equality to choose a map, substitutes a canonical `limitLeg`,
+or recomputes a supplied pullback or projection.
+
+For `createdCone(L,D,C)`, the outer `constructionApex`/`constructionLeg` retains
+exactly the source diagram `D`. The target limit id still names the registered
+operation that produced `C`. The supported lift is
+`lift.finite_sets.pullbacks`, only with `lim.sets.pullback`; its selected action
+is `classifierForget("clf.sets.finite",[])`. A plain graph in `C` uses the actual
+returned apex inventory and the target prescribed by this action on the source
+cospan. A typed target leg retains its actual complete computational endpoints;
+the consumer does not manufacture a preferred spelling for a target object or
+recover a named source apex from it. Complete `valueData` wrappers are unboxed
+without replacing their stored fields.
+
+Each nested creation packet is read using its own retained lift and source
+diagram. An unknown lift or interpreted action remains unsupported. The
+finite-set forget action may surround a retained apex or leg, and `finiteData`
+may supply the actual apex inventory. An existing native Sage product can use
+that supplied pullback apex as either factor, and its native projection can be
+composed with the original supplied pullback leg on the same connection.
+Neither packet decoding nor native execution establishes that a creation lift
+applies, that an inventory is a mathematical carrier, that a cone commutes, or
+that an apex is universal. Those remain independent formal questions.
 
 There is no generic HomSet application address in the public surface used here.
 A construction leg therefore has no invented standalone operation id and is
@@ -434,7 +491,39 @@ unknown and incompatible action rejection, owned data under selected elements,
 retained creation-apex lowering, source-diagram preservation, the actual
 nonidentity F9 coefficient map, incomplete finite coefficient graph rejection,
 and connection-local ownership inside admitted units. Python syntax and the
-unchanged nineteen operation addresses were checked separately.
+unchanged nineteen operation addresses were checked separately. These earlier
+framing checks did not resolve the product-only gate's mismatch with the
+published pullback creation row; they are not evidence for that shape selection.
+
+The complete cone repair first ran seven bounded product framing requests for
+plain graphs, `finiteGraph`, mixed typed/untyped legs, exact source preservation,
+incomplete graph rejection, and the existing native product constructor. After
+the fresh constructor export and creation-diagram clarification were published,
+a separate twenty-eight-request exercise used independently chosen public
+packets in one live Sage process. It covered both product legs and both stored
+pullback legs; actual typed target descriptors; source cospans with typed maps,
+identity/composition and complete Arrow fields; explicit finite-set mapped
+cospans; the published finite-to-residue inclusion as endpoint context; created
+raw, typed and mixed target legs; a created apex in a native Sage product; and
+a native product projection composed with the retained created pullback leg.
+
+The same exercise checked changed source diagrams, changed complete typed
+endpoints despite equal native carriers or matching inventories, missing cone
+fields, incomplete graph data, absent target context, unknown lifts/actions,
+using the pullback lift for a product, incorrect shape indices, and the unstored
+center projection only for their `error`/`unsupported` strata. It also confirmed
+that dispatching `lim.sets.pullback` remains unsupported: consuming its retained
+data adds no operation registration. Assertions inspected frame lengths,
+request identities, result envelopes, exact retained descriptor fields, the
+unchanged nineteen advertised operations, and clean EOF. The supplied apex and
+cone fields were arbitrary computational records; no numerical result,
+commutation equation or universal property was asserted.
+
+Four direct metadata-only checks additionally inspected exact nested apex/leg
+retention and the inner packet's endpoint context, rejection of an unknown inner
+lift, and rejection of changed common and intermediate endpoints. These checks
+did not execute the cospan arrows or assert that the selected nested creation
+route was mathematically applicable.
 
 These checks assert engineering status, representation and native API use only.
 They assert no numerical answers, algebraic identities, universality, semantic
@@ -450,7 +539,11 @@ No additional wire convention was needed for the supported cases. The current
 published terminal source is supported as stated above; arbitrary infinite
 generalized domains are not implemented. Finite callables need their actual
 inventory, a supported public finite scalar descriptor, or factors with those
-forms; unlabelled graphs inside a
+forms. A pullback with both unlabelled cospan arrows and unlabelled cone legs
+has no supplied target context and remains unsupported. Endpoint reading for
+other named diagram arrows needs an explicit supported wrapper; it does not
+reconstruct their fields from an operation name. Only the two stored side legs
+of the published pullback constructor are consumed. Unlabelled graphs inside a
 composition need typed constituents to retain intermediate endpoints. Opaque
 values and callables remain local to their original live process. The adapter
 cannot consume another process's tokens, invent a missing coefficient map,
