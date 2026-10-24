@@ -334,8 +334,132 @@
     "engineeringChecks": {
       "syntaxCompiledSources": 15,
       "protocolOnlyBoundaryGroups": 13,
-      "engineStatus": "pending process slot",
-      "evidenceBoundary": "Framing, complete parameter consumption, exact descriptors, retained packets/callables, explicit inventories and session ownership only. No mathematical correctness or acceptance evidence."
-    }
+      "engineStatus": "completed; all listed standalone engineering controls exited 0",
+      "evidenceBoundary": "Framing, complete parameter consumption, exact descriptors, retained packets/callables, explicit inventories and session ownership only. No mathematical correctness or acceptance evidence.",
+      "runtime": "/tmp/kernel-runtime-20261024/passagemath-10.8.13/bin/python",
+      "observedReady": {
+        "protocol": 1,
+        "backend_version": "10.8.13",
+        "adapter_version": "2026-10-24.6"
+      },
+      "executionSourceCommit": "eab9e3aac978087295d5ef9ab0e300edf8096bb2",
+      "executionSourceTree": "0f3e51bb5cbbc60103630a2e1ff37754061926f4",
+      "endpointPrimaryRequests": 33,
+      "endpointForeignOwnerRequests": 2,
+      "genericRequests": 36,
+      "completionPrimaryRequests": 99,
+      "completionForeignOwnerRequests": 1,
+      "completionGroups": 14,
+      "nativeProcessScheduling": "At most one native engine at a time. The endpoint script already checks owners sequentially; the original completion foreign-token request was deferred until its primary owner closed. All existing completion requests and expected engineering statuses were retained.",
+      "additionalNativeRuns": "None. The prior additive and original smoke results remain earlier-checkpoint records.",
+      "logs": [
+        {
+          "path": "/tmp/kernel-public-leaf-endpoints-20261024-checks/endpoint-smoke.log",
+          "sha256": "993725c162dc38c1bba21ad60f05eb4f45b6c838b35227d4e86707b353adc37a",
+          "exitCode": 0,
+          "command": "env CAS_LEAF_CONTRACT_PATH=/tmp/kernel-public-api-final-producer-20261024/contract PYTHONPATH=/tmp/kernel-public-api-final-producer-20261024/contract/python python diagnostics/extensions-20261024/endpoint_smoke.py --sage-python /tmp/kernel-runtime-20261024/passagemath-10.8.13/bin/python",
+          "cwd": "/tmp/kernel-public-leaf-endpoints-20261024",
+          "stdout": "protocol boundary groups: 13\nprimary requests: 33\nforeign-owner requests: 2\nEngineering framing/retention results only; no mathematical acceptance claim.\n"
+        },
+        {
+          "path": "/tmp/kernel-public-leaf-endpoints-20261024-checks/generic-smoke.log",
+          "sha256": "6297fe66c244718463b4d9994bcbb081556ace55f6ebe1f449bf072e55159cf5",
+          "exitCode": 0,
+          "command": "env CAS_LEAF_CONTRACT_PATH=/tmp/kernel-public-api-final-producer-20261024/contract CAS_SAGE_PYTHON=/tmp/kernel-runtime-20261024/passagemath-10.8.13/bin/python PYTHONPATH=/tmp/kernel-public-api-final-producer-20261024/contract/python python diagnostics/extensions-20261024/generic_smoke.py",
+          "cwd": "/tmp/kernel-public-leaf-endpoints-20261024",
+          "stdout": "{\"completedRequests\": 36, \"checks\": \"public framing, selected structures and live callable reuse only\"}\n"
+        },
+        {
+          "path": "/tmp/kernel-public-leaf-endpoints-20261024-checks/completion-smoke.log",
+          "sha256": "5ec4c3276fb60b2dd6cdfc4da3268deba0799f1e9476aed6f510c0006f78460c",
+          "exitCode": 0,
+          "command": "env CAS_LEAF_CONTRACT_PATH=/tmp/kernel-public-api-final-producer-20261024/contract CAS_SAGE_PYTHON=/tmp/kernel-runtime-20261024/passagemath-10.8.13/bin/python PYTHONPATH=/tmp/kernel-public-api-final-producer-20261024/contract/python python /tmp/kernel-public-leaf-endpoints-20261024-checks/completion-sequential.py",
+          "cwd": "/tmp/kernel-public-leaf-endpoints-20261024",
+          "stdout": "{\"runtimeReady\": {\"protocol\": 1, \"backend_version\": \"10.8.13\", \"adapter_version\": \"2026-10-24.6\"}}\n{\"runtimeReady\": {\"protocol\": 1, \"backend_version\": \"10.8.13\", \"adapter_version\": \"2026-10-24.6\"}}\n{\n  \"engineering_groups_completed\": 14,\n  \"engineering_groups_requested\": 14,\n  \"primary_connection_requests\": 99,\n  \"foreign_connection_requests\": 1,\n  \"engineering_exceptions\": [],\n  \"scheduling\": \"original owner closes before the foreign owner starts\"\n}\n"
+        }
+      ],
+      "completionSequentialRunner": {
+        "path": "/tmp/kernel-public-leaf-endpoints-20261024-checks/completion-sequential.py",
+        "sha256": "a59af6e28a6f5ca63f15090519fd34a62c07725301c6c48688c4d41e0ab042ba",
+        "source": "\"\"\"Run the existing completion controls with one native process at a time.\"\"\"\n\nimport json\nimport os\nfrom pathlib import Path\nimport sys\n\nsys.path.insert(0, \"/tmp/kernel-public-leaf-endpoints-20261024/diagnostics/extensions-20261024\")\nimport completion_smoke as controls\n\nread_frame = controls.read_frame\n\n\ndef observe_ready(stream):\n    frame = read_frame(stream)\n    if isinstance(frame, dict) and frame.get(\"op\") == \"ready\":\n        print(json.dumps({\"runtimeReady\": {key: frame.get(key) for key in\n                                         (\"protocol\", \"backend_version\", \"adapter_version\")}}))\n    return frame\n\n\ncontrols.read_frame = observe_ready\nenvironment = dict(os.environ, PYTHONDONTWRITEBYTECODE=\"1\")\nbackend = Path(controls.__file__).with_name(\"backend.py\")\nwith controls.Port(backend, environment) as port:\n    for dimension in (0, 1, 4):\n        for typed in (False, True):\n            controls.finite_checks(port, dimension, typed)\n    controls.dual_and_polynomial_checks(port)\n    controls.series_checks(port)\n    controls.aut_wrapper_checks(port)\n    controls.named_aut_checks(port, False)\n    controls.named_aut_checks(port, True)\n    controls.category_descriptor_checks(port)\n    selected = controls.node(\"obj.sets.fin\", 4)\n    value = controls.owned(port.request(\n        \"ownership/original whole map\", \"mor.sets.fin_rev\",\n        controls.invoke(\"mor.sets.fin_rev\", [4], selected, selected, selected,\n                        controls.identity(selected))))\n    controls.cartesian_check(port)\n    primary_requests = port.requests\n\nwith controls.Port(backend, environment) as foreign:\n    foreign.request(\"ownership/foreign session reuse\", \"mor.sets.fin_rev\",\n                    controls.invoke(\"mor.sets.fin_rev\", [4], selected, selected, selected, value),\n                    expected=\"unsupported\")\n    foreign_requests = foreign.requests\n\nprint(json.dumps({\"engineering_groups_completed\": 14, \"engineering_groups_requested\": 14,\n                  \"primary_connection_requests\": primary_requests,\n                  \"foreign_connection_requests\": foreign_requests,\n                  \"engineering_exceptions\": [],\n                  \"scheduling\": \"original owner closes before the foreign owner starts\"}, indent=2))\n"
+      }
+    },
+    "sourceCheckpoints": [
+      {
+        "commit": "57c1c0fd53fd39fe8bbd802b92f7b54fa5d3803a",
+        "tree": "90adeeaeb9a8c4b19e3834d1ee9fd7ab65855fb4",
+        "publishedCommit": "5e5bd0c5b59d0297ab5fc11aac5bef87e8aada5c"
+      },
+      {
+        "commit": "eab9e3aac978087295d5ef9ab0e300edf8096bb2",
+        "tree": "0f3e51bb5cbbc60103630a2e1ff37754061926f4",
+        "scope": "Exact implementation source used by all follow-up native controls."
+      }
+    ],
+    "implementationSourceFiles": [
+      {
+        "path": "diagnostics/extensions-20261024/additive_interfaces.py",
+        "sha256": "881a55b16d26430995a946465105b7730978dce11c2a6e72da8e75b764146813"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/additive_smoke.py",
+        "sha256": "0bbb38db0ed66022908d646023cca6caa60c1f904d150617525576a317f8d196"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/backend.py",
+        "sha256": "d50e23198bcf21bf3390d16924052aecaaa092ba59ddcffdbc7e81a3794608dd"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/completion_smoke.py",
+        "sha256": "371abf6be4a7619d6c6b3baa9e1dc12bad759166eb0fa2c7d5992d0adf5db41e"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/endpoint_smoke.py",
+        "sha256": "5719e3b0a0b30a8b87c6fe036c9457eb3714f71b07b4a89e4304c097af0602fc"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/endpoints.py",
+        "sha256": "02d1dcaa25c2dbf14c41d9d4e944a4f2fe14715e0737ab6b346c3c05cff11c23"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/engine.py",
+        "sha256": "6f2251ed15fb4f431d2b76670e92496ff251b33739dbd0c240c82e4fb26fa09e"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/extensions.py",
+        "sha256": "b38ad2049cbec4de159232d561d187783cfd4ed93d710642cc2ea872b58de79b"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/generic_interfaces.py",
+        "sha256": "3a0743deffb101bcc4534e13286cac82ca3abec86e8d883180df9c33d185b614"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/generic_smoke.py",
+        "sha256": "4e132c4f065e4a4c68cd5c11091919d9b31f9647bd73dfdbb70b9a7779347c47"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/lifts.py",
+        "sha256": "5e9111b0360ba86f44fe63aacdccb23ef1c48a33d12b36249f18b209eb666c26"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/native_linear.py",
+        "sha256": "42c70582440942d632d6b4e529baf78c2cdc0b21d676a82beb4f2ae7d19f12cf"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/native_polynomial.py",
+        "sha256": "1c79b79fd33908e3eff802f02829e62805186c79e6085b57e9d1cf726608d033"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/smoke.py",
+        "sha256": "81182e57ee94c8bb5210451b75153193d3ee23c611e6c9dad69e78dc4f711063"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/wire.py",
+        "sha256": "d8b081b9042a0e4b463d0c7c7528ece656907c960dfacb2b100882903a574827"
+      }
+    ],
+    "implementationSourcesSha256": "0e5f37870c432c66d268737711ccf5e49379f5322c6e9f2a5f2393cbf3dbee37",
+    "publicContractDeficiency": null,
+    "implementationLimits": "Existing native implementation limits remain. Endpoint wrappers supply no finite inventory; arbitrary unnamed arrows without an implemented complete native reader remain unsupported. No new registration, native algorithm or wire tag was added."
   }
 }

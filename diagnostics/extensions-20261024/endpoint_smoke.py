@@ -128,6 +128,10 @@ def engine_checks(port):
                  invoke("op.rings.pow", [QR], psource, psource, ptarget, identity(psource),
                         map_data(psource, ptarget, power)), expected="error")
     whole(port, "ring/unary full parameters", "op.rings.pow", [QR, 4])
+    port.request("ring/composed callable changed parameter", "op.rings.pow",
+                 invoke("op.rings.pow", [QR, 5], psource, psource, ptarget, identity(psource),
+                        node("compose", identity(psource), map_data(psource, ptarget, power))),
+                 expected="error")
     domain = node("obj.sets.fin", 2)
     left = map_data(domain, Q, [[0, rational(3)], [1, rational(8)]])
     right = map_data(domain, Q, [[0, rational(6)], [1, rational(9)]])
@@ -197,6 +201,19 @@ def engine_checks(port):
     cell = node("cellComponent", "cell.additive_groups.carrier", [], group, False)
     whole(port, "additive/retained complete component endpoints",
           "cell.additive_groups.carrier#component", [[], group, False], arrow=cell)
+
+    comparison = "cmp.rational_dual.translation"
+    comparison_arrow = node("presentation", comparison, [], False)
+    comparison_map, csource, ctarget = whole(port, "comparison/common whole invocation", comparison, [],
+                                           arrow=comparison_arrow)
+    whole(port, "comparison/reused common callable", comparison, [], arrow=comparison_map,
+          source=csource, target=ctarget)
+    comparison_map = owned(port.request("comparison/retained presentation invocation", comparison,
+                                       node("presentationApply", [], False, csource, ctarget,
+                                            identity(csource))))
+    port.request("comparison/presentation result changed parameters", comparison,
+                 invoke(comparison, [QR], csource, csource, ctarget, identity(csource), comparison_map),
+                 expected="error")
 
     matrix = [[0, [[0, rational(2)]]]]
     parameters = [1, 1, QC, matrix]

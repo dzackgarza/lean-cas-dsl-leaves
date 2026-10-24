@@ -6,7 +6,7 @@ inventory. Every Callable continues to retain the exact original descriptors.
 """
 
 from cas_port import cartesian_map, morphism_endpoint, object_product, typed_map
-from wire import Callable, Unsupported, fields, key, node, retained_endpoint, same
+from wire import Callable, Unsupported, fields, inventory, key, node, retained_endpoint, same
 
 
 class EndpointInterfaces:
@@ -160,6 +160,10 @@ class EndpointInterfaces:
 
     def same_endpoint(self, actual, explicit, arrow, side, label):
         """Accept the exact declaration endpoint or an explicitly supplied field."""
+        if self.tag(actual) == "finiteData":
+            original, _ = fields(actual, "finiteData", 2)
+            inventory(actual)
+            return self.same_endpoint(original, explicit, arrow, side, label)
         if self.tag(actual) == "morphismEndpoint":
             selected_arrow, selected_side = morphism_endpoint(actual)
             same(selected_arrow, arrow, label + " callable")

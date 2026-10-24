@@ -233,6 +233,16 @@ self-selected packets and checks only result forms, parameter retention and
 malformed/foreign-owner rejection. These engineering controls contain no expected
 mathematical answer and establish no mathematical correctness or acceptance claim.
 
+At source checkpoint `eab9e3aac978087295d5ef9ab0e300edf8096bb2`, the endpoint
+run completed 33 primary requests and two sequential foreign-owner requests,
+and its 13 protocol-only boundary groups passed. The existing generic controls
+completed 36 requests. All 14 existing completion groups completed 99 primary
+requests and one foreign-owner request; the foreign request was deferred until
+the first engine exited so only one native process ran at a time. Ready frames
+reported Sage `10.8.13` and adapter `2026-10-24.6`. The exact runner, logs and
+source digests are retained in the receipt. No additional optional native runs
+were performed for this follow-up.
+
 ## Deliberate limits
 
 The manifest addresses remain computational claims on the following precise
@@ -338,6 +348,18 @@ checkpoint, rather than a newly repeated run.
 All 66 registration pairs were checked against the latest candidate public exported
 operation and input inventories. These are engineering checks only: no computed
 equality truth, cardinality, coefficient or other mathematical answer is asserted.
+
+The endpoint follow-up uses the supplied helper and one native process at a time:
+
+```sh
+CAS_LEAF_CONTRACT_PATH=/absolute/path/to/public-contract \
+PYTHONPATH=/absolute/path/to/public-contract/python \
+python3 endpoint_smoke.py --sage-python /absolute/path/to/sage/python
+```
+
+Use `--protocol-only` instead of `--sage-python ...` for the framing and owner
+controls that require no Sage process. The full script closes its first process
+before checking deliberately foreign tokens on a second process.
 
 ## Public inputs and engine documentation
 

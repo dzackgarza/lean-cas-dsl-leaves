@@ -890,8 +890,9 @@ class ExtensionEngine(AdditiveInterfaces, GenericInterfaces, Engine):
         if comparison is None or comparison == self.comparison:
             return super().presentation_application(packet)
         parameters, inverse, source, target, argument = presentation_invocation(packet)
+        public_data(packet, self.session)
         action = self.other_comparison(comparison, parameters, inverse, source, target)
-        return self.apply_comparison(action, argument)
+        return self.apply_comparison(action, argument, comparison, parameters, packet)
 
     def point(self, data, target, domain):
         if self.tag(data) == "element":

@@ -668,12 +668,15 @@ class Engine(EndpointInterfaces):
         return Callable(original.source, action.target,
                         lambda point: action(original(point)), native)
 
-    def apply_comparison(self, action, argument):
+    def apply_comparison(self, action, argument, operation, parameters, packet):
         domain = self.callable_domain(argument)
         if domain is None:
             return action(argument)
         original = self.function(argument, domain, action.source)
-        return self.session.keep(self.postcompose(original, action))
+        result = self.postcompose(original, action)
+        retained = Invocation(operation, parameters, packet, original, action)
+        return self.session.keep(Callable(result.source, result.target, result.action,
+                                          result.native, retained))
 
     def interpret_arrow(self, arrow, source, target):
         tag = self.tag(arrow)
@@ -923,5 +926,6 @@ class Engine(EndpointInterfaces):
 
     def presentation_application(self, packet):
         parameters, inverse, source, target, argument = presentation_invocation(packet)
+        public_data(packet, self.session)
         action = self.comparison_callable(parameters, inverse, source, target)
-        return self.apply_comparison(action, argument)
+        return self.apply_comparison(action, argument, self.comparison, parameters, packet)
