@@ -14,7 +14,8 @@ from wire import Unsupported
 def degree(module):
     if module.native is QQ:
         return 1
-    if module.native.base_ring() is not QQ:
+    if (module.native.base_ring() is not QQ
+            or not callable(getattr(module.native, "basis_matrix", None))):
         raise Unsupported("this native linear representation requires a rational carrier")
     return int(module.native.degree())
 

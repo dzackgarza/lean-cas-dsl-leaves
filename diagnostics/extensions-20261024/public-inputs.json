@@ -17,7 +17,7 @@
     "declarationProbeSha256": "6d9af2678190cb4a439dfb3c0a8e97690f416306cbbd97735904a9fb17a7d8da",
     "addressProbeSha256": "9017be76727d196bc8fe0ba8edb604add6ecf088bca703ddb11e0b7e74487b71"
   },
-  "publicContractRevision": "8397df15042598f5ce9a75cdb22675c65b06fc89",
+  "publicContractRevision": "80bf36d2131e00e78cba2c8461db7b32d98a86f4",
   "implementationInputs": [
     "CasContract/Port.lean documentation",
     "api/README.md",
@@ -28,7 +28,7 @@
     "Sage 10.8 public documentation",
     "Public InterfaceCompletion.md mathematical interface documentation"
   ],
-  "sourceBoundary": "No kernel implementation, acceptance assertion, old leaf implementation, or other agent report was consulted.",
+  "sourceBoundary": "Only this diagnostic subtree, repository instructions, supplied public protocol and declaration exports, and referenced engine/interface documentation were consulted. No kernel implementation, acceptance assertion, expected-answer fixture, frozen trial or downstream execution report was accessed.",
   "additionalPublicMathematicalDocumentation": [
     {
       "path": "LeanCategories/Catalogue/Semantics/Independent/InterfaceCompletion.md",
@@ -36,5 +36,20 @@
       "sha256": "8a53c2ca3c4ef2ba64ce6c6df2f167bd2c13b0637b29b5c5cbdfdcffe4c2887f",
       "scope": "Complete selected change-value comparison and category-sensitive automorphism arrows"
     }
-  ]
+  ],
+  "completionReview": {
+    "baseSourceCommit": "03a0a3dc834455afe898da1c4839f123578f3812",
+    "publicContractPublishedRevision": "80bf36d2131e00e78cba2c8461db7b32d98a86f4",
+    "publicContractLocalRevision": "aa8477de4aebc83823b88ac4885225e8fc13d9c5",
+    "publicContractTree": "7de02aec2fd5d89d13683561ee92055909c28eb7",
+    "publicApiSha256": "691d2b80c2ff4fd6a0e99745beee82117a5f110a288674bb9b58fc930034c22a",
+    "scope": "Complete callable requests, retained native computations, selected parameter framing, exact native equality and standalone protocol checks.",
+    "priorPublicContracts": [
+      {
+        "publicContractPublishedRevision": "c6e24107ec84481a8240bb3cae5c31f67a098a71",
+        "publicContractLocalRevision": "c97110dbef75cb77d249ae3a51a95cdc8f90af19",
+        "publicContractTree": "c08793f7c1bb4843ad0f6131ad8c32d9db9c928d"
+      }
+    ]
+  }
 }

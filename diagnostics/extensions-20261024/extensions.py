@@ -10,14 +10,15 @@ from sage.all import (QQ, ZZ, IntegerModRing, LazyPowerSeriesRing, Set, Subsets,
                       SymmetricGroup, identity_matrix, matrix, vector)
 from sage.libs.gap.libgap import libgap
 
-from cas_port import (admitted_point, cartesian_map, category_parameter,
+from cas_port import (admitted_point, cartesian_map, category_parameter, constructed_category,
                       construction_invocation, core_iso, core_object,
                       functor_parameter, map_data, object_field,
-                      presentation_invocation, typed_map)
+                      presentation_invocation, structured_projection_action, typed_map)
 from engine import Engine, Form, Module, Scalar, Q, Z
 from wire import (Callable, NativeComposition, NativeIdentity, NativeMediator,
                   Unsupported, fields, framed_callable, inventory, key, node, same)
 from native_linear import LinearAction, degree, identity, zero
+from native_polynomial import build as polynomial_action
 
 
 @dataclass(frozen=True)
@@ -56,6 +57,15 @@ class Automorphism:
 class Series:
     coefficient: object
     native: object
+    context: object
+
+
+@dataclass(frozen=True)
+class SuccessorFamily:
+    """Native family metadata supplied only by the declared full term action."""
+
+    coefficient: object
+    index: object
     context: object
 
 
@@ -117,12 +127,8 @@ class ExtensionEngine(Engine):
         if tag == "functorAction":
             action, receiver = fields(selected, tag, 2)
             atag = self.tag(action)
-            if atag in self.carrier_actions | {"fun.linear_orders.forget"}:
+            if self.carrier_action(action):
                 return self.underlying_receiver(receiver)
-            if atag == "classifierForget":
-                classifier, parameters = fields(action, atag, 2)
-                if classifier in {"clf.sets.finite", "clf.magmas.associative", "clf.sets.binary_operation"}:
-                    return self.underlying_receiver(receiver)
         return selected
 
     def cyclic_context(self, selected):
@@ -184,6 +190,8 @@ class ExtensionEngine(Engine):
         tag = self.tag(selected)
         if tag == "valueData":
             return self.finite_object(fields(selected, tag, 1)[0])
+        if tag in {"constructionApex", "constructionField"}:
+            return self.finite_object(self.project_field(selected))
         if tag == "opaqueData":
             value = self.session.get(selected)
             if isinstance(value, FiniteObject):
@@ -191,9 +199,7 @@ class ExtensionEngine(Engine):
             if isinstance(value, Module):
                 return self.finite_module_object(selected, value)
             if isinstance(value, AutomorphismGroup):
-                # Cardinality uses its native group directly, without enumerating
-                # every automorphism or substituting a symmetric group.
-                raise Unsupported("the native group is not an enumerated set object")
+                return self.finite_automorphism_object(selected, value)
         try:
             points = inventory(selected)
         except Unsupported:
@@ -205,8 +211,12 @@ class ExtensionEngine(Engine):
             if not native.is_finite():
                 raise Unsupported("the selected zero-modulus ring has an infinite carrier")
             points = tuple(self.encode_scalar(value, selected) for value in native)
-        elif tag in {"obj.modules.regular", "obj.modules_r.restricted_regular"}:
+        elif tag in {"obj.modules.regular", "obj.modules_r.restricted_regular",
+                     "obj.modules.vectors", "obj.sets.vectors"}:
             return self.finite_module_object(selected, self.module(selected))
+        elif tag == "obj.sets.truth_values":
+            fields(selected, tag, 0)
+            points = (False, True)
         elif tag in {"obj.finite_sets.fin", "obj.linear_orders.fin_ordinary", "obj.linear_orders.fin_reverse"}:
             n, = fields(selected, tag, 1)
             points = tuple(range(self.natural(n, "the selected finite order")))
@@ -227,6 +237,8 @@ class ExtensionEngine(Engine):
             points = tuple([a, b] for a in x.points for b in y.points)
         elif tag == "functorAction":
             action, receiver = fields(selected, tag, 2)
+            if self.tag(action) in {"con.automorphisms", "fun.core_sets.automorphisms", "fun.core_groups.automorphisms"}:
+                return self.finite_automorphism_object(selected, self.aut_context(selected))
             if self.tag(action) == "fun.modules.reindex":
                 return self.finite_module_object(selected, self.module(selected))
             elif self.tag(action) == "fun.core_sets.two_subsets":
@@ -245,10 +257,15 @@ class ExtensionEngine(Engine):
                 raise Unsupported("this extent has no supported complete finite inventory")
             points = tuple(points)
         else:
-            modulus, quotient = self.cyclic_context(selected)
-            if modulus == 0:
-                raise Unsupported("the zero-modulus quotient has an infinite carrier")
-            points = tuple(self.encode_cyclic(k, selected) for k in range(modulus))
+            try:
+                context = self.aut_context(selected)
+            except Unsupported:
+                modulus, quotient = self.cyclic_context(selected)
+                if modulus == 0:
+                    raise Unsupported("the zero-modulus quotient has an infinite carrier")
+                points = tuple(self.encode_cyclic(k, selected) for k in range(modulus))
+            else:
+                return self.finite_automorphism_object(selected, context)
         if len({key(point) for point in points}) != len(points):
             raise ValueError("the supplied finite object repeats a point")
         return FiniteObject(selected, tuple(points), Set(range(len(points))))
@@ -259,11 +276,81 @@ class ExtensionEngine(Engine):
         points = tuple(native_module.write(value) for value in native_module.native)
         return FiniteObject(selected, points, Set(range(len(points))))
 
+    def finite_automorphism_object(self, selected, context):
+        """Enumerate the actual native finite group, retaining every direction."""
+        points = []
+        if self.category(context.category) == "cat.sets":
+            for native_forward in context.native:
+                native_backward = native_forward.inverse()
+                def action(native):
+                    return Callable(context.receiver, context.receiver,
+                                    lambda point: context.points[int(native(self.point_index(
+                                        point, context.points, context.receiver) + 1)) - 1])
+                forward, backward = action(native_forward), action(native_backward)
+                points.append(self.session.keep(Automorphism(context.category, context.receiver,
+                                                             forward, backward, native_forward, native_backward)))
+        else:
+            modulus, _ = self.cyclic_context(context.receiver)
+            for native_forward in libgap.Elements(context.native):
+                native_backward = native_forward ** -1
+                group = libgap.Source(native_forward)
+                generator = group.GeneratorsOfGroup()[0] if modulus > 1 else group.One()
+                elements = libgap([generator ** index for index in range(modulus)])
+                def action(native, elements=elements):
+                    def evaluate(point):
+                        index = int(self.cyclic_point(point, context.receiver))
+                        image = libgap.Image(native, elements[index])
+                        coordinate = int(libgap.Position(elements, image)) - 1
+                        return self.encode_cyclic(coordinate, context.receiver)
+                    return Callable(context.receiver, context.receiver, evaluate)
+                forward, backward = action(native_forward), action(native_backward)
+                points.append(self.session.keep(Automorphism(context.category, context.receiver,
+                                                             forward, backward, native_forward, native_backward)))
+        return FiniteObject(selected, tuple(points), Set(range(len(points))))
+
     def function(self, data, source, target):
         return framed_callable(data, source, target, self.session, self.interpret_arrow,
                                lambda selected: self.finite_object(selected).points)
 
+    def category_descriptor(self, descriptor):
+        """Check public descriptor framing without erasing a selected category.
+
+        The caller owns dependent typing and category laws. These signatures are
+        the seven public constructor argument grammars, not semantic aliases.
+        """
+        if self.tag(descriptor) == "category":
+            category_id, parameters = category_parameter(descriptor)
+            if category_id in {"cat.sets", "cat.groups"} and parameters:
+                raise ValueError("the selected Sets or Groups dictionary has no explicit parameters")
+            return descriptor
+        constructor, arguments = constructed_category(descriptor)
+        signatures = {
+            "ctor.arrow": ("category",), "ctor.core": ("category",),
+            "ctor.subobjects": ("category",),
+            "ctor.slice": ("category", "object"),
+            "ctor.coslice": ("category", "object"),
+            "ctor.elements": ("category", "functor"),
+            "ctor.functor_category": ("category", "category"),
+        }
+        if constructor not in signatures:
+            raise Unsupported("the selected category constructor is not implemented: " + constructor)
+        signature = signatures[constructor]
+        if len(arguments) != len(signature):
+            raise ValueError("the constructed category omits or adds a declaration parameter")
+        for kind, argument in zip(signature, arguments):
+            if kind == "category":
+                self.category_descriptor(argument)
+            elif kind == "functor":
+                functor_parameter(argument)
+            elif not isinstance(argument, dict) or not isinstance(argument.get("ctor"), str):
+                raise ValueError("the constructed category omits its complete selected object")
+        return descriptor
+
     def category(self, descriptor):
+        self.category_descriptor(descriptor)
+        if self.tag(descriptor) == "constructedCategory":
+            constructor, _ = constructed_category(descriptor)
+            raise Unsupported("native automorphisms for the complete selected category wrapper are not implemented: " + constructor)
         category_id, parameters = category_parameter(descriptor)
         if parameters or category_id not in {"cat.sets", "cat.groups"}:
             raise Unsupported("this exact selected category is outside the finite Aut implementation")
@@ -288,6 +375,10 @@ class ExtensionEngine(Engine):
             if isinstance(value, AutomorphismGroup):
                 return value
         underlying = self.underlying_receiver(selected)
+        if self.tag(underlying) == "opaqueData":
+            value = self.session.get(underlying)
+            if isinstance(value, AutomorphismGroup):
+                return value
         if self.tag(underlying) == "functorAction":
             action, receiver = fields(underlying, "functorAction", 2)
             atag = self.tag(action)
@@ -355,6 +446,21 @@ class ExtensionEngine(Engine):
 
     def core_comparison(self, data):
         tag = self.tag(data)
+        if tag == "valueData":
+            return self.core_comparison(fields(data, tag, 1)[0])
+        if tag == "map":
+            action, original = fields(data, tag, 2)
+            if self.tag(action) != "constructorMap":
+                raise Unsupported("this selected action has no native core-comparison adapter")
+            constructor, inner = fields(action, "constructorMap", 2)
+            if constructor != "ctor.core":
+                raise Unsupported("this selected constructor action has no native core adapter")
+            old_source, old_target, old_forward, old_backward = self.core_comparison(original)
+            source = node("functorAction", inner, old_source)
+            target = node("functorAction", inner, old_target)
+            forward = node("map", inner, map_data(old_source, old_target, self.session.keep(old_forward)))
+            backward = node("map", inner, map_data(old_target, old_source, self.session.keep(old_backward)))
+            return source, target, self.function(forward, source, target), self.function(backward, target, source)
         if tag == "coreIso":
             source, target, forward, backward = core_iso(data)
         elif tag == "mor.core_sets.fin_rev":
@@ -395,8 +501,6 @@ class ExtensionEngine(Engine):
 
     def regular_module(self, coefficient=Q):
         native = self.ring(coefficient)
-        if native is not QQ and not native.is_finite():
-            raise Unsupported("regular modules here require rational or finite integer-quotient scalars")
         return RegularModule(native, lambda data: self.scalar(data, coefficient),
                              lambda data: self.encode_scalar(data, coefficient), coefficient,
                              {"regularModule": node("obj.modules.regular", coefficient),
@@ -477,8 +581,6 @@ class ExtensionEngine(Engine):
         source, target, base_map = self.base_map(parameters[0])
         self.ring(source)
         target_ring = self.ring(target)
-        if target_ring is not QQ and not target_ring.is_finite():
-            raise Unsupported("reindexing here targets rational or finite integer-quotient modules")
         original = self.module(receiver)
         if self.module_scalar_ring(original) is not target_ring:
             raise ValueError("the actual module scalar ring differs from the selected base-map target")
@@ -502,6 +604,8 @@ class ExtensionEngine(Engine):
         raise Unsupported("a complete computed series remains owned on this live connection")
 
     def successor_family(self, data, coefficient, index):
+        if self.tag(data) == "valueData":
+            return self.successor_family(fields(data, "valueData", 1)[0], coefficient, index)
         if self.tag(data) == "admittedPoint":
             _, _, _, _, _, original = admitted_point(data)
             return self.successor_family(original, coefficient, index)
@@ -513,19 +617,34 @@ class ExtensionEngine(Engine):
             return self.successor_family(expression, coefficient, index)
         if self.tag(data) == "point":
             return self.successor_family(fields(data, "point", 1)[0], coefficient, index)
-        if self.tag(data) != "mor.sets.successor_power_series_terms":
-            raise Unsupported("the infinite summation implementation supports the retained successor family")
-        actual, = fields(data, "mor.sets.successor_power_series_terms", 1)
-        same(actual, coefficient, "the actual family coefficient ring")
-        same(index, node("obj.sets.naturals"), "the actual successor-family index object")
         series_object = node("obj.sets.power_series", coefficient)
-        return self.function(data, index, series_object)
+        actual = self.function(data, index, series_object)
+        metadata = self.native_successor(actual.native)
+        same(metadata.coefficient, coefficient, "the actual family coefficient ring")
+        same(metadata.index, index, "the actual successor-family index object")
+        return actual
+
+    def native_successor(self, native):
+        if isinstance(native, SuccessorFamily):
+            return native
+        if isinstance(native, NativeComposition):
+            if (isinstance(native.first, NativeIdentity)
+                    and key(native.first.source) == key(native.first.target)):
+                return self.native_successor(native.second)
+            if (isinstance(native.second, NativeIdentity)
+                    and key(native.second.source) == key(native.second.target)):
+                return self.native_successor(native.first)
+        raise Unsupported("this infinite family has no retained supported native summation model")
 
     def interpret_arrow(self, arrow, source, target):
         tag = self.tag(arrow)
         if tag == "map":
             action, original = fields(arrow, tag, 2)
             atag = self.tag(action)
+            if atag == "structuredProjectionAction":
+                category, _ = structured_projection_action(action)
+                self.category_descriptor(category)
+                raise Unsupported("the selected structured projection requires native Arrow-comparison components")
             if atag == "fun.core_sets.two_subsets":
                 fields(action, atag, 0)
                 old_source, old_target, forward, backward = self.core_comparison(original)
@@ -535,8 +654,12 @@ class ExtensionEngine(Engine):
                     actual = [forward(point) for point in subset]
                     return sorted(actual, key=key)
                 return Callable(source, target, image)
-            if atag == "con.automorphisms":
-                category, = fields(action, atag, 1)
+            if atag in {"con.automorphisms", "fun.core_sets.automorphisms", "fun.core_groups.automorphisms"}:
+                if atag == "con.automorphisms":
+                    category, = fields(action, atag, 1)
+                else:
+                    fields(action, atag, 0)
+                    category = node("category", "cat.sets" if atag == "fun.core_sets.automorphisms" else "cat.groups", [])
                 self.category(category)
                 old_source, old_target, forward, backward = self.core_comparison(original)
                 def conjugate(data):
@@ -648,7 +771,16 @@ class ExtensionEngine(Engine):
             selected_parent = self.ring(coefficient)
             if self.ring(source) is not ZZ or self.ring(target) is not selected_parent:
                 raise ValueError("the integer coefficient map changes its selected endpoints")
-            return Callable(source, target, lambda value: self.encode_scalar(selected_parent(self.scalar(value, source)), target))
+            native = None
+            try:
+                source_model, target_model = self.polynomial_model(source), self.polynomial_model(target)
+            except Unsupported:
+                pass
+            else:
+                native = polynomial_action(source_model, target_model,
+                                           lambda value, coefficients: target_model.symbolic_ring(coefficients)(value),
+                                           {"arrow": arrow, "source": source, "target": target})
+            return Callable(source, target, lambda value: self.encode_scalar(selected_parent(self.scalar(value, source)), target), native)
         if tag == "cartesianMap":
             reindex, parameters, receiver = cartesian_map(arrow)
             if reindex != "fun.modules.reindex":
@@ -680,7 +812,9 @@ class ExtensionEngine(Engine):
                 index = self.natural(index, "the selected series index")
                 native = native_ring(self.ring(coefficient)(index + 1)) * generator ** index
                 return self.session.keep(Series(coefficient, native, {"family": arrow, "index": index}))
-            return Callable(source, target, term)
+            native = SuccessorFamily(coefficient, source,
+                                     {"arrow": arrow, "source": source, "target": target})
+            return Callable(source, target, term, native)
         if tag == "bind.sets.power_series_sum":
             coefficient, index = fields(arrow, tag, 2)
             native_ring = self.series_ring(coefficient)
@@ -747,7 +881,8 @@ class ExtensionEngine(Engine):
         if comparison is None or comparison == self.comparison:
             return super().presentation_application(packet)
         parameters, inverse, source, target, argument = presentation_invocation(packet)
-        return self.other_comparison(comparison, parameters, inverse, source, target)(argument)
+        action = self.other_comparison(comparison, parameters, inverse, source, target)
+        return self.apply_comparison(action, argument)
 
     def point(self, data, target, domain):
         if self.tag(data) == "element":
@@ -763,9 +898,18 @@ class ExtensionEngine(Engine):
         return super().point(data, target, domain)
 
     def point_application(self, operation, packet):
+        from cas_port import point_invocation
+        _, parameters, arrow, _, source, target, _ = point_invocation(packet, operation)
+        if operation == "fun.modules.reindex#cartesian":
+            reindex, declaration_parameters, receiver = cartesian_map(arrow)
+            if reindex + "#cartesian" != operation:
+                raise ValueError("the cartesian descriptor changes the selected reindex action")
+            same(parameters, [declaration_parameters, receiver],
+                 "cartesian invocation's complete nested declaration parameters")
+        if operation in self.object_operations and self.tag(arrow) == "map":
+            action, _ = fields(arrow, "map", 2)
+            same(fields(action, operation), parameters, "functor map's declaration parameters")
         if operation == "con.automorphisms#map":
-            from cas_port import point_invocation
-            _, parameters, arrow, _, source, target, _ = point_invocation(packet, operation)
             action, original = fields(arrow, "map", 2)
             same(fields(action, "con.automorphisms", 1), parameters,
                  "the construction map's selected category parameters")
@@ -797,6 +941,12 @@ class ExtensionEngine(Engine):
             if f.native is not None and g.native is not None:
                 try:
                     native_f, native_g = self.native_linear(f.native), self.native_linear(g.native)
+                except Unsupported:
+                    pass
+                else:
+                    return native_f.equal(native_g)
+                try:
+                    native_f, native_g = self.native_polynomial(f.native), self.native_polynomial(g.native)
                 except Unsupported:
                     pass
                 else:
@@ -880,9 +1030,20 @@ class ExtensionEngine(Engine):
                 pass
             else:
                 first_native = LinearAction(matrix(QQ, [[1, 0]]), apex_module, left_module,
-                                            {"product": packet, "port": 1})
+                                            {"product": packet, "port": 1, "source": apex, "target": left})
                 second_native = LinearAction(matrix(QQ, [[0, 1]]), apex_module, right_module,
-                                             {"product": packet, "port": 2})
+                                             {"product": packet, "port": 2, "source": apex, "target": right})
+            if first_native is None or second_native is None:
+                try:
+                    apex_model = self.polynomial_model(apex)
+                    left_model, right_model = self.polynomial_model(left), self.polynomial_model(right)
+                except Unsupported:
+                    pass
+                else:
+                    first_native = polynomial_action(apex_model, left_model, lambda point, _: point[0],
+                                                     {"product": packet, "port": 1})
+                    second_native = polynomial_action(apex_model, right_model, lambda point, _: point[1],
+                                                      {"product": packet, "port": 2})
             first = self.session.keep(Callable(apex, left, lambda point: point[0], first_native))
             second = self.session.keep(Callable(apex, right, lambda point: point[1], second_native))
             return node("cone", apex, map_data(apex, left, first), map_data(apex, right, second))

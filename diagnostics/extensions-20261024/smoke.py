@@ -243,7 +243,7 @@ def main():
         restricted_image = node("functorAction", node("fun.modules.reindex", scalar_map), v2)
         total_source = node("functorAction", node("fun.modules.fibre_inclusion", integer_ring), restricted_image)
         total_target = node("functorAction", node("fun.modules.fibre_inclusion", qr), v2)
-        invoke("fun.modules.reindex#cartesian", node("apply", "fun.modules.reindex#cartesian", [v2, scalar_map],
+        invoke("fun.modules.reindex#cartesian", node("apply", "fun.modules.reindex#cartesian", [[scalar_map], v2],
                node("cartesianMap", "fun.modules.reindex", [scalar_map], v2), one,
                total_source, total_target, [[0, [9, 2]], [1, [-11, 5]]]))
 
@@ -297,7 +297,7 @@ def main():
             finite_total_target = node("functorAction", node("fun.modules.fibre_inclusion", finite_ring), regular)
             cartesian_arrow = node("cartesianMap", "fun.modules.reindex", [finite_base_map], regular)
             finite_cartesian = invoke("fun.modules.reindex#cartesian", node("apply", "fun.modules.reindex#cartesian",
-                [regular, finite_base_map], cartesian_arrow, finite_total_source,
+                [[finite_base_map], regular], cartesian_arrow, finite_total_source,
                 finite_total_source, finite_total_target,
                 node("typedMap", finite_total_source, finite_total_source,
                      node("identity", finite_total_source, finite_total_source))))

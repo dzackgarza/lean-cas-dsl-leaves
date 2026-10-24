@@ -114,10 +114,10 @@ def graph_callable(data, source, target, finite_inventory=inventory):
         points, graph = fields(data, "finiteGraph", 2)
         if not isinstance(points, list):
             raise ValueError("finiteGraph requires an actual point inventory")
-        try:
-            selected_points = finite_inventory(source)
-        except Unsupported:
-            selected_points = points
+        # The graph's keys cannot certify that its domain is finite or complete.
+        # Its source must independently supply a full inventory (for example
+        # Fin(n), finiteData, or a complete native finite carrier).
+        selected_points = finite_inventory(source)
         if {key(p) for p in points} != {key(p) for p in selected_points}:
             raise ValueError("the graph changes the supplied domain inventory")
     else:
@@ -153,6 +153,9 @@ def framed_callable(data, source, target, session, interpret, finite_inventory=i
     ``interpret`` is the implementation's explicit registered-arrow reader. This
     module never infers an action from an address or from equal carrier data.
     """
+    if isinstance(data, dict) and data.get("ctor") == "valueData":
+        return framed_callable(fields(data, "valueData", 1)[0], source, target,
+                               session, interpret, finite_inventory)
     if isinstance(data, dict) and data.get("ctor") == "typedMap":
         actual_source, actual_target, body = typed_map(data)
         same(actual_source, source, "callable source")
