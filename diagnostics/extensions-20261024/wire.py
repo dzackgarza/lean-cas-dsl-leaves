@@ -152,6 +152,8 @@ def public_data(data, session):
             typed_map(data)
         elif tag == "objectProduct":
             object_product(data)
+        elif tag == "finiteData":
+            inventory(data)
         elif tag == "powerObjectMap":
             power_object_map(data)
         elif tag in {"compose", "mediator"}:

@@ -20,7 +20,13 @@ class PowerObjectInterfaces:
         if field == "terminal":
             # This is the actual declared Fin(1)-valued map. It does not replace
             # another terminal comparison or manufacture a graph inventory.
-            point, = self.finite_object(expected_target).points
+            actual_target = self.endpoint_view(target) if self.tag(target) == "morphismEndpoint" else target
+            selected_target = actual_target if self.tag(actual_target) == "finiteData" else expected_target
+            points = self.finite_object(selected_target).points
+            if len(points) != 1:
+                raise ValueError("the supplied terminal target has no single computational point")
+            point, = points
+            self.finite_ordinal(point, 1)
             return Callable(source, target, lambda _, retained=(context, point): retained[1])
         if field == "truth":
             def truth(point, retained=context):

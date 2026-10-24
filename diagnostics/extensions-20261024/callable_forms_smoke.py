@@ -61,6 +61,7 @@ def protocol_checks():
     for invalid in (node("powerObjectMap", "pow.sets", "terminal"),
                     node("powerObjectMap", "pow.sets", "terminal", selected),
                     node("powerObjectMap", 4, "truth", []),
+                    node("finiteData", selected, [0, 0]),
                     node("compose", terminal), node("mediator", terminal)):
         reject(lambda invalid=invalid: public_data(invalid, reader.session))
     reject(lambda: power_object_map(node("powerObjectMap", "pow.other", "terminal", [selected])), Unsupported)
@@ -110,6 +111,9 @@ def engine_checks(port):
                        arrow, node("compose", identity(selected), map_data(selected, ONE, arrow)))
     constant = node("compose", terminal, truth)
     equality_reply(port, "truth/terminal composition", domain, TRUTH, constant, constant)
+    supplied_terminal = node("finiteData", ONE, [0])
+    equality_reply(port, "terminal/retained actual target inventory", domain, supplied_terminal,
+                   terminal, terminal)
 
     endpoint_source = endpoint_data(constant, "source")
     supplied_source = node("finiteData", endpoint_source, [0, 1, 2, 3])
@@ -183,6 +187,13 @@ def engine_checks(port):
                       map_data(domain, target, terminal)):
         port.request("malformed/power parameter or exact endpoint", "mor.sets.equality",
                      invoke("mor.sets.equality", [maps], ONE, compare_source, TRUTH, [malformed, terminal]),
+                     expected="error")
+    for points in ([], [1], [0, 0]):
+        malformed_target = node("finiteData", ONE, points)
+        malformed_maps = node("obj.sets.maps", domain, malformed_target)
+        port.request("malformed/terminal keeps the actual supplied inventory", "mor.sets.equality",
+                     invoke("mor.sets.equality", [malformed_maps], ONE,
+                            node("objectProduct", malformed_maps, malformed_maps), TRUTH, [terminal, terminal]),
                      expected="error")
     broken_shared = node("compose", map_data(domain, ONE, terminal), map_data(target, TRUTH, truth))
     broken_maps = node("obj.sets.maps", domain, TRUTH)

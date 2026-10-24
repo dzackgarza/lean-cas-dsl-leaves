@@ -476,15 +476,36 @@
     "scope": "Consume the existing five published powerObjectMap fields through existing registrations; complete composition/mediator endpoint context and retained finite subset reuse. No new operation or registration.",
     "sourceBoundary": "Only the frozen leaf repository, its instructions, the supplied public contract/API/docs/reference helper, and the installed local runtime setup were inspected. No kernel implementation, acceptance questions, expected-answer fixtures or downstream runtime reports were consulted.",
     "validation": {
-      "syntax": "All diagnostic Python sources parsed successfully.",
+      "syntax": "All 17 diagnostic Python sources parsed successfully.",
       "protocolFieldGroups": 5,
-      "targetedPrimaryRequests": 31,
+      "targetedPrimaryRequests": 35,
       "foreignOwnerRequests": 3,
       "script": "callable_forms_smoke.py",
       "runtimeSetup": "/tmp/kernel-runtime-20261024/engines.sh",
       "scope": "Engineering packet framing, retained callable data, endpoint/parameter/session checks and result shapes only. No mathematical expected answers or acceptance claims.",
-      "existingConsumerRegressions": "Pending after source checkpoint."
+      "existingConsumerRegressions": {
+        "endpointProtocolGroups": 13,
+        "endpointPrimaryRequests": 33,
+        "endpointForeignOwnerRequests": 2,
+        "genericRequests": 36,
+        "result": "All completed successfully; one native process at a time."
+      },
+      "sourceHashes": {
+        "wire.py": "d71b389e88973556242a70b8d55888f58fb8c93dd35e6fee5daaaa08b9827afd",
+        "endpoints.py": "6de642a74be58e58a75589ce1faabae5bed1e613aff5adcf57b866922b23ca81",
+        "engine.py": "7ac13f3c42db2b2f86ec288fefaf8f4add3f4247b2d4cc5870d3de33cff42a0d",
+        "generic_interfaces.py": "684cdef1b29f632e82ce9b78dfa7060225174af58296d5291b4b2d954f912c74",
+        "extensions.py": "49c1ab7a080199fe42c80360690c24364808416390d03cf4eaf6f3f041f5e25f",
+        "power_interfaces.py": "d9a4368d599a630981845693b19295d14835f7c3e264708c7c093e72ceb212a5",
+        "callable_forms_smoke.py": "521454f34a8784dbab4573c1328c49e112ad7cfed3542f503cb7c5a77da4297a"
+      }
     },
-    "firstSourceCheckpoint": "258508a368c853f72d577c0c24580570ad22655c"
+    "firstSourceCheckpoint": "258508a368c853f72d577c0c24580570ad22655c",
+    "sourceCheckpoints": [
+      "258508a368c853f72d577c0c24580570ad22655c",
+      "a6a9901eda45a001804c083c303c7b25edb23f9b"
+    ],
+    "manifestSha256": "0af9314a206ca8fb7028da77f75c5adeb4b0c4a04c309d06594aa532a4d3597d",
+    "registrationPairsUnchanged": 66
   }
 }
