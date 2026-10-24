@@ -28,7 +28,7 @@ does not claim an implementation for every object of that category.
 | Sets and Groups `automorphism_forward`, `automorphism_backward`; group `inverse` | The actual stored forward or inverse arrow on the selected receiver. Both directions of an inline automorphism are read and retained. |
 | General Sets `automorphism_evaluation`, `automorphism_inverse_evaluation` | The selected Sets identity functor. Other set-valued functors are explicitly unsupported. |
 | `cmp.groups.cyclic_quotient_residue`, `mor.sets.cyclic_quotient_map`, `mor.groups.cyclic_quotient_aut_by_unit` | Actual quotient/residue transport, integer quotient images and multiplication by the actual selected unit with its native inverse. Finite automorphism computation requires positive modulus. |
-| `mor.commutative_rings.integer_coefficients`, `fun.modules.reindex`, `fun.modules.reindex#cartesian`, `op.modules.scalar_action` | Rational modules restricted along a complete supported base map into the rational ring; native scalar action applies that map. The reindex declaration has one explicit parameter, the actual base map, whose endpoints remain available. The cartesian arrow retains that selection and its actual module. |
+| `mor.commutative_rings.integer_coefficients`, `fun.modules.reindex`, `fun.modules.reindex#cartesian`, `op.modules.scalar_action` | Rational modules and regular modules over the selected finite integer-quotient ring, restricted along the actual coefficient map. Native scalar action applies that map. The reindex declaration has one explicit parameter, the base map, whose endpoints remain available. The named `obj.modules_r.restricted_regular` separately retains its three declared parameters `R`, `S`, `q`. Reindexed whole module morphisms and cartesian maps retain the complete original map and selected modules. |
 | `mor.sets.successor_power_series_terms`, `bind.sets.power_series_sum`, `mor.sets.power_series_coefficient` | The supplied infinite successor family in the selected coefficient ring, a native lazy infinite sum and requested coefficient observations. No finite truncation or replacement closed-form series is used. |
 | `mor.modules.rectangular_linear_map`, `row_linear_map` | Actual matrices read from complete nested finite callables, at all supplied dimensions including zero, over supported coefficient rings. Rational maps retain exact Sage matrix representations. |
 | The three published degenerate-plane morphisms; `mor.sets.bilin_module_pairing` | The documented linear actions and four documented forms, together with actual native lifted forms. Scalar and value-module selections remain in the context. |
@@ -45,6 +45,13 @@ callables at **every point in the complete supported domain** and compares each
 result at the supplied codomain. It does not label a finite sample complete.
 Owned callables, complete finite graphs and supported named/composed callables
 participate in the same path.
+
+For finite integer-quotient regular modules and their restrictions, the full
+carrier is enumerated by the actual Sage ring at the supplied modulus. Complete
+graphs are checked against that inventory. An opaque returned module morphism or
+cartesian map can be compared over every residue without exporting or replacing
+its native owned callable. Composite moduli use modular-ring arithmetic directly;
+the implementation does not assert that the coefficient ring is a field.
 
 An infinite carrier is supported when both maps carry actual exact rational Sage
 matrices at their complete native endpoint modules. This metadata is introduced
@@ -91,8 +98,11 @@ proof, monicity evidence or universal-property certificate is manufactured.
 This specimen does not implement arbitrary category dictionaries for Aut,
 arbitrary groups, module automorphism objects, arbitrary infinite summable
 families, or general rings' submodule algorithms. Reindexing currently targets
-the native rational modules. Native exact linear equality and kernels use
-rational coefficients. Arbitrary set-valued functor evaluation is outside the
+native rational modules and finite integer-quotient regular modules. The latter
+supports every positive supplied modulus; the zero-modulus infinite regular
+module remains outside this finite extension. Native matrix equality and kernels
+use rational coefficients, while finite modular whole-map equality uses the
+complete carrier. Arbitrary set-valued functor evaluation is outside the
 current scope even when that functor's formal declaration exists.
 
 There is enough public wire and mathematical information for the implemented
@@ -115,11 +125,14 @@ PYTHONPATH=/absolute/path/to/public-contract/python \
 python3 smoke.py
 ```
 
-The independently chosen 48-request smoke run checks startup, framing, request
+The independently chosen 74-request smoke run checks startup, framing, request
 identity, selected packet consumption and live opaque reuse. It includes native
 whole-map comparison, complete kernel-to-lift reuse, a nonidentity selected value
 projection, finite Sets and cyclic Groups conjugation, reindex/cartesian data and
-lazy series over two selected coefficient rings. It contains no expected
+lazy series over two selected coefficient rings. Separate regular-module inputs
+at moduli 12 and 17 exercise integer coefficient maps, both presentations of the
+restriction, native scalar action, an owned whole module morphism, its complete
+reindexing, full finite-domain equality and owned cartesian maps. It contains no expected
 mathematical answers and does not import or invoke the acceptance suite or kernel.
 Mathematical acceptance remains independent of this protocol diagnostic.
 
@@ -131,6 +144,7 @@ Mathematical acceptance remains independent of this protocol diagnostic.
 - Additional public mathematical interface documentation: `InterfaceCompletion.md`, published revision `93e1a738`; its exact content hash is recorded in `public-inputs.json`.
 - [Sage polynomial quotient rings](https://doc.sagemath.org/html/en/reference/polynomial_rings/sage/rings/polynomial/polynomial_quotient_ring.html).
 - [Sage ring homomorphisms](https://doc.sagemath.org/html/en/reference/rings/sage/rings/morphism.html).
+- [Sage integer quotient rings and complete finite iteration](https://doc.sagemath.org/html/en/reference/finite_rings/sage/rings/finite_rings/integer_mod_ring.html).
 - [Sage matrix construction](https://doc.sagemath.org/html/en/reference/matrices/sage/matrix/constructor.html) and [matrix kernels](https://doc.sagemath.org/html/en/reference/matrices/sage/matrix/matrix2.html).
 - [Sage lazy power-series rings](https://doc.sagemath.org/html/en/reference/power_series/sage/rings/lazy_series_ring.html) and [lazy series](https://doc.sagemath.org/html/en/reference/power_series/sage/rings/lazy_series.html).
 - [Sage permutation groups](https://doc.sagemath.org/html/en/reference/groups/sage/groups/perm_gps/permgroup_named.html) and [native GAP morphisms](https://doc.sagemath.org/html/en/reference/groups/sage/groups/libgap_morphism.html).

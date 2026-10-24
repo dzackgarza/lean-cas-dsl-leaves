@@ -248,8 +248,11 @@ class Engine:
         dimension = self.natural(dimension, "the selected vector dimension")
         return Module(QQ ** dimension, lambda data: self.read_vector(data, dimension), self.write_vector)
 
-    def regular_module(self):
-        return Module(QQ, lambda data: self.scalar(data, Q), lambda data: self.encode_scalar(data, Q))
+    def regular_module(self, coefficient=Q):
+        if self.ring(coefficient) is not QQ:
+            raise Unsupported("this regular module has no implemented native representation")
+        return Module(QQ, lambda data: self.scalar(data, coefficient),
+                      lambda data: self.encode_scalar(data, coefficient))
 
     def module(self, selected):
         tag = self.tag(selected)
@@ -272,12 +275,10 @@ class Engine:
             return self.vector_module(dimension)
         if tag == "obj.modules.regular":
             coefficient, = fields(selected, tag, 1)
-            if self.ring(coefficient) is not QQ:
-                raise Unsupported("this diagnostic regular module requires rational scalars")
-            return self.regular_module()
+            return self.regular_module(coefficient)
         if tag in self.rational_ids:
             fields(selected, tag, 0)
-            return self.regular_module()
+            return self.regular_module(selected)
         if tag == "objectProduct":
             left, right = fields(selected, tag, 2)
             left_module, right_module = self.module(left), self.module(right)

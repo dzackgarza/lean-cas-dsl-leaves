@@ -108,20 +108,20 @@ class Session:
         return self._values[token]
 
 
-def graph_callable(data, source, target):
+def graph_callable(data, source, target, finite_inventory=inventory):
     """Read a complete finite graph at its actual selected endpoints."""
     if isinstance(data, dict) and data.get("ctor") == "finiteGraph":
         points, graph = fields(data, "finiteGraph", 2)
         if not isinstance(points, list):
             raise ValueError("finiteGraph requires an actual point inventory")
         try:
-            selected_points = inventory(source)
+            selected_points = finite_inventory(source)
         except Unsupported:
             selected_points = points
         if {key(p) for p in points} != {key(p) for p in selected_points}:
             raise ValueError("the graph changes the supplied domain inventory")
     else:
-        points, graph = inventory(source), data
+        points, graph = finite_inventory(source), data
     if not isinstance(graph, list):
         raise Unsupported("callable data is not an inline finite graph")
     entries = {}
@@ -147,7 +147,7 @@ def graph_callable(data, source, target):
     return Callable(source, target, evaluate)
 
 
-def framed_callable(data, source, target, session, interpret):
+def framed_callable(data, source, target, session, interpret, finite_inventory=inventory):
     """Consume typed maps, total finite graphs and owned callable data.
 
     ``interpret`` is the implementation's explicit registered-arrow reader. This
@@ -157,7 +157,7 @@ def framed_callable(data, source, target, session, interpret):
         actual_source, actual_target, body = typed_map(data)
         same(actual_source, source, "callable source")
         same(actual_target, target, "callable target")
-        return framed_callable(body, source, target, session, interpret)
+        return framed_callable(body, source, target, session, interpret, finite_inventory)
     if isinstance(data, dict) and data.get("ctor") == "opaqueData":
         native = session.get(data)
         if not isinstance(native, Callable):
@@ -166,7 +166,7 @@ def framed_callable(data, source, target, session, interpret):
         same(native.target, target, "owned callable target")
         return native
     if isinstance(data, list) or isinstance(data, dict) and data.get("ctor") == "finiteGraph":
-        return graph_callable(data, source, target)
+        return graph_callable(data, source, target, finite_inventory)
     if isinstance(data, dict) and data.get("ctor") == "identity":
         actual_source, actual_target = fields(data, "identity", 2)
         same(actual_source, source, "identity source")
@@ -176,8 +176,8 @@ def framed_callable(data, source, target, session, interpret):
     if isinstance(data, dict) and data.get("ctor") == "mediator":
         left, right = fields(data, "mediator", 2)
         left_target, right_target = fields(target, "objectProduct", 2)
-        f = framed_callable(left, source, left_target, session, interpret)
-        g = framed_callable(right, source, right_target, session, interpret)
+        f = framed_callable(left, source, left_target, session, interpret, finite_inventory)
+        g = framed_callable(right, source, right_target, session, interpret, finite_inventory)
         native = NativeMediator(source, target, f.native, g.native) if f.native is not None and g.native is not None else None
         return Callable(source, target, lambda point: [f(point), g(point)], native)
     if isinstance(data, dict) and data.get("ctor") == "compose":
@@ -192,8 +192,8 @@ def framed_callable(data, source, target, session, interpret):
             # Registered named arrows may have enough independently published
             # endpoint information for the implementation's reader to proceed.
             return interpret(data, source, target)
-        f = framed_callable(first, source, middle, session, interpret)
-        g = framed_callable(second, middle, target, session, interpret)
+        f = framed_callable(first, source, middle, session, interpret, finite_inventory)
+        g = framed_callable(second, middle, target, session, interpret, finite_inventory)
         native = NativeComposition(f.native, g.native) if f.native is not None and g.native is not None else None
         return Callable(source, target, lambda point: g(f(point)), native)
     return interpret(data, source, target)

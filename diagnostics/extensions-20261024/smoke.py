@@ -247,6 +247,65 @@ def main():
                node("cartesianMap", "fun.modules.reindex", [scalar_map], v2), one,
                total_source, total_target, [[0, [9, 2]], [1, [-11, 5]]]))
 
+        for modulus in (12, 17):
+            finite_ring = node("obj.rings.integers_mod", modulus)
+            finite_commutative_ring = node("obj.commutative_rings.integers_mod", modulus)
+            finite_carrier = node("obj.sets.integers_mod", modulus)
+            regular = node("obj.modules.regular", finite_ring)
+            coefficient_arrow = node("mor.commutative_rings.integer_coefficients", finite_commutative_ring)
+            coefficient_value = invoke("mor.commutative_rings.integer_coefficients", apply(
+                "mor.commutative_rings.integer_coefficients", [finite_commutative_ring], one,
+                node("obj.sets.integers"), finite_carrier, -37))
+            finite_base_map = node("typedMap", integer_ring, finite_ring,
+                                  node("map", node("fun.commutative_rings.ring"), coefficient_arrow))
+            finite_restricted = invoke("fun.modules.reindex",
+                {"ctor": "fun.modules.reindex", "args": [finite_base_map], "receiver": regular})
+            invoke("meth.cardinality", regular)
+            invoke("meth.cardinality", finite_restricted)
+            named_restricted = node("obj.modules_r.restricted_regular", integer_ring, finite_ring, finite_base_map)
+            invoke("meth.cardinality", named_restricted)
+            invoke("op.modules.scalar_action", apply("op.modules.scalar_action", [integer_ring, named_restricted],
+                one, node("objectProduct", node("obj.sets.integers"), named_restricted), named_restricted,
+                [-23, modulus - 2]))
+            invoke("op.modules.scalar_action", apply("op.modules.scalar_action", [integer_ring, finite_restricted],
+                one, node("objectProduct", node("obj.sets.integers"), finite_restricted), finite_restricted,
+                [-19, modulus - 1]))
+            invoke("op.modules.scalar_action", apply("op.modules.scalar_action", [finite_ring, regular], one,
+                node("objectProduct", finite_carrier, regular), regular, [coefficient_value, 2]))
+
+            vector_one = node("obj.modules.vectors", finite_ring, 1)
+            points = list(range(modulus))
+            vector_family = node("typedMap", regular, vector_one,
+                node("finiteGraph", points, [[point, [[0, point]]] for point in points]))
+            row = [[0, [[0, 5]]]]
+            native_endomorphism = invoke("mor.modules.row_linear_map", apply(
+                "mor.modules.row_linear_map", [1, finite_commutative_ring, row], regular,
+                vector_one, regular, vector_family))
+            original_endomorphism = node("typedMap", regular, regular, native_endomorphism)
+            finite_action = node("fun.modules.reindex", finite_base_map)
+            finite_image = node("functorAction", finite_action, regular)
+            mapped_endomorphism = node("map", finite_action, original_endomorphism)
+            reindexed_endomorphism = invoke("fun.modules.reindex", node("apply", "fun.modules.reindex", [finite_base_map],
+                mapped_endomorphism, finite_image, finite_image, finite_image,
+                node("typedMap", finite_image, finite_image, node("identity", finite_image, finite_image))))
+            finite_endomorphisms = node("obj.sets.maps", finite_image, finite_image)
+            invoke("mor.sets.equality", apply("mor.sets.equality", [finite_endomorphisms], one,
+                node("objectProduct", finite_endomorphisms, finite_endomorphisms), node("obj.sets.truth_values"),
+                [reindexed_endomorphism, node("typedMap", finite_image, finite_image, mapped_endomorphism)]))
+
+            finite_total_source = node("functorAction", node("fun.modules.fibre_inclusion", integer_ring), finite_image)
+            finite_total_target = node("functorAction", node("fun.modules.fibre_inclusion", finite_ring), regular)
+            cartesian_arrow = node("cartesianMap", "fun.modules.reindex", [finite_base_map], regular)
+            finite_cartesian = invoke("fun.modules.reindex#cartesian", node("apply", "fun.modules.reindex#cartesian",
+                [regular, finite_base_map], cartesian_arrow, finite_total_source,
+                finite_total_source, finite_total_target,
+                node("typedMap", finite_total_source, finite_total_source,
+                     node("identity", finite_total_source, finite_total_source))))
+            finite_cartesian_maps = node("obj.sets.maps", finite_total_source, finite_total_target)
+            invoke("mor.sets.equality", apply("mor.sets.equality", [finite_cartesian_maps], one,
+                node("objectProduct", finite_cartesian_maps, finite_cartesian_maps), node("obj.sets.truth_values"),
+                [finite_cartesian, node("typedMap", finite_total_source, finite_total_target, cartesian_arrow)]))
+
         naturals = node("obj.sets.naturals")
         for coefficient, coefficient_set in [(qc, q), (node("obj.commutative_rings.integers_mod", 7), residue)]:
             series_object = node("obj.sets.power_series", coefficient)

@@ -4,7 +4,7 @@ This module uses only the public declaration interfaces recorded by the specimen
 Selected category and functor dictionaries stay explicit at every construction.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from sage.all import (QQ, ZZ, IntegerModRing, LazyPowerSeriesRing, Set, Subsets,
                       SymmetricGroup, identity_matrix, matrix, vector)
@@ -16,7 +16,7 @@ from cas_port import (admitted_point, cartesian_map, category_parameter,
                       presentation_invocation, typed_map)
 from engine import Engine, Form, Module, Scalar, Q, Z
 from wire import (Callable, NativeComposition, NativeIdentity, NativeMediator,
-                  Unsupported, fields, inventory, key, node, same)
+                  Unsupported, fields, framed_callable, inventory, key, node, same)
 from native_linear import LinearAction, degree, identity, zero
 
 
@@ -56,6 +56,12 @@ class Automorphism:
 class Series:
     coefficient: object
     native: object
+    context: object
+
+
+@dataclass(frozen=True)
+class RegularModule(Module):
+    coefficient: object
     context: object
 
 
@@ -182,6 +188,8 @@ class ExtensionEngine(Engine):
             value = self.session.get(selected)
             if isinstance(value, FiniteObject):
                 return value
+            if isinstance(value, Module):
+                return self.finite_module_object(selected, value)
             if isinstance(value, AutomorphismGroup):
                 # Cardinality uses its native group directly, without enumerating
                 # every automorphism or substituting a symmetric group.
@@ -192,7 +200,14 @@ class ExtensionEngine(Engine):
             points = None
         if points is not None:
             return FiniteObject(selected, tuple(points), Set(range(len(points))))
-        if tag in {"obj.finite_sets.fin", "obj.linear_orders.fin_ordinary", "obj.linear_orders.fin_reverse"}:
+        if tag in self.modular_ids:
+            native = self.ring(selected)
+            if not native.is_finite():
+                raise Unsupported("the selected zero-modulus ring has an infinite carrier")
+            points = tuple(self.encode_scalar(value, selected) for value in native)
+        elif tag in {"obj.modules.regular", "obj.modules_r.restricted_regular"}:
+            return self.finite_module_object(selected, self.module(selected))
+        elif tag in {"obj.finite_sets.fin", "obj.linear_orders.fin_ordinary", "obj.linear_orders.fin_reverse"}:
             n, = fields(selected, tag, 1)
             points = tuple(range(self.natural(n, "the selected finite order")))
         elif tag in {"obj.sets.integer_square_bound", "obj.finite_sets.integer_square_bound"}:
@@ -212,7 +227,9 @@ class ExtensionEngine(Engine):
             points = tuple([a, b] for a in x.points for b in y.points)
         elif tag == "functorAction":
             action, receiver = fields(selected, tag, 2)
-            if self.tag(action) == "fun.core_sets.two_subsets":
+            if self.tag(action) == "fun.modules.reindex":
+                return self.finite_module_object(selected, self.module(selected))
+            elif self.tag(action) == "fun.core_sets.two_subsets":
                 fields(action, self.tag(action), 0)
                 original = self.finite_object(core_object(receiver))
                 points = tuple([original.points[int(i)] for i in sorted(pair)]
@@ -235,6 +252,16 @@ class ExtensionEngine(Engine):
         if len({key(point) for point in points}) != len(points):
             raise ValueError("the supplied finite object repeats a point")
         return FiniteObject(selected, tuple(points), Set(range(len(points))))
+
+    def finite_module_object(self, selected, native_module):
+        if not native_module.native.is_finite():
+            raise Unsupported("the actual native module has an infinite carrier")
+        points = tuple(native_module.write(value) for value in native_module.native)
+        return FiniteObject(selected, points, Set(range(len(points))))
+
+    def function(self, data, source, target):
+        return framed_callable(data, source, target, self.session, self.interpret_arrow,
+                               lambda selected: self.finite_object(selected).points)
 
     def category(self, descriptor):
         category_id, parameters = category_parameter(descriptor)
@@ -344,13 +371,43 @@ class ExtensionEngine(Engine):
         return source, target, self.function(forward, source, target), self.function(backward, target, source)
 
     def module(self, selected):
+        if self.tag(selected) == "finiteData":
+            original, points = fields(selected, "finiteData", 2)
+            actual_module = self.module(original)
+            complete = self.finite_module_object(original, actual_module).points
+            if len(points) != len(complete) or {key(point) for point in points} != {key(point) for point in complete}:
+                raise ValueError("the supplied module inventory differs from its complete native carrier")
+            return actual_module
         if self.tag(selected) == "functorAction":
             action, receiver = fields(selected, "functorAction", 2)
             if self.tag(action) == "fun.modules.reindex":
                 return self.restricted_module(fields(action, "fun.modules.reindex", 1), receiver)
         if self.tag(selected) == "obj.modules_r.restricted_regular":
-            raise Unsupported("this diagnostic uses the actual reindex action with its complete base map")
+            source, target, base_map = fields(selected, "obj.modules_r.restricted_regular", 3)
+            actual_source, actual_target, _ = self.base_map(base_map)
+            if self.ring(source) is not self.ring(actual_source) or self.ring(target) is not self.ring(actual_target):
+                raise ValueError("the named restricted module changes its selected coefficient-map endpoints")
+            restricted = self.restricted_module([base_map], node("obj.modules.regular", target))
+            return replace(restricted, source_ring=source, target_ring=target,
+                           context={**restricted.context, "namedObject": selected,
+                                    "declaredParameters": [source, target, base_map]})
         return super().module(selected)
+
+    def regular_module(self, coefficient=Q):
+        native = self.ring(coefficient)
+        if native is not QQ and not native.is_finite():
+            raise Unsupported("regular modules here require rational or finite integer-quotient scalars")
+        return RegularModule(native, lambda data: self.scalar(data, coefficient),
+                             lambda data: self.encode_scalar(data, coefficient), coefficient,
+                             {"regularModule": node("obj.modules.regular", coefficient),
+                              "coefficient": coefficient})
+
+    def module_scalar_ring(self, actual):
+        if isinstance(actual, RestrictedModule):
+            return self.ring(actual.source_ring)
+        if isinstance(actual, RegularModule):
+            return self.ring(actual.coefficient)
+        return QQ if actual.native is QQ else actual.native.base_ring()
 
     def pulled_back_forms(self, arrow):
         scalar, values, changed_values, change_data, original_data, inclusion_data = fields(arrow, self.tag(arrow), 6)
@@ -419,9 +476,12 @@ class ExtensionEngine(Engine):
             raise ValueError("module reindexing has exactly one explicit base-map parameter")
         source, target, base_map = self.base_map(parameters[0])
         self.ring(source)
-        if self.ring(target) is not QQ:
-            raise Unsupported("this specimen reindexes its native rational modules along maps into the rational ring")
+        target_ring = self.ring(target)
+        if target_ring is not QQ and not target_ring.is_finite():
+            raise Unsupported("reindexing here targets rational or finite integer-quotient modules")
         original = self.module(receiver)
+        if self.module_scalar_ring(original) is not target_ring:
+            raise ValueError("the actual module scalar ring differs from the selected base-map target")
         context = {"action": node("fun.modules.reindex", *parameters), "receiver": receiver,
                    "sourceRing": source, "targetRing": target, "baseMap": parameters[0]}
         return RestrictedModule(original.native, original.read, original.write, original,
@@ -487,17 +547,23 @@ class ExtensionEngine(Engine):
                 return Callable(source, target, conjugate)
             if atag == "fun.modules.reindex":
                 parameters = fields(action, atag, 1)
-                self.base_map(parameters[0])
                 if self.tag(original) != "typedMap":
                     raise Unsupported("a reindexed arbitrary map needs both original typed endpoints")
                 old_source, old_target, _ = typed_map(original)
                 actual = self.function(original, old_source, old_target)
-                return Callable(source, target, actual, actual.native)
+                restricted_source = self.restricted_module(parameters, old_source)
+                restricted_target = self.restricted_module(parameters, old_target)
+                retained = (action, original, restricted_source, restricted_target, actual)
+                return Callable(source, target, lambda value, context=retained: context[-1](value), actual.native)
         if tag == "zero":
             actual_source, actual_target = fields(arrow, tag, 2)
             same(actual_source, source, "the selected zero-map source")
             same(actual_target, target, "the selected zero-map target")
-            native = zero(self.module(source), self.module(target), arrow)
+            actual_source, actual_target = self.module(source), self.module(target)
+            try:
+                native = zero(actual_source, actual_target, arrow)
+            except Unsupported:
+                return Callable(source, target, lambda _: actual_target.zero())
             return Callable(source, target, native, native)
         if tag in {"mor.bilin_module.pulled_back_forward", "mor.bilin_module.pulled_back_backward"}:
             self.pulled_back_forms(arrow)
@@ -589,13 +655,18 @@ class ExtensionEngine(Engine):
                 raise Unsupported("this registered cartesian action is outside the specimen")
             restricted = self.restricted_module(parameters, receiver)
             retained = (parameters, receiver, restricted, source, target)
-            native = identity(restricted, restricted.original,
-                              {"cartesian": arrow, "source": source, "target": target,
-                               "restriction": restricted.context})
+            try:
+                native = identity(restricted, restricted.original,
+                                  {"cartesian": arrow, "source": source, "target": target,
+                                   "restriction": restricted.context})
+            except Unsupported:
+                native = NativeIdentity(source, target)
             return Callable(source, target, lambda value, context=retained: context[2].original.write(context[2].original.read(value)), native)
         if tag == "op.modules.scalar_action":
             scalar_ring, selected = fields(arrow, tag, 2)
             native_module = self.module(selected)
+            if self.ring(scalar_ring) is not self.module_scalar_ring(native_module):
+                raise ValueError("the scalar action changes the actual selected module fibre")
             def scale(pair):
                 if not isinstance(pair, list) or len(pair) != 2:
                     raise ValueError("scalar action requires its actual scalar and module point")
