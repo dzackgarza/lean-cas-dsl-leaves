@@ -40,6 +40,23 @@ def same(actual, selected, label):
         raise ValueError("%s differs from the complete selected descriptor" % label)
 
 
+def power_object_map(data):
+    """Read the five callable field spellings published by the power port."""
+    power, field, parameters = fields(data, "powerObjectMap", 3)
+    if not isinstance(power, str) or not power or not isinstance(field, str) or not field:
+        raise ValueError("a power-object map requires its declared power and field names")
+    if not isinstance(parameters, list):
+        raise ValueError("a power-object map requires its ordered declaration parameters")
+    if power != "pow.sets":
+        raise Unsupported("this selected power object has no implemented callable reader")
+    counts = {"member": 1, "terminal": 1, "transpose": 2, "image": 3, "truth": 0}
+    if field not in counts:
+        raise Unsupported("this power-object field has no published callable implementation here")
+    if len(parameters) != counts[field]:
+        raise ValueError("the power-object field omits or adds a declaration parameter")
+    return power, field, parameters
+
+
 def inventory(value):
     """Return only an explicitly supplied finite inventory or primitive Fin data."""
     if isinstance(value, dict) and value.get("ctor") == "finiteData":
@@ -135,6 +152,10 @@ def public_data(data, session):
             typed_map(data)
         elif tag == "objectProduct":
             object_product(data)
+        elif tag == "powerObjectMap":
+            power_object_map(data)
+        elif tag in {"compose", "mediator"}:
+            fields(data, tag, 2)
         elif tag == "opaqueData":
             session.get(data)
         for item in data.values():

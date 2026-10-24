@@ -245,6 +245,29 @@ were performed for this follow-up.
 
 ## Deliberate limits
 
+### Published power-object callable consumption
+
+The callable-form follow-up keeps all 66 registrations and consumes the five
+published `powerObjectMap` fields inside their existing requests. `terminal`
+and `truth` retain the selected public arrow and its declared endpoints.
+`member`, finite `image`, and finite `transpose` use the existing complete
+native inventories and Sage-set representation. These are data-form readers;
+there is no new standalone power-map operation or generic application address.
+
+Named power maps, mediators, and point wrappers can supply internal endpoint
+context for composition. Actual typed/owned endpoint fields take precedence and
+must agree exactly at the shared endpoint. Returned callables retain the
+original selected descriptors. Endpoint wrappers still supply no graph inventory,
+and nested owned data stay on their original live connection. A retained image
+or predicate subset can feed an existing direct-image, membership, equality, or
+extent consumer without substituting another function or predicate.
+
+Infinite global images and arbitrary infinite predicate subsets remain outside
+the existing finite-set implementation. Malformed field/parameter/endpoint data
+are rejected; well-framed unsupported native inputs retain the ordinary
+`unsupported` outcome. Exact public input hashes and validation status are in
+`public-inputs.json`. No mathematical acceptance assertion is supplied here.
+
 The manifest addresses remain computational claims on the following precise
 native input families; no category-wide address promises arbitrary native data.
 

@@ -557,7 +557,7 @@ class Engine(EndpointInterfaces):
             left, right = fields(data, tag, 2)
             left_target, right_target = self.product_factors(target, (left, right))
             return [self.point(left, left_target, domain), self.point(right, right_target, domain)]
-        if tag in {"compose", "typedMap"}:
+        if tag in {"compose", "typedMap", "powerObjectMap"}:
             if domain is None or not self.closed_domain(domain):
                 raise Unsupported("a point arrow needs its actual generalized domain")
             return self.function(data, domain, target)(inventory(domain)[0])
@@ -615,7 +615,7 @@ class Engine(EndpointInterfaces):
                 return typed_map(port)[1]
         if fallback is not None:
             return fallback
-        raise Unsupported("the composition needs the supplied typed intermediate endpoint")
+        return self.endpoint_view(node("morphismEndpoint", arrow, "target"))
 
     def callable_domain(self, data):
         """Read a retained domain; do not infer it from a sampled point or carrier."""
@@ -635,6 +635,8 @@ class Engine(EndpointInterfaces):
             return self.callable_domain(fields(data, tag, 2)[0])
         if tag == "point":
             return self.callable_domain(fields(data, tag, 1)[0])
+        if tag in {"mediator", "powerObjectMap"}:
+            return self.endpoint_view(node("morphismEndpoint", data, "source"))
         return None
 
     def callable_argument(self, argument, domain, source):
@@ -682,7 +684,12 @@ class Engine(EndpointInterfaces):
         tag = self.tag(arrow)
         if tag == "compose":
             first, second = fields(arrow, tag, 2)
-            middle = self.intermediate(first)
+            middle = retained_endpoint(first, "target", self.session)
+            second_source = retained_endpoint(second, "source", self.session)
+            if middle is not None and second_source is not None:
+                same(middle, second_source, "composition's complete shared endpoint")
+            if middle is None:
+                middle = second_source if second_source is not None else self.intermediate(first)
             f, g = self.function(first, source, middle), self.function(second, middle, target)
             native = NativeComposition(f.native, g.native) if f.native is not None and g.native is not None else None
             return Callable(source, target, lambda value: g(f(value)), native)

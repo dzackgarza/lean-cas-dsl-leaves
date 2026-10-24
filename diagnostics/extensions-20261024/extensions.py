@@ -21,6 +21,7 @@ from native_linear import LinearAction, degree, identity, zero
 from native_polynomial import build as polynomial_action
 from generic_interfaces import GenericInterfaces
 from additive_interfaces import AdditiveInterfaces
+from power_interfaces import PowerObjectInterfaces
 
 
 @dataclass(frozen=True)
@@ -93,7 +94,7 @@ class RestrictedModule(Module):
         return self.original.scale(native_scalar, value)
 
 
-class ExtensionEngine(AdditiveInterfaces, GenericInterfaces, Engine):
+class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfaces, Engine):
     modular_ids = {"obj.sets.integers_mod", "obj.rings.integers_mod", "obj.commutative_rings.integers_mod"}
     quotient_ids = {"obj.sets.cyclic_quotient", "obj.groups.cyclic_quotient"}
     cyclic_ids = {"obj.groups.cyclic"}
@@ -262,10 +263,10 @@ class ExtensionEngine(AdditiveInterfaces, GenericInterfaces, Engine):
                     raise Unsupported("this selected finite action is outside the specimen")
                 return self.finite_object(underlying)
         elif tag == "extent":
-            power, _, points = fields(selected, tag, 3)
-            if power != "pow.sets" or not isinstance(points, list):
-                raise Unsupported("this extent has no supported complete finite inventory")
-            points = tuple(points)
+            power, ambient, subset = fields(selected, tag, 3)
+            if power != "pow.sets":
+                raise Unsupported("this selected power-object extent is outside the specimen")
+            points = self.finite_subset(subset, ambient, selected).points
         else:
             try:
                 context = self.aut_context(selected)

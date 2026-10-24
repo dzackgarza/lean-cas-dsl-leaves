@@ -6,15 +6,37 @@ inventory. Every Callable continues to retain the exact original descriptors.
 """
 
 from cas_port import cartesian_map, morphism_endpoint, object_product, typed_map
-from wire import Callable, Unsupported, fields, inventory, key, node, retained_endpoint, same
+from wire import (Callable, Unsupported, fields, inventory, key, node,
+                  power_object_map, retained_endpoint, same)
 
 
 class EndpointInterfaces:
+    def power_endpoints(self, arrow):
+        """Native decoding context from the complete public power-field types."""
+        _, field, parameters = power_object_map(arrow)
+        terminal = node("obj.sets.fin", 1)
+        truth = node("obj.sets.truth_values")
+        if field == "truth":
+            return terminal, truth
+        selected = parameters[0]
+        if field == "terminal":
+            return selected, terminal
+        if field == "member":
+            return node("objectProduct", selected, node("obj.sets.power_set", selected)), truth
+        ambient = parameters[1] if field == "image" else selected
+        return terminal, node("obj.sets.power_set", ambient)
+
+    def component_endpoint(self, arrow, side):
+        actual = retained_endpoint(arrow, side, self.session)
+        if actual is not None:
+            return actual
+        return self.endpoint_view(node("morphismEndpoint", arrow, side))
+
     def endpoint_view(self, selected):
         """Read native input context while leaving ``selected`` attached verbatim."""
         arrow, side = morphism_endpoint(selected)
         tag = self.tag(arrow)
-        if tag == "valueData":
+        if tag in {"valueData", "point"}:
             return self.endpoint_view(node("morphismEndpoint", fields(arrow, tag, 1)[0], side))
         if tag == "typedMap":
             # Use the actual retained field for native decoding. This helper
@@ -26,13 +48,29 @@ class EndpointInterfaces:
             if not isinstance(actual, Callable):
                 raise ValueError("the endpoint's owned datum is not a callable")
             return actual.source if side == "source" else actual.target
-        if tag == "identity":
+        if tag in {"identity", "zero"}:
             source, target = fields(arrow, tag, 2)
-            same(source, target, "endpoint identity's selected objects")
+            if tag == "identity":
+                same(source, target, "endpoint identity's selected objects")
             return source if side == "source" else target
         if tag == "compose":
             first, second = fields(arrow, tag, 2)
             return node("morphismEndpoint", first if side == "source" else second, side)
+        if tag == "mediator":
+            left, right = fields(arrow, tag, 2)
+            if side == "source":
+                actual = self.component_endpoint(left, "source")
+                same(self.component_endpoint(right, "source"), actual,
+                     "mediator's complete shared domain")
+                return actual
+            return node("objectProduct", self.component_endpoint(left, "target"),
+                        self.component_endpoint(right, "target"))
+        if tag == "element":
+            original, _ = fields(arrow, tag, 2)
+            return node("obj.sets.fin", 1) if side == "source" else original
+        if tag == "powerObjectMap":
+            source, target = self.power_endpoints(arrow)
+            return source if side == "source" else target
         if tag == "map":
             action, original = fields(arrow, tag, 2)
             if self.carrier_action(action):
@@ -160,12 +198,20 @@ class EndpointInterfaces:
 
     def same_endpoint(self, actual, explicit, arrow, side, label):
         """Accept the exact declaration endpoint or an explicitly supplied field."""
+        if explicit is not None and key(actual) == key(explicit):
+            return
         if self.tag(actual) == "finiteData":
             original, _ = fields(actual, "finiteData", 2)
             inventory(actual)
             return self.same_endpoint(original, explicit, arrow, side, label)
         if self.tag(actual) == "morphismEndpoint":
             selected_arrow, selected_side = morphism_endpoint(actual)
+            if key(selected_arrow) != key(arrow) and self.tag(selected_arrow) in {
+                    "compose", "mediator", "point", "valueData", "typedMap"}:
+                # Structural endpoint projections retain the original packet;
+                # only their supplied field is used for this internal check.
+                return self.same_endpoint(self.endpoint_view(actual), explicit,
+                                          arrow, side, label)
             same(selected_arrow, arrow, label + " callable")
             same(selected_side, side, label + " selector")
         else:

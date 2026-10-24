@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from sage.all import Set, Subsets, ZZ
 
 from cas_port import admitted_point, map_data, object_field
-from wire import Callable, NativeIdentity, Unsupported, fields, node, same
+from wire import Callable, NativeIdentity, Unsupported, fields, key, node, public_data, same
 from native_polynomial import build as polynomial_action
 
 
@@ -101,6 +101,7 @@ class GenericInterfaces:
         return self.point_index(point, finite.points, ambient)
 
     def finite_subset(self, data, ambient, context=None):
+        public_data([data, ambient], self.session)
         if self.tag(data) == "valueData":
             return self.finite_subset(fields(data, "valueData", 1)[0], ambient, context)
         if self.tag(data) == "opaqueData":
@@ -109,6 +110,11 @@ class GenericInterfaces:
                 raise Unsupported("the owned subset has no supported complete finite representation")
             same(actual.ambient, ambient, "owned finite subset's complete ambient selection")
             return actual
+        if self.tag(data) in {"element", "point", "powerObjectMap", "compose", "typedMap"}:
+            actual = self.point(data, node("obj.sets.power_set", ambient), node("obj.sets.fin", 1))
+            if key(actual) == key(data):
+                raise Unsupported("the selected subset point has no implemented callable reader")
+            return self.finite_subset(actual, ambient, {"point": data, "context": context})
         if not isinstance(data, list):
             raise Unsupported("this subset has no complete supported finite representation")
         keys = [self.subset_key(point, ambient) for point in data]

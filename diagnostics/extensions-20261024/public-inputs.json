@@ -461,5 +461,20 @@
     "implementationSourcesSha256": "0e5f37870c432c66d268737711ccf5e49379f5322c6e9f2a5f2393cbf3dbee37",
     "publicContractDeficiency": null,
     "implementationLimits": "Existing native implementation limits remain. Endpoint wrappers supply no finite inventory; arbitrary unnamed arrows without an implemented complete native reader remain unsupported. No new registration, native algorithm or wire tag was added."
+  },
+  "callableFormsCompletion": {
+    "baseLeafCommit": "d33bec4433f39582824f6b2846c4f4ec4b9f7e13",
+    "publicContractRevision": "90d7d3f1833cff39b77024dcee2dc43213e623ad",
+    "publicFiles": {
+      "CasContract/Port.lean": "1d2093178736f4c8c76bb578e8ee1ab5846da0f916f4b5e50d11752903266be3",
+      "python/cas_port.py": "5f2c330047725cd429eec42ac0dbf0ca6f5933b723857d44859f1954a7e98e19",
+      "api/README.md": "6fc24c988722d8e66f2cf8227975e015893a5700a971a4cd4fc7c7c786fc9a15",
+      "api/wire-examples.md": "ca78531697169e84909cbde4cedd06837ff27b607c64ba307c17597ee3a94ed9",
+      "api/manifest.md": "4fefaf5ae2fc8dd8bb2a1556274e1aa49347c288a61897b6804870a413d53314",
+      "api/declared-ports.json": "f3a17fd1d2fa98d72513fbe9ac333834f64b6b160a9ccd5206b97a5991802b19"
+    },
+    "scope": "Consume the existing five published powerObjectMap fields through existing registrations; complete composition/mediator endpoint context and retained finite subset reuse. No new operation or registration.",
+    "sourceBoundary": "Only the frozen leaf repository, its instructions, the supplied public contract/API/docs/reference helper, and the installed local runtime setup were inspected. No kernel implementation, acceptance questions, expected-answer fixtures or downstream runtime reports were consulted.",
+    "validation": "Source syntax parsed. Independent public-protocol engineering controls pending; no mathematical acceptance claim."
   }
 }
