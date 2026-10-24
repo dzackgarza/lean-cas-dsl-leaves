@@ -268,6 +268,22 @@ are rejected; well-framed unsupported native inputs retain the ordinary
 `unsupported` outcome. Exact public input hashes and validation status are in
 `public-inputs.json`. No mathematical acceptance assertion is supplied here.
 
+`callable_forms_smoke.py` exercises the five published fields through existing
+registrations, including empty/singleton domains, complete generalized results,
+unlabelled compositions, mediator inputs, explicit endpoint inventories, retained
+subset/extent reuse, and malformed or foreign-session data. The targeted run
+completed 31 primary requests and three foreign-owner controls, checking result
+shapes and retention only. The protocol-only mode requires no Sage process:
+
+```sh
+python3 callable_forms_smoke.py --protocol-only
+```
+
+Omit `--protocol-only` with the ordinary contract/engine environment to run the
+framed backend controls. A `powerObjectMap` in a map-valued point stays a callable;
+an explicit closed `point(...)` stays a point value even when its named domain
+can now be read. Actual returned typed/owned endpoints are never renamed.
+
 The manifest addresses remain computational claims on the following precise
 native input families; no category-wide address promises arbitrary native data.
 

@@ -55,7 +55,7 @@ class EndpointInterfaces:
             return source if side == "source" else target
         if tag == "compose":
             first, second = fields(arrow, tag, 2)
-            return node("morphismEndpoint", first if side == "source" else second, side)
+            return self.component_endpoint(first if side == "source" else second, side)
         if tag == "mediator":
             left, right = fields(arrow, tag, 2)
             if side == "source":

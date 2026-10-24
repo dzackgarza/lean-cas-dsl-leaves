@@ -508,7 +508,7 @@ class Engine(EndpointInterfaces):
 
     def point(self, data, target, domain):
         tag = self.tag(data)
-        if self.tag(target) == "obj.sets.maps" and tag in {"typedMap", "compose", "mediator"}:
+        if self.tag(target) == "obj.sets.maps" and tag in {"typedMap", "compose", "mediator", "powerObjectMap"}:
             # This is a complete function-valued point, not a point arrow from
             # the generalized domain into the function object.
             return data
@@ -648,6 +648,10 @@ class Engine(EndpointInterfaces):
         tag = self.tag(argument)
         if tag == "valueData":
             return self.callable_argument(fields(argument, tag, 1)[0], domain, source)
+        if tag == "point" and self.closed_domain(domain):
+            # The public point envelope asks for the closed point value. Its
+            # now-readable named domain must not change it into a whole map.
+            return False
         if tag in {"typedMap", "identity"}:
             actual_source, actual_target = (typed_map(argument)[:2] if tag == "typedMap"
                                             else fields(argument, tag, 2))
