@@ -1,0 +1,31 @@
+{
+  "publicApiSha256": "691d2b80c2ff4fd6a0e99745beee82117a5f110a288674bb9b58fc930034c22a",
+  "publicApiProvenance": {
+    "protocolRevision": "8397df15042598f5ce9a75cdb22675c65b06fc89",
+    "mathematicsRevision": "7e848db36ff74faf62b00304cc0186a8bac641b7",
+    "exporterSha256": "938fcb03f47fce885c2661d3b5135e3c9dec0b999563887087fffe897ccff9c9",
+    "kernelRevision": "58735c5a16caea1754dab6d5e00fc769c4692ce4",
+    "admissionSourceSha256": "d1bcbfcd86ef3e0d0881d4293cd0f184410d9822b444684e2c41a610fe162cc6",
+    "addressExporterSha256": "e4936bf3a71dfd145635816e4e2c0fe269b5790a0d34d1ee7dc05f6216edf4b8",
+    "additionalImports": [
+      "LeanCategories.Catalogue.Semantics.Foundation.FiniteOrders",
+      "LeanCategories.Catalogue.Semantics.Foundation.TwoSubsets",
+      "LeanCategories.Catalogue.Semantics.Foundation.IntegerSquareBounds",
+      "LeanCategories.Catalogue.Semantics.Algebra.CyclicQuotients",
+      "LeanCategories.Catalogue.Semantics.Independent.ScalarAndFormExtensions"
+    ],
+    "declarationProbeSha256": "6d9af2678190cb4a439dfb3c0a8e97690f416306cbbd97735904a9fb17a7d8da",
+    "addressProbeSha256": "9017be76727d196bc8fe0ba8edb604add6ecf088bca703ddb11e0b7e74487b71"
+  },
+  "publicContractRevision": "8397df15042598f5ce9a75cdb22675c65b06fc89",
+  "implementationInputs": [
+    "CasContract/Port.lean documentation",
+    "api/README.md",
+    "api/manifest.md",
+    "api/wire-examples.md",
+    "python/cas_port.py",
+    "Fresh public declared-port export signatures and docstrings",
+    "Sage 10.8 public documentation"
+  ],
+  "sourceBoundary": "No kernel implementation, acceptance assertion, old leaf implementation, or other agent report was consulted."
+}

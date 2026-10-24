@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+"""Live public-protocol diagnostic backend; no Lean executable or kernel import."""
+
+import os
+from pathlib import Path
+import sys
+import tempfile
+
+
+def select_engine():
+    selected = os.environ.get("CAS_SAGE_PYTHON")
+    # Virtual environments can share the same underlying executable symlink;
+    # their invocation paths still select different installed engine packages.
+    if selected and Path(selected).absolute() != Path(sys.executable).absolute():
+        os.execv(selected, [selected, str(Path(__file__).resolve()), *sys.argv[1:]])
+    if "DOT_SAGE" not in os.environ:
+        os.environ["DOT_SAGE"] = tempfile.mkdtemp(prefix="cas-extension-sage-")
+
+
+def main():
+    select_engine()
+    import json
+    import sage.version
+    from cas_port import read_frame, value_data, write_frame
+    from engine import Engine
+    import lifts
+    from wire import Unsupported
+
+    manifest = json.loads(Path(__file__).with_name("leaves.json").read_text())
+    operations = {row["operation"] for row in manifest["registrations"]}
+    engine = Engine()
+    write_frame({"op": "ready", "protocol": 1,
+                 "backend": "independent-extensions-sage",
+                 "backend_version": sage.version.version,
+                 "adapter_version": "2026-10-24.1",
+                 "capabilities": sorted(operations)})
+    while True:
+        packet = read_frame()
+        if packet is None:
+            return
+        request_id, operation = packet.get("request_id"), packet.get("op")
+        try:
+            if operation not in operations:
+                raise Unsupported("unregistered diagnostic operation")
+            if "args" not in packet:
+                raise ValueError("the request omitted its actual args data")
+            argument = packet["args"]
+            if operation.startswith("lift."):
+                result = lifts.factor(engine, operation, argument) if operation.endswith("#factor") else lifts.field(engine, operation, argument)
+            else:
+                data = engine.presentation_application(argument) if operation == engine.comparison else engine.point_application(operation, argument)
+                result = data if engine.tag(data) == "opaqueData" else value_data(data)
+            write_frame({"request_id": request_id, "status": "ok", "value": result})
+        except Unsupported:
+            write_frame({"request_id": request_id, "status": "unsupported", "op": operation})
+        except Exception as error:
+            write_frame({"request_id": request_id, "status": "error",
+                         "kind": type(error).__name__, "message": str(error)})
+
+
+if __name__ == "__main__":
+    main()

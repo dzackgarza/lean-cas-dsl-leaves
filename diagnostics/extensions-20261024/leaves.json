@@ -1,0 +1,133 @@
+{
+  "backends": [
+    {
+      "name": "independent-extensions-sage",
+      "command": "python3",
+      "args": [
+        "backend.py"
+      ]
+    }
+  ],
+  "registrations": [
+    {
+      "operation": "op.rings.add",
+      "input": "cat.rings",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "op.rings.mul",
+      "input": "cat.rings",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "op.rings.pow",
+      "input": "cat.rings",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "op.rings.neg",
+      "input": "cat.rings",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "cmp.rational_dual.translation",
+      "input": "cmp.rational_dual.translation",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.sets.rational_dual_x_constants",
+      "input": "mor.sets.rational_dual_x_constants",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.sets.rational_dual_y_constants",
+      "input": "mor.sets.rational_dual_y_constants",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.modules.rectangular_linear_map",
+      "input": "mor.modules.rectangular_linear_map",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.modules.row_linear_map",
+      "input": "mor.modules.row_linear_map",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.sets.bilin_module_pairing",
+      "input": "mor.sets.bilin_module_pairing",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.sets.equality",
+      "input": "mor.sets.equality",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.bilin_module.degenerate_plane_map",
+      "input": "mor.bilin_module.degenerate_plane_map",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.bilin_module.degenerate_plane_cone",
+      "input": "mor.bilin_module.degenerate_plane_cone",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.bilin_module.degenerate_plane_paired_cone",
+      "input": "mor.bilin_module.degenerate_plane_paired_cone",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "lift.bilin_module.restrict#obj",
+      "input": "lift.bilin_module.restrict#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "lift.bilin_module.restrict#hom",
+      "input": "lift.bilin_module.restrict#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "lift.bilin_module.restrict#forward",
+      "input": "lift.bilin_module.restrict#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "lift.bilin_module.restrict#backward",
+      "input": "lift.bilin_module.restrict#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "lift.bilin_module.restrict#factor",
+      "input": "lift.bilin_module.restrict#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "lift.bilin_module.change_value_restriction#obj",
+      "input": "lift.bilin_module.change_value_restriction#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "lift.bilin_module.change_value_restriction#hom",
+      "input": "lift.bilin_module.change_value_restriction#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "lift.bilin_module.change_value_restriction#forward",
+      "input": "lift.bilin_module.change_value_restriction#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "lift.bilin_module.change_value_restriction#backward",
+      "input": "lift.bilin_module.change_value_restriction#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "lift.bilin_module.change_value_restriction#factor",
+      "input": "lift.bilin_module.change_value_restriction#input",
+      "backend": "independent-extensions-sage"
+    }
+  ]
+}
