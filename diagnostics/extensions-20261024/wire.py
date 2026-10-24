@@ -8,7 +8,7 @@ from dataclasses import dataclass
 import json
 import secrets
 
-from cas_port import opaque_data, typed_map
+from cas_port import morphism_endpoint, object_product, opaque_data, typed_map
 
 
 class Unsupported(Exception):
@@ -64,6 +64,7 @@ class Callable:
     target: object
     action: object
     native: object = None
+    invocation: object = None
 
     def __call__(self, point):
         return self.action(point)
@@ -89,6 +90,17 @@ class NativeMediator:
     right: object
 
 
+@dataclass(frozen=True)
+class Invocation:
+    """The actual complete request and both retained computational dependencies."""
+
+    operation: str
+    parameters: object
+    packet: object
+    argument: object
+    action: object
+
+
 class Session:
     """Own native engine values and callables on a single live port connection."""
 
@@ -103,9 +115,58 @@ class Session:
 
     def get(self, data):
         token, = fields(data, "opaqueData", 1)
+        if not isinstance(token, str) or not token:
+            raise ValueError("an opaque computational value requires a nonempty token")
         if token not in self._values:
             raise Unsupported("the opaque token is not owned by this live connection")
         return self._values[token]
+
+
+def public_data(data, session):
+    """Check nested public framing and live owners, without interpreting types."""
+    if isinstance(data, list):
+        for item in data:
+            public_data(item, session)
+    elif isinstance(data, dict):
+        tag = data.get("ctor")
+        if tag == "morphismEndpoint":
+            morphism_endpoint(data)
+        elif tag == "typedMap":
+            typed_map(data)
+        elif tag == "objectProduct":
+            object_product(data)
+        elif tag == "opaqueData":
+            session.get(data)
+        for item in data.values():
+            public_data(item, session)
+
+
+def retained_endpoint(data, side, session):
+    """Read an actual supplied map field; never manufacture a carrier name."""
+    tag = data.get("ctor") if isinstance(data, dict) else None
+    if tag in {"valueData", "point"}:
+        return retained_endpoint(fields(data, tag, 1)[0], side, session)
+    if tag == "typedMap":
+        source, target, _ = typed_map(data)
+        return source if side == "source" else target
+    if tag == "opaqueData":
+        actual = session.get(data)
+        if isinstance(actual, Callable):
+            return actual.source if side == "source" else actual.target
+    if tag == "identity":
+        source, target = fields(data, tag, 2)
+        same(source, target, "identity endpoints")
+        return source if side == "source" else target
+    if tag == "element" and side == "target":
+        return fields(data, tag, 2)[0]
+    if tag == "compose":
+        first, second = fields(data, tag, 2)
+        return retained_endpoint(first if side == "source" else second, side, session)
+    return None
+
+
+def product_fields(selected, components=None):
+    return object_product(selected)
 
 
 def graph_callable(data, source, target, finite_inventory=inventory):
@@ -147,7 +208,8 @@ def graph_callable(data, source, target, finite_inventory=inventory):
     return Callable(source, target, evaluate)
 
 
-def framed_callable(data, source, target, session, interpret, finite_inventory=inventory):
+def framed_callable(data, source, target, session, interpret, finite_inventory=inventory,
+                    product_factors=product_fields):
     """Consume typed maps, total finite graphs and owned callable data.
 
     ``interpret`` is the implementation's explicit registered-arrow reader. This
@@ -155,12 +217,12 @@ def framed_callable(data, source, target, session, interpret, finite_inventory=i
     """
     if isinstance(data, dict) and data.get("ctor") == "valueData":
         return framed_callable(fields(data, "valueData", 1)[0], source, target,
-                               session, interpret, finite_inventory)
+                               session, interpret, finite_inventory, product_factors)
     if isinstance(data, dict) and data.get("ctor") == "typedMap":
         actual_source, actual_target, body = typed_map(data)
         same(actual_source, source, "callable source")
         same(actual_target, target, "callable target")
-        return framed_callable(body, source, target, session, interpret, finite_inventory)
+        return framed_callable(body, source, target, session, interpret, finite_inventory, product_factors)
     if isinstance(data, dict) and data.get("ctor") == "opaqueData":
         native = session.get(data)
         if not isinstance(native, Callable):
@@ -178,9 +240,9 @@ def framed_callable(data, source, target, session, interpret, finite_inventory=i
         return Callable(source, target, lambda point: point, NativeIdentity(source, target))
     if isinstance(data, dict) and data.get("ctor") == "mediator":
         left, right = fields(data, "mediator", 2)
-        left_target, right_target = fields(target, "objectProduct", 2)
-        f = framed_callable(left, source, left_target, session, interpret, finite_inventory)
-        g = framed_callable(right, source, right_target, session, interpret, finite_inventory)
+        left_target, right_target = product_factors(target, (left, right))
+        f = framed_callable(left, source, left_target, session, interpret, finite_inventory, product_factors)
+        g = framed_callable(right, source, right_target, session, interpret, finite_inventory, product_factors)
         native = NativeMediator(source, target, f.native, g.native) if f.native is not None and g.native is not None else None
         return Callable(source, target, lambda point: [f(point), g(point)], native)
     if isinstance(data, dict) and data.get("ctor") == "compose":
@@ -195,8 +257,11 @@ def framed_callable(data, source, target, session, interpret, finite_inventory=i
             # Registered named arrows may have enough independently published
             # endpoint information for the implementation's reader to proceed.
             return interpret(data, source, target)
-        f = framed_callable(first, source, middle, session, interpret, finite_inventory)
-        g = framed_callable(second, middle, target, session, interpret, finite_inventory)
+        f = framed_callable(first, source, middle, session, interpret, finite_inventory, product_factors)
+        g = framed_callable(second, middle, target, session, interpret, finite_inventory, product_factors)
         native = NativeComposition(f.native, g.native) if f.native is not None and g.native is not None else None
         return Callable(source, target, lambda point: g(f(point)), native)
+    if isinstance(data, dict) and data.get("ctor") == "morphismEndpoint":
+        morphism_endpoint(data)
+        raise ValueError("a morphism endpoint is object data, not a callable")
     return interpret(data, source, target)

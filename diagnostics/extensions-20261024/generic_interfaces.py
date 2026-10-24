@@ -210,12 +210,18 @@ class GenericInterfaces:
         if tag in applications:
             object_id = applications[tag]
             parameters = fields(arrow, tag, self.morphism_objects[object_id])
-            hom_object, argument_source = fields(source, "objectProduct", 2)
+            hom_object, argument_source = self.product_factors(source)
             same(hom_object, node(object_id, *parameters), "application's complete selected hom object")
+            if self.tag(source) == "morphismEndpoint":
+                self.same_endpoint(source, None, arrow, "source", "application's complete source")
+            argument_target = target
+            if self.tag(target) == "morphismEndpoint":
+                self.same_endpoint(target, None, arrow, "target", "application's complete target")
+                argument_target = parameters[-1]
             def apply(pair):
                 if not isinstance(pair, list) or len(pair) != 2:
                     raise ValueError("a morphism application requires its actual function and argument")
-                actual = self.morphism_function(pair[0], object_id, parameters, argument_source, target)
+                actual = self.morphism_function(pair[0], object_id, parameters, argument_source, argument_target)
                 return actual(pair[1])
             return Callable(source, target, apply)
         if tag == "objectField":
@@ -229,8 +235,10 @@ class GenericInterfaces:
                 return Callable(source, target, include)
         if tag == "mor.sets.direct_image":
             ambient_source, ambient_target, actual_map = fields(arrow, tag, 3)
-            same(source, node("obj.sets.power_set", ambient_source), "direct-image power source")
-            same(target, node("obj.sets.power_set", ambient_target), "direct-image power target")
+            self.same_endpoint(source, node("obj.sets.power_set", ambient_source),
+                               arrow, "source", "direct-image power source")
+            self.same_endpoint(target, node("obj.sets.power_set", ambient_target),
+                               arrow, "target", "direct-image power target")
             actual = self.function(actual_map, ambient_source, ambient_target)
             def direct_image(data):
                 subset = self.finite_subset(data, ambient_source)

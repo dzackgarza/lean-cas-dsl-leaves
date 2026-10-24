@@ -157,8 +157,10 @@ class AdditiveInterfaces:
                 actual, original = self.additive_group_native(receiver)
                 left, right = self.additive_carrier_routes(receiver)
                 expected_source, expected_target = (right, left) if inverse else (left, right)
-                same(source, expected_source, "additive carrier component's complete source route")
-                same(target, expected_target, "additive carrier component's complete target route")
+                self.same_endpoint(source, expected_source, arrow, "source",
+                                   "additive carrier component's complete source route")
+                self.same_endpoint(target, expected_target, arrow, "target",
+                                   "additive carrier component's complete target route")
                 context = (arrow, receiver, actual, original, source, target)
                 return Callable(source, target, lambda value, retained=context: value,
                                 NativeIdentity(source, target))
@@ -170,8 +172,9 @@ class AdditiveInterfaces:
             if len(parameters) != 3 or not isinstance(parameters[0], list) or type(parameters[2]) is not bool:
                 raise ValueError("the additive carrier invocation requires [declarationParameters,receiver,inverse]")
             same(parameters[0], [], "additive carrier invocation's declaration parameters")
-            if self.tag(arrow) == "cellComponent":
-                cell, declaration_parameters, receiver, inverse = fields(arrow, "cellComponent", 4)
+            descriptor = self.declaration_data(arrow)
+            if self.tag(descriptor) == "cellComponent":
+                cell, declaration_parameters, receiver, inverse = fields(descriptor, "cellComponent", 4)
                 same(cell, self.additive_cell, "additive carrier component identifier")
                 same(parameters, [declaration_parameters, receiver, inverse],
                      "additive carrier invocation's complete nested parameters")

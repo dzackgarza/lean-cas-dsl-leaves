@@ -12,11 +12,11 @@ from sage.libs.gap.libgap import libgap
 
 from cas_port import (admitted_point, cartesian_map, category_parameter, constructed_category,
                       construction_invocation, core_iso, core_object,
-                      functor_parameter, map_data, object_field,
+                      functor_parameter, map_data, morphism_endpoint, object_field,
                       presentation_invocation, structured_projection_action, typed_map)
 from engine import Engine, Form, Module, Scalar, Q, Z
 from wire import (Callable, NativeComposition, NativeIdentity, NativeMediator,
-                  Unsupported, fields, framed_callable, inventory, key, node, same)
+                  Unsupported, fields, framed_callable, inventory, key, node, public_data, same)
 from native_linear import LinearAction, degree, identity, zero
 from native_polynomial import build as polynomial_action
 from generic_interfaces import GenericInterfaces
@@ -126,6 +126,11 @@ class ExtensionEngine(AdditiveInterfaces, GenericInterfaces, Engine):
 
     def underlying_receiver(self, selected):
         tag = self.tag(selected)
+        if tag == "morphismEndpoint":
+            try:
+                return self.underlying_receiver(self.endpoint_view(selected))
+            except Unsupported:
+                return selected
         if tag == "functorAction":
             action, receiver = fields(selected, tag, 2)
             atag = self.tag(action)
@@ -314,8 +319,10 @@ class ExtensionEngine(AdditiveInterfaces, GenericInterfaces, Engine):
         return FiniteObject(selected, tuple(points), Set(range(len(points))))
 
     def function(self, data, source, target):
+        public_data([data, source, target], self.session)
         return framed_callable(data, source, target, self.session, self.interpret_arrow,
-                               lambda selected: self.finite_object(selected).points)
+                               lambda selected: self.finite_object(selected).points,
+                               self.product_factors)
 
     def category_descriptor(self, descriptor):
         """Check public descriptor framing without erasing a selected category.
@@ -538,9 +545,7 @@ class ExtensionEngine(AdditiveInterfaces, GenericInterfaces, Engine):
 
     def form(self, selected):
         if self.tag(selected) == "morphismEndpoint":
-            arrow, side = fields(selected, "morphismEndpoint", 2)
-            if side not in {"source", "target"}:
-                raise ValueError("the selected comparison endpoint has an invalid selector")
+            arrow, side = morphism_endpoint(selected)
             if self.tag(arrow) in {"mor.bilin_module.pulled_back_forward", "mor.bilin_module.pulled_back_backward"}:
                 changed, base = self.pulled_back_forms(arrow)
                 forward = self.tag(arrow).endswith("_forward")
@@ -675,9 +680,7 @@ class ExtensionEngine(AdditiveInterfaces, GenericInterfaces, Engine):
                 return Callable(source, target, conjugate)
             if atag == "fun.modules.reindex":
                 parameters = fields(action, atag, 1)
-                if self.tag(original) != "typedMap":
-                    raise Unsupported("a reindexed arbitrary map needs both original typed endpoints")
-                old_source, old_target, _ = typed_map(original)
+                old_source, old_target = self.callable_endpoints(original)
                 actual = self.function(original, old_source, old_target)
                 restricted_source = self.restricted_module(parameters, old_source)
                 restricted_target = self.restricted_module(parameters, old_target)
@@ -874,8 +877,9 @@ class ExtensionEngine(AdditiveInterfaces, GenericInterfaces, Engine):
             raise ValueError("the selected comparison requires its parameter and Boolean direction")
         if comparison == "cmp.sets.fin_reversal":
             dimension = self.natural(parameters[0], "the selected reversal dimension")
-            same(source, node("obj.sets.fin", dimension), "reversal source")
-            same(target, node("obj.sets.fin", dimension), "reversal target")
+            arrow = node("presentation", comparison, parameters, inverse)
+            self.same_endpoint(source, node("obj.sets.fin", dimension), arrow, "source", "reversal source")
+            self.same_endpoint(target, node("obj.sets.fin", dimension), arrow, "target", "reversal target")
             return Callable(source, target, lambda point: dimension - 1 - self.finite_ordinal(point, dimension))
         modulus = self.natural(parameters[0], "the selected quotient modulus")
         if self.cyclic_context(source) != (modulus, not inverse) or self.cyclic_context(target) != (modulus, inverse):
@@ -905,28 +909,36 @@ class ExtensionEngine(AdditiveInterfaces, GenericInterfaces, Engine):
     def point_application(self, operation, packet):
         from cas_port import point_invocation
         _, parameters, arrow, _, source, target, _ = point_invocation(packet, operation)
-        if operation == "fun.modules.reindex#cartesian":
-            reindex, declaration_parameters, receiver = cartesian_map(arrow)
+        descriptor = self.declaration_data(arrow)
+        if operation == "fun.modules.reindex#cartesian" and self.tag(descriptor) == "cartesianMap":
+            reindex, declaration_parameters, receiver = cartesian_map(descriptor)
             if reindex + "#cartesian" != operation:
                 raise ValueError("the cartesian descriptor changes the selected reindex action")
             same(parameters, [declaration_parameters, receiver],
                  "cartesian invocation's complete nested declaration parameters")
-        if operation in self.object_operations and self.tag(arrow) == "map":
-            action, _ = fields(arrow, "map", 2)
+        if operation in self.object_operations and self.tag(descriptor) == "map":
+            action, _ = fields(descriptor, "map", 2)
             same(fields(action, operation), parameters, "functor map's declaration parameters")
-        if operation == "con.automorphisms#map":
-            action, original = fields(arrow, "map", 2)
+        if operation == "con.automorphisms#map" and self.tag(descriptor) == "map":
+            action, original = fields(descriptor, "map", 2)
             same(fields(action, "con.automorphisms", 1), parameters,
                  "the construction map's selected category parameters")
             old_source, old_target, _, _ = self.core_comparison(original)
-            same(source, node("functorAction", action, node("coreObject", old_source)),
-                 "the construction map's full source image")
-            same(target, node("functorAction", action, node("coreObject", old_target)),
-                 "the construction map's full target image")
+            self.same_endpoint(source, node("functorAction", action, node("coreObject", old_source)),
+                               descriptor, "source", "the construction map's full source image")
+            self.same_endpoint(target, node("functorAction", action, node("coreObject", old_target)),
+                               descriptor, "target", "the construction map's full target image")
         return super().point_application(operation, packet)
 
     def equal(self, left, right, selected):
         tag = self.tag(selected)
+        if tag == "morphismEndpoint":
+            try:
+                actual = self.endpoint_view(selected)
+            except Unsupported:
+                pass
+            else:
+                return self.equal(left, right, actual)
         if tag == "opaqueData":
             owned = self.session.get(selected)
             if isinstance(owned, FiniteObject):

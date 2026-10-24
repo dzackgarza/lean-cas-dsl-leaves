@@ -175,5 +175,167 @@
     },
     "publicContractDeficiency": null,
     "nativeLimits": "Only explicit supported ring/module additive-group images and their actual returned monoids. Other additive monoids, the separate additive-vectors family, alternate carrier-route encodings and arbitrary infinite whole-map equality without an existing native model remain unsupported."
+  },
+  "endpointConsumptionReview": {
+    "baseSourceLocalCommit": "d8a24f94205407f1c0d7c20272f230e7f1515458",
+    "baseSourcePublishedCommit": "5b2ce9e5a2da78227d43a01297874667bd6f436e",
+    "baseSourceSubtree": "f3439d485b4d8a529af6e38c16eace2f40b95ee0",
+    "scope": "Bounded completion of existing public endpoint and whole-callable consumption; no new registration or native algorithm.",
+    "sourceInputFiles": [
+      {
+        "path": "diagnostics/extensions-20261024/README.md",
+        "sha256": "a4ae6d605f2e62614206d65c6f4fc02c7b250f81ad4b213fc5651e0b2839d11d"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/additive_interfaces.py",
+        "sha256": "97b1a5dfd249d1bdfbe361bab1c6be2bc685b9d7cd4d8cd955cc9064c5087c74"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/additive_smoke.py",
+        "sha256": "0bbb38db0ed66022908d646023cca6caa60c1f904d150617525576a317f8d196"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/backend.py",
+        "sha256": "329cadcc09bc200f09530f4a7887cb60599c25efdad5a507d235d052b55ea292"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/completion_smoke.py",
+        "sha256": "371abf6be4a7619d6c6b3baa9e1dc12bad759166eb0fa2c7d5992d0adf5db41e"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/engine.py",
+        "sha256": "7357327aced3f5afa36578153c608192d5f685fdd4f3ac4b1d04e00e9b09ea51"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/extensions.py",
+        "sha256": "e53b4f2914b6fa22f1557cc9d59a1f9fa2beaf1bd45ee96973b3db2cf1b1a1b3"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/generic_interfaces.py",
+        "sha256": "59ff9ea0cf237c37be801e3044b6a43556ea9eec8bf00573d4ec8063544a28c1"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/generic_smoke.py",
+        "sha256": "4e132c4f065e4a4c68cd5c11091919d9b31f9647bd73dfdbb70b9a7779347c47"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/leaves.json",
+        "sha256": "0af9314a206ca8fb7028da77f75c5adeb4b0c4a04c309d06594aa532a4d3597d"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/lifts.py",
+        "sha256": "5e9111b0360ba86f44fe63aacdccb23ef1c48a33d12b36249f18b209eb666c26"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/native_linear.py",
+        "sha256": "42c70582440942d632d6b4e529baf78c2cdc0b21d676a82beb4f2ae7d19f12cf"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/native_polynomial.py",
+        "sha256": "1c79b79fd33908e3eff802f02829e62805186c79e6085b57e9d1cf726608d033"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/public-inputs.json",
+        "sha256": "cff6f558f7fca892963a7d3e2dc0c3be1e0cc4963895cdf61a0522085ff4c457"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/smoke.py",
+        "sha256": "81182e57ee94c8bb5210451b75153193d3ee23c611e6c9dad69e78dc4f711063"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/wire.py",
+        "sha256": "5a9ec61a92b1fdd04ca1ef91842610dc3eecf0c16f83e19e49211040a36a89e9"
+      }
+    ],
+    "publicContractObservedRevisions": [
+      "706b353f6cc58d204cbbd8e47cea038ccaa0a9d3",
+      "23f1e8190ba472fd99f7ee83b78f6e8357530e7f"
+    ],
+    "publicContractCurrentRevision": "23f1e8190ba472fd99f7ee83b78f6e8357530e7f",
+    "publicContractCurrentTree": "8203d550c8d1e4719c84eaa3f9ca263cf0836fda",
+    "contractRevisionNote": "The second observed revision changes the mathematics dependency lock only; the consulted protocol, wire, helper and checked-in API bytes are unchanged.",
+    "publicContractInputFiles": [
+      {
+        "path": "AGENTS.md",
+        "sha256": "844f7c441354a6fbe0a626439e7253438371dab5f3cfcc6884ca5e7dc365131b"
+      },
+      {
+        "path": "INTENT.md",
+        "sha256": "a92d8299a42d9d05158eac9fdfafc1f38b0959028f60ed88377ebc9eff605981"
+      },
+      {
+        "path": "CasContract/Port.lean",
+        "sha256": "1d2093178736f4c8c76bb578e8ee1ab5846da0f916f4b5e50d11752903266be3"
+      },
+      {
+        "path": "api/README.md",
+        "sha256": "6fc24c988722d8e66f2cf8227975e015893a5700a971a4cd4fc7c7c786fc9a15"
+      },
+      {
+        "path": "api/manifest.md",
+        "sha256": "4fefaf5ae2fc8dd8bb2a1556274e1aa49347c288a61897b6804870a413d53314"
+      },
+      {
+        "path": "api/wire-examples.md",
+        "sha256": "ca78531697169e84909cbde4cedd06837ff27b607c64ba307c17597ee3a94ed9"
+      },
+      {
+        "path": "api/declared-ports.json",
+        "sha256": "f3a17fd1d2fa98d72513fbe9ac333834f64b6b160a9ccd5206b97a5991802b19"
+      },
+      {
+        "path": "python/cas_port.py",
+        "sha256": "5f2c330047725cd429eec42ac0dbf0ca6f5933b723857d44859f1954a7e98e19"
+      }
+    ],
+    "extensionApi": {
+      "path": "/tmp/kernel-mvp-public-api-candidate-546cffae-20261024.json",
+      "sha256": "eecf444f9a3f007684c2c494085b02cbe6945b1add5ea90db2da5ad9a33c7612",
+      "status": "earlier public candidate; not a final freeze",
+      "provenance": {
+        "protocolRevision": "a131843a8c4cd8222814ca3949a27dc41dd7a29e",
+        "mathematicsRevision": "4acd7aff0350c5a84ce695e42eaadfd583ac343d",
+        "exporterSha256": "938fcb03f47fce885c2661d3b5135e3c9dec0b999563887087fffe897ccff9c9",
+        "kernelRevision": "546cffae249e1d53c66cc7d62aeba74e426c6592",
+        "admissionSourceSha256": "14af9de07036bd0f11000e2bd88a6dfed7edc6bf47690b1fa49b3f97e00d19c3",
+        "addressExporterSha256": "e4936bf3a71dfd145635816e4e2c0fe269b5790a0d34d1ee7dc05f6216edf4b8",
+        "additionalImports": [
+          "LeanCategories.Catalogue.Semantics.Foundation.FiniteOrders",
+          "LeanCategories.Catalogue.Semantics.Foundation.TwoSubsets",
+          "LeanCategories.Catalogue.Semantics.Foundation.IntegerSquareBounds",
+          "LeanCategories.Catalogue.Semantics.Algebra.CyclicQuotients",
+          "LeanCategories.Catalogue.Semantics.Independent.ScalarAndFormExtensions"
+        ],
+        "declarationProbeSha256": "6d9af2678190cb4a439dfb3c0a8e97690f416306cbbd97735904a9fb17a7d8da",
+        "addressProbeSha256": "9017be76727d196bc8fe0ba8edb604add6ecf088bca703ddb11e0b7e74487b71"
+      }
+    },
+    "checkedInApi": {
+      "path": "api/declared-ports.json",
+      "sha256": "f3a17fd1d2fa98d72513fbe9ac333834f64b6b160a9ccd5206b97a5991802b19",
+      "status": "earlier checked-in public candidate; not a final freeze",
+      "provenance": {
+        "protocolRevision": "aac22724a34c198f5d5b1d309565aca79393a146",
+        "mathematicsRevision": "dbab309f2ee6a4da2c19e970f4d5d6460d8665a4",
+        "exporterSha256": "9c292396d56c46a445e71bcf7f60356d7420728857ab97937eae5b54b8c0766f",
+        "kernelRevision": "9630f544f0b82581ba0083f7bbd49831ef5967e2",
+        "admissionSourceSha256": "43966977d75305e86b7de9879b53b8731c4eb4c52a5b2a14a0996d5fb2d06db3",
+        "addressExporterSha256": "aa28d707f425ff40f7cdf0bdf6e52169bfa674745b5b091e0c4e4042d40517a9"
+      }
+    },
+    "registrationInventory": {
+      "pairs": 66,
+      "uniquePairs": 66,
+      "unchangedSha256": "0af9314a206ca8fb7028da77f75c5adeb4b0c4a04c309d06594aa532a4d3597d",
+      "missingExtensionOperationAddresses": [],
+      "missingExtensionInputForms": []
+    },
+    "inputBoundary": "Only the supplied immutable diagnostic subtree, repository instructions, public contract documentation/helper, and explicitly authorized generated public candidates were consulted. No kernel implementation, acceptance question/assertion, expected-answer fixture, trial driver, private mathematics or downstream execution report was accessed. No additional external source was consulted.",
+    "engineeringChecks": {
+      "syntaxCompiledSources": 15,
+      "protocolOnlyBoundaryGroups": 13,
+      "engineStatus": "pending process slot",
+      "evidenceBoundary": "Framing, complete parameter consumption, exact descriptors, retained packets/callables, explicit inventories and session ownership only. No mathematical correctness or acceptance evidence."
+    }
   }
 }

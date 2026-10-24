@@ -11,11 +11,12 @@ from sage.all import QQ, ZZ, PolynomialRing, matrix, vector
 
 from cas_port import (
     admitted_point, constrained_point, construction_field, map_data,
-    object_field, operation_expression, point_invocation,
+    morphism_endpoint, object_field, operation_expression, point_invocation,
     presentation_invocation, typed_map,
 )
-from wire import (Callable, NativeComposition, NativeIdentity, NativeMediator, Session, Unsupported,
-                  fields, framed_callable, inventory, key, node, same)
+from wire import (Callable, Invocation, NativeComposition, NativeIdentity, NativeMediator, Session, Unsupported,
+                  fields, framed_callable, inventory, key, node, public_data, retained_endpoint, same)
+from endpoints import EndpointInterfaces
 from native_linear import LinearAction
 from native_polynomial import (PolynomialAction, ProductModel, ScalarModel,
                                build as polynomial_action,
@@ -61,7 +62,7 @@ class Form:
     context: object
 
 
-class Engine:
+class Engine(EndpointInterfaces):
     comparison = "cmp.rational_dual.translation"
     ring_operations = {"op.rings.add", "op.rings.mul", "op.rings.pow", "op.rings.neg"}
     rational_ids = {"obj.sets.rationals", "obj.rings.rationals", "obj.commutative_rings.rationals"}
@@ -125,18 +126,14 @@ class Engine:
             if self.carrier_action(action):
                 return self.ring(receiver)
         if tag == "morphismEndpoint":
-            arrow, side = fields(selected, tag, 2)
-            if self.tag(arrow) in {"mor.sets.rational_dual_x_constants", "mor.sets.rational_dual_y_constants"}:
-                fields(arrow, self.tag(arrow), 0)
-                if side == "source":
-                    return QQ
-                if side == "target":
-                    return self.dual_x if self.tag(arrow).endswith("_x_constants") else self.dual_y
+            return self.ring(self.endpoint_view(selected))
         raise Unsupported("this exact selected ring is outside the diagnostic implementation")
 
     def polynomial_model(self, selected):
         """Native coordinate models for the explicit supported scalar objects."""
         tag = self.tag(selected)
+        if tag == "morphismEndpoint":
+            return self.polynomial_model(self.endpoint_view(selected))
         if tag == "objectProduct":
             left, right = fields(selected, tag, 2)
             return ProductModel(self.polynomial_model(left), self.polynomial_model(right))
@@ -378,9 +375,13 @@ class Engine:
             if self.carrier_action(action):
                 return self.module(receiver)
         if tag == "morphismEndpoint":
-            arrow, side = fields(selected, tag, 2)
-            if side not in {"source", "target"}:
-                raise ValueError("a morphism endpoint has an invalid selector")
+            arrow, side = morphism_endpoint(selected)
+            try:
+                actual = self.endpoint_view(selected)
+            except Unsupported:
+                pass
+            else:
+                return self.module(actual)
             atag = self.tag(arrow)
             if atag == "mor.modules.rectangular_linear_map":
                 rows, columns, ring, _ = fields(arrow, atag, 4)
@@ -432,10 +433,8 @@ class Engine:
                 change = self.function(value_map, source_values, target_values)
                 return Form(original.module, lambda x, y: change(original.pairing(x, y)), selected)
         if tag == "morphismEndpoint":
-            arrow, side = fields(selected, tag, 2)
+            arrow, side = morphism_endpoint(selected)
             atag = self.tag(arrow)
-            if side not in {"source", "target"}:
-                raise ValueError("a morphism endpoint has an invalid selector")
             if atag == "mor.bilin_module.degenerate_plane_map":
                 fields(arrow, atag, 0)
                 return self.form_from_grams(([[2, 2], [2, 2]],) if side == "source"
@@ -513,12 +512,16 @@ class Engine:
             # This is a complete function-valued point, not a point arrow from
             # the generalized domain into the function object.
             return data
-        if isinstance(data, list) and self.tag(target) == "objectProduct":
-            left_target, right_target = fields(target, "objectProduct", 2)
-            if len(data) != 2:
-                raise ValueError("a product point omits an ordered component")
-            return [self.point(data[0], left_target, domain),
-                    self.point(data[1], right_target, domain)]
+        if isinstance(data, list):
+            try:
+                left_target, right_target = self.product_factors(target)
+            except Unsupported:
+                pass
+            else:
+                if len(data) != 2:
+                    raise ValueError("a product point omits an ordered component")
+                return [self.point(data[0], left_target, domain),
+                        self.point(data[1], right_target, domain)]
         if tag == "valueData":
             return self.point(fields(data, tag, 1)[0], target, domain)
         if tag == "pointView":
@@ -552,7 +555,7 @@ class Engine:
             return self.function(arrow, domain, target)(inventory(domain)[0])
         if tag == "mediator":
             left, right = fields(data, tag, 2)
-            left_target, right_target = fields(target, "objectProduct", 2)
+            left_target, right_target = self.product_factors(target, (left, right))
             return [self.point(left, left_target, domain), self.point(right, right_target, domain)]
         if tag in {"compose", "typedMap"}:
             if domain is None or not self.closed_domain(domain):
@@ -561,7 +564,19 @@ class Engine:
         return data
 
     def function(self, data, source, target):
-        return framed_callable(data, source, target, self.session, self.interpret_arrow)
+        public_data([data, source, target], self.session)
+        return framed_callable(data, source, target, self.session, self.interpret_arrow,
+                               product_factors=self.product_factors)
+
+    def callable_endpoints(self, data):
+        """Retain actual map fields, or the public endpoints of its whole arrow."""
+        source = retained_endpoint(data, "source", self.session)
+        target = retained_endpoint(data, "target", self.session)
+        if source is not None and target is not None:
+            return source, target
+        if not isinstance(data, dict) or self.tag(data) in {"finiteGraph", "morphismEndpoint"}:
+            raise Unsupported("the unframed graph has no independently supplied endpoints")
+        return node("morphismEndpoint", data, "source"), node("morphismEndpoint", data, "target")
 
     def intermediate(self, arrow, fallback=None):
         tag = self.tag(arrow)
@@ -734,7 +749,9 @@ class Engine:
                 return Callable(source, target, lambda value: value, NativeIdentity(source, target))
             raise Unsupported("this published object field is outside the specimen")
         if tag in self.ring_operations:
-            parameters = fields(arrow, tag)
+            parameters = fields(arrow, tag, 2 if tag == "op.rings.pow" else 1)
+            if tag == "op.rings.pow":
+                self.natural(parameters[1], "the selected exponent")
             native = None
             try:
                 source_model, target_model = self.polynomial_model(source), self.polynomial_model(target)
@@ -842,10 +859,56 @@ class Engine:
         native_module = self.module(selected)
         return bool(native_module.read(left) == native_module.read(right))
 
+    def declaration_data(self, arrow):
+        """Inspect a public wrapper without changing the callable that is used."""
+        tag = self.tag(arrow)
+        if tag == "valueData":
+            return self.declaration_data(fields(arrow, tag, 1)[0])
+        if tag == "typedMap":
+            return self.declaration_data(typed_map(arrow)[2])
+        return arrow
+
+    def invocation_selection(self, arrow, operation, parameters, nested=False):
+        """Consume complete declaration parameters through public map wrappers."""
+        tag = self.tag(arrow)
+        if tag == "valueData":
+            return self.invocation_selection(fields(arrow, tag, 1)[0], operation, parameters, nested)
+        if tag == "typedMap":
+            return self.invocation_selection(typed_map(arrow)[2], operation, parameters, nested)
+        if tag == "compose":
+            for part in fields(arrow, tag, 2):
+                self.invocation_selection(part, operation, parameters, True)
+        if tag == "map":
+            action, original = fields(arrow, tag, 2)
+            if self.tag(action) in {operation, operation.removesuffix("#map")}:
+                same(fields(action, self.tag(action)), parameters, "selected map's declaration parameters")
+            self.invocation_selection(original, operation, parameters, True)
+        if tag == "cartesianMap":
+            reindex, selected, receiver = fields(arrow, tag, 3)
+            if reindex + "#cartesian" == operation:
+                same([selected, receiver], parameters, "cartesian invocation's complete parameters")
+        if tag == "cellComponent":
+            cell, selected, receiver, inverse = fields(arrow, tag, 4)
+            if cell + "#component" == operation:
+                same([selected, receiver, inverse], parameters, "component invocation's complete parameters")
+        if tag == "presentation":
+            comparison, selected, _ = fields(arrow, tag, 3)
+            if comparison == operation:
+                same(selected, parameters, "comparison invocation's declaration parameters")
+        if tag == operation:
+            same(fields(arrow, operation), parameters, "callable declaration parameters")
+        if tag == "opaqueData":
+            actual = self.session.get(arrow)
+            if isinstance(actual, Callable) and actual.invocation is not None:
+                if nested and actual.invocation.operation != operation:
+                    return
+                same(actual.invocation.operation, operation, "owned callable's original operation")
+                same(actual.invocation.parameters, parameters, "owned callable's full declaration parameters")
+
     def point_application(self, operation, packet):
         _, parameters, arrow, domain, source, target, argument = point_invocation(packet, operation)
-        if self.tag(arrow) == operation:
-            same(fields(arrow, operation), parameters, "callable declaration parameters")
+        public_data(packet, self.session)
+        self.invocation_selection(arrow, operation, parameters)
         action = self.function(arrow, source, target)
         if self.closed_domain(domain) and not self.callable_argument(argument, domain, source):
             return action(self.point(argument, source, domain))
@@ -853,7 +916,10 @@ class Engine:
         # A returned callable is the actual composite on the complete original
         # domain. Keeping it owned preserves native metadata and dependencies,
         # including finite and singleton domains, without materializing samples.
-        return self.session.keep(self.postcompose(original, action))
+        result = self.postcompose(original, action)
+        retained = Invocation(operation, parameters, packet, original, action)
+        return self.session.keep(Callable(result.source, result.target, result.action,
+                                          result.native, retained))
 
     def presentation_application(self, packet):
         parameters, inverse, source, target, argument = presentation_invocation(packet)

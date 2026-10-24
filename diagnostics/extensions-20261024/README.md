@@ -191,6 +191,48 @@ models support it. Complete finite domains retain the full enumeration path.
 All implemented addition maps can be returned and reused as owned callables,
 including maps whose whole-domain equality is outside those native models.
 
+## Public endpoint consumption follow-up
+
+The existing 66 registration pairs are unchanged. The consumer accepts the
+public `morphismEndpoint(actualCallable, source/target)` form where the selected
+complete arrow fixes an unnamed endpoint. `objectProduct` remains an explicit
+alternative; it is not a required spelling of every binary callable's source.
+The selected operation's full public signature supplies native decoding context.
+The exact request descriptor remains on the callable and on its returned whole
+map. No native decoding view is emitted as a replacement formal object.
+
+`endpoints.py` uses the existing native readers for the supported declared
+operation families. A mediator into an unnamed product keeps actual typed or
+owned component endpoint fields. It does not replace those fields by a named
+carrier chosen from a parameter. A finite endpoint wrapper supplies no point
+inventory: a graph still needs the actual complete `finiteData` inventory or an
+independently supported explicit finite object.
+
+Whole-callable replies retain their complete original invocation, ordered
+parameters, original generalized domain, input callable and actual action. Reuse
+under the original operation checks those stored parameters. Typed wrappers and
+compositions also consume the selected declaration parameters. Reindex actions
+consume actual owned or portable declared maps as well as typed maps, without
+substituting a fresh named map for a retained result. Existing comparison
+registrations accept both their presentation packet and the common `apply`
+packet. Nested endpoint and typed-map framing is checked before use, and nested
+opaque dependencies are resolved only on their original live session.
+
+The follow-up uses the current executable protocol and the separately supplied
+public extension candidate with SHA256
+`eecf444f9a3f007684c2c494085b02cbe6945b1add5ea90db2da5ad9a33c7612`.
+The earlier checked-in API snapshot was also inspected and is recorded separately.
+Neither generated candidate is relabelled as a final export. Exact source
+checkpoints, producer provenance, consulted paths and digests are recorded in
+`public-inputs.json`.
+
+`endpoint_smoke.py --protocol-only` checks public framing, retained descriptors,
+full callable input passage, explicit graph inventories and session boundaries
+without importing Sage. The full script exercises the same public port with
+self-selected packets and checks only result forms, parameter retention and
+malformed/foreign-owner rejection. These engineering controls contain no expected
+mathematical answer and establish no mathematical correctness or acceptance claim.
+
 ## Deliberate limits
 
 The manifest addresses remain computational claims on the following precise
