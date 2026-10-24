@@ -1,11 +1,11 @@
 {
-  "publicApiSha256": "691d2b80c2ff4fd6a0e99745beee82117a5f110a288674bb9b58fc930034c22a",
+  "publicApiSha256": "7bccaf5e7bcfaa682f14ce429bcae158d9c899a66daec214e5ac5a9ad885d615",
   "publicApiProvenance": {
-    "protocolRevision": "8397df15042598f5ce9a75cdb22675c65b06fc89",
-    "mathematicsRevision": "7e848db36ff74faf62b00304cc0186a8bac641b7",
+    "protocolRevision": "80bf36d2131e00e78cba2c8461db7b32d98a86f4",
+    "mathematicsRevision": "4ea82e7cf6f5fd75234fd2ce18255a45ad851379",
     "exporterSha256": "938fcb03f47fce885c2661d3b5135e3c9dec0b999563887087fffe897ccff9c9",
-    "kernelRevision": "58735c5a16caea1754dab6d5e00fc769c4692ce4",
-    "admissionSourceSha256": "d1bcbfcd86ef3e0d0881d4293cd0f184410d9822b444684e2c41a610fe162cc6",
+    "kernelRevision": "1dbcaf3af7718d4e7f347eb3bfa1d0aa55a18330",
+    "admissionSourceSha256": "14af9de07036bd0f11000e2bd88a6dfed7edc6bf47690b1fa49b3f97e00d19c3",
     "addressExporterSha256": "e4936bf3a71dfd145635816e4e2c0fe269b5790a0d34d1ee7dc05f6216edf4b8",
     "additionalImports": [
       "LeanCategories.Catalogue.Semantics.Foundation.FiniteOrders",
@@ -17,7 +17,7 @@
     "declarationProbeSha256": "6d9af2678190cb4a439dfb3c0a8e97690f416306cbbd97735904a9fb17a7d8da",
     "addressProbeSha256": "9017be76727d196bc8fe0ba8edb604add6ecf088bca703ddb11e0b7e74487b71"
   },
-  "publicContractRevision": "80bf36d2131e00e78cba2c8461db7b32d98a86f4",
+  "publicContractRevision": "98794d1ac255a51d2396b59f041650f4d564a998",
   "implementationInputs": [
     "CasContract/Port.lean documentation",
     "api/README.md",
@@ -26,7 +26,8 @@
     "python/cas_port.py",
     "Fresh public declared-port export signatures and docstrings",
     "Sage 10.8 public documentation",
-    "Public InterfaceCompletion.md mathematical interface documentation"
+    "Public InterfaceCompletion.md mathematical interface documentation",
+    "Explicitly authorized public generic AutomorphismArrows interface documentation at mathematics revision 4ea82e7cf6f5fd75234fd2ce18255a45ad851379"
   ],
   "sourceBoundary": "Only this diagnostic subtree, repository instructions, supplied public protocol and declaration exports, and referenced engine/interface documentation were consulted. No kernel implementation, acceptance assertion, expected-answer fixture, frozen trial or downstream execution report was accessed.",
   "additionalPublicMathematicalDocumentation": [
@@ -35,21 +36,77 @@
       "publishedRevision": "93e1a738",
       "sha256": "8a53c2ca3c4ef2ba64ce6c6df2f167bd2c13b0637b29b5c5cbdfdcffe4c2887f",
       "scope": "Complete selected change-value comparison and category-sensitive automorphism arrows"
+    },
+    {
+      "path": "LeanCategories/Catalogue/Semantics/Algebra/AutomorphismArrows.lean",
+      "publishedRevision": "4ea82e7cf6f5fd75234fd2ce18255a45ad851379",
+      "sha256": "42494a964a198c8df24c229c68c8a69ed3ccdf85b09bb70db2ffaf9ca5644bd0",
+      "scope": "Only the authorized generic public forward/backward and Aut multiplication convention; no test or neighboring source inspected"
     }
   ],
   "completionReview": {
     "baseSourceCommit": "03a0a3dc834455afe898da1c4839f123578f3812",
-    "publicContractPublishedRevision": "80bf36d2131e00e78cba2c8461db7b32d98a86f4",
-    "publicContractLocalRevision": "aa8477de4aebc83823b88ac4885225e8fc13d9c5",
-    "publicContractTree": "7de02aec2fd5d89d13683561ee92055909c28eb7",
-    "publicApiSha256": "691d2b80c2ff4fd6a0e99745beee82117a5f110a288674bb9b58fc930034c22a",
+    "publicContractPublishedRevision": "98794d1ac255a51d2396b59f041650f4d564a998",
+    "publicContractLocalRevision": "c74abb724fd1424d590efc5fd0e21d67aaa55034",
+    "publicContractTree": "8fdf6a4e6b60f98017f6b967babb0cc180156b39",
+    "publicApiSha256": "7bccaf5e7bcfaa682f14ce429bcae158d9c899a66daec214e5ac5a9ad885d615",
     "scope": "Complete callable requests, retained native computations, selected parameter framing, exact native equality and standalone protocol checks.",
     "priorPublicContracts": [
       {
         "publicContractPublishedRevision": "c6e24107ec84481a8240bb3cae5c31f67a098a71",
         "publicContractLocalRevision": "c97110dbef75cb77d249ae3a51a95cdc8f90af19",
         "publicContractTree": "c08793f7c1bb4843ad0f6131ad8c32d9db9c928d"
+      },
+      {
+        "publicContractPublishedRevision": "80bf36d2131e00e78cba2c8461db7b32d98a86f4",
+        "publicContractLocalRevision": "aa8477de4aebc83823b88ac4885225e8fc13d9c5",
+        "publicContractTree": "7de02aec2fd5d89d13683561ee92055909c28eb7"
       }
-    ]
-  }
+    ],
+    "firstSourceCheckpoint": "d04b96c4a57081a9877fae1cfec41631a965e973",
+    "newRegistrationAddresses": [
+      "op.monoids.mul",
+      "op.monoids.one",
+      "mor.sets.direct_image",
+      "obj.sets.group_morphisms#application",
+      "obj.sets.module_morphisms#application"
+    ],
+    "contractUpdate": "Documentation-only Aut multiplication convention; candidate API provenance retains its original protocol revision.",
+    "engineeringChecks": {
+      "runtime": "/workspace/scratch/17aab8431d78/recovery/engines/passagemath-10.8.13/bin/python",
+      "originalSmokeRequests": 74,
+      "completionSmokePrimaryRequests": 99,
+      "completionSmokeForeignOwnerRequests": 1,
+      "completionSmokeGroups": 14,
+      "genericSmokeRequests": 36,
+      "registrationPairs": 63,
+      "uniqueRegistrationPairs": 63,
+      "missingPublicAddresses": [],
+      "pythonSourcesCompiled": 11,
+      "evidenceBoundary": "Standalone framing, complete parameter consumption, ownership and ordinary result-shape checks only; no expected mathematical answer or acceptance assertion."
+    }
+  },
+  "priorPublicApis": [
+    {
+      "sha256": "691d2b80c2ff4fd6a0e99745beee82117a5f110a288674bb9b58fc930034c22a",
+      "provenance": {
+        "protocolRevision": "8397df15042598f5ce9a75cdb22675c65b06fc89",
+        "mathematicsRevision": "7e848db36ff74faf62b00304cc0186a8bac641b7",
+        "exporterSha256": "938fcb03f47fce885c2661d3b5135e3c9dec0b999563887087fffe897ccff9c9",
+        "kernelRevision": "58735c5a16caea1754dab6d5e00fc769c4692ce4",
+        "admissionSourceSha256": "d1bcbfcd86ef3e0d0881d4293cd0f184410d9822b444684e2c41a610fe162cc6",
+        "addressExporterSha256": "e4936bf3a71dfd145635816e4e2c0fe269b5790a0d34d1ee7dc05f6216edf4b8",
+        "additionalImports": [
+          "LeanCategories.Catalogue.Semantics.Foundation.FiniteOrders",
+          "LeanCategories.Catalogue.Semantics.Foundation.TwoSubsets",
+          "LeanCategories.Catalogue.Semantics.Foundation.IntegerSquareBounds",
+          "LeanCategories.Catalogue.Semantics.Algebra.CyclicQuotients",
+          "LeanCategories.Catalogue.Semantics.Independent.ScalarAndFormExtensions"
+        ],
+        "declarationProbeSha256": "6d9af2678190cb4a439dfb3c0a8e97690f416306cbbd97735904a9fb17a7d8da",
+        "addressProbeSha256": "9017be76727d196bc8fe0ba8edb604add6ecf088bca703ddb11e0b7e74487b71"
+      }
+    }
+  ],
+  "publicApiStatus": "candidate supplied by the public-interface owner; not a final freeze"
 }

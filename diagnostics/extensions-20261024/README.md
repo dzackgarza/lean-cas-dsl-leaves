@@ -1,10 +1,11 @@
 # Independent extension diagnostic
 
-This new subtree is a computational registration specimen built from the public
-contract and fresh declaration export recorded in `public-inputs.json`. Its author
-did not inspect the kernel, acceptance assertions or outcomes, an existing leaf,
-or another implementation report. It ships no Lean and changes no mathematical
-or protocol declaration. The manifest contains 58 public operation/input pairs.
+This subtree is a computational registration specimen built and completed from
+the public contract, declaration exports and authorized interface documentation
+recorded in `public-inputs.json`. No kernel implementation, acceptance assertion,
+expected-answer fixture or downstream execution report was consulted. Diagnostic
+work stayed in this subtree. It ships no Lean and changes no mathematical or
+protocol declaration. The manifest contains 63 public operation/input pairs.
 
 Sage 10.8 supplies exact quotient-ring, modular, polynomial, matrix, module and lazy
 power-series computations. Sage's permutation groups and native GAP supply the
@@ -36,6 +37,9 @@ does not claim an implementation for every object of that category.
 | `lift.bilin_module.restrict` and `lift.bilin_module.change_value_restriction`: `#obj`, `#hom`, `#forward`, `#backward`, `#factor` | Callable pullback of the original selected pairing along the supplied inclusion. Every explicit evidence-family parameter, complete base subobject and actual preceding output is consumed and retained. Nonidentity change-value maps are supported through actual callable actions, including a returned product projection. |
 | `mor.bilin_module.pulled_back_forward`, `pulled_back_backward` | The two publicly documented identity carrier maps between the complete selected formed endpoints, including `morphismEndpoint` descriptors. |
 | `lim.sets.product` | A complete cone with its actual apex and both typed projections. The product of two regular rational modules also has retained exact projection matrices. |
+| `op.monoids.mul`, `op.monoids.one` | The explicitly selected ring multiplicative monoid, ring/module additive group viewed as a monoid, supported cyclic groups and actual finite native automorphism groups. The selected structural path determines multiplication and unit. Aut multiplication uses the documented function-composition convention and both actual directions. |
+| `mor.sets.direct_image` | The image of the actual supplied finite subset under the complete selected function, including finite subsets of supported infinite carriers. Whole power-object maps retain that function. Complete finite power domains use Sage's full subset inventory. |
+| `obj.sets.group_morphisms#application`, `obj.sets.module_morphisms#application` | Application of the original complete admitted function at the supplied group pair or scalar ring/module pair. The inclusion keeps that same function. Generalized admitted families keep their original domain. No group or module law is inferred or manufactured. |
 | `mor.sets.equality` | Exact supported scalar, product, module and finite-object points; complete finite-domain maps, including native finite automorphism carriers; complete native rational linear maps; and native polynomial scalar actions as detailed below. |
 
 ## Whole-map equality
@@ -125,6 +129,36 @@ factor consumes both actual input maps and returns the declared underlying base
 map action. It also retains all prior outputs. No inverse equation, compatibility
 proof, monicity evidence or universal-property certificate is manufactured.
 
+## Generic interface completion
+
+The five additional addresses consume the candidate public API with SHA256
+`7bccaf5e7bcfaa682f14ce429bcae158d9c899a66daec214e5ac5a9ad885d615`.
+They use the existing `apply` and `admittedPoint` protocol; no wire constructor
+was added. This snapshot is a candidate supplied by the public-interface owner,
+not a final freeze.
+
+Monoid computation reads the complete selected structural path. For example,
+the multiplicative monoid of a rational ring and its additive group viewed as a
+monoid retain different multiplication and unit operations despite sharing a
+native scalar carrier. Automorphism multiplication consumes both original
+directions and composes the forward maps as `(a * b)(x) = a(b(x))`, following the
+authorized generic `AutomorphismArrows.forward_mul` interface.
+
+An owned finite subset keeps its complete ambient descriptor, actual points,
+native Sage set and all producing context. Direct image uses the actual subset
+argument and original function; a global function image is never substituted
+for the supplied subset. The whole-map result can be reused by composition or a
+generalized subset family. Equality of finite subsets compares their exact
+native sets; equality of maps on supported finite power objects enumerates every
+subset of the complete ambient inventory.
+
+Group and module morphism application and inclusion preserve the selected
+objects, scalar ring, complete original function and admission domain. A
+non-singleton admitted family remains a family of its original functions.
+Homomorphism and linearity proofs stay the caller's responsibility. Whole
+application maps remain owned callables even when their hom-object domain has
+no supported finite inventory or symbolic equality model.
+
 ## Deliberate limits
 
 The manifest addresses remain computational claims on the following precise
@@ -133,6 +167,9 @@ native input families; no category-wide address promises arbitrary native data.
 | Registered family | Unsupported public inputs |
 | --- | --- |
 | Ring operations and integer coefficient maps | Rings other than the explicit integer, rational, modular and rational dual-number implementations; arbitrary foreign-session scalar data. |
+| Monoid multiplication and unit | Monoids outside the explicit supported ring/additive-module paths, supported cyclic groups and finite native automorphism groups. The implementation does not choose a monoid law merely from a carrier representation. |
+| Direct image | Infinite subsets, subsets without complete supported finite representations or exact native point keys, and original functions without an implemented complete callable. Arbitrary infinite power-object equality is unsupported. |
+| Group/module morphism application and inclusion | Missing complete selection parameters, functions without supported complete representations or matching endpoints, foreign-owned data and unsupported product/endpoint wrappers. Arbitrary hom-object enumeration is not implemented, so equality of a whole application map requires another complete supported native model or finite inventory. |
 | Aut construction, core Aut functors, forward/backward and group inverse | Categories other than the exact selected `cat.sets` and `cat.groups` dictionaries; every constructed-category Aut wrapper, including nested Core, Arrow, slice, elements and subobjects; groups other than the supported finite cyclic presentations and the actual returned finite automorphism groups in the operations that consume those groups. Zero-modulus cyclic Aut objects remain unsupported. |
 | General automorphism evaluation | Selected set-valued functors other than the actual `fun.sets.identity` at `cat.sets`. A functor with a matching carrier does not become that identity functor. |
 | Two-subsets and cardinality | Carriers without a complete supplied or implemented native finite inventory. Native Aut cardinality uses the actual group directly. Infinite cardinality and arbitrary infinite two-subset objects remain unsupported. |
@@ -193,18 +230,33 @@ one deliberate foreign-owner request on a second connection. Its 14 groups check
 whole callable framing, empty/singleton domains, actual returned map composition,
 native polynomial response shapes, retained lazy-series families, finite native
 Aut map reuse, selected category framing and complete cartesian parameter arrays.
-The original 58 registration pairs were checked against the public exported
+The generic-interface run adds 36 requests covering complete monoid operations,
+different selected structures on a shared carrier, actual finite Aut composition,
+direct images and owned subset families, and group/module function application
+and inclusion. It includes a non-singleton admission domain and finite subsets
+of an infinite native carrier. Run it with the same environment as `smoke.py`:
+
+```sh
+CAS_SAGE_PYTHON=/absolute/path/to/sage/python \
+PYTHONPATH=/absolute/path/to/public-contract/python \
+python3 generic_smoke.py
+```
+
+All 63 registration pairs were checked against the candidate public exported
 operation and input inventories. These are engineering checks only: no computed
 equality truth, cardinality, coefficient or other mathematical answer is asserted.
 
 ## Public inputs and engine documentation
 
-- Completion contract: published `80bf36d2131e00e78cba2c8461db7b32d98a86f4`, read at local `aa8477de4aebc83823b88ac4885225e8fc13d9c5`; tree `7de02aec2fd5d89d13683561ee92055909c28eb7`.
+- Final consumed documentation update: published `98794d1ac255a51d2396b59f041650f4d564a998`, read at local `c74abb724fd1424d590efc5fd0e21d67aaa55034`; tree `8fdf6a4e6b60f98017f6b967babb0cc180156b39`. The update makes the generic Aut multiplication convention explicit in `api/wire-examples.md` and changes no executable protocol.
+- Completion contract used for the standalone runs and retained in candidate API provenance: published `80bf36d2131e00e78cba2c8461db7b32d98a86f4`, read at local `aa8477de4aebc83823b88ac4885225e8fc13d9c5`; tree `7de02aec2fd5d89d13683561ee92055909c28eb7`.
 - Earlier completion contract consumed during review: published `c6e24107ec84481a8240bb3cae5c31f67a098a71`, local `c97110dbef75cb77d249ae3a51a95cdc8f90af19`; tree `c08793f7c1bb4843ad0f6131ad8c32d9db9c928d`.
 - Original contract revision retained in the declaration export provenance: `8397df15042598f5ce9a75cdb22675c65b06fc89`.
-- Fresh mathematical declaration revision: `7e848db36ff74faf62b00304cc0186a8bac641b7`.
-- Fresh API SHA256: `691d2b80c2ff4fd6a0e99745beee82117a5f110a288674bb9b58fc930034c22a`.
+- Candidate mathematical declaration revision: `4ea82e7cf6f5fd75234fd2ce18255a45ad851379`.
+- Candidate API SHA256: `7bccaf5e7bcfaa682f14ce429bcae158d9c899a66daec214e5ac5a9ad885d615`; its embedded public producer identifier is `1dbcaf3af7718d4e7f347eb3bfa1d0aa55a18330`. That identifier is provenance only; no producer implementation was inspected.
+- Earlier API SHA256: `691d2b80c2ff4fd6a0e99745beee82117a5f110a288674bb9b58fc930034c22a`, with mathematical declaration revision `7e848db36ff74faf62b00304cc0186a8bac641b7`; complete earlier provenance is retained in `public-inputs.json`.
 - Additional public mathematical interface documentation: `InterfaceCompletion.md`, published revision `93e1a738`; its exact content hash is recorded in `public-inputs.json`.
+- Authorized public generic multiplication convention: `AutomorphismArrows.lean` at mathematical revision `4ea82e7cf6f5fd75234fd2ce18255a45ad851379`, SHA256 `42494a964a198c8df24c229c68c8a69ed3ccdf85b09bb70db2ffaf9ca5644bd0`. Only that generic source and the authorized interface document were read; no neighboring test or mathematical source was opened.
 - [Sage polynomial quotient rings](https://doc.sagemath.org/html/en/reference/polynomial_rings/sage/rings/polynomial/polynomial_quotient_ring.html).
 - [Sage ring homomorphisms](https://doc.sagemath.org/html/en/reference/rings/sage/rings/morphism.html).
 - [Sage integer quotient rings and complete finite iteration](https://doc.sagemath.org/html/en/reference/finite_rings/sage/rings/finite_rings/integer_mod_ring.html).

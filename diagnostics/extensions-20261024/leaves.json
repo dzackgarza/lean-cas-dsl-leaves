@@ -298,6 +298,31 @@
       "operation": "mor.bilin_module.pulled_back_backward",
       "input": "mor.bilin_module.pulled_back_backward",
       "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "op.monoids.mul",
+      "input": "cat.monoids",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "op.monoids.one",
+      "input": "cat.monoids",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.sets.direct_image",
+      "input": "mor.sets.direct_image",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "obj.sets.group_morphisms#application",
+      "input": "obj.sets.group_morphisms#application",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "obj.sets.module_morphisms#application",
+      "input": "obj.sets.module_morphisms#application",
+      "backend": "independent-extensions-sage"
     }
   ]
 }

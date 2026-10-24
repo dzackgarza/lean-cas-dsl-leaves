@@ -19,6 +19,7 @@ from wire import (Callable, NativeComposition, NativeIdentity, NativeMediator,
                   Unsupported, fields, framed_callable, inventory, key, node, same)
 from native_linear import LinearAction, degree, identity, zero
 from native_polynomial import build as polynomial_action
+from generic_interfaces import GenericInterfaces
 
 
 @dataclass(frozen=True)
@@ -91,7 +92,7 @@ class RestrictedModule(Module):
         return self.original.scale(native_scalar, value)
 
 
-class ExtensionEngine(Engine):
+class ExtensionEngine(GenericInterfaces, Engine):
     modular_ids = {"obj.sets.integers_mod", "obj.rings.integers_mod", "obj.commutative_rings.integers_mod"}
     quotient_ids = {"obj.sets.cyclic_quotient", "obj.groups.cyclic_quotient"}
     cyclic_ids = {"obj.groups.cyclic"}
@@ -229,6 +230,9 @@ class ExtensionEngine(Engine):
             original = self.finite_object(receiver)
             pairs = Subsets(range(len(original.points)), 2)
             points = tuple([original.points[int(i)] for i in sorted(pair)] for pair in pairs)
+        elif tag == "obj.sets.power_set":
+            ambient, = fields(selected, tag, 1)
+            points = self.power_inventory(ambient)
         elif tag == "coreObject":
             return self.finite_object(core_object(selected))
         elif tag == "objectProduct":
@@ -959,6 +963,9 @@ class ExtensionEngine(Engine):
             if type(left) is not bool or type(right) is not bool:
                 raise ValueError("a truth-valued point requires a Boolean")
             return left == right
+        if tag == "obj.sets.naturals":
+            fields(selected, tag, 0)
+            return self.natural(left, "the first natural point") == self.natural(right, "the second natural point")
         if tag in {"obj.sets.fin", "obj.finite_sets.fin", "obj.linear_orders.fin_ordinary", "obj.linear_orders.fin_reverse"}:
             dimension, = fields(selected, tag, 1)
             return self.finite_ordinal(left, dimension) == self.finite_ordinal(right, dimension)
