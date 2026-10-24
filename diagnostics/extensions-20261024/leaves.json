@@ -323,6 +323,21 @@
       "operation": "obj.sets.module_morphisms#application",
       "input": "obj.sets.module_morphisms#application",
       "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "op.additive_monoids.add",
+      "input": "cat.additive_monoids",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.additive_groups.additive_monoid",
+      "input": "cat.additive_groups",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "cell.additive_groups.carrier#component",
+      "input": "cell.additive_groups.carrier#component",
+      "backend": "independent-extensions-sage"
     }
   ]
 }

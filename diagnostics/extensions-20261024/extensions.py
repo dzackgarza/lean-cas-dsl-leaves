@@ -20,6 +20,7 @@ from wire import (Callable, NativeComposition, NativeIdentity, NativeMediator,
 from native_linear import LinearAction, degree, identity, zero
 from native_polynomial import build as polynomial_action
 from generic_interfaces import GenericInterfaces
+from additive_interfaces import AdditiveInterfaces
 
 
 @dataclass(frozen=True)
@@ -92,7 +93,7 @@ class RestrictedModule(Module):
         return self.original.scale(native_scalar, value)
 
 
-class ExtensionEngine(GenericInterfaces, Engine):
+class ExtensionEngine(AdditiveInterfaces, GenericInterfaces, Engine):
     modular_ids = {"obj.sets.integers_mod", "obj.rings.integers_mod", "obj.commutative_rings.integers_mod"}
     quotient_ids = {"obj.sets.cyclic_quotient", "obj.groups.cyclic_quotient"}
     cyclic_ids = {"obj.groups.cyclic"}
@@ -100,7 +101,7 @@ class ExtensionEngine(GenericInterfaces, Engine):
     object_operations = {"con.automorphisms", "fun.core_sets.automorphisms", "fun.core_groups.automorphisms",
                          "fun.core_sets.two_subsets", "meth.two_subsets", "meth.cardinality",
                          "fun.modules.reindex", "lim.sets.product", "fun.arrows_modules.kernel",
-                         "meth.kernel", "meth.arrow_ker"}
+                         "meth.kernel", "meth.arrow_ker", "fun.additive_groups.additive_monoid"}
 
     def ring(self, selected):
         if self.tag(selected) in self.modular_ids:
@@ -1000,6 +1001,9 @@ class ExtensionEngine(GenericInterfaces, Engine):
         return super().equal(left, right, selected)
 
     def object_application(self, operation, packet):
+        if operation == self.additive_functor:
+            _, parameters, receiver = construction_invocation(packet, operation)
+            return self.additive_monoid_object(parameters, receiver)
         if operation in {"fun.arrows_modules.kernel", "meth.kernel", "meth.arrow_ker"}:
             parameters = []
             if operation == "fun.arrows_modules.kernel":

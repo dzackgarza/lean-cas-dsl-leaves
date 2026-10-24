@@ -5,7 +5,7 @@ the public contract, declaration exports and authorized interface documentation
 recorded in `public-inputs.json`. No kernel implementation, acceptance assertion,
 expected-answer fixture or downstream execution report was consulted. Diagnostic
 work stayed in this subtree. It ships no Lean and changes no mathematical or
-protocol declaration. The manifest contains 63 public operation/input pairs.
+protocol declaration. The manifest contains 66 public operation/input pairs.
 
 Sage 10.8 supplies exact quotient-ring, modular, polynomial, matrix, module and lazy
 power-series computations. Sage's permutation groups and native GAP supply the
@@ -38,6 +38,8 @@ does not claim an implementation for every object of that category.
 | `mor.bilin_module.pulled_back_forward`, `pulled_back_backward` | The two publicly documented identity carrier maps between the complete selected formed endpoints, including `morphismEndpoint` descriptors. |
 | `lim.sets.product` | A complete cone with its actual apex and both typed projections. The product of two regular rational modules also has retained exact projection matrices. |
 | `op.monoids.mul`, `op.monoids.one` | The explicitly selected ring multiplicative monoid, ring/module additive group viewed as a monoid, supported cyclic groups and actual finite native automorphism groups. The selected structural path determines multiplication and unit. Aut multiplication uses the documented function-composition convention and both actual directions. |
+| `op.additive_monoids.add`, `fun.additive_groups.additive_monoid` | The explicit additive-group path of supported native rings and modules, including actual returned module objects. The functor has no declaration parameters and returns an owned additive monoid retaining its original group and native object. Addition consumes that selected object or the complete symbolic functor image, both actual operands, nested addition expressions and generalized families. |
+| `cell.additive_groups.carrier#component` | Both identity carrier components on the exact two published routes of a supported ring/module additive group. The complete nested parameters are `[[],receiver,inverse]`; the original receiver, route endpoints and every owned dependency remain attached. |
 | `mor.sets.direct_image` | The image of the actual supplied finite subset under the complete selected function, including finite subsets of supported infinite carriers. Whole power-object maps retain that function. Complete finite power domains use Sage's full subset inventory. |
 | `obj.sets.group_morphisms#application`, `obj.sets.module_morphisms#application` | Application of the original complete admitted function at the supplied group pair or scalar ring/module pair. The inclusion keeps that same function. Generalized admitted families keep their original domain. No group or module law is inferred or manufactured. |
 | `mor.sets.equality` | Exact supported scalar, product, module and finite-object points; complete finite-domain maps, including native finite automorphism carriers; complete native rational linear maps; and native polynomial scalar actions as detailed below. |
@@ -159,6 +161,36 @@ Homomorphism and linearity proofs stay the caller's responsibility. Whole
 application maps remain owned callables even when their hom-object domain has
 no supported finite inventory or symbolic equality model.
 
+## Additive capability follow-up
+
+The bounded follow-up consumes candidate API SHA256
+`eecf444f9a3f007684c2c494085b02cbe6945b1add5ea90db2da5ad9a33c7612` and adds only
+the three related public addresses in the additive rows above. Addition takes
+exactly `[M]` for the selected additive monoid. Its registration input is
+`cat.additive_monoids`; the operation name is not an invented input form.
+The functor registers on `cat.additive_groups`, and the carrier component uses
+its exported complete-request input address.
+
+`additive_interfaces.py` reuses the existing native scalar and module decoders.
+A returned monoid retains the original selected additive group, actual native
+object, original receiver and live owning connection. Subsequent additions use
+that result directly. A complete symbolic input remains supported through the
+explicit `fun.additive_groups.additive_monoid` path; a multiplicative structure
+with a matching carrier is not accepted as an additive structure. Nested
+`element`/`operationExpression` operands preserve the same selection and actual
+returned data. No numeral interpretation is added to the additive operation.
+
+The carrier component checks the full existing route through groups, monoids,
+semigroups and the two classifier-forget actions against the new route through
+additive monoids. Its two directions keep their exact endpoints. These identity
+carrier maps do not identify additive and multiplicative operations. The
+structural functor map retains the actual original callable and native metadata.
+
+Scalar addition maps retain exact polynomial metadata where the existing scalar
+models support it. Complete finite domains retain the full enumeration path.
+All implemented addition maps can be returned and reused as owned callables,
+including maps whose whole-domain equality is outside those native models.
+
 ## Deliberate limits
 
 The manifest addresses remain computational claims on the following precise
@@ -168,6 +200,7 @@ native input families; no category-wide address promises arbitrary native data.
 | --- | --- |
 | Ring operations and integer coefficient maps | Rings other than the explicit integer, rational, modular and rational dual-number implementations; arbitrary foreign-session scalar data. |
 | Monoid multiplication and unit | Monoids outside the explicit supported ring/additive-module paths, supported cyclic groups and finite native automorphism groups. The implementation does not choose a monoid law merely from a carrier representation. |
+| Additive operation, additive-group functor and carrier component | Additive groups without one of the supported explicit ring/module paths, and additive monoids other than those selected functor images or their actual owned results. The separate `obj.additive_monoids.vectors` family is not implemented; module-vector additive groups use their existing module decoder. Carrier components require the complete explicit published route endpoints. Arbitrary infinite vector-addition equality has no additional native model here; the whole callable itself remains usable. |
 | Direct image | Infinite subsets, subsets without complete supported finite representations or exact native point keys, and original functions without an implemented complete callable. Arbitrary infinite power-object equality is unsupported. |
 | Group/module morphism application and inclusion | Missing complete selection parameters, functions without supported complete representations or matching endpoints, foreign-owned data and unsupported product/endpoint wrappers. Arbitrary hom-object enumeration is not implemented, so equality of a whole application map requires another complete supported native model or finite inventory. |
 | Aut construction, core Aut functors, forward/backward and group inverse | Categories other than the exact selected `cat.sets` and `cat.groups` dictionaries; every constructed-category Aut wrapper, including nested Core, Arrow, slice, elements and subobjects; groups other than the supported finite cyclic presentations and the actual returned finite automorphism groups in the operations that consume those groups. Zero-modulus cyclic Aut objects remain unsupported. |
@@ -242,21 +275,41 @@ PYTHONPATH=/absolute/path/to/public-contract/python \
 python3 generic_smoke.py
 ```
 
-All 63 registration pairs were checked against the candidate public exported
+The additive follow-up has its own standalone check:
+
+```sh
+CAS_SAGE_PYTHON=/absolute/path/to/sage/python \
+PYTHONPATH=/absolute/path/to/public-contract/python \
+python3 additive_smoke.py
+```
+
+It completes 66 requests on one connection and one deliberate foreign-owner
+request. It covers native rational, modular and dual-number operands; an actual
+returned scalar-restriction module; module vectors; nested expressions; empty,
+singleton and non-singleton generalized domains; whole callable reuse;
+structural functor maps; both carrier component directions; and malformed
+parameter framing. The 36-request generic run and the 99-request completion run
+(plus its one foreign-owner request) were also rerun for the shared decoder
+change. The earlier 74-request original smoke remains evidence for the preceding
+checkpoint, rather than a newly repeated run.
+
+All 66 registration pairs were checked against the latest candidate public exported
 operation and input inventories. These are engineering checks only: no computed
 equality truth, cardinality, coefficient or other mathematical answer is asserted.
 
 ## Public inputs and engine documentation
 
-- Final consumed documentation update: published `98794d1ac255a51d2396b59f041650f4d564a998`, read at local `c74abb724fd1424d590efc5fd0e21d67aaa55034`; tree `8fdf6a4e6b60f98017f6b967babb0cc180156b39`. The update makes the generic Aut multiplication convention explicit in `api/wire-examples.md` and changes no executable protocol.
+- Latest additive-follow-up contract guide: published `6cf4cda6eb34169a7c34dba4d269bd0212f78383`, read at local `89f514d7a496e3867f24efefc7f71bbda88fba7f`; tree `0cbfe994b2aeb4edf2564b216a3194598eef1443`. The consumed guide includes additive operation/carrier data, terminal-point invocation and actual-data ownership guidance. The public Port and Python helper are unchanged from the preceding consumed contract.
+- Earlier consumed documentation update: published `98794d1ac255a51d2396b59f041650f4d564a998`, read at local `c74abb724fd1424d590efc5fd0e21d67aaa55034`; tree `8fdf6a4e6b60f98017f6b967babb0cc180156b39`. This update made the generic Aut multiplication convention explicit in `api/wire-examples.md` and changed no executable protocol.
 - Completion contract used for the standalone runs and retained in candidate API provenance: published `80bf36d2131e00e78cba2c8461db7b32d98a86f4`, read at local `aa8477de4aebc83823b88ac4885225e8fc13d9c5`; tree `7de02aec2fd5d89d13683561ee92055909c28eb7`.
 - Earlier completion contract consumed during review: published `c6e24107ec84481a8240bb3cae5c31f67a098a71`, local `c97110dbef75cb77d249ae3a51a95cdc8f90af19`; tree `c08793f7c1bb4843ad0f6131ad8c32d9db9c928d`.
 - Original contract revision retained in the declaration export provenance: `8397df15042598f5ce9a75cdb22675c65b06fc89`.
-- Candidate mathematical declaration revision: `4ea82e7cf6f5fd75234fd2ce18255a45ad851379`.
-- Candidate API SHA256: `7bccaf5e7bcfaa682f14ce429bcae158d9c899a66daec214e5ac5a9ad885d615`; its embedded public producer identifier is `1dbcaf3af7718d4e7f347eb3bfa1d0aa55a18330`. That identifier is provenance only; no producer implementation was inspected.
+- Latest candidate API SHA256: `eecf444f9a3f007684c2c494085b02cbe6945b1add5ea90db2da5ad9a33c7612`; mathematical declaration producer `4acd7aff0350c5a84ce695e42eaadfd583ac343d`, protocol producer `a131843a8c4cd8222814ca3949a27dc41dd7a29e` and exported producer identifier `546cffae249e1d53c66cc7d62aeba74e426c6592`. These identifiers are provenance only; no producer implementation was inspected. This remains a candidate API, not a final freeze.
+- Prior candidate API SHA256: `7bccaf5e7bcfaa682f14ce429bcae158d9c899a66daec214e5ac5a9ad885d615`; mathematical declaration producer `4ea82e7cf6f5fd75234fd2ce18255a45ad851379` and exported producer identifier `1dbcaf3af7718d4e7f347eb3bfa1d0aa55a18330`.
 - Earlier API SHA256: `691d2b80c2ff4fd6a0e99745beee82117a5f110a288674bb9b58fc930034c22a`, with mathematical declaration revision `7e848db36ff74faf62b00304cc0186a8bac641b7`; complete earlier provenance is retained in `public-inputs.json`.
 - Additional public mathematical interface documentation: `InterfaceCompletion.md`, published revision `93e1a738`; its exact content hash is recorded in `public-inputs.json`.
 - Authorized public generic multiplication convention: `AutomorphismArrows.lean` at mathematical revision `4ea82e7cf6f5fd75234fd2ce18255a45ad851379`, SHA256 `42494a964a198c8df24c229c68c8a69ed3ccdf85b09bb70db2ffaf9ca5644bd0`. Only that generic source and the authorized interface document were read; no neighboring test or mathematical source was opened.
+- The additive follow-up read only the new public API, public contract and this diagnostic subtree. It made no additional mathematical-source, kernel-source, external mathematical-test or downstream-report reads.
 - [Sage polynomial quotient rings](https://doc.sagemath.org/html/en/reference/polynomial_rings/sage/rings/polynomial/polynomial_quotient_ring.html).
 - [Sage ring homomorphisms](https://doc.sagemath.org/html/en/reference/rings/sage/rings/morphism.html).
 - [Sage integer quotient rings and complete finite iteration](https://doc.sagemath.org/html/en/reference/finite_rings/sage/rings/finite_rings/integer_mod_ring.html).

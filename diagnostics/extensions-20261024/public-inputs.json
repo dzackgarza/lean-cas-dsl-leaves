@@ -1,10 +1,10 @@
 {
-  "publicApiSha256": "7bccaf5e7bcfaa682f14ce429bcae158d9c899a66daec214e5ac5a9ad885d615",
+  "publicApiSha256": "eecf444f9a3f007684c2c494085b02cbe6945b1add5ea90db2da5ad9a33c7612",
   "publicApiProvenance": {
-    "protocolRevision": "80bf36d2131e00e78cba2c8461db7b32d98a86f4",
-    "mathematicsRevision": "4ea82e7cf6f5fd75234fd2ce18255a45ad851379",
+    "protocolRevision": "a131843a8c4cd8222814ca3949a27dc41dd7a29e",
+    "mathematicsRevision": "4acd7aff0350c5a84ce695e42eaadfd583ac343d",
     "exporterSha256": "938fcb03f47fce885c2661d3b5135e3c9dec0b999563887087fffe897ccff9c9",
-    "kernelRevision": "1dbcaf3af7718d4e7f347eb3bfa1d0aa55a18330",
+    "kernelRevision": "546cffae249e1d53c66cc7d62aeba74e426c6592",
     "admissionSourceSha256": "14af9de07036bd0f11000e2bd88a6dfed7edc6bf47690b1fa49b3f97e00d19c3",
     "addressExporterSha256": "e4936bf3a71dfd145635816e4e2c0fe269b5790a0d34d1ee7dc05f6216edf4b8",
     "additionalImports": [
@@ -17,7 +17,7 @@
     "declarationProbeSha256": "6d9af2678190cb4a439dfb3c0a8e97690f416306cbbd97735904a9fb17a7d8da",
     "addressProbeSha256": "9017be76727d196bc8fe0ba8edb604add6ecf088bca703ddb11e0b7e74487b71"
   },
-  "publicContractRevision": "98794d1ac255a51d2396b59f041650f4d564a998",
+  "publicContractRevision": "6cf4cda6eb34169a7c34dba4d269bd0212f78383",
   "implementationInputs": [
     "CasContract/Port.lean documentation",
     "api/README.md",
@@ -106,7 +106,74 @@
         "declarationProbeSha256": "6d9af2678190cb4a439dfb3c0a8e97690f416306cbbd97735904a9fb17a7d8da",
         "addressProbeSha256": "9017be76727d196bc8fe0ba8edb604add6ecf088bca703ddb11e0b7e74487b71"
       }
+    },
+    {
+      "sha256": "7bccaf5e7bcfaa682f14ce429bcae158d9c899a66daec214e5ac5a9ad885d615",
+      "provenance": {
+        "protocolRevision": "80bf36d2131e00e78cba2c8461db7b32d98a86f4",
+        "mathematicsRevision": "4ea82e7cf6f5fd75234fd2ce18255a45ad851379",
+        "exporterSha256": "938fcb03f47fce885c2661d3b5135e3c9dec0b999563887087fffe897ccff9c9",
+        "kernelRevision": "1dbcaf3af7718d4e7f347eb3bfa1d0aa55a18330",
+        "admissionSourceSha256": "14af9de07036bd0f11000e2bd88a6dfed7edc6bf47690b1fa49b3f97e00d19c3",
+        "addressExporterSha256": "e4936bf3a71dfd145635816e4e2c0fe269b5790a0d34d1ee7dc05f6216edf4b8",
+        "additionalImports": [
+          "LeanCategories.Catalogue.Semantics.Foundation.FiniteOrders",
+          "LeanCategories.Catalogue.Semantics.Foundation.TwoSubsets",
+          "LeanCategories.Catalogue.Semantics.Foundation.IntegerSquareBounds",
+          "LeanCategories.Catalogue.Semantics.Algebra.CyclicQuotients",
+          "LeanCategories.Catalogue.Semantics.Independent.ScalarAndFormExtensions"
+        ],
+        "declarationProbeSha256": "6d9af2678190cb4a439dfb3c0a8e97690f416306cbbd97735904a9fb17a7d8da",
+        "addressProbeSha256": "9017be76727d196bc8fe0ba8edb604add6ecf088bca703ddb11e0b7e74487b71"
+      }
     }
   ],
-  "publicApiStatus": "candidate supplied by the public-interface owner; not a final freeze"
+  "publicApiStatus": "candidate supplied by the public-interface owner; not a final freeze",
+  "additiveFollowupReview": {
+    "baseSourceCheckpoint": "818f82d606b65f302f10ce120e82bc1d15e0d299",
+    "publicApiSha256": "eecf444f9a3f007684c2c494085b02cbe6945b1add5ea90db2da5ad9a33c7612",
+    "publicApiStatus": "candidate supplied by the public-interface owner; not a final freeze",
+    "publicContractPublishedRevision": "6cf4cda6eb34169a7c34dba4d269bd0212f78383",
+    "publicContractLocalRevision": "89f514d7a496e3867f24efefc7f71bbda88fba7f",
+    "publicContractTree": "0cbfe994b2aeb4edf2564b216a3194598eef1443",
+    "scope": "Only the three new related public additive addresses; existing native ring/module decoders, complete selections, point/whole-domain invocation and actual live result reuse.",
+    "inputBoundary": "Public candidate API, public contract and the owned diagnostic subtree only. No additional mathematical implementation, kernel implementation, external mathematical test assertion or downstream execution report was read.",
+    "newRegistrations": [
+      {
+        "operation": "op.additive_monoids.add",
+        "input": "cat.additive_monoids"
+      },
+      {
+        "operation": "fun.additive_groups.additive_monoid",
+        "input": "cat.additive_groups"
+      },
+      {
+        "operation": "cell.additive_groups.carrier#component",
+        "input": "cell.additive_groups.carrier#component"
+      }
+    ],
+    "publicInventory": {
+      "operations": 326,
+      "inputForms": 566,
+      "objects": 132,
+      "functors": 96,
+      "lifts": 3
+    },
+    "engineeringChecks": {
+      "runtime": "/workspace/scratch/17aab8431d78/recovery/engines/passagemath-10.8.13/bin/python",
+      "additiveSmokePrimaryRequests": 66,
+      "additiveSmokeForeignOwnerRequests": 1,
+      "genericSmokeRequests": 36,
+      "completionSmokePrimaryRequests": 99,
+      "completionSmokeForeignOwnerRequests": 1,
+      "completionSmokeGroups": 14,
+      "registrationPairs": 66,
+      "uniqueRegistrationPairs": 66,
+      "missingPublicAddresses": [],
+      "pythonSourcesCompiled": 13,
+      "evidenceBoundary": "Standalone framing, selected parameters, complete callable data, ownership and ordinary result-shape checks only. No expected mathematical answer or mathematical acceptance assertion."
+    },
+    "publicContractDeficiency": null,
+    "nativeLimits": "Only explicit supported ring/module additive-group images and their actual returned monoids. Other additive monoids, the separate additive-vectors family, alternate carrier-route encodings and arbitrary infinite whole-map equality without an existing native model remain unsupported."
+  }
 }

@@ -73,7 +73,7 @@ class Engine:
     carrier_actions = {
         "fun.sets.identity", "fun.commutative_rings.ring",
         "fun.rings.additive_group", "fun.rings.multiplicative_monoid",
-        "fun.additive_groups.to_groups",
+        "fun.additive_groups.to_groups", "fun.additive_groups.additive_monoid",
         "fun.groups.monoid", "fun.monoids.semigroup",
         "fun.additive_monoids.underlying", "fun.modules.fibre_inclusion",
         "fun.modules.additive_group", "fun.modules.underlying",
