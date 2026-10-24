@@ -4,7 +4,7 @@ from sage.all import QQ
 
 from cas_port import lift_factor_input, lift_input, lift_parameters, map_data, typed_map
 from engine import Form
-from wire import Callable, Unsupported, fields, node, same
+from wire import Callable, NativeIdentity, Unsupported, fields, node, same
 
 
 RESTRICTION = "lift.bilin_module.restrict"
@@ -80,13 +80,15 @@ def field(engine, operation, packet):
     actual_object = engine.form(obj)
     changed = node("functorAction", action, obj)
     if port == "hom":
-        callable_data = engine.session.keep(Callable(obj, source, inclusion))
+        callable_data = engine.session.keep(Callable(obj, source, inclusion, inclusion.native))
         return map_data(obj, source, callable_data)
     if port == "forward":
-        callable_data = engine.session.keep(Callable(changed, apex, lambda point: point))
+        callable_data = engine.session.keep(Callable(changed, apex, lambda point: point,
+                                                     NativeIdentity(changed, apex)))
         return map_data(changed, apex, callable_data)
     if port == "backward":
-        callable_data = engine.session.keep(Callable(apex, changed, lambda point: point))
+        callable_data = engine.session.keep(Callable(apex, changed, lambda point: point,
+                                                     NativeIdentity(apex, changed)))
         return map_data(apex, changed, callable_data)
     raise Unsupported("the requested lift component is not published by this specimen")
 
@@ -113,4 +115,4 @@ def factor(engine, operation, packet):
     def factor_action(point, context=retained):
         return context[-2](point)
 
-    return map_data(domain, obj, engine.session.keep(Callable(domain, obj, factor_action)))
+    return map_data(domain, obj, engine.session.keep(Callable(domain, obj, factor_action, g.native)))

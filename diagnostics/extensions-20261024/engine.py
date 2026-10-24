@@ -14,7 +14,9 @@ from cas_port import (
     object_field, operation_expression, point_invocation,
     presentation_invocation, typed_map,
 )
-from wire import Callable, Session, Unsupported, fields, framed_callable, inventory, key, node, same
+from wire import (Callable, NativeComposition, NativeIdentity, Session, Unsupported,
+                  fields, framed_callable, inventory, key, node, same)
+from native_linear import LinearAction
 
 
 Q = node("obj.sets.rationals")
@@ -410,6 +412,16 @@ class Engine:
 
     def point(self, data, target, domain):
         tag = self.tag(data)
+        if self.tag(target) == "obj.sets.maps" and tag in {"typedMap", "compose"}:
+            # This is a complete function-valued point, not a point arrow from
+            # the generalized domain into the function object.
+            return data
+        if isinstance(data, list) and self.tag(target) == "objectProduct":
+            left_target, right_target = fields(target, "objectProduct", 2)
+            if len(data) != 2:
+                raise ValueError("a product point omits an ordered component")
+            return [self.point(data[0], left_target, domain),
+                    self.point(data[1], right_target, domain)]
         if tag == "valueData":
             return self.point(fields(data, tag, 1)[0], target, domain)
         if tag == "pointView":
@@ -490,7 +502,8 @@ class Engine:
             first, second = fields(arrow, tag, 2)
             middle = self.intermediate(first)
             f, g = self.function(first, source, middle), self.function(second, middle, target)
-            return Callable(source, target, lambda value: g(f(value)))
+            native = NativeComposition(f.native, g.native) if f.native is not None and g.native is not None else None
+            return Callable(source, target, lambda value: g(f(value)), native)
         if tag == "element":
             if not self.closed_domain(source):
                 raise Unsupported("a closed element cannot replace a generalized-domain callable")
@@ -518,17 +531,17 @@ class Engine:
                 # interpreting its selected structural view at the supplied ends.
                 old_source, old_target = source, target
             original_callable = self.function(original, old_source, old_target)
-            return Callable(source, target, original_callable)
+            return Callable(source, target, original_callable, original_callable.native)
         if tag in {"arrowHom", "subobjectInclusion"}:
             receiver, = fields(arrow, tag, 1)
             actual_source, actual_target, actual_map = self.arrow_record(receiver)
             actual = self.function(actual_map, actual_source, actual_target)
-            return Callable(source, target, actual)
+            return Callable(source, target, actual, actual.native)
         if tag == "constructionField":
             actual_map = self.project_field(arrow)
             actual_source, actual_target, _ = typed_map(actual_map)
             actual = self.function(actual_map, actual_source, actual_target)
-            return Callable(source, target, actual)
+            return Callable(source, target, actual, actual.native)
         if tag == "generator":
             object_id, parameters = fields(arrow, tag, 2)
             selected = node(object_id, *parameters)
@@ -546,7 +559,7 @@ class Engine:
                 expected = self.dual_x if object_id in self.dual_x_ids else self.dual_y
                 if self.ring(source) is not expected or self.ring(target) is not expected:
                     raise ValueError("the selected carrier identification changes presentation")
-                return Callable(source, target, lambda value: value)
+                return Callable(source, target, lambda value: value, NativeIdentity(source, target))
             raise Unsupported("this published object field is outside the specimen")
         if tag in self.ring_operations:
             parameters = fields(arrow, tag)
@@ -573,6 +586,13 @@ class Engine:
                 columns, coefficient, data = fields(arrow, tag, 3)
                 rows = 1
             native_matrix = self.read_matrix(data, rows, columns, coefficient)
+            if native_matrix.base_ring() is QQ:
+                source_module = self.module(source)
+                target_module = self.module(target)
+                native = LinearAction(native_matrix, source_module, target_module,
+                                      {"arrow": arrow, "source": source, "target": target,
+                                       "coefficient": coefficient})
+                return Callable(source, target, native, native)
             def compute(value):
                 image = native_matrix * self.read_vector(value, columns, coefficient)
                 return self.encode_scalar(image[0], coefficient) if tag == "mor.modules.row_linear_map" else self.write_vector(image, coefficient)
@@ -580,7 +600,9 @@ class Engine:
         if tag in {"mor.bilin_module.degenerate_plane_map", "mor.bilin_module.degenerate_plane_cone", "mor.bilin_module.degenerate_plane_paired_cone"}:
             fields(arrow, tag, 0)
             native_matrix = matrix(QQ, [[1, 1], [0, 0]] if tag.endswith("_map") else [[3, -2], [-3, 2]])
-            return Callable(source, target, lambda value: self.write_vector(native_matrix * self.read_vector(value, 2)))
+            native = LinearAction(native_matrix, self.module(source), self.module(target),
+                                  {"arrow": arrow, "source": source, "target": target})
+            return Callable(source, target, native, native)
         if tag == "mor.sets.bilin_module_pairing":
             scalar, values, selected = fields(arrow, tag, 3)
             if self.ring(scalar) is not QQ:
@@ -632,7 +654,8 @@ class Engine:
         if self.closed_domain(domain):
             return action(self.point(argument, source, domain))
         original = self.function(argument, domain, source)
-        result = Callable(domain, target, lambda point: action(original(point)))
+        native = NativeComposition(original.native, action.native) if original.native is not None and action.native is not None else None
+        result = Callable(domain, target, lambda point: action(original(point)), native)
         try:
             points = inventory(domain)
         except Unsupported:

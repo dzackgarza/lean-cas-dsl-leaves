@@ -25,7 +25,16 @@
     "api/wire-examples.md",
     "python/cas_port.py",
     "Fresh public declared-port export signatures and docstrings",
-    "Sage 10.8 public documentation"
+    "Sage 10.8 public documentation",
+    "Public InterfaceCompletion.md mathematical interface documentation"
   ],
-  "sourceBoundary": "No kernel implementation, acceptance assertion, old leaf implementation, or other agent report was consulted."
+  "sourceBoundary": "No kernel implementation, acceptance assertion, old leaf implementation, or other agent report was consulted.",
+  "additionalPublicMathematicalDocumentation": [
+    {
+      "path": "LeanCategories/Catalogue/Semantics/Independent/InterfaceCompletion.md",
+      "publishedRevision": "93e1a738",
+      "sha256": "8a53c2ca3c4ef2ba64ce6c6df2f167bd2c13b0637b29b5c5cbdfdcffe4c2887f",
+      "scope": "Complete selected change-value comparison and category-sensitive automorphism arrows"
+    }
+  ]
 }

@@ -1,0 +1,850 @@
+"""Finite objects, selected core actions, scalar restriction and lazy series.
+
+This module uses only the public declaration interfaces recorded by the specimen.
+Selected category and functor dictionaries stay explicit at every construction.
+"""
+
+from dataclasses import dataclass
+
+from sage.all import (QQ, ZZ, IntegerModRing, LazyPowerSeriesRing, Set, Subsets,
+                      SymmetricGroup, identity_matrix, matrix, vector)
+from sage.libs.gap.libgap import libgap
+
+from cas_port import (admitted_point, cartesian_map, category_parameter,
+                      construction_invocation, core_iso, core_object,
+                      functor_parameter, map_data, object_field,
+                      presentation_invocation, typed_map)
+from engine import Engine, Form, Module, Scalar, Q, Z
+from wire import (Callable, NativeComposition, NativeIdentity, NativeMediator,
+                  Unsupported, fields, inventory, key, node, same)
+from native_linear import LinearAction, degree, identity, zero
+
+
+@dataclass(frozen=True)
+class FiniteObject:
+    selected: object
+    points: tuple
+    native: object
+
+
+@dataclass(frozen=True)
+class CyclicPoint:
+    selected: object
+    modulus: int
+    native: object
+
+
+@dataclass(frozen=True)
+class AutomorphismGroup:
+    category: object
+    receiver: object
+    points: tuple
+    native: object
+
+
+@dataclass(frozen=True)
+class Automorphism:
+    category: object
+    receiver: object
+    forward: Callable
+    backward: Callable
+    native_forward: object
+    native_backward: object
+
+
+@dataclass(frozen=True)
+class Series:
+    coefficient: object
+    native: object
+    context: object
+
+
+@dataclass(frozen=True)
+class RestrictedModule(Module):
+    original: object
+    base_map: object
+    source_ring: object
+    target_ring: object
+    transport: object
+    context: object
+
+    def scale(self, scalar, value):
+        encoded = self.transport.encode_scalar(scalar, self.source_ring)
+        mapped = self.base_map(encoded)
+        native_scalar = self.transport.scalar(mapped, self.target_ring)
+        return self.original.scale(native_scalar, value)
+
+
+class ExtensionEngine(Engine):
+    modular_ids = {"obj.sets.integers_mod", "obj.rings.integers_mod", "obj.commutative_rings.integers_mod"}
+    quotient_ids = {"obj.sets.cyclic_quotient", "obj.groups.cyclic_quotient"}
+    cyclic_ids = {"obj.groups.cyclic"}
+    comparisons = {Engine.comparison, "cmp.sets.fin_reversal", "cmp.groups.cyclic_quotient_residue"}
+    object_operations = {"con.automorphisms", "fun.core_sets.automorphisms", "fun.core_groups.automorphisms",
+                         "fun.core_sets.two_subsets", "meth.two_subsets", "meth.cardinality",
+                         "fun.modules.reindex", "lim.sets.product", "fun.arrows_modules.kernel",
+                         "meth.kernel", "meth.arrow_ker"}
+
+    def ring(self, selected):
+        if self.tag(selected) in self.modular_ids:
+            modulus, = fields(selected, self.tag(selected), 1)
+            return IntegerModRing(self.natural(modulus, "the selected modulus"))
+        return super().ring(selected)
+
+    def scalar(self, data, selected, domain=None):
+        parent = self.ring(selected)
+        if parent is not QQ and parent is not ZZ and parent not in (self.dual_x, self.dual_y):
+            if type(data) is int:
+                if data < 0 or data >= int(parent.cardinality()):
+                    raise ValueError("a modular literal is outside its selected canonical range")
+                return parent(data)
+        return super().scalar(data, selected, domain)
+
+    def encode_scalar(self, value, selected):
+        parent = self.ring(selected)
+        if parent is not QQ and parent is not ZZ and parent not in (self.dual_x, self.dual_y):
+            return int(parent(value))
+        return super().encode_scalar(value, selected)
+
+    def underlying_receiver(self, selected):
+        tag = self.tag(selected)
+        if tag == "functorAction":
+            action, receiver = fields(selected, tag, 2)
+            atag = self.tag(action)
+            if atag in self.carrier_actions | {"fun.linear_orders.forget"}:
+                return self.underlying_receiver(receiver)
+            if atag == "classifierForget":
+                classifier, parameters = fields(action, atag, 2)
+                if classifier in {"clf.sets.finite", "clf.magmas.associative", "clf.sets.binary_operation"}:
+                    return self.underlying_receiver(receiver)
+        return selected
+
+    def cyclic_context(self, selected):
+        original = self.underlying_receiver(selected)
+        tag = self.tag(original)
+        if tag in self.quotient_ids | self.cyclic_ids:
+            modulus, = fields(original, tag, 1)
+            self.natural(modulus, "the selected cyclic modulus")
+            return modulus, tag in self.quotient_ids
+        raise Unsupported("the selected group is not a supported cyclic presentation")
+
+    def cyclic_point(self, data, selected):
+        modulus, quotient = self.cyclic_context(selected)
+        ring = IntegerModRing(modulus)
+        tag = self.tag(data)
+        if tag == "opaqueData":
+            value = self.session.get(data)
+            if not isinstance(value, CyclicPoint):
+                raise ValueError("the owned point is not a cyclic-group element")
+            old_modulus, old_quotient = self.cyclic_context(value.selected)
+            if (old_modulus, old_quotient) != (modulus, quotient):
+                raise ValueError("the cyclic point has a different selected quotient presentation")
+            return value.native
+        if tag == "element":
+            original, expression = fields(data, tag, 2)
+            if self.cyclic_context(original) != (modulus, quotient):
+                raise ValueError("the cyclic expression changes its selected group")
+            return self.cyclic_expression(expression, original)
+        if tag == "pointView":
+            actual, original, _ = fields(data, tag, 3)
+            same(actual, selected, "cyclic point-view target")
+            return self.cyclic_point(original, fields(original, "element", 2)[0])
+        if not quotient and type(data) is int and (modulus == 0 or 0 <= data < modulus):
+            return ring(data)
+        raise Unsupported("the selected quotient point needs its published map or owned data")
+
+    def cyclic_expression(self, expression, selected):
+        modulus, _ = self.cyclic_context(selected)
+        tag = self.tag(expression)
+        if tag == "generator":
+            fields(expression, tag, 0)
+            return IntegerModRing(modulus)(1)
+        if tag == "mul":
+            left, right = fields(expression, tag, 2)
+            return self.cyclic_expression(left, selected) + self.cyclic_expression(right, selected)
+        if tag == "operationExpression":
+            operation, parameters, operands = fields(expression, tag, 3)
+            if operation == "op.groups.inverse" and len(parameters) == 1 and len(operands) == 1:
+                same(parameters[0], selected, "cyclic inverse selection")
+                return -self.cyclic_expression(operands[0], selected)
+        raise Unsupported("this cyclic-group point expression is outside the specimen")
+
+    def encode_cyclic(self, value, selected):
+        modulus, quotient = self.cyclic_context(selected)
+        native = IntegerModRing(modulus)(value)
+        return self.session.keep(CyclicPoint(selected, modulus, native)) if quotient else int(native)
+
+    def finite_object(self, selected):
+        tag = self.tag(selected)
+        if tag == "valueData":
+            return self.finite_object(fields(selected, tag, 1)[0])
+        if tag == "opaqueData":
+            value = self.session.get(selected)
+            if isinstance(value, FiniteObject):
+                return value
+            if isinstance(value, AutomorphismGroup):
+                # Cardinality uses its native group directly, without enumerating
+                # every automorphism or substituting a symmetric group.
+                raise Unsupported("the native group is not an enumerated set object")
+        try:
+            points = inventory(selected)
+        except Unsupported:
+            points = None
+        if points is not None:
+            return FiniteObject(selected, tuple(points), Set(range(len(points))))
+        if tag in {"obj.finite_sets.fin", "obj.linear_orders.fin_ordinary", "obj.linear_orders.fin_reverse"}:
+            n, = fields(selected, tag, 1)
+            points = tuple(range(self.natural(n, "the selected finite order")))
+        elif tag in {"obj.sets.integer_square_bound", "obj.finite_sets.integer_square_bound"}:
+            radius, = fields(selected, tag, 1)
+            radius = self.natural(radius, "the selected square-bound radius")
+            points = tuple(int(x) for x in ZZ.range(-radius, radius + 1))
+        elif tag == "obj.sets.two_subsets":
+            receiver, = fields(selected, tag, 1)
+            original = self.finite_object(receiver)
+            pairs = Subsets(range(len(original.points)), 2)
+            points = tuple([original.points[int(i)] for i in sorted(pair)] for pair in pairs)
+        elif tag == "coreObject":
+            return self.finite_object(core_object(selected))
+        elif tag == "objectProduct":
+            left, right = fields(selected, tag, 2)
+            x, y = self.finite_object(left), self.finite_object(right)
+            points = tuple([a, b] for a in x.points for b in y.points)
+        elif tag == "functorAction":
+            action, receiver = fields(selected, tag, 2)
+            if self.tag(action) == "fun.core_sets.two_subsets":
+                fields(action, self.tag(action), 0)
+                original = self.finite_object(core_object(receiver))
+                points = tuple([original.points[int(i)] for i in sorted(pair)]
+                               for pair in Subsets(range(len(original.points)), 2))
+            else:
+                underlying = self.underlying_receiver(selected)
+                if key(underlying) == key(selected):
+                    raise Unsupported("this selected finite action is outside the specimen")
+                return self.finite_object(underlying)
+        elif tag == "extent":
+            power, _, points = fields(selected, tag, 3)
+            if power != "pow.sets" or not isinstance(points, list):
+                raise Unsupported("this extent has no supported complete finite inventory")
+            points = tuple(points)
+        else:
+            modulus, quotient = self.cyclic_context(selected)
+            if modulus == 0:
+                raise Unsupported("the zero-modulus quotient has an infinite carrier")
+            points = tuple(self.encode_cyclic(k, selected) for k in range(modulus))
+        if len({key(point) for point in points}) != len(points):
+            raise ValueError("the supplied finite object repeats a point")
+        return FiniteObject(selected, tuple(points), Set(range(len(points))))
+
+    def category(self, descriptor):
+        category_id, parameters = category_parameter(descriptor)
+        if parameters or category_id not in {"cat.sets", "cat.groups"}:
+            raise Unsupported("this exact selected category is outside the finite Aut implementation")
+        return category_id
+
+    def automorphism_group(self, category, receiver):
+        category_id = self.category(category)
+        if category_id == "cat.sets":
+            points = self.finite_object(receiver).points
+            native = SymmetricGroup(len(points))
+        else:
+            modulus, _ = self.cyclic_context(receiver)
+            if modulus == 0:
+                raise Unsupported("infinite cyclic automorphism objects are outside this finite diagnostic")
+            points = tuple(self.encode_cyclic(k, receiver) for k in range(modulus))
+            native = libgap.AutomorphismGroup(libgap.CyclicGroup(modulus))
+        return AutomorphismGroup(category, receiver, points, native)
+
+    def aut_context(self, selected):
+        if self.tag(selected) == "opaqueData":
+            value = self.session.get(selected)
+            if isinstance(value, AutomorphismGroup):
+                return value
+        underlying = self.underlying_receiver(selected)
+        if self.tag(underlying) == "functorAction":
+            action, receiver = fields(underlying, "functorAction", 2)
+            atag = self.tag(action)
+            if atag in {"con.automorphisms", "fun.core_sets.automorphisms", "fun.core_groups.automorphisms"}:
+                if atag == "con.automorphisms":
+                    category, = fields(action, atag, 1)
+                else:
+                    fields(action, atag, 0)
+                    category = node("category", "cat.sets" if atag.startswith("fun.core_sets") else "cat.groups", [])
+                return self.automorphism_group(category, core_object(receiver))
+            if atag in {"fun.core_sets.automorphisms", "fun.core_groups.automorphisms"}:
+                fields(action, atag, 0)
+                category = node("category", "cat.sets" if atag.startswith("fun.core_sets") else "cat.groups", [])
+                return self.automorphism_group(category, core_object(receiver))
+        raise Unsupported("the actual selected automorphism group is not retained")
+
+    def point_index(self, point, points, selected):
+        try:
+            modulus, _ = self.cyclic_context(selected)
+        except Unsupported:
+            lookup = {key(value): i for i, value in enumerate(points)}
+            if key(point) not in lookup:
+                raise ValueError("the actual finite point is outside the supplied inventory")
+            return lookup[key(point)]
+        return int(self.cyclic_point(point, selected))
+
+    def make_automorphism(self, category, receiver, forward, backward):
+        context = self.automorphism_group(category, receiver)
+        points = context.points
+        forward_images = [self.point_index(forward(point), points, receiver) for point in points]
+        backward_images = [self.point_index(backward(point), points, receiver) for point in points]
+        if self.category(category) == "cat.sets":
+            native_forward = context.native([i + 1 for i in forward_images])
+            native_backward = context.native([i + 1 for i in backward_images])
+        else:
+            n, _ = self.cyclic_context(receiver)
+            group = libgap.CyclicGroup(n)
+            generator = group.GeneratorsOfGroup()[0] if n > 1 else group.One()
+            elements = [generator ** i for i in range(n)]
+            native_forward = libgap.GroupHomomorphismByImages(group, group, elements, [elements[i] for i in forward_images])
+            native_backward = libgap.GroupHomomorphismByImages(group, group, elements, [elements[i] for i in backward_images])
+            if native_forward == libgap.fail or native_backward == libgap.fail:
+                raise ValueError("the supplied cyclic-group map has no native homomorphism representation")
+        return Automorphism(category, receiver, forward, backward, native_forward, native_backward)
+
+    def automorphism(self, data, category, receiver):
+        if self.tag(data) == "valueData":
+            return self.automorphism(fields(data, "valueData", 1)[0], category, receiver)
+        if self.tag(data) == "opaqueData":
+            value = self.session.get(data)
+            if not isinstance(value, Automorphism):
+                raise ValueError("the owned value is not an automorphism")
+            same(value.category, category, "automorphism's selected category")
+            same(value.receiver, receiver, "automorphism's selected object")
+            return value
+        if self.tag(data) == "element":
+            _, expression = fields(data, "element", 2)
+            if self.tag(expression) == "point":
+                raise Unsupported("an automorphism point needs its retained invocation domain")
+        if not isinstance(data, list) or len(data) != 2:
+            raise ValueError("a complete inline automorphism requires both callable directions")
+        forward = self.function(data[0], receiver, receiver)
+        backward = self.function(data[1], receiver, receiver)
+        return self.make_automorphism(category, receiver, forward, backward)
+
+    def core_comparison(self, data):
+        tag = self.tag(data)
+        if tag == "coreIso":
+            source, target, forward, backward = core_iso(data)
+        elif tag == "mor.core_sets.fin_rev":
+            dimension, = fields(data, tag, 1)
+            source = target = node("obj.sets.fin", dimension)
+            forward = backward = node("mor.sets.fin_rev", dimension)
+        elif tag == "mor.core_sets.specified_iso":
+            source, target, directions = fields(data, tag, 3)
+            if not isinstance(directions, list) or len(directions) != 2:
+                raise ValueError("the specified core comparison omits a direction")
+            forward, backward = directions
+        else:
+            raise Unsupported("this complete core comparison is outside the specimen")
+        return source, target, self.function(forward, source, target), self.function(backward, target, source)
+
+    def module(self, selected):
+        if self.tag(selected) == "functorAction":
+            action, receiver = fields(selected, "functorAction", 2)
+            if self.tag(action) == "fun.modules.reindex":
+                return self.restricted_module(fields(action, "fun.modules.reindex", 1), receiver)
+        if self.tag(selected) == "obj.modules_r.restricted_regular":
+            raise Unsupported("this diagnostic uses the actual reindex action with its complete base map")
+        return super().module(selected)
+
+    def pulled_back_forms(self, arrow):
+        scalar, values, changed_values, change_data, original_data, inclusion_data = fields(arrow, self.tag(arrow), 6)
+        if self.ring(scalar) is not QQ:
+            raise Unsupported("the selected pulled-back form requires rational scalars here")
+        self.module(values)
+        self.module(changed_values)
+        change = self.function(change_data, values, changed_values)
+        base, ambient, _ = typed_map(inclusion_data)
+        inclusion = self.function(inclusion_data, base, ambient)
+        original, actual_base = self.form(original_data), self.form(base)
+        context = {"comparison": arrow, "base": base, "ambient": ambient,
+                   "original": original_data, "inclusion": inclusion_data}
+        pulled_back = Form(actual_base.module,
+                           lambda x, y: original.pairing(inclusion(x), inclusion(y)), context)
+        changed = Form(actual_base.module,
+                       lambda x, y: change(pulled_back.pairing(x, y)), context)
+        return changed, actual_base
+
+    def form(self, selected):
+        if self.tag(selected) == "morphismEndpoint":
+            arrow, side = fields(selected, "morphismEndpoint", 2)
+            if side not in {"source", "target"}:
+                raise ValueError("the selected comparison endpoint has an invalid selector")
+            if self.tag(arrow) in {"mor.bilin_module.pulled_back_forward", "mor.bilin_module.pulled_back_backward"}:
+                changed, base = self.pulled_back_forms(arrow)
+                forward = self.tag(arrow).endswith("_forward")
+                return changed if (side == "source") == forward else base
+        return super().form(selected)
+
+    def native_linear(self, data):
+        if isinstance(data, LinearAction):
+            return data
+        if isinstance(data, NativeIdentity):
+            return identity(self.module(data.source), self.module(data.target),
+                            {"identitySource": data.source, "identityTarget": data.target})
+        if isinstance(data, NativeComposition):
+            return self.native_linear(data.first).then(self.native_linear(data.second))
+        if isinstance(data, NativeMediator):
+            left, right = self.native_linear(data.left), self.native_linear(data.right)
+            if left.source.native != right.source.native:
+                raise Unsupported("the actual native mediator domains differ")
+            return LinearAction(left.matrix.stack(right.matrix), left.source, self.module(data.target),
+                                {"mediatorSource": data.source, "mediatorTarget": data.target,
+                                 "left": left.context, "right": right.context})
+        raise Unsupported("this callable has no complete native linear-map representation")
+
+    def base_map(self, data):
+        if self.tag(data) == "typedMap":
+            source, target, _ = typed_map(data)
+            return source, target, self.function(data, source, target)
+        if self.tag(data) == "mor.commutative_rings.integer_coefficients":
+            target, = fields(data, self.tag(data), 1)
+            source = node("obj.commutative_rings.integers")
+            return source, target, self.function(data, source, target)
+        if self.tag(data) == "map":
+            action, original = fields(data, "map", 2)
+            if self.tag(action) != "fun.commutative_rings.ring":
+                raise Unsupported("the selected base-map action is outside the specimen")
+            old_source, old_target, original_callable = self.base_map(original)
+            return node("functorAction", action, old_source), node("functorAction", action, old_target), original_callable
+        raise Unsupported("the scalar base map needs its complete endpoints or a supported declaration")
+
+    def restricted_module(self, parameters, receiver):
+        if len(parameters) != 1:
+            raise ValueError("module reindexing has exactly one explicit base-map parameter")
+        source, target, base_map = self.base_map(parameters[0])
+        self.ring(source)
+        if self.ring(target) is not QQ:
+            raise Unsupported("this specimen reindexes its native rational modules along maps into the rational ring")
+        original = self.module(receiver)
+        context = {"action": node("fun.modules.reindex", *parameters), "receiver": receiver,
+                   "sourceRing": source, "targetRing": target, "baseMap": parameters[0]}
+        return RestrictedModule(original.native, original.read, original.write, original,
+                                base_map, source, target, self, context)
+
+    def series_ring(self, coefficient):
+        return LazyPowerSeriesRing(self.ring(coefficient), "t")
+
+    def series(self, data, coefficient):
+        if self.tag(data) == "valueData":
+            return self.series(fields(data, "valueData", 1)[0], coefficient)
+        if self.tag(data) == "opaqueData":
+            value = self.session.get(data)
+            if not isinstance(value, Series):
+                raise ValueError("the owned point is not a complete lazy power series")
+            same(value.coefficient, coefficient, "power-series coefficient selection")
+            return value.native
+        raise Unsupported("a complete computed series remains owned on this live connection")
+
+    def successor_family(self, data, coefficient, index):
+        if self.tag(data) == "admittedPoint":
+            _, _, _, _, _, original = admitted_point(data)
+            return self.successor_family(original, coefficient, index)
+        if self.tag(data) == "pointView":
+            _, original, _ = fields(data, "pointView", 3)
+            return self.successor_family(original, coefficient, index)
+        if self.tag(data) == "element":
+            _, expression = fields(data, "element", 2)
+            return self.successor_family(expression, coefficient, index)
+        if self.tag(data) == "point":
+            return self.successor_family(fields(data, "point", 1)[0], coefficient, index)
+        if self.tag(data) != "mor.sets.successor_power_series_terms":
+            raise Unsupported("the infinite summation implementation supports the retained successor family")
+        actual, = fields(data, "mor.sets.successor_power_series_terms", 1)
+        same(actual, coefficient, "the actual family coefficient ring")
+        same(index, node("obj.sets.naturals"), "the actual successor-family index object")
+        series_object = node("obj.sets.power_series", coefficient)
+        return self.function(data, index, series_object)
+
+    def interpret_arrow(self, arrow, source, target):
+        tag = self.tag(arrow)
+        if tag == "map":
+            action, original = fields(arrow, tag, 2)
+            atag = self.tag(action)
+            if atag == "fun.core_sets.two_subsets":
+                fields(action, atag, 0)
+                old_source, old_target, forward, backward = self.core_comparison(original)
+                def image(subset):
+                    if not isinstance(subset, list) or len(subset) != 2:
+                        raise ValueError("the selected two-subset omits one of its actual members")
+                    actual = [forward(point) for point in subset]
+                    return sorted(actual, key=key)
+                return Callable(source, target, image)
+            if atag == "con.automorphisms":
+                category, = fields(action, atag, 1)
+                self.category(category)
+                old_source, old_target, forward, backward = self.core_comparison(original)
+                def conjugate(data):
+                    automorphism = self.automorphism(data, category, old_source)
+                    forward_image = Callable(old_target, old_target, lambda point: forward(automorphism.forward(backward(point))))
+                    backward_image = Callable(old_target, old_target, lambda point: forward(automorphism.backward(backward(point))))
+                    return self.session.keep(self.make_automorphism(category, old_target, forward_image, backward_image))
+                return Callable(source, target, conjugate)
+            if atag == "fun.modules.reindex":
+                parameters = fields(action, atag, 1)
+                self.base_map(parameters[0])
+                if self.tag(original) != "typedMap":
+                    raise Unsupported("a reindexed arbitrary map needs both original typed endpoints")
+                old_source, old_target, _ = typed_map(original)
+                actual = self.function(original, old_source, old_target)
+                return Callable(source, target, actual, actual.native)
+        if tag == "zero":
+            actual_source, actual_target = fields(arrow, tag, 2)
+            same(actual_source, source, "the selected zero-map source")
+            same(actual_target, target, "the selected zero-map target")
+            native = zero(self.module(source), self.module(target), arrow)
+            return Callable(source, target, native, native)
+        if tag in {"mor.bilin_module.pulled_back_forward", "mor.bilin_module.pulled_back_backward"}:
+            self.pulled_back_forms(arrow)
+            native = identity(self.module(source), self.module(target),
+                              {"arrow": arrow, "source": source, "target": target})
+            return Callable(source, target, native, native)
+        if tag == "presentation":
+            comparison, parameters, inverse = fields(arrow, tag, 3)
+            if comparison in self.comparisons - {self.comparison}:
+                return self.other_comparison(comparison, parameters, inverse, source, target)
+        if tag == "mor.sets.fin_rev":
+            dimension, = fields(arrow, tag, 1)
+            self.natural(dimension, "the selected reversal dimension")
+            return Callable(source, target, lambda point: dimension - 1 - self.finite_ordinal(point, dimension))
+        if tag in {"op.linear_orders.le", "op.linear_orders.lt"}:
+            selected, = fields(arrow, tag, 1)
+            selected_tag = self.tag(selected)
+            if selected_tag not in {"obj.linear_orders.fin_ordinary", "obj.linear_orders.fin_reverse"}:
+                raise Unsupported("this selected linear order is outside the specimen")
+            dimension, = fields(selected, selected_tag, 1)
+            def compare(pair):
+                if not isinstance(pair, list) or len(pair) != 2:
+                    raise ValueError("an order comparison requires both points")
+                left, right = [self.finite_ordinal(value, dimension) for value in pair]
+                if selected_tag == "obj.linear_orders.fin_reverse":
+                    left, right = right, left
+                return bool(ZZ(left) < ZZ(right) if tag.endswith(".lt") else ZZ(left) <= ZZ(right))
+            return Callable(source, target, compare)
+        if tag == "mor.sets.cyclic_quotient_map":
+            modulus, = fields(arrow, tag, 1)
+            if self.cyclic_context(target) != (modulus, True):
+                raise ValueError("the quotient map changes its actual selected modulus")
+            return Callable(source, target, lambda value: self.encode_cyclic(self.scalar(value, source), target))
+        if tag == "mor.groups.cyclic_quotient_aut_by_unit":
+            modulus, = fields(arrow, tag, 1)
+            group = node("obj.groups.cyclic_quotient", modulus)
+            category = node("category", "cat.groups", [])
+            ring_object = node("obj.sets.integers_mod", modulus)
+            def by_unit(data):
+                if self.tag(data) == "admittedPoint":
+                    _, _, _, original_target, _, original = admitted_point(data)
+                    scalar = self.scalar(original, original_target)
+                else:
+                    scalar = self.scalar(data, ring_object)
+                inverse = scalar.inverse_of_unit()
+                f = Callable(group, group, lambda point: self.encode_cyclic(scalar * self.cyclic_point(point, group), group))
+                b = Callable(group, group, lambda point: self.encode_cyclic(inverse * self.cyclic_point(point, group), group))
+                return self.session.keep(self.make_automorphism(category, group, f, b))
+            return Callable(source, target, by_unit)
+        if tag == "op.groups.inverse":
+            selected, = fields(arrow, tag, 1)
+            try:
+                group = self.aut_context(selected)
+            except Unsupported:
+                self.cyclic_context(selected)
+                return Callable(source, target, lambda value: self.encode_cyclic(-self.cyclic_point(value, selected), selected))
+            def inverse(data):
+                actual = self.automorphism(data, group.category, group.receiver)
+                return self.session.keep(Automorphism(actual.category, actual.receiver, actual.backward,
+                                                     actual.forward, actual.native_backward, actual.native_forward))
+            return Callable(source, target, inverse)
+        if tag in {"mor.sets.automorphism_forward", "mor.sets.automorphism_backward",
+                   "mor.groups.automorphism_forward", "mor.groups.automorphism_backward"}:
+            receiver, data = fields(arrow, tag, 2)
+            category = node("category", "cat.sets" if tag.startswith("mor.sets") else "cat.groups", [])
+            actual = self.automorphism(data, category, receiver)
+            return Callable(source, target, actual.backward if tag.endswith("_backward") else actual.forward)
+        if tag in {"mor.sets.automorphism_evaluation", "mor.sets.automorphism_inverse_evaluation"}:
+            category, functor, receiver = fields(arrow, tag, 3)
+            category_id = self.category(category)
+            functor_id, parameters = functor_parameter(functor)
+            if parameters or (category_id, functor_id) not in {("cat.sets", "fun.sets.identity")}:
+                raise Unsupported("this selected set-valued functor has no implemented action here")
+            def evaluate(pair):
+                if not isinstance(pair, list) or len(pair) != 2:
+                    raise ValueError("automorphism evaluation requires the actual automorphism and point")
+                actual = self.automorphism(pair[0], category, receiver)
+                return actual.backward(pair[1]) if tag.endswith("inverse_evaluation") else actual.forward(pair[1])
+            return Callable(source, target, evaluate)
+        if tag == "mor.commutative_rings.integer_coefficients":
+            coefficient, = fields(arrow, tag, 1)
+            selected_parent = self.ring(coefficient)
+            if self.ring(source) is not ZZ or self.ring(target) is not selected_parent:
+                raise ValueError("the integer coefficient map changes its selected endpoints")
+            return Callable(source, target, lambda value: self.encode_scalar(selected_parent(self.scalar(value, source)), target))
+        if tag == "cartesianMap":
+            reindex, parameters, receiver = cartesian_map(arrow)
+            if reindex != "fun.modules.reindex":
+                raise Unsupported("this registered cartesian action is outside the specimen")
+            restricted = self.restricted_module(parameters, receiver)
+            retained = (parameters, receiver, restricted, source, target)
+            native = identity(restricted, restricted.original,
+                              {"cartesian": arrow, "source": source, "target": target,
+                               "restriction": restricted.context})
+            return Callable(source, target, lambda value, context=retained: context[2].original.write(context[2].original.read(value)), native)
+        if tag == "op.modules.scalar_action":
+            scalar_ring, selected = fields(arrow, tag, 2)
+            native_module = self.module(selected)
+            def scale(pair):
+                if not isinstance(pair, list) or len(pair) != 2:
+                    raise ValueError("scalar action requires its actual scalar and module point")
+                return native_module.scale(self.scalar(pair[0], scalar_ring), pair[1])
+            return Callable(source, target, scale)
+        if tag == "mor.sets.successor_power_series_terms":
+            coefficient, = fields(arrow, tag, 1)
+            native_ring = self.series_ring(coefficient)
+            generator = native_ring.gen()
+            def term(index):
+                index = self.natural(index, "the selected series index")
+                native = native_ring(self.ring(coefficient)(index + 1)) * generator ** index
+                return self.session.keep(Series(coefficient, native, {"family": arrow, "index": index}))
+            return Callable(source, target, term)
+        if tag == "bind.sets.power_series_sum":
+            coefficient, index = fields(arrow, tag, 2)
+            native_ring = self.series_ring(coefficient)
+            def summation(data):
+                family = self.successor_family(data, coefficient, index)
+                if self.ring(coefficient).one() == self.ring(coefficient).zero():
+                    native_sum = native_ring.zero()
+                else:
+                    def nonzero_terms():
+                        k = 0
+                        while True:
+                            # The actual chosen coefficient ring controls which
+                            # terms vanish; no finite truncation or closed-form
+                            # replacement is used by this infinite iterator.
+                            if self.ring(coefficient)(k + 1) != 0:
+                                yield self.series(family(k), coefficient)
+                            k += 1
+                    native_sum = native_ring.sum(nonzero_terms(), True)
+                return self.session.keep(Series(coefficient, native_sum,
+                                                {"coefficient": coefficient, "index": index, "family": data}))
+            return Callable(source, target, summation)
+        if tag == "mor.sets.power_series_coefficient":
+            coefficient, = fields(arrow, tag, 1)
+            def coefficient_at(pair):
+                if not isinstance(pair, list) or len(pair) != 2:
+                    raise ValueError("coefficient extraction requires its actual series and degree")
+                degree = self.natural(pair[1], "the requested coefficient degree")
+                return self.encode_scalar(self.series(pair[0], coefficient)[degree], coefficient)
+            return Callable(source, target, coefficient_at)
+        if tag == "objectField":
+            object_id, field, parameters = object_field(arrow)
+            if object_id == "obj.sets.two_subsets" and field in {"presentation", "inversePresentation", "inclusion"}:
+                if len(parameters) != 1:
+                    raise ValueError("the selected two-subset object requires its complete carrier")
+                return Callable(source, target, lambda value: value)
+            if object_id == "obj.sets.integer_square_bound" and field == "inclusion":
+                if len(parameters) != 1:
+                    raise ValueError("the selected square bound requires its radius")
+                return Callable(source, target, lambda value: value)
+        return super().interpret_arrow(arrow, source, target)
+
+    def finite_ordinal(self, value, dimension):
+        if self.tag(value) == "element":
+            _, expression = fields(value, "element", 2)
+            value, = fields(expression, "numeral", 1)
+        if type(value) is not int or value < 0 or value >= dimension:
+            raise ValueError("the finite ordinal is outside its selected range")
+        return value
+
+    def other_comparison(self, comparison, parameters, inverse, source, target):
+        if type(inverse) is not bool or len(parameters) != 1:
+            raise ValueError("the selected comparison requires its parameter and Boolean direction")
+        if comparison == "cmp.sets.fin_reversal":
+            dimension = self.natural(parameters[0], "the selected reversal dimension")
+            same(source, node("obj.sets.fin", dimension), "reversal source")
+            same(target, node("obj.sets.fin", dimension), "reversal target")
+            return Callable(source, target, lambda point: dimension - 1 - self.finite_ordinal(point, dimension))
+        modulus = self.natural(parameters[0], "the selected quotient modulus")
+        if self.cyclic_context(source) != (modulus, not inverse) or self.cyclic_context(target) != (modulus, inverse):
+            raise ValueError("the cyclic comparison changes a selected presentation or direction")
+        return Callable(source, target, lambda value: self.encode_cyclic(self.cyclic_point(value, source), target))
+
+    def presentation_application(self, packet, comparison=None):
+        if comparison is None or comparison == self.comparison:
+            return super().presentation_application(packet)
+        parameters, inverse, source, target, argument = presentation_invocation(packet)
+        return self.other_comparison(comparison, parameters, inverse, source, target)(argument)
+
+    def point(self, data, target, domain):
+        if self.tag(data) == "element":
+            selected, expression = fields(data, "element", 2)
+            if self.tag(expression) == "point":
+                return super().point(data, target, domain)
+            try:
+                self.cyclic_context(selected)
+            except Unsupported:
+                pass
+            else:
+                return self.encode_cyclic(self.cyclic_point(data, selected), selected)
+        return super().point(data, target, domain)
+
+    def point_application(self, operation, packet):
+        if operation == "con.automorphisms#map":
+            from cas_port import point_invocation
+            _, parameters, arrow, _, source, target, _ = point_invocation(packet, operation)
+            action, original = fields(arrow, "map", 2)
+            same(fields(action, "con.automorphisms", 1), parameters,
+                 "the construction map's selected category parameters")
+            old_source, old_target, _, _ = self.core_comparison(original)
+            same(source, node("functorAction", action, node("coreObject", old_source)),
+                 "the construction map's full source image")
+            same(target, node("functorAction", action, node("coreObject", old_target)),
+                 "the construction map's full target image")
+        return super().point_application(operation, packet)
+
+    def equal(self, left, right, selected):
+        tag = self.tag(selected)
+        if tag == "opaqueData":
+            owned = self.session.get(selected)
+            if isinstance(owned, FiniteObject):
+                return self.equal(left, right, owned.selected)
+        if tag == "functorAction":
+            action, receiver = fields(selected, tag, 2)
+            if self.tag(action) == "fun.core_sets.two_subsets":
+                fields(action, self.tag(action), 0)
+                return self.equal(left, right, node("obj.sets.two_subsets", core_object(receiver)))
+            underlying = self.underlying_receiver(selected)
+            if key(underlying) != key(selected):
+                return self.equal(left, right, underlying)
+        if tag == "obj.sets.maps":
+            domain, codomain = fields(selected, tag, 2)
+            f = self.function(left, domain, codomain)
+            g = self.function(right, domain, codomain)
+            if f.native is not None and g.native is not None:
+                try:
+                    native_f, native_g = self.native_linear(f.native), self.native_linear(g.native)
+                except Unsupported:
+                    pass
+                else:
+                    return native_f.equal(native_g)
+            points = self.finite_object(domain).points
+            # Every actual domain point is inspected. An infinite domain raises
+            # Unsupported above; no finite sample is called whole-map equality.
+            return all(self.equal(f(point), g(point), codomain) for point in points)
+        if tag == "obj.sets.truth_values":
+            if type(left) is not bool or type(right) is not bool:
+                raise ValueError("a truth-valued point requires a Boolean")
+            return left == right
+        if tag in {"obj.sets.fin", "obj.finite_sets.fin", "obj.linear_orders.fin_ordinary", "obj.linear_orders.fin_reverse"}:
+            dimension, = fields(selected, tag, 1)
+            return self.finite_ordinal(left, dimension) == self.finite_ordinal(right, dimension)
+        if tag in {"obj.sets.integer_square_bound", "obj.finite_sets.integer_square_bound"}:
+            radius, = fields(selected, tag, 1)
+            if type(left) is not int or type(right) is not int or abs(left) > radius or abs(right) > radius:
+                raise ValueError("a square-bound point is outside its complete selected carrier")
+            return left == right
+        if tag in {"finiteData", "extent"}:
+            points = self.finite_object(selected).points
+            return self.point_index(left, points, selected) == self.point_index(right, points, selected)
+        if tag == "obj.sets.two_subsets":
+            receiver, = fields(selected, tag, 1)
+            original = self.finite_object(receiver)
+            return Set(self.point_index(point, original.points, receiver) for point in left) == Set(self.point_index(point, original.points, receiver) for point in right)
+        try:
+            self.cyclic_context(selected)
+        except Unsupported:
+            pass
+        else:
+            return bool(self.cyclic_point(left, selected) == self.cyclic_point(right, selected))
+        try:
+            context = self.aut_context(selected)
+        except Unsupported:
+            pass
+        else:
+            a = self.automorphism(left, context.category, context.receiver)
+            b = self.automorphism(right, context.category, context.receiver)
+            return all(self.equal(a.forward(point), b.forward(point), context.receiver)
+                       and self.equal(a.backward(point), b.backward(point), context.receiver)
+                       for point in context.points)
+        return super().equal(left, right, selected)
+
+    def object_application(self, operation, packet):
+        if operation in {"fun.arrows_modules.kernel", "meth.kernel", "meth.arrow_ker"}:
+            parameters = []
+            if operation == "fun.arrows_modules.kernel":
+                _, parameters, arrow = construction_invocation(packet, operation)
+                if len(parameters) != 1 or self.ring(parameters[0]) is not QQ:
+                    raise Unsupported("the native kernel implementation requires the selected rational scalar ring")
+            else:
+                arrow = packet
+            source, target, defining_map = fields(arrow, "arrow", 3)
+            actual_source, actual_target = self.module(source), self.module(target)
+            callable_data = self.function(defining_map, source, target)
+            native = self.native_linear(callable_data.native)
+            if native.source.native != actual_source.native or native.target.native != actual_target.native:
+                raise Unsupported("the full native map does not retain the actual selected endpoint modules")
+            native_kernel = native.kernel()
+            if actual_source.native is QQ:
+                read_kernel = lambda data: native_kernel(vector(QQ, [actual_source.read(data)]))
+                write_kernel = lambda data: actual_source.write(data[0])
+            else:
+                read_kernel = lambda data: native_kernel(actual_source.read(data))
+                write_kernel = actual_source.write
+            kernel_module = Module(native_kernel, read_kernel, write_kernel)
+            kernel_object = self.session.keep(kernel_module)
+            inclusion = LinearAction(identity_matrix(QQ, degree(kernel_module)), kernel_module,
+                                     actual_source, {"kernelOf": arrow, "parameters": parameters})
+            inclusion_data = self.session.keep(Callable(kernel_object, source, inclusion, inclusion))
+            return node("arrow", kernel_object, source, map_data(kernel_object, source, inclusion_data))
+        if operation == "lim.sets.product":
+            left, right = fields(packet, "pair", 2)
+            apex = node("objectProduct", left, right)
+            first_native = second_native = None
+            try:
+                apex_module, left_module, right_module = self.module(apex), self.module(left), self.module(right)
+            except Unsupported:
+                pass
+            else:
+                first_native = LinearAction(matrix(QQ, [[1, 0]]), apex_module, left_module,
+                                            {"product": packet, "port": 1})
+                second_native = LinearAction(matrix(QQ, [[0, 1]]), apex_module, right_module,
+                                             {"product": packet, "port": 2})
+            first = self.session.keep(Callable(apex, left, lambda point: point[0], first_native))
+            second = self.session.keep(Callable(apex, right, lambda point: point[1], second_native))
+            return node("cone", apex, map_data(apex, left, first), map_data(apex, right, second))
+        if operation == "con.automorphisms":
+            _, parameters, receiver = construction_invocation(packet, operation)
+            if len(parameters) != 1:
+                raise ValueError("Aut requires the actual selected category dictionary")
+            return self.session.keep(self.automorphism_group(parameters[0], core_object(receiver)))
+        if operation in {"fun.core_sets.automorphisms", "fun.core_groups.automorphisms"}:
+            _, parameters, receiver = construction_invocation(packet, operation)
+            if parameters:
+                raise ValueError("the selected core automorphism functor has no explicit parameters")
+            category = node("category", "cat.sets" if operation.startswith("fun.core_sets") else "cat.groups", [])
+            return self.session.keep(self.automorphism_group(category, core_object(receiver)))
+        if operation == "fun.modules.reindex":
+            _, parameters, receiver = construction_invocation(packet, operation)
+            return self.session.keep(self.restricted_module(parameters, receiver))
+        if operation == "fun.core_sets.two_subsets":
+            _, parameters, receiver = construction_invocation(packet, operation)
+            if parameters:
+                raise ValueError("the selected two-subset functor has no explicit parameters")
+            descriptor = node("functorAction", node(operation), receiver)
+            return self.session.keep(self.finite_object(descriptor))
+        if operation == "meth.two_subsets":
+            receiver = core_object(packet) if self.tag(packet) == "coreObject" else packet
+            return self.session.keep(self.finite_object(node("obj.sets.two_subsets", receiver)))
+        if operation == "meth.cardinality":
+            receiver = core_object(packet) if self.tag(packet) == "coreObject" else packet
+            try:
+                group = self.aut_context(receiver)
+            except Unsupported:
+                count = int(self.finite_object(receiver).native.cardinality())
+            else:
+                count = int(group.native.cardinality()) if self.category(group.category) == "cat.sets" else int(group.native.Size())
+            return node("finite", count)
+        raise Unsupported("this object action is outside the specimen")

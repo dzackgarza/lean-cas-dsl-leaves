@@ -128,6 +128,176 @@
       "operation": "lift.bilin_module.change_value_restriction#factor",
       "input": "lift.bilin_module.change_value_restriction#input",
       "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "con.automorphisms",
+      "input": "con.automorphisms#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "con.automorphisms#map",
+      "input": "con.automorphisms#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.core_sets.automorphisms",
+      "input": "cat.core_sets",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.core_groups.automorphisms",
+      "input": "cat.core_groups",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.core_sets.two_subsets",
+      "input": "cat.core_sets",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "meth.two_subsets",
+      "input": "cat.sets",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "meth.cardinality",
+      "input": "cat.sets",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "lim.sets.product",
+      "input": "cat.sets",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "op.linear_orders.le",
+      "input": "cat.linear_orders",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "op.linear_orders.lt",
+      "input": "cat.linear_orders",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "op.groups.inverse",
+      "input": "cat.groups",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.modules.reindex",
+      "input": "cat.modules_r",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "op.modules.scalar_action",
+      "input": "cat.modules_r",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "cmp.sets.fin_reversal",
+      "input": "cmp.sets.fin_reversal",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "cmp.groups.cyclic_quotient_residue",
+      "input": "cmp.groups.cyclic_quotient_residue",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.sets.fin_rev",
+      "input": "mor.sets.fin_rev",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.sets.cyclic_quotient_map",
+      "input": "mor.sets.cyclic_quotient_map",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.groups.cyclic_quotient_aut_by_unit",
+      "input": "mor.groups.cyclic_quotient_aut_by_unit",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.sets.automorphism_forward",
+      "input": "mor.sets.automorphism_forward",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.sets.automorphism_backward",
+      "input": "mor.sets.automorphism_backward",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.groups.automorphism_forward",
+      "input": "mor.groups.automorphism_forward",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.groups.automorphism_backward",
+      "input": "mor.groups.automorphism_backward",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.sets.automorphism_evaluation",
+      "input": "mor.sets.automorphism_evaluation",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.sets.automorphism_inverse_evaluation",
+      "input": "mor.sets.automorphism_inverse_evaluation",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.commutative_rings.integer_coefficients",
+      "input": "mor.commutative_rings.integer_coefficients",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.modules.reindex#cartesian",
+      "input": "fun.modules.reindex#cartesian",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.sets.successor_power_series_terms",
+      "input": "mor.sets.successor_power_series_terms",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "bind.sets.power_series_sum",
+      "input": "bind.sets.power_series_sum",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.sets.power_series_coefficient",
+      "input": "mor.sets.power_series_coefficient",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.arrows_modules.kernel",
+      "input": "cat.arrows_modules_r",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "meth.kernel",
+      "input": "cat.arrows_modules_r",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "meth.arrow_ker",
+      "input": "cat.arrows_modules_r",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.bilin_module.pulled_back_forward",
+      "input": "mor.bilin_module.pulled_back_forward",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.bilin_module.pulled_back_backward",
+      "input": "mor.bilin_module.pulled_back_backward",
+      "backend": "independent-extensions-sage"
     }
   ]
 }

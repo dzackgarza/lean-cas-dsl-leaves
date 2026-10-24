@@ -22,13 +22,13 @@ def main():
     import json
     import sage.version
     from cas_port import read_frame, value_data, write_frame
-    from engine import Engine
+    from extensions import ExtensionEngine
     import lifts
     from wire import Unsupported
 
     manifest = json.loads(Path(__file__).with_name("leaves.json").read_text())
     operations = {row["operation"] for row in manifest["registrations"]}
-    engine = Engine()
+    engine = ExtensionEngine()
     write_frame({"op": "ready", "protocol": 1,
                  "backend": "independent-extensions-sage",
                  "backend_version": sage.version.version,
@@ -48,7 +48,12 @@ def main():
             if operation.startswith("lift."):
                 result = lifts.factor(engine, operation, argument) if operation.endswith("#factor") else lifts.field(engine, operation, argument)
             else:
-                data = engine.presentation_application(argument) if operation == engine.comparison else engine.point_application(operation, argument)
+                if operation in engine.comparisons:
+                    data = engine.presentation_application(argument, operation)
+                elif operation in engine.object_operations and engine.tag(argument) != "apply":
+                    data = engine.object_application(operation, argument)
+                else:
+                    data = engine.point_application(operation, argument)
                 result = data if engine.tag(data) == "opaqueData" else value_data(data)
             write_frame({"request_id": request_id, "status": "ok", "value": result})
         except Unsupported:

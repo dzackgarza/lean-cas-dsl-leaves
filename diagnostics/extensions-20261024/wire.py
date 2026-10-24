@@ -63,9 +63,30 @@ class Callable:
     source: object
     target: object
     action: object
+    native: object = None
 
     def __call__(self, point):
         return self.action(point)
+
+
+@dataclass(frozen=True)
+class NativeIdentity:
+    source: object
+    target: object
+
+
+@dataclass(frozen=True)
+class NativeComposition:
+    first: object
+    second: object
+
+
+@dataclass(frozen=True)
+class NativeMediator:
+    source: object
+    target: object
+    left: object
+    right: object
 
 
 class Session:
@@ -151,13 +172,14 @@ def framed_callable(data, source, target, session, interpret):
         same(actual_source, source, "identity source")
         same(actual_target, target, "identity target")
         same(source, target, "identity endpoints")
-        return Callable(source, target, lambda point: point)
+        return Callable(source, target, lambda point: point, NativeIdentity(source, target))
     if isinstance(data, dict) and data.get("ctor") == "mediator":
         left, right = fields(data, "mediator", 2)
         left_target, right_target = fields(target, "objectProduct", 2)
         f = framed_callable(left, source, left_target, session, interpret)
         g = framed_callable(right, source, right_target, session, interpret)
-        return Callable(source, target, lambda point: [f(point), g(point)])
+        native = NativeMediator(source, target, f.native, g.native) if f.native is not None and g.native is not None else None
+        return Callable(source, target, lambda point: [f(point), g(point)], native)
     if isinstance(data, dict) and data.get("ctor") == "compose":
         first, second = fields(data, "compose", 2)
         if isinstance(first, dict) and first.get("ctor") == "typedMap":
@@ -172,5 +194,6 @@ def framed_callable(data, source, target, session, interpret):
             return interpret(data, source, target)
         f = framed_callable(first, source, middle, session, interpret)
         g = framed_callable(second, middle, target, session, interpret)
-        return Callable(source, target, lambda point: g(f(point)))
+        native = NativeComposition(f.native, g.native) if f.native is not None and g.native is not None else None
+        return Callable(source, target, lambda point: g(f(point)), native)
     return interpret(data, source, target)
