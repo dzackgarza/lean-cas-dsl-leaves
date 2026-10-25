@@ -87,7 +87,7 @@ class NativeUnitData:
 
 class SageDiagnostic:
     NAME = "sage-v1-diagnostic"
-    VERSION = "0.6.1"
+    VERSION = "0.6.2"
     POINT_OPERATIONS = (
         "mor.sets.matrix_rows",
         "mor.sets.matrix_charpoly",
@@ -392,6 +392,9 @@ class SageDiagnostic:
         # typed maps and owned values still use exact complete endpoint checks.
         if target is None or self.object_data(target) == self.object_data(selected):
             return
+        if tag_of(target) == "morphismEndpoint":
+            context = self.element_carrier(self.carrier_descriptor(target))
+            return self.check_element_target(context, selected)
         self.check_endpoints(None, target, None, self.element_carrier(selected))
 
     def arrow_endpoints(self, arrow):
@@ -676,6 +679,13 @@ class SageDiagnostic:
             actual, expression = fields(data, "element", 2)
             self.check_element_target(selected, actual)
             self.carrier_descriptor(actual)
+            if (tag_of(unbox(expression)) == "finiteGraph"
+                    and tag_of(self.carrier_descriptor(actual)) in self.SCALARS
+                    and domain == node("obj.sets.fin", 1)):
+                # A complete actual scalar-valued graph at the supplied global
+                # domain is callable data, not a new arithmetic expression.
+                target = selected if selected is not None else self.element_carrier(actual)
+                return self.call_arrow(expression, self.decode(0, domain), source=domain, target=target)
             return self.expression(expression, actual, domain, data_target=selected)
         if tag == "pointView":
             target, original, original_domain = fields(data, "pointView", 3)

@@ -684,3 +684,27 @@ the two failed scalar-example replies and a subsequent retained-callable
 endpoint-reader failure are preserved outside source under
 `public-extension-sufficiency-checks`. These engineering observations have no
 mathematical acceptance standing.
+
+### Bounded scalar composition follow-through
+
+The later public-only check from leaf `4382c4c` combines the same released scalar
+examples with complete typed maps, mediators, actual product projections and
+generalized-domain callable data. It cites contract `90d7d3f`'s
+`api/wire-examples.md` sections on whole-domain requests, complete expression
+inputs, scalar expressions and complete results, together with
+`CasContract/Port.lean`'s element and complete typed-map interfaces.
+
+Two independently demonstrated V1 reader gaps are repaired: a complete finite
+graph nested in a scalar element at the actual registered global domain is
+consumed as callable data; and a selected scalar can use the native codec
+context of its complete declared endpoint without replacing that descriptor.
+The element's selected structure and ordered arithmetic parameters stay intact.
+Explicit typed and owned endpoint fields still require exact matches, and other
+singleton generalized domains retain their complete callable data.
+
+The closed 116-request run covers both specimens and fresh owner connections,
+including successive actual callable uses and changed-owner/endpoint controls.
+Its failed baselines, public-source citations and complete transcripts are
+outside source under `public-scalar-closure-checks`. All native V1 computation
+methods and nineteen registrations remain unchanged. These are interface
+observations with no mathematical correctness or acceptance standing.

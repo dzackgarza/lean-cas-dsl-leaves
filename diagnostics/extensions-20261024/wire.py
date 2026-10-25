@@ -180,8 +180,10 @@ def retained_endpoint(data, side, session):
         source, target = fields(data, tag, 2)
         same(source, target, "identity endpoints")
         return source if side == "source" else target
-    if tag == "element" and side == "target":
-        return fields(data, tag, 2)[0]
+    if tag == "element":
+        # The selected arithmetic owner is not an actual typed-map field.
+        # A retained callable payload, when present, keeps its own endpoints.
+        return retained_endpoint(fields(data, tag, 2)[1], side, session)
     if tag == "compose":
         first, second = fields(data, tag, 2)
         return retained_endpoint(first if side == "source" else second, side, session)

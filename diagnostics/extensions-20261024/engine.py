@@ -588,13 +588,14 @@ class Engine(EndpointInterfaces):
             return self.point(original, original_target, original_domain)
         if tag == "element":
             selected, expression = fields(data, tag, 2)
+            self.check_element_target(target, selected)
             if self.tag(expression) == "point":
-                return self.point(expression, selected, domain)
+                return self.point(expression, target, domain)
             if self.tag(expression) in {"valueData", "opaqueData"} or not isinstance(expression, dict):
                 # Actual returned records and owned values remain data. They
                 # are not reconstructed as a symbolic scalar expression.
-                return self.point(expression, selected, domain)
-            return self.encode_scalar(self.expression(expression, selected, domain), selected)
+                return self.point(expression, target, domain)
+            return self.encode_scalar(self.expression(expression, selected, domain), target)
         if tag == "point":
             arrow, = fields(data, tag, 1)
             if domain is None or not self.closed_domain(domain):
@@ -617,8 +618,8 @@ class Engine(EndpointInterfaces):
 
     def callable_endpoints(self, data):
         """Retain actual map fields, or the public endpoints of its whole arrow."""
-        source = retained_endpoint(data, "source", self.session)
-        target = retained_endpoint(data, "target", self.session)
+        source = self.retained_map_endpoint(data, "source")
+        target = self.retained_map_endpoint(data, "target")
         if source is not None and target is not None:
             return source, target
         if not isinstance(data, dict) or self.tag(data) in {"finiteGraph", "morphismEndpoint"}:
@@ -639,7 +640,12 @@ class Engine(EndpointInterfaces):
         if tag == "identity":
             return fields(arrow, tag, 2)[1]
         if tag == "element":
-            return fields(arrow, tag, 2)[0]
+            selected, expression = fields(arrow, tag, 2)
+            actual = self.retained_map_endpoint(expression, "target")
+            if actual is not None:
+                self.check_element_target(actual, selected)
+                return actual
+            return selected
         if tag == "point":
             return self.intermediate(fields(arrow, tag, 1)[0], fallback)
         if tag == "compose":
@@ -682,6 +688,8 @@ class Engine(EndpointInterfaces):
             return self.callable_domain(fields(data, tag, 2)[0])
         if tag == "point":
             return self.callable_domain(fields(data, tag, 1)[0])
+        if tag == "element":
+            return self.callable_domain(fields(data, tag, 2)[1])
         if tag in {"mediator", "powerObjectMap"}:
             return self.endpoint_view(node("morphismEndpoint", data, "source"))
         return None
@@ -695,6 +703,10 @@ class Engine(EndpointInterfaces):
         tag = self.tag(argument)
         if tag == "valueData":
             return self.callable_argument(fields(argument, tag, 1)[0], domain, source)
+        if tag == "element":
+            selected, expression = fields(argument, tag, 2)
+            self.check_element_target(source, selected)
+            return self.callable_argument(expression, domain, source)
         if tag == "point" and self.closed_domain(domain):
             # The public point envelope asks for the closed point value. Its
             # now-readable named domain must not change it into a whole map.
@@ -737,8 +749,8 @@ class Engine(EndpointInterfaces):
         tag = self.tag(arrow)
         if tag == "compose":
             first, second = fields(arrow, tag, 2)
-            middle = retained_endpoint(first, "target", self.session)
-            second_source = retained_endpoint(second, "source", self.session)
+            middle = self.retained_map_endpoint(first, "target")
+            second_source = self.retained_map_endpoint(second, "source")
             if middle is not None and second_source is not None:
                 same(middle, second_source, "composition's complete shared endpoint")
             if middle is None:
@@ -748,8 +760,8 @@ class Engine(EndpointInterfaces):
             return Callable(source, target, lambda value: g(f(value)), native)
         if tag == "element":
             selected, expression = fields(arrow, tag, 2)
-            self.same_endpoint(target, selected, arrow, "target", "element callable's target")
-            if not self.closed_domain(source):
+            self.check_element_target(target, selected)
+            if not self.closed_domain(source) or self.callable_argument(expression, source, target):
                 return self.function(expression, source, target)
             return Callable(source, target, lambda _: self.point(arrow, target, source))
         if tag == "pointView":

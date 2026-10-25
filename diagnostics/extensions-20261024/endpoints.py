@@ -11,6 +11,47 @@ from wire import (Callable, Unsupported, fields, inventory, key, node,
 
 
 class EndpointInterfaces:
+    def scalar_element_carrier(self, selected):
+        """Private codec context for the existing named scalar selections."""
+        tag = self.tag(selected)
+        families = ((self.rational_ids, "obj.sets.rationals"),
+                    (self.integer_ids, "obj.sets.integers"),
+                    (self.dual_x_ids, "obj.sets.rational_dual_x"),
+                    (self.dual_y_ids, "obj.sets.rational_dual_y"),
+                    (getattr(self, "modular_ids", set()), "obj.sets.integers_mod"))
+        for names, carrier in families:
+            if tag in names:
+                return node(carrier, *fields(selected, tag))
+        return selected
+
+    def check_element_target(self, target, selected):
+        # The released scalar examples retain a ring in element(...) and its
+        # carrier in apply(...). Keep both original fields: this check reads
+        # their known codec layout, never equality of native parents or maps.
+        if target is None or key(target) == key(selected):
+            return
+        if self.tag(target) == "morphismEndpoint":
+            context = self.scalar_element_carrier(self.endpoint_view(target))
+            return self.check_element_target(context, selected)
+        same(target, self.scalar_element_carrier(selected), "element's complete scalar target")
+
+    def retained_map_endpoint(self, arrow, side):
+        """Read actual callable fields through wrappers and stored projections."""
+        actual = retained_endpoint(arrow, side, self.session)
+        if actual is not None:
+            return actual
+        tag = self.tag(arrow)
+        if tag in {"valueData", "point"}:
+            return self.retained_map_endpoint(fields(arrow, tag, 1)[0], side)
+        if tag == "element":
+            return self.retained_map_endpoint(fields(arrow, tag, 2)[1], side)
+        if tag == "compose":
+            first, second = fields(arrow, tag, 2)
+            return self.retained_map_endpoint(first if side == "source" else second, side)
+        if tag in {"arrowHom", "subobjectInclusion", "constructionField", "constructionLeg"}:
+            return self.endpoint_view(node("morphismEndpoint", arrow, side))
+        return None
+
     def uninventoried_endpoint(self, selected):
         """A structural view does not turn an endpoint field into graph keys."""
         tag = self.tag(selected)
@@ -43,7 +84,7 @@ class EndpointInterfaces:
         return terminal, node("obj.sets.power_set", ambient)
 
     def component_endpoint(self, arrow, side):
-        actual = retained_endpoint(arrow, side, self.session)
+        actual = self.retained_map_endpoint(arrow, side)
         if actual is not None:
             return actual
         return self.endpoint_view(node("morphismEndpoint", arrow, side))
@@ -98,7 +139,12 @@ class EndpointInterfaces:
             return node("objectProduct", self.component_endpoint(left, "target"),
                         self.component_endpoint(right, "target"))
         if tag == "element":
-            original, _ = fields(arrow, tag, 2)
+            original, expression = fields(arrow, tag, 2)
+            actual = self.retained_map_endpoint(expression, side)
+            if actual is not None:
+                if side == "target":
+                    self.check_element_target(actual, original)
+                return actual
             return node("obj.sets.fin", 1) if side == "source" else original
         if tag == "powerObjectMap":
             source, target = self.power_endpoints(arrow)
@@ -235,7 +281,7 @@ class EndpointInterfaces:
             # An unnamed endpoint supplies no extra component spelling. Keep
             # actual typed/owned component fields, when supplied, instead of
             # replacing them by a native carrier view of a declaration parameter.
-            retained = [retained_endpoint(component, "target", self.session)
+            retained = [self.retained_map_endpoint(component, "target")
                         for component in components]
             return tuple(factor if endpoint is None else endpoint
                          for factor, endpoint in zip(factors, retained))

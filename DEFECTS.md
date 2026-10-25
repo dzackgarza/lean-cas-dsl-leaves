@@ -615,3 +615,44 @@ and 29 V1 reader controls. Failed baseline attempts are retained.
 Only interface framing, parameter/endpoint retention, returned-data reuse and
 owner/error behavior were asserted. These are engineering observations with no
 mathematical correctness or acceptance standing.
+
+## Bounded scalar composition closure, 2026-10-25
+
+From published leaf `4382c4c50e617c47ece8be4a745360b84c4a7e18`, a separate
+public-only check composes the released scalar examples with complete typed
+maps, mediators, actual returned product projections and generalized callable
+data. Its public sources are contract `90d7d3f`'s `api/wire-examples.md`, sections
+"Scalars and registered point expressions", "Whole-domain callable requests",
+"Complete expression inputs and returned-data reuse", and "Complete results,
+projections and lifts"; and `CasContract/Port.lean`'s element, mediator and
+complete typed-map interfaces. The external receipt records exact source lines,
+hashes and per-request citations, together with the supplied public declaration
+entries. No downstream finding or mathematical question was an input.
+
+The extension's element reader conflated the complete selected arithmetic owner
+with a callable's actual carrier endpoint. Direct released scalar requests could
+work while typed, composed, mediated and generalized forms were rejected. The
+point path also accepted a changed scalar modulus. Symbolic element selection
+was treated as an actual stored map field, obscuring the actual endpoints of
+returned callable payloads and product projections. V1 separately rejected a
+complete finite graph inside a global scalar element and a selected scalar at
+its complete declared endpoint.
+
+The repair keeps selected arithmetic owners and all parameters attached, checks
+the existing named scalar codec context, and reads complete callable fields from
+the actual payload or returned projection. Typed and owned endpoint fields remain
+exact; a matching native parent is not an endpoint comparison. Actual callable
+values keep their source and target through element wrappers and successive uses.
+Global scalar-valued graph data are evaluated at the supplied registered global
+domain; other singleton and finite domains keep their full callable interface.
+
+The two baseline runs are preserved outside source under
+`public-scalar-closure-checks`: 108 requests with 18 interface mismatches, then
+116 requests with 23 mismatches after the explicit global graph and endpoint
+forms were added. The repaired 116-request run closes across both specimens and
+their fresh owner connections. Assertions concern framing, retained fields,
+scalar/callable representation, actual result reuse and owner/error strata only.
+All seven manifests and existing native algorithms remain unchanged. The
+previously documented native routine limits, including the unimplemented kernel
+functor morphism action, remain. This bounded check asserts no mathematical
+answer or law and has no correctness or acceptance standing.

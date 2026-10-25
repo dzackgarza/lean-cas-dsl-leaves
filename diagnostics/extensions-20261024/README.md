@@ -380,6 +380,38 @@ ordinary implementation boundary, not a missing public type or a reason to
 invent a map. The other precise native limits in the table below continue to
 apply. The checks found no additional public wire type needed for these repairs.
 
+### Bounded scalar composition closure, 2026-10-25
+
+A separate check from published leaf `4382c4c` exercises the released scalar
+examples under composition, complete typed maps, product mediators and actual
+returned projections, and at global, empty, distinct singleton, finite and
+infinite generalized domains. The public sources are contract `90d7d3f`'s
+`api/wire-examples.md` sections on scalar expressions, whole-domain requests,
+returned-data reuse and complete results; and `CasContract/Port.lean`'s element,
+mediator and complete typed-map interfaces. The external receipt records pinned
+source hashes, exact source lines and a citation for every request.
+
+This independently exposed a shared reader mismatch. A selected arithmetic
+owner in `element` was sometimes treated as an actual callable endpoint field,
+rejecting supported typed/composed forms while a direct point path accepted a
+changed scalar modulus. The reader now keeps that owner for arithmetic,
+checks the existing named scalar codec context, and consumes the actual
+payload's complete endpoints. Returned product/Arrow projections contribute
+their stored map fields when a composition needs its intermediate context.
+Actual typed and owned fields are compared exactly; native parent equality
+does not identify them. Actual callable payloads keep their generalized domain
+through element wrappers, and a global scalar-valued graph is read as callable
+data rather than a new arithmetic expression.
+
+The repaired run contains 116 complete requests across the extension and V1,
+including fresh-connection owner controls. Its assertions cover interface
+framing, selected owners and ordered parameters, full endpoint fields,
+scalar/callable representation and successive actual-data uses. The two failed
+baselines and all requests/replies remain outside source under
+`public-scalar-closure-checks`. All seven manifests and native algorithms are
+unchanged; the native limits below continue to apply. This bounded check asserts
+no mathematical answer, identity or acceptance result.
+
 ### Published power-object callable consumption
 
 The callable-form follow-up keeps all 66 registrations and consumes the five
