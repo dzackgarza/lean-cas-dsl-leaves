@@ -87,6 +87,7 @@ class GenericInterfaces:
                 if len(operands) != arity:
                     raise ValueError("the operation expression has a different operand count")
                 selected = parameters[0]
+                same(selected, target, "operation expression's complete selected structure")
                 values = [self.point(value, target, domain) for value in operands]
                 if operation == "op.groups.inverse":
                     return self.function(node(operation, selected), selected, selected)(values[0])

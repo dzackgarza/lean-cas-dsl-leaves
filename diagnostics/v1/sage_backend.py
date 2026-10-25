@@ -87,7 +87,7 @@ class NativeUnitData:
 
 class SageDiagnostic:
     NAME = "sage-v1-diagnostic"
-    VERSION = "0.6.0"
+    VERSION = "0.6.1"
     POINT_OPERATIONS = (
         "mor.sets.matrix_rows",
         "mor.sets.matrix_charpoly",
@@ -375,6 +375,25 @@ class SageDiagnostic:
             if selected is not None and actual is not None and self.object_data(selected) != self.object_data(actual):
                 raise ValueError("a callable changed its supplied complete %s" % name)
 
+    def element_carrier(self, selected):
+        """Read the public scalar carrier without replacing its selected owner."""
+        actual = self.object_data(selected)
+        tag = tag_of(actual)
+        if tag in self.SCALARS:
+            carriers = {"naturals": "obj.sets.naturals", "integers": "obj.sets.integers",
+                        "rationals": "obj.sets.rationals", "residues": "obj.sets.integers_mod"}
+            return node(carriers[self.SCALARS[tag]], *fields(actual, tag))
+        return selected
+
+    def check_element_target(self, target, selected):
+        # An element selects its complete algebraic structure. A common apply
+        # separately supplies its carrier endpoint, as in the released scalar
+        # examples. Only that published scalar layout is read here: retained
+        # typed maps and owned values still use exact complete endpoint checks.
+        if target is None or self.object_data(target) == self.object_data(selected):
+            return
+        self.check_endpoints(None, target, None, self.element_carrier(selected))
+
     def arrow_endpoints(self, arrow):
         """Read supplied endpoint context without evaluating a diagram's arrows."""
         arrow = unbox(arrow)
@@ -442,8 +461,14 @@ class SageDiagnostic:
             inner, = fields(arrow, tag, 1)
             return self.arrow_endpoints(inner)
         if tag == "element":
-            selected, _data = fields(arrow, tag, 2)
-            return node("obj.sets.fin", 1), selected
+            selected, actual = fields(arrow, tag, 2)
+            actual = unbox(actual)
+            if tag_of(actual) in ("typedMap", "finiteGraph", "point") or (
+                    tag_of(actual) == "opaqueData" and self.entry(actual).callable):
+                source, target = self.arrow_endpoints(actual)
+                self.check_element_target(target, selected)
+                return source, target if target is not None else self.element_carrier(selected)
+            return node("obj.sets.fin", 1), self.element_carrier(selected)
         if tag == "pointView":
             target, _original, domain = fields(arrow, tag, 3)
             return domain, target
@@ -649,9 +674,9 @@ class SageDiagnostic:
             return entry.value
         if tag == "element":
             actual, expression = fields(data, "element", 2)
-            self.check_endpoints(None, selected, None, actual)
+            self.check_element_target(selected, actual)
             self.carrier_descriptor(actual)
-            return self.expression(expression, actual, domain)
+            return self.expression(expression, actual, domain, data_target=selected)
         if tag == "pointView":
             target, original, original_domain = fields(data, "pointView", 3)
             if domain is not None and original_domain != domain:
@@ -751,13 +776,13 @@ class SageDiagnostic:
             return NativeUnitData(monoid, self.native_coerce(self.parent(monoid), native))
         return native
 
-    def expression(self, expression, selected, domain=None):
+    def expression(self, expression, selected, domain=None, data_target=None):
         expression = unbox(expression)
         tag = tag_of(expression)
         if tag not in ("numeral", "generator", "add", "mul", "neg", "operationExpression", "point"):
             # A retained element can contain actual computational data, including
             # a nested token. It is not reconstructed as a numeral or polynomial.
-            return self.decode(expression, selected, domain)
+            return self.decode(expression, selected if data_target is None else data_target, domain)
         args = fields(expression, tag)
         if tag == "numeral" and len(args) == 1:
             return self.parent(selected)(natural(args[0]))
@@ -786,7 +811,7 @@ class SageDiagnostic:
             value = values[0] if len(values) == 1 else tuple(values)
             return self.compute(operation, parameters, value)
         if tag == "point" and len(args) == 1:
-            return self.point_arrow(args[0], selected, domain)
+            return self.point_arrow(args[0], selected if data_target is None else data_target, domain)
         raise NotImplementedError("unsupported public arithmetic expression")
 
     def pair_data(self, data):
@@ -1198,6 +1223,13 @@ class SageDiagnostic:
         elif tag == "point":
             inner, = fields(arrow, tag, 1)
             self.check_callable_fields(inner, source, target)
+        elif tag == "element":
+            selected, actual = fields(arrow, tag, 2)
+            self.check_element_target(target, selected)
+            actual = unbox(actual)
+            if tag_of(actual) in ("typedMap", "finiteGraph", "point") or (
+                    tag_of(actual) == "opaqueData" and self.entry(actual).callable):
+                self.check_callable_fields(actual, source, target if target is not None else selected)
 
     def call_arrow(self, arrow, value, *, source=None, target=None):
         """Lower only supplied public map data; this adds no dispatch address."""
@@ -1331,11 +1363,11 @@ class SageDiagnostic:
             return self.point_arrow(arrow, target, source)
         if tag == "element":
             selected, expression = fields(arrow, tag, 2)
-            self.check_endpoints(None, target, None, selected)
+            self.check_element_target(target, selected)
             actual = unbox(expression)
             if tag_of(actual) in ("typedMap", "finiteGraph", "point") or (
                     tag_of(actual) == "opaqueData" and self.entry(actual).callable):
-                return self.call_arrow(actual, value, source=source, target=selected)
+                return self.call_arrow(actual, value, source=source, target=target if target is not None else selected)
             if source is not None and len(self.inventory(source)) != 1:
                 raise ValueError("a closed point cannot replace a nonconstant generalized map")
             return self.point_arrow(arrow, target, source)

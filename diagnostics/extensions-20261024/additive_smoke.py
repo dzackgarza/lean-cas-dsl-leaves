@@ -63,6 +63,8 @@ def ring_checks(port):
     carrier, source, complete = addition_checks(port, "rational", rational_monoid, [[4, 3], [-5, 7]], True)
     for size in (0, 1):
         domain = node("obj.sets.fin", size)
+        if size == 1:
+            domain = node("finiteData", domain, [0])
         family = node("typedMap", domain, source, [[index, [[4, 3], [-5, 7]]] for index in range(size)])
         result = owned(port.request("rational/empty or singleton retained family", ADD,
                                      invoke(ADD, [rational_monoid], domain, source, carrier, family, complete)))

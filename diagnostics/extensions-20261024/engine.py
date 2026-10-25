@@ -257,9 +257,7 @@ class Engine(EndpointInterfaces):
             operation, parameters, operands = operation_expression(expression)
             if operation not in self.ring_operations or not parameters:
                 raise Unsupported("this scalar operation expression is not implemented")
-            operation_parent = self.ring(parameters[0])
-            if operation_parent is not parent:
-                raise ValueError("an operation expression changes the selected ring")
+            same(parameters[0], selected, "an operation expression's complete selected ring")
             values = [self.expression(value, selected, domain) for value in operands]
             return self.ring_operation(operation, parameters, values)
         if tag == "point":
@@ -297,7 +295,15 @@ class Engine(EndpointInterfaces):
             data = fields(data, "valueData", 1)[0]
         if self.tag(data) == "element":
             selected, expression = fields(data, "element", 2)
-            data = self.point(node("point", expression), selected, None)
+            if self.tag(expression) == "point":
+                data = self.point(expression, selected, self.callable_domain(expression))
+            else:
+                data = expression
+            if self.tag(selected) == "obj.sets.maps":
+                actual_source, actual_target = fields(selected, "obj.sets.maps", 2)
+                same(actual_source, source, "selected finite callable index object")
+                call = self.function(data, actual_source, actual_target)
+                return [call(i) for i in range(count)]
         if self.tag(data) == "typedMap":
             actual_source, actual_target, body = typed_map(data)
             same(actual_source, source, "finite callable index object")
@@ -492,6 +498,9 @@ class Engine(EndpointInterfaces):
             limit, diagram, packet, leg = fields(data, tag, 4)
             if limit != "lim.sets.product":
                 raise Unsupported("this diagram-leg indexing has no native constructor adapter")
+            if self.tag(leg) in {"left", "right"}:
+                fields(leg, self.tag(leg), 0)
+                leg = 0 if self.tag(leg) == "left" else 1
             if type(leg) is not int or leg not in (0, 1):
                 raise ValueError("the selected binary-product leg has an invalid diagram index")
             fields(diagram, "pair", 2)
@@ -511,12 +520,29 @@ class Engine(EndpointInterfaces):
         ports = fields(packet, tag)
         if index >= len(ports):
             raise ValueError("the returned construction omits the selected data port")
+        if limit == "lim.sets.product":
+            if tag != "cone" or len(ports) != 3:
+                raise ValueError("the complete binary product requires its apex and both maps")
+            targets = fields(diagram, "pair", 2)
+            for actual_map, target in zip(ports[1:], targets):
+                framed = actual_map
+                while self.tag(framed) == "valueData":
+                    framed = fields(framed, "valueData", 1)[0]
+                if self.tag(framed) == "typedMap":
+                    actual_source, actual_target, _ = typed_map(framed)
+                    same(actual_source, ports[0], "returned product leg's exact apex")
+                    same(actual_target, target, "returned product leg's exact factor")
+            if index:
+                # An unlabelled finite graph has its endpoint context in the
+                # complete cone and the independently supplied product diagram.
+                actual_map = ports[index]
+                if self.tag(actual_map) != "typedMap":
+                    return map_data(ports[0], targets[index - 1], actual_map)
         return ports[index]
 
     def closed_domain(self, domain):
-        if self.tag(domain) == "finiteData":
-            original, _ = fields(domain, "finiteData", 2)
-            return self.closed_domain(original) and len(inventory(domain)) == 1
+        # Only the actual registered global-point descriptor has the scalar
+        # convention. A different singleton retains its complete callable.
         return self.tag(domain) == "obj.sets.fin" and fields(domain, "obj.sets.fin", 1) == [1]
 
     def point(self, data, target, domain):
@@ -543,6 +569,10 @@ class Engine(EndpointInterfaces):
             if domain is not None:
                 same(original_domain, domain, "point-view domain")
             original_target, _ = fields(original, "element", 2)
+            action, receiver = fields(actual_target, "functorAction", 2)
+            same(receiver, original_target, "point-view original selected object")
+            if not self.carrier_action(action):
+                raise Unsupported("this selected point view has no native carrier adapter")
             return self.point(original, original_target, original_domain)
         if tag == "admittedPoint":
             _, _, original_domain, original_target, admitted, original = admitted_point(data)
@@ -559,6 +589,10 @@ class Engine(EndpointInterfaces):
         if tag == "element":
             selected, expression = fields(data, tag, 2)
             if self.tag(expression) == "point":
+                return self.point(expression, selected, domain)
+            if self.tag(expression) in {"valueData", "opaqueData"} or not isinstance(expression, dict):
+                # Actual returned records and owned values remain data. They
+                # are not reconstructed as a symbolic scalar expression.
                 return self.point(expression, selected, domain)
             return self.encode_scalar(self.expression(expression, selected, domain), selected)
         if tag == "point":
@@ -692,6 +726,8 @@ class Engine(EndpointInterfaces):
         if domain is None:
             return action(argument)
         original = self.function(argument, domain, action.source)
+        if self.closed_domain(domain):
+            return action(original(inventory(domain)[0]))
         result = self.postcompose(original, action)
         retained = Invocation(operation, parameters, packet, original, action)
         return self.session.keep(Callable(result.source, result.target, result.action,
@@ -711,9 +747,31 @@ class Engine(EndpointInterfaces):
             native = NativeComposition(f.native, g.native) if f.native is not None and g.native is not None else None
             return Callable(source, target, lambda value: g(f(value)), native)
         if tag == "element":
+            selected, expression = fields(arrow, tag, 2)
+            self.same_endpoint(target, selected, arrow, "target", "element callable's target")
             if not self.closed_domain(source):
-                raise Unsupported("a closed element cannot replace a generalized-domain callable")
+                return self.function(expression, source, target)
             return Callable(source, target, lambda _: self.point(arrow, target, source))
+        if tag == "pointView":
+            selected, original, domain = fields(arrow, tag, 3)
+            same(source, domain, "point-view callable's original domain")
+            same(target, selected, "point-view callable's complete target")
+            original_target, _ = fields(original, "element", 2)
+            action, receiver = fields(selected, "functorAction", 2)
+            same(receiver, original_target, "point-view callable's original object")
+            if not self.carrier_action(action):
+                raise Unsupported("this selected point view has no native carrier adapter")
+            actual = self.function(original, domain, original_target)
+            return Callable(source, target, actual, actual.native)
+        if tag in {"admittedPoint", "constrainedPoint"}:
+            if tag == "admittedPoint":
+                _, _, domain, original_target, selected, original = admitted_point(arrow)
+            else:
+                _, domain, original_target, selected, original = constrained_point(arrow)
+            same(source, domain, "retained point family's original domain")
+            same(target, selected, "retained point family's complete target")
+            actual = self.function(original, domain, original_target)
+            return Callable(source, target, actual, actual.native)
         if tag == "point":
             return self.function(fields(arrow, tag, 1)[0], source, target)
         if tag == "presentation":
@@ -749,11 +807,15 @@ class Engine(EndpointInterfaces):
         if tag in {"arrowHom", "subobjectInclusion"}:
             receiver, = fields(arrow, tag, 1)
             actual_source, actual_target, actual_map = self.arrow_record(receiver)
+            self.same_endpoint(source, actual_source, arrow, "source", "stored Arrow map source")
+            self.same_endpoint(target, actual_target, arrow, "target", "stored Arrow map target")
             actual = self.function(actual_map, actual_source, actual_target)
             return Callable(source, target, actual, actual.native)
         if tag in {"constructionField", "constructionLeg"}:
             actual_map = self.project_field(arrow)
             actual_source, actual_target, _ = typed_map(actual_map)
+            self.same_endpoint(source, actual_source, arrow, "source", "stored construction map source")
+            self.same_endpoint(target, actual_target, arrow, "target", "stored construction map target")
             actual = self.function(actual_map, actual_source, actual_target)
             return Callable(source, target, actual, actual.native)
         if tag == "generator":
@@ -940,10 +1002,9 @@ class Engine(EndpointInterfaces):
         if self.closed_domain(domain) and not self.callable_argument(argument, domain, source):
             return action(self.point(argument, source, domain))
         original = self.function(argument, domain, source)
-        if operation == "op.monoids.one" and self.closed_domain(domain):
-            # The public nullary-point interface keeps its actual terminal
-            # comparison, while its global result uses ordinary scalar data.
-            # Generalized domains below continue to return complete callables.
+        if self.closed_domain(domain):
+            # The actual global domain keeps its scalar convention, including
+            # an explicitly supplied identity or terminal comparison.
             return action(original(inventory(domain)[0]))
         # A returned callable is the actual composite on the complete original
         # domain. Keeping it owned preserves native metadata and dependencies,

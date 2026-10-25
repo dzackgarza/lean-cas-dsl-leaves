@@ -32,14 +32,19 @@ def main():
     write_frame({"op": "ready", "protocol": 1,
                  "backend": "independent-extensions-sage",
                  "backend_version": sage.version.version,
-                 "adapter_version": "2026-10-25.1",
+                 "adapter_version": "2026-10-25.2",
                  "capabilities": sorted(operations)})
     while True:
         packet = read_frame()
         if packet is None:
             return
-        request_id, operation = packet.get("request_id"), packet.get("op")
+        request_id, operation = None, None
         try:
+            if not isinstance(packet, dict):
+                raise ValueError("a request requires its complete JSON object")
+            request_id, operation = packet.get("request_id"), packet.get("op")
+            if not isinstance(operation, str) or not operation:
+                raise ValueError("a request requires its nonempty registered operation id")
             if operation not in operations:
                 raise Unsupported("unregistered diagnostic operation")
             if "args" not in packet:

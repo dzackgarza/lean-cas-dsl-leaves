@@ -129,6 +129,10 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
         tag = self.tag(selected)
         if tag == "valueData":
             return self.underlying_receiver(fields(selected, tag, 1)[0])
+        if tag == "finiteData":
+            original, _ = fields(selected, tag, 2)
+            inventory(selected)
+            return self.underlying_receiver(original)
         if tag == "morphismEndpoint":
             try:
                 return self.underlying_receiver(self.endpoint_view(selected))
@@ -154,6 +158,8 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
         modulus, quotient = self.cyclic_context(selected)
         ring = IntegerModRing(modulus)
         tag = self.tag(data)
+        if tag == "valueData":
+            return self.cyclic_point(fields(data, tag, 1)[0], selected)
         if tag == "opaqueData":
             value = self.session.get(data)
             if not isinstance(value, CyclicPoint):
@@ -194,6 +200,17 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
     def encode_cyclic(self, value, selected):
         modulus, quotient = self.cyclic_context(selected)
         native = IntegerModRing(modulus)(value)
+        retained = selected
+        while self.tag(retained) == "valueData":
+            retained = fields(retained, "valueData", 1)[0]
+        if self.tag(retained) == "finiteData":
+            # Keep the actual supplied point keys, including their tokens.
+            # A new token for the same native coordinate is a different graph
+            # key and cannot replace this retained finite-data interface.
+            for point in inventory(retained):
+                if self.cyclic_point(point, selected) == native:
+                    return point
+            raise ValueError("the cyclic result is absent from the supplied point inventory")
         return self.session.keep(CyclicPoint(selected, modulus, native)) if quotient else int(native)
 
     def finite_object(self, selected):
@@ -324,7 +341,7 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
     def function(self, data, source, target):
         public_data([data, source, target], self.session)
         def supplied_inventory(selected):
-            if self.tag(selected) == "morphismEndpoint":
+            if self.uninventoried_endpoint(selected):
                 raise Unsupported("a declared endpoint needs its supplied finiteData inventory for a graph")
             return self.finite_object(selected).points
         return framed_callable(data, source, target, self.session, self.interpret_arrow,
@@ -383,7 +400,11 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
             modulus, _ = self.cyclic_context(receiver)
             if modulus == 0:
                 raise Unsupported("infinite cyclic automorphism objects are outside this finite diagnostic")
-            points = tuple(self.encode_cyclic(k, receiver) for k in range(modulus))
+            retained = receiver
+            while self.tag(retained) == "valueData":
+                retained = fields(retained, "valueData", 1)[0]
+            points = (tuple(inventory(retained)) if self.tag(retained) == "finiteData"
+                      else tuple(self.encode_cyclic(k, receiver) for k in range(modulus)))
             native = libgap.AutomorphismGroup(libgap.CyclicGroup(modulus))
         return AutomorphismGroup(category, receiver, points, native)
 
@@ -435,9 +456,11 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
             n, _ = self.cyclic_context(receiver)
             group = libgap.CyclicGroup(n)
             generator = group.GeneratorsOfGroup()[0] if n > 1 else group.One()
-            elements = [generator ** i for i in range(n)]
-            native_forward = libgap.GroupHomomorphismByImages(group, group, elements, [elements[i] for i in forward_images])
-            native_backward = libgap.GroupHomomorphismByImages(group, group, elements, [elements[i] for i in backward_images])
+            elements = [generator ** int(self.cyclic_point(point, receiver)) for point in points]
+            native_forward = libgap.GroupHomomorphismByImages(group, group, elements,
+                                                            [generator ** i for i in forward_images])
+            native_backward = libgap.GroupHomomorphismByImages(group, group, elements,
+                                                             [generator ** i for i in backward_images])
             if native_forward == libgap.fail or native_backward == libgap.fail:
                 raise ValueError("the supplied cyclic-group map has no native homomorphism representation")
         return Automorphism(category, receiver, forward, backward, native_forward, native_backward)
@@ -747,12 +770,20 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
             category = node("category", "cat.groups", [])
             ring_object = node("obj.sets.integers_mod", modulus)
             def by_unit(data):
+                if self.tag(data) == "valueData":
+                    data = fields(data, "valueData", 1)[0]
                 if self.tag(data) == "admittedPoint":
                     _, _, _, original_target, _, original = admitted_point(data)
                     scalar = self.scalar(original, original_target)
+                    inverse = scalar.inverse_of_unit()
+                elif isinstance(data, list):
+                    if len(data) != 2:
+                        raise ValueError("a complete unit record requires its value and inverse")
+                    scalar = self.scalar(data[0], ring_object)
+                    inverse = self.scalar(data[1], ring_object)
                 else:
                     scalar = self.scalar(data, ring_object)
-                inverse = scalar.inverse_of_unit()
+                    inverse = scalar.inverse_of_unit()
                 f = Callable(group, group, lambda point: self.encode_cyclic(scalar * self.cyclic_point(point, group), group))
                 b = Callable(group, group, lambda point: self.encode_cyclic(inverse * self.cyclic_point(point, group), group))
                 return self.session.keep(self.make_automorphism(category, group, f, b))
@@ -910,6 +941,15 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
     def point(self, data, target, domain):
         if self.tag(data) == "element":
             selected, expression = fields(data, "element", 2)
+            if self.tag(expression) == "numeral":
+                original = self.underlying_receiver(selected)
+                if self.tag(original) in {"obj.sets.fin", "obj.finite_sets.fin",
+                                          "obj.linear_orders.fin_ordinary", "obj.linear_orders.fin_reverse"}:
+                    dimension, = fields(original, self.tag(original), 1)
+                    self.natural(dimension, "the selected finite-point dimension")
+                    return self.finite_ordinal(data, dimension)
+                if self.tag(original) == "obj.sets.naturals":
+                    return self.natural(fields(expression, "numeral", 1)[0], "the natural point")
             if self.tag(expression) in {"point", "operationPoint"}:
                 return super().point(data, target, domain)
             if (self.tag(expression) == "operationExpression"

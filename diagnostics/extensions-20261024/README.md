@@ -291,6 +291,95 @@ scope and ordinary unsupported cases in the following table are unchanged.
 
 ## Deliberate limits
 
+### Separate public-interface sufficiency checkpoint, 2026-10-25
+
+This follow-up starts from published leaf commit
+`1c41aa80993cc4b799893bd3165ddb64d9f80939`, after the separate V1 completion.
+It uses only this specimen and its engineering material, public contract
+`90d7d3f1833cff39b77024dcee2dc43213e623ad`, the supplied declaration export
+SHA256 `43392ae1c6636276519113d07c4cdc3ce8f8eeead1b4336db574c57269216079`
+and its provenance, and the installed engines. All 66 operation/input pairs
+occur in that public export, including the derived application, component,
+cartesian, construction-map and lift addresses. No absent public registration
+was assigned invented semantics. No kernel implementation, protected question,
+expected answer, acceptance record, downstream execution result or other
+author's work was read. All registration manifests are unchanged. The separate
+released-example check below also repairs one V1 scalar reader.
+
+The independent per-pair cases exercise the applicable object/lift or callable
+request forms. Callable cases retain point, whole-map, empty, distinct singleton
+and two-point domains; exact supplied endpoints and ordered parameters; and
+actual returned point and callable data. Object and lift cases retain complete
+results, both source-context variants, all four actual preceding outputs,
+factor data and subsequent point/map consumers. Every registration also has a
+previously successful request containing a real retained native dependency
+replayed on a fresh connection, where that old owner is unavailable.
+
+The bounded repairs are in the existing data readers:
+
+- Only the exact registered global-point `Fin(1)` uses the scalar convention,
+  including an actual identity or terminal comparison. A distinct singleton
+  descriptor retains its whole callable. The two existing singleton engineering
+  examples now use explicit `finiteData` when they request the latter interface.
+- Complete returned data inside `element`, finite numeral points, matrix
+  callable elements and closed matrix points reach the existing native readers.
+  Generalized `pointView`, `admittedPoint` and `constrainedPoint` families retain
+  their original domain, target and underlying callable. Point views require
+  their complete supported carrier action.
+- Nested ring and monoid expressions retain their exact selected structure.
+  Arrow and cone projections keep the stored map's complete endpoint fields;
+  changing a field is rejected before the native map is used. Product leg
+  selectors accept the published `left`/`right` constructor data. Complete
+  product cones can also supply unlabelled finite graph legs at the actual
+  apex and corresponding diagram factor.
+- An endpoint wrapped in a structural action still supplies no graph inventory.
+  Explicit `finiteData` retains its supplied keys. Supported cyclic object
+  data, point envelopes and unit records are consumed completely: both unit
+  fields feed the existing GAP automorphism glue, and cyclic finite inventories
+  retain their original point keys and owners when native coordinates are read
+  or written. The existing GAP group/homomorphism routines are unchanged.
+- Non-object request packets and malformed operation fields produce framed
+  errors; a subsequent valid request remains usable. Recursive ownership checks
+  continue to run before every existing dispatch branch.
+
+The closed engineering run contains 1,305 requests across all 66 pairs, including
+66 fresh-connection owner replays; 69 focused data-form requests; 25 framing and
+error-recovery requests; and 50 requests from the two updated local engineering
+examples. The complete requests, replies, source digests, failed baseline
+attempts and per-pair coverage receipt are kept outside the source repository
+under `public-extension-sufficiency-checks`. These checks inspect data framing,
+retention, callable reuse and error strata only. They assert no computed
+mathematical answer or law, and provide no correctness or acceptance evidence.
+
+The released contract's `api/wire-examples.md` was checked separately, without
+changing its supplied descriptors or parameters. Eight concrete selected requests
+were executed across the V1 and extension specimens. Two use literal illustrative
+opaque tokens that were never issued by the live connection; their ordinary
+`unsupported` owner outcomes are recorded separately from native routine limits.
+The remaining six requests return the published result envelopes. Every one of
+the guide's 32 fenced blocks has a recorded disposition: schematic requests with
+unbound variables, reply/data-only examples and the unregistered square-root
+request are not presented as executed concrete selected requests.
+
+The exact modular power and addition examples exposed a V1 reader mismatch:
+`element` retains the selected ring while the common request separately supplies
+its scalar carrier. V1 now reads those two fields without replacing the ring,
+the operation parameters or the actual payload. A retained callable inside an
+element keeps its own domain and target. Twenty-nine independently selected
+follow-up requests check actual result/callable reuse, composition, complete
+parameter and endpoint rejection, nested ownership and framing. Their receipt
+and the failed public-example baseline remain distinct from the 66-pair run.
+
+The source still selects the same Sage/GAP computations, with no new operation,
+registration or mathematical algorithm. In particular,
+`fun.arrows_modules.kernel` has an implemented **object** action on the stated
+rational native matrices, but its **morphism** action on a complete Arrow-category
+map has no native adapter and returns `unsupported`. The method registrations
+`meth.kernel` and `meth.arrow_ker` use the existing object action. This is an
+ordinary implementation boundary, not a missing public type or a reason to
+invent a map. The other precise native limits in the table below continue to
+apply. The checks found no additional public wire type needed for these repairs.
+
 ### Published power-object callable consumption
 
 The callable-form follow-up keeps all 66 registrations and consumes the five
@@ -349,7 +438,7 @@ native input families; no category-wide address promises arbitrary native data.
 | Two-subsets and cardinality | Carriers without a complete supplied or implemented native finite inventory. Native Aut cardinality uses the actual group directly. Infinite cardinality and arbitrary infinite two-subset objects remain unsupported. |
 | Module reindexing and scalar action | Native modules or scalar rings outside the implemented regular, vector, rational subspace and formed-carrier readers; base maps without an implemented complete callable. No scalar action is recovered from category membership alone. |
 | Matrix and row morphisms | Coefficient rings without an implemented scalar reader; matrices or vectors missing complete finite callable coordinates. Rational native matrix metadata is retained; finite modular equality enumerates the full native carrier. |
-| Kernels and bilinear lifts | Kernels without an actual retained rational native matrix; general-ring submodule algorithms; forms and value modules outside the documented rational native representations. Lift evidence-family parameters, base subobject and all prior outputs are required. |
+| Kernels and bilinear lifts | The kernel functor's morphism action; kernels without an actual retained rational native matrix; general-ring submodule algorithms; forms and value modules outside the documented rational native representations. Lift evidence-family parameters, base subobject and all prior outputs are required. |
 | Infinite series binder | Arbitrary infinite summable families without the retained native successor-family model, or compositions changing that family without supported metadata. The actual callable is used for every generated term. |
 | Whole-map equality | Arbitrary infinite callables with neither complete native rational linear metadata nor complete supported polynomial metadata; whole infinite series; arbitrary graph keys on an unbounded or unenumerated domain. |
 | Structured comparisons and projections | `structuredProjectionAction` has complete descriptor parsing but no adapter exposing arbitrary Arrow-comparison components. Constructor actions other than the implemented Core adapter, arbitrary creation actions, and non-product diagram-leg indexing remain unsupported. |

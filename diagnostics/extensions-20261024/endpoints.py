@@ -11,6 +11,22 @@ from wire import (Callable, Unsupported, fields, inventory, key, node,
 
 
 class EndpointInterfaces:
+    def uninventoried_endpoint(self, selected):
+        """A structural view does not turn an endpoint field into graph keys."""
+        tag = self.tag(selected)
+        if tag == "finiteData":
+            inventory(selected)
+            return False
+        if tag == "morphismEndpoint":
+            return True
+        if tag == "valueData":
+            return self.uninventoried_endpoint(fields(selected, tag, 1)[0])
+        if tag == "functorAction":
+            return self.uninventoried_endpoint(fields(selected, tag, 2)[1])
+        if tag == "objectProduct":
+            return any(self.uninventoried_endpoint(factor) for factor in fields(selected, tag, 2))
+        return False
+
     def power_endpoints(self, arrow):
         """Native decoding context from the complete public power-field types."""
         _, field, parameters = power_object_map(arrow)
@@ -48,6 +64,22 @@ class EndpointInterfaces:
             if not isinstance(actual, Callable):
                 raise ValueError("the endpoint's owned datum is not a callable")
             return actual.source if side == "source" else actual.target
+        if tag in {"arrowHom", "subobjectInclusion"}:
+            actual_source, actual_target, _ = self.arrow_record(fields(arrow, tag, 1)[0])
+            return actual_source if side == "source" else actual_target
+        if tag in {"constructionField", "constructionLeg"}:
+            actual_source, actual_target, _ = typed_map(self.project_field(arrow))
+            return actual_source if side == "source" else actual_target
+        if tag == "pointView":
+            target, _, domain = fields(arrow, tag, 3)
+            return domain if side == "source" else target
+        if tag in {"admittedPoint", "constrainedPoint"}:
+            from cas_port import admitted_point, constrained_point
+            if tag == "admittedPoint":
+                _, _, domain, _, target, _ = admitted_point(arrow)
+            else:
+                _, domain, _, target, _ = constrained_point(arrow)
+            return domain if side == "source" else target
         if tag in {"identity", "zero"}:
             source, target = fields(arrow, tag, 2)
             if tag == "identity":
@@ -191,6 +223,8 @@ class EndpointInterfaces:
         if tag == "finiteData":
             original, _ = fields(selected, tag, 2)
             return self.product_factors(original, components)
+        if tag in {"constructionField", "constructionApex"}:
+            return self.product_factors(self.project_field(selected), components)
         if tag == "morphismEndpoint":
             actual = self.endpoint_view(selected)
             if key(actual) == key(selected):

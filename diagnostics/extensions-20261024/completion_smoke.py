@@ -135,6 +135,10 @@ def whole_comparison(port, label, operation, parameters, source, target, inverse
 
 def finite_checks(port, dimension, typed):
     selected = node("obj.sets.fin", dimension)
+    if dimension == 1:
+        # A distinct singleton keeps a whole callable. The exact registered
+        # global-point object instead has the contract's scalar convention.
+        selected = node("finiteData", selected, [0])
     label = "finite/%s/%s" % (dimension, "typed" if typed else "bare")
     reversal = owned(port.request(label + "/whole morphism", "mor.sets.fin_rev",
                                   invoke("mor.sets.fin_rev", [dimension], selected, selected, selected,

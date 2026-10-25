@@ -654,3 +654,33 @@ property, algebra law, cone equation or universal property. These scratch
 engineering cases and their logs are outside the source repository and are not
 mathematical acceptance assertions. Python syntax and the nineteen addresses
 were checked separately against the supplied public declaration export.
+
+### Released scalar examples follow-up
+
+The later extension sufficiency checkpoint separately executes the concrete
+selected requests from public contract `90d7d3f`'s `api/wire-examples.md` as
+written. Five of those requests select existing V1 addresses. The exact modular
+power and addition examples retain `element(selectedRing, expression)` while
+their common invocation supplies the scalar carrier endpoint. The original
+reader incorrectly required those two descriptors to be identical.
+
+The reader now checks the existing named scalar carrier layout while retaining
+the complete selected structure for expression interpretation and full operation
+parameters. Actual returned payloads are decoded at the supplied endpoint;
+typed maps and owned callables keep their exact stored endpoints and original
+domain. A complete element can therefore contain the actual returned callable
+without becoming a newly fabricated closed point. Changed selected structures
+inside an operation expression, changed typed/owned endpoints and foreign nested
+owners are still rejected. The native routines and all nineteen registrations
+are unchanged.
+
+The five verbatim V1 requests have their expected interface outcomes. The F9
+comparison and matrix-application examples contain illustrative opaque tokens,
+so their as-written requests report unavailable owners. Their literals were not
+replaced with invented live tokens. Twenty-nine separate derived requests check
+the affected scalar, composition, actual-data and callable readers and rejection
+controls; they assert no computed value or mathematical law. Full transcripts,
+the two failed scalar-example replies and a subsequent retained-callable
+endpoint-reader failure are preserved outside source under
+`public-extension-sufficiency-checks`. These engineering observations have no
+mathematical acceptance standing.

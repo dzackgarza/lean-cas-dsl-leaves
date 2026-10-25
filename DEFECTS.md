@@ -562,3 +562,56 @@ algebra records, other comparisons and unrelated operations. No new public wire
 type was required. The 143 independent engineering requests check framing,
 returned-data reuse, owner handling and error strata only. They assert no
 mathematical answers and carry no acceptance standing.
+
+## Separate extension public-interface sufficiency check, 2026-10-25
+
+This checkpoint covers the 66 existing pairs of
+`diagnostics/extensions-20261024` from published base
+`1c41aa80993cc4b799893bd3165ddb64d9f80939`. The only external inputs were public
+contract `90d7d3f1833cff39b77024dcee2dc43213e623ad`, the supplied declaration export
+SHA256 `43392ae1c6636276519113d07c4cdc3ce8f8eeead1b4336db574c57269216079`
+and its provenance, and the installed engine interfaces. Every registered
+operation/input pair occurs in that export. No downstream implementation,
+protected question, expected answer, acceptance material or execution finding
+was supplied or read.
+
+Independent public-packet engineering requests exposed shared reader defects:
+distinct singleton domains were collapsed to points, whereas an actual global
+identity could return a callable; complete finite elements and matrix point
+records were rejected; generalized point views and constrained families were
+absent; projected Arrow/cone maps could be consumed with changed endpoint
+fields; and nested ring/monoid expressions could change their complete selected
+structure. Product legs omitted the published shape constructors and unlabelled
+finite graph form. A carrier action could expose an implicit endpoint inventory.
+The cyclic adapters did not consume full unit records or retained finite object
+inventories. Invalid top-level request objects could interrupt framed processing.
+
+These are repaired through the existing public data readers and the same Sage/GAP
+routines. Actual finite cyclic point keys and both unit fields remain attached
+to their existing native conversions. All registration
+manifests remain unchanged; no new algorithm, operation, Lean code, proof or
+certificate was introduced. Two existing singleton engineering examples were
+updated to request the full-callable interface with a distinct singleton.
+
+A separate verbatim check of released `api/wire-examples.md` executed eight
+concrete requests at existing selected addresses. Its preserved baseline exposed
+two V1 scalar-reader mismatches: the complete selected ring inside an element
+was incorrectly compared directly to the common request's carrier endpoint.
+The bounded reader fix retains that ring and its parameters, reads the supplied
+carrier separately, and preserves the endpoints of actual callable payloads.
+The eight public examples and 29 directly affected independently selected
+controls close with their interface outcomes. Two literal illustrative opaque
+tokens from the guide remain unavailable owners, not native mathematical gaps.
+Schematic blocks, data/reply-only blocks and the unregistered square-root request
+have explicit documentation coverage dispositions rather than invented bindings.
+
+The kernel functor's complete morphism action remains an unsupported native
+routine; its rational object action and the two method aliases remain available.
+The extension README records that boundary and the remaining ordinary native
+input limits. No missing public wire type was found. The closed external receipt
+contains 1,305 per-pair requests, 69 focused data-form requests, 25 framing/error
+requests and 50 local example requests, plus the distinct eight public examples
+and 29 V1 reader controls. Failed baseline attempts are retained.
+Only interface framing, parameter/endpoint retention, returned-data reuse and
+owner/error behavior were asserted. These are engineering observations with no
+mathematical correctness or acceptance standing.
