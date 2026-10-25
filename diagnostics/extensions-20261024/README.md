@@ -95,8 +95,10 @@ their supplying connection. Composition uses categorical order and retains its
 actual intermediate descriptor. A common point invocation keeps its generalized
 domain. An identity argument on the original source requests the complete map,
 including sources `Fin(0)` and `Fin(1)`. Both bare identities and typed identities
-work. Generalized results remain owned callables, preserving native metadata and
-all dependencies; no point is substituted for the complete map. Presentation
+work. The published nullary `op.monoids.one` point uses the ordinary scalar
+convention at the registered global-point domain, after executing its actual
+source comparison. At other generalized domains it remains a complete callable.
+Generalized results preserve native metadata and all dependencies. Presentation
 invocations likewise consume identities, typed generalized arrows and actual
 owned callable results. Returned `valueData` maps and bare owned maps can be
 used directly in subsequent compositions.
@@ -242,6 +244,50 @@ the first engine exited so only one native process ran at a time. Ready frames
 reported Sage `10.8.13` and adapter `2026-10-24.6`. The exact runner, logs and
 source digests are retained in the receipt. No additional optional native runs
 were performed for this follow-up.
+
+## Public contract conformance follow-up, 2026-10-25
+
+This bounded follow-up starts at leaf commit
+`fa0856dfc365c497a25e4a94019a1cb08b79c4d1`, consumes public contract
+`90d7d3f1833cff39b77024dcee2dc43213e623ad`, and uses the supplied fresh public
+declaration export with SHA256
+`43392ae1c6636276519113d07c4cdc3ce8f8eeead1b4336db574c57269216079`.
+All 66 existing registration pairs occur in that export's operation and input
+inventories. Both registration manifests are unchanged. No producer source,
+acceptance material or downstream execution report was inspected.
+
+The public terminal-point and complete-expression interfaces exposed a gap in
+the earlier decoder: a unit requested with its actual identity comparison could
+be returned as a callable and then fail as an operand of the next point operation.
+The global unit now returns its ordinary point data, using the supplied comparison.
+The same operation at a non-global domain keeps its complete callable. Supported
+`operationPoint` data retain their selected operation, ordered parameters, actual
+source comparison, original domain and selected target. Nested monoid operation
+expressions and the existing group-inverse expression consume their supplied
+operands through the already implemented native operations. They add no address
+or implementation for an otherwise unsupported monoid or group.
+
+Successive operations also consume `valueData` around actual returned modules,
+forms and base maps. Kernel requests read an actual complete returned Arrow
+through the same record reader as projections. Native endpoint views retain the
+selected Core action for mapped automorphism/two-subset images, module reindexing
+and the published cyclic-quotient automorphism target. Typed or owned endpoint
+fields remain attached unchanged; a native decoding view supplies no graph
+inventory and is never emitted as a replacement object.
+
+The port now checks nested ownership before every operation, including object
+and lift requests. An unused source-Arrow field, endpoint wrapper or product
+factor cannot carry a foreign token past the connection boundary. Complete
+finite graphs additionally check images against an explicitly supplied codomain
+inventory or primitive finite codec. These are data-framing checks; they do not
+establish a mathematical equation, a group law or the correctness of an inventory.
+
+Independent engineering cases and logs are kept outside this repository. They
+exercise global and generalized units, nested expressions, exact returned-data
+reuse, unnamed selected endpoints, malformed graphs and foreign owners through
+the framed public port. The existing completion, generic, additive, endpoint and
+callable-form scripts remain engineering controls only. The native algorithm
+scope and ordinary unsupported cases in the following table are unchanged.
 
 ## Deliberate limits
 

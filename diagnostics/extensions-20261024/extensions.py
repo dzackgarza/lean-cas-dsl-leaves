@@ -127,6 +127,8 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
 
     def underlying_receiver(self, selected):
         tag = self.tag(selected)
+        if tag == "valueData":
+            return self.underlying_receiver(fields(selected, tag, 1)[0])
         if tag == "morphismEndpoint":
             try:
                 return self.underlying_receiver(self.endpoint_view(selected))
@@ -321,9 +323,12 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
 
     def function(self, data, source, target):
         public_data([data, source, target], self.session)
+        def supplied_inventory(selected):
+            if self.tag(selected) == "morphismEndpoint":
+                raise Unsupported("a declared endpoint needs its supplied finiteData inventory for a graph")
+            return self.finite_object(selected).points
         return framed_callable(data, source, target, self.session, self.interpret_arrow,
-                               lambda selected: self.finite_object(selected).points,
-                               self.product_factors)
+                               supplied_inventory, self.product_factors)
 
     def category_descriptor(self, descriptor):
         """Check public descriptor framing without erasing a selected category.
@@ -571,6 +576,13 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
         raise Unsupported("this callable has no complete native linear-map representation")
 
     def base_map(self, data):
+        if self.tag(data) == "valueData":
+            return self.base_map(fields(data, "valueData", 1)[0])
+        if self.tag(data) == "opaqueData":
+            actual = self.session.get(data)
+            if not isinstance(actual, Callable):
+                raise ValueError("the retained scalar base-map datum is not a callable")
+            return actual.source, actual.target, actual
         if self.tag(data) == "typedMap":
             source, target, _ = typed_map(data)
             return source, target, self.function(data, source, target)
@@ -898,7 +910,11 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
     def point(self, data, target, domain):
         if self.tag(data) == "element":
             selected, expression = fields(data, "element", 2)
-            if self.tag(expression) == "point":
+            if self.tag(expression) in {"point", "operationPoint"}:
+                return super().point(data, target, domain)
+            if (self.tag(expression) == "operationExpression"
+                    and fields(expression, "operationExpression", 3)[0]
+                    in {"op.monoids.mul", "op.monoids.one"}):
                 return super().point(data, target, domain)
             try:
                 self.cyclic_context(selected)
@@ -1026,7 +1042,7 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
                     raise Unsupported("the native kernel implementation requires the selected rational scalar ring")
             else:
                 arrow = packet
-            source, target, defining_map = fields(arrow, "arrow", 3)
+            source, target, defining_map = self.arrow_record(arrow)
             actual_source, actual_target = self.module(source), self.module(target)
             callable_data = self.function(defining_map, source, target)
             native = self.native_linear(callable_data.native)

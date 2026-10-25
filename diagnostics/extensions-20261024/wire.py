@@ -221,6 +221,14 @@ def graph_callable(data, source, target, finite_inventory=inventory):
         raise ValueError("the graph inventory repeats a point")
     if set(entries) != set(selected):
         raise ValueError("a callable graph omits or adds a domain point")
+    try:
+        target_points = inventory(target)
+    except Unsupported:
+        pass
+    else:
+        target_keys = {key(point) for point in target_points}
+        if any(key(value) not in target_keys for value in entries.values()):
+            raise ValueError("a callable graph has an image outside the supplied codomain inventory")
 
     def evaluate(point):
         encoded = key(point)

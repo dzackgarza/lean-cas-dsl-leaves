@@ -9,8 +9,9 @@ from dataclasses import dataclass
 
 from sage.all import Set, Subsets, ZZ
 
-from cas_port import admitted_point, map_data, object_field
-from wire import Callable, NativeIdentity, Unsupported, fields, key, node, public_data, same
+from cas_port import admitted_point, map_data, object_field, operation_expression
+from wire import (Callable, NativeIdentity, Unsupported, fields, inventory, key,
+                  node, public_data, same)
 from native_polynomial import build as polynomial_action
 
 
@@ -25,6 +26,73 @@ class FiniteSubset:
 class GenericInterfaces:
     morphism_objects = {"obj.sets.group_morphisms": 2,
                         "obj.sets.module_morphisms": 3}
+
+    def operation_point_callable(self, data):
+        """Consume the supported nullary point's actual source comparison."""
+        operation, parameters, comparison, domain, selected = fields(data, "operationPoint", 5)
+        if not isinstance(operation, str) or not operation or not isinstance(parameters, list):
+            raise ValueError("a nullary point requires its operation and ordered parameters")
+        if operation != "op.monoids.one":
+            if operation in {"op.monoids.mul", "op.groups.inverse", "op.additive_monoids.add"} | self.ring_operations:
+                raise ValueError("operationPoint requires a nullary operation")
+            raise Unsupported("this nullary operation has no implemented point adapter")
+        if len(parameters) != 1:
+            raise ValueError("the nullary monoid point requires its complete selected monoid")
+        if isinstance(comparison, list) or self.tag(comparison) == "finiteGraph":
+            # The operation's published categorical source is Fin(1); the
+            # supplied graph still provides every actual comparison value.
+            source = node("obj.sets.fin", 1)
+        else:
+            source = self.component_endpoint(comparison, "target")
+        actual = self.function(comparison, domain, source)
+        action = self.function(node(operation, *parameters), source, selected)
+        context = (data, actual, action)
+        return Callable(domain, selected,
+                        lambda point, retained=context: retained[2](retained[1](point)))
+
+    def point(self, data, target, domain):
+        tag = self.tag(data)
+        if tag == "element":
+            selected, expression = fields(data, tag, 2)
+            expression_tag = self.tag(expression)
+            if expression_tag == "operationPoint":
+                return self.point(expression, selected, domain)
+            if expression_tag == "operationExpression":
+                operation, _, _ = operation_expression(expression)
+                if operation in {"op.monoids.mul", "op.monoids.one", "op.groups.inverse"}:
+                    return self.point(expression, selected, domain)
+            if expression_tag == "mul":
+                try:
+                    self.monoid_operations(selected)
+                except Unsupported:
+                    pass
+                else:
+                    operands = fields(expression, "mul", 2)
+                    return self.point(node("operationExpression", "op.monoids.mul", [selected], operands),
+                                      selected, domain)
+        if tag == "operationPoint":
+            actual = self.operation_point_callable(data)
+            same(actual.target, target, "nullary point's complete selected target")
+            if domain is not None:
+                same(actual.source, domain, "nullary point's original generalized domain")
+            if not self.closed_domain(actual.source):
+                raise Unsupported("a non-global nullary point retains its original callable domain")
+            return actual(inventory(actual.source)[0])
+        if tag == "operationExpression":
+            operation, parameters, operands = operation_expression(data)
+            if operation in {"op.monoids.mul", "op.monoids.one", "op.groups.inverse"}:
+                if len(parameters) != 1:
+                    raise ValueError("the operation expression omits its complete selected structure")
+                arity = {"op.monoids.mul": 2, "op.monoids.one": 0, "op.groups.inverse": 1}[operation]
+                if len(operands) != arity:
+                    raise ValueError("the operation expression has a different operand count")
+                selected = parameters[0]
+                values = [self.point(value, target, domain) for value in operands]
+                if operation == "op.groups.inverse":
+                    return self.function(node(operation, selected), selected, selected)(values[0])
+                multiply, unit, _ = self.monoid_operations(selected)
+                return unit() if arity == 0 else multiply(*values)
+        return super().point(data, target, domain)
 
     def morphism_function(self, data, object_id, parameters, source, target):
         """Use the complete supplied function under its selected admission."""
@@ -133,6 +201,8 @@ class GenericInterfaces:
     def monoid_operations(self, selected):
         """Read the actual supported selected monoid, without erasing its law."""
         tag = self.tag(selected)
+        if tag == "valueData":
+            return self.monoid_operations(fields(selected, tag, 1)[0])
         if tag == "functorAction":
             action, receiver = fields(selected, tag, 2)
             atag = self.tag(action)
@@ -196,6 +266,11 @@ class GenericInterfaces:
 
     def interpret_arrow(self, arrow, source, target):
         tag = self.tag(arrow)
+        if tag == "operationPoint":
+            actual = self.operation_point_callable(arrow)
+            same(actual.source, source, "nullary callable's original generalized domain")
+            same(actual.target, target, "nullary callable's complete selected target")
+            return actual
         applications = {identifier + "#application": identifier
                         for identifier in self.morphism_objects}
         if tag == "admittedPoint":
@@ -260,7 +335,13 @@ class GenericInterfaces:
                        "selectedMonoid": selected, "multiply": multiply,
                        "unit": unit, "nativeModel": model}
             if tag == "op.monoids.one":
-                return Callable(source, target, lambda _, retained=context: retained["unit"]())
+                def identity_point(point, retained=context):
+                    # The published operation has Fin(1) as its categorical
+                    # source. Consume the comparison's actual image; do not
+                    # invent a replacement terminal point or domain.
+                    self.finite_ordinal(point, 1)
+                    return retained["unit"]()
+                return Callable(source, target, identity_point)
             native = None
             if model in {"scalar_multiplication", "scalar_addition"}:
                 try:
@@ -274,7 +355,8 @@ class GenericInterfaces:
             def multiplication(pair, retained=context):
                 if not isinstance(pair, list) or len(pair) != 2:
                     raise ValueError("monoid multiplication requires both actual operands")
-                return retained["multiply"](pair[0], pair[1])
+                left, right = (self.point(value, retained["selectedMonoid"], None) for value in pair)
+                return retained["multiply"](left, right)
             return Callable(source, target, multiplication, native)
         return super().interpret_arrow(arrow, source, target)
 

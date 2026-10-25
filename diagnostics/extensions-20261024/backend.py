@@ -24,7 +24,7 @@ def main():
     from cas_port import read_frame, value_data, write_frame
     from extensions import ExtensionEngine
     import lifts
-    from wire import Unsupported
+    from wire import Unsupported, public_data
 
     manifest = json.loads(Path(__file__).with_name("leaves.json").read_text())
     operations = {row["operation"] for row in manifest["registrations"]}
@@ -32,7 +32,7 @@ def main():
     write_frame({"op": "ready", "protocol": 1,
                  "backend": "independent-extensions-sage",
                  "backend_version": sage.version.version,
-                 "adapter_version": "2026-10-24.6",
+                 "adapter_version": "2026-10-25.1",
                  "capabilities": sorted(operations)})
     while True:
         packet = read_frame()
@@ -45,6 +45,10 @@ def main():
             if "args" not in packet:
                 raise ValueError("the request omitted its actual args data")
             argument = packet["args"]
+            # Every retained dependency belongs to this request, including an
+            # object field or source Arrow that a native routine need not visit.
+            # A JSON wrapper never makes another connection's token portable.
+            public_data(argument, engine.session)
             if operation.startswith("lift."):
                 result = lifts.factor(engine, operation, argument) if operation.endswith("#factor") else lifts.field(engine, operation, argument)
             else:

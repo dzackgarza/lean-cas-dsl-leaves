@@ -507,5 +507,80 @@
     ],
     "manifestSha256": "0af9314a206ca8fb7028da77f75c5adeb4b0c4a04c309d06594aa532a4d3597d",
     "registrationPairsUnchanged": 66
+  },
+  "publicConformance20261025": {
+    "baseLeafCommit": "fa0856dfc365c497a25e4a94019a1cb08b79c4d1",
+    "publicContractCommit": "90d7d3f1833cff39b77024dcee2dc43213e623ad",
+    "publicApiSha256": "43392ae1c6636276519113d07c4cdc3ce8f8eeead1b4336db574c57269216079",
+    "publicApiProvenance": {
+      "protocolRevision": "90d7d3f1833cff39b77024dcee2dc43213e623ad",
+      "mathematicsRevision": "82d1370de372a00a86391b74fc2566c9547dfcb6",
+      "exporterSha256": "938fcb03f47fce885c2661d3b5135e3c9dec0b999563887087fffe897ccff9c9",
+      "kernelRevision": "da6af543a8e71e9400f5438ee40a4e395af2f299",
+      "admissionSourceSha256": "14af9de07036bd0f11000e2bd88a6dfed7edc6bf47690b1fa49b3f97e00d19c3",
+      "addressExporterSha256": "e4936bf3a71dfd145635816e4e2c0fe269b5790a0d34d1ee7dc05f6216edf4b8",
+      "additionalImports": [
+        "LeanCategories.Catalogue.Semantics.Foundation.FiniteOrders",
+        "LeanCategories.Catalogue.Semantics.Foundation.TwoSubsets",
+        "LeanCategories.Catalogue.Semantics.Foundation.IntegerSquareBounds",
+        "LeanCategories.Catalogue.Semantics.Algebra.CyclicQuotients",
+        "LeanCategories.Catalogue.Semantics.Independent.ScalarAndFormExtensions"
+      ],
+      "declarationProbeSha256": "6d9af2678190cb4a439dfb3c0a8e97690f416306cbbd97735904a9fb17a7d8da",
+      "addressProbeSha256": "9017be76727d196bc8fe0ba8edb604add6ecf088bca703ddb11e0b7e74487b71"
+    },
+    "publicProvenanceFileSha256": "0f16ecbe95dffd19b7328bfb76310ef967c6793f448cf4576dc414c86caec7ea",
+    "publicContractFiles": {
+      "CasContract/Port.lean": "1d2093178736f4c8c76bb578e8ee1ab5846da0f916f4b5e50d11752903266be3",
+      "python/cas_port.py": "5f2c330047725cd429eec42ac0dbf0ca6f5933b723857d44859f1954a7e98e19",
+      "api/README.md": "6fc24c988722d8e66f2cf8227975e015893a5700a971a4cd4fc7c7c786fc9a15",
+      "api/manifest.md": "4fefaf5ae2fc8dd8bb2a1556274e1aa49347c288a61897b6804870a413d53314",
+      "api/wire-examples.md": "ca78531697169e84909cbde4cedd06837ff27b607c64ba307c17597ee3a94ed9"
+    },
+    "unchangedExtensionManifestSha256": "0af9314a206ca8fb7028da77f75c5adeb4b0c4a04c309d06594aa532a4d3597d",
+    "unchangedRootManifestSha256": "318403323bfd15af750ac0fc7a726bbb08d74487e4496c337a70b4cdef8c6ea7",
+    "registrationPairs": 66,
+    "missingPublicAddresses": [],
+    "inputBoundary": "Only the exact independent leaf and its own engineering material, the exact public contract and reference helper, the explicitly supplied generated public API/provenance, and the installed runtime setup were consulted. No kernel source, protected mathematical question, expected answer, acceptance record, other agent directory, CI result or downstream runtime finding was read.",
+    "scope": "Common forms of existing registrations only: complete nullary/monoid expressions, global versus generalized results, actual returned object/map/Arrow reuse, complete endpoint contexts, explicit graph inventories, and live session ownership. No manifest change, new operation, new native mathematics algorithm, Lean code or certificate.",
+    "engineeringChecks": {
+      "freshPublicCases": {
+        "primaryRequests": 27,
+        "foreignOwnerRequests": 3,
+        "graphControls": 3,
+        "result": "completed"
+      },
+      "completion": {
+        "primaryRequests": 99,
+        "foreignOwnerRequests": 1,
+        "groups": 14,
+        "result": "completed"
+      },
+      "generic": {
+        "requests": 36,
+        "result": "completed"
+      },
+      "additive": {
+        "primaryRequests": 66,
+        "foreignOwnerRequests": 1,
+        "result": "completed"
+      },
+      "endpoint": {
+        "primaryRequests": 33,
+        "foreignOwnerRequests": 2,
+        "protocolGroups": 13,
+        "result": "completed"
+      },
+      "callableForms": {
+        "primaryRequests": 35,
+        "foreignOwnerRequests": 3,
+        "protocolGroups": 5,
+        "result": "completed"
+      },
+      "syntaxSources": 17,
+      "boundary": "Engineering framing, complete supplied data passage, successive native reuse, result shape and owner rejection only. No computed mathematical answer is asserted and no mathematical acceptance claim is made."
+    },
+    "publicInterfaceGap": null,
+    "implementationLimits": "The existing README Deliberate limits table remains authoritative for this diagnostic: arbitrary categories/functors, unsupported carriers, general-ring kernels, arbitrary infinite subsets/functions/series and arbitrary structured projection/creation actions remain unsupported."
   }
 }

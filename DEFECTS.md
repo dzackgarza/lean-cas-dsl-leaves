@@ -481,3 +481,45 @@ not evidence of anything, and is replaced as soon as the contract declares the f
 * **Closed points in morphism positions** (`compose` first argument, mediator components)
   are written as `element` envelopes; the contract gives "the pair of their data" only for
   mediators.
+
+## Public-interface conformance review, 2026-10-25
+
+This review is limited to the independent extension diagnostic at leaf base
+`fa0856dfc365c497a25e4a94019a1cb08b79c4d1`, public contract
+`90d7d3f1833cff39b77024dcee2dc43213e623ad`, and the supplied declaration export
+SHA256 `43392ae1c6636276519113d07c4cdc3ce8f8eeead1b4336db574c57269216079`.
+The older reports above describe their original checkpoints, not gaps asserted
+against this public contract. No kernel implementation, external mathematical
+test, expected answer or downstream execution record was used in this review.
+
+The following defects were implementation gaps in existing registrations:
+
+- A nullary unit with its actual terminal identity comparison returned a
+  callable at the global-point domain. Reusing that data as a point then failed.
+  The decoder now applies the retained comparison and returns ordinary global
+  point data; generalized requests still retain their complete callable domain.
+- Published `operationPoint` and nested selected monoid operation expressions
+  were absent from the existing operand readers. Their complete supplied data
+  now reach the existing native unit, multiplication and inverse routines.
+- Returned module/base-map envelopes and a returned Arrow record were not
+  accepted by every successive-operation reader. The existing object and map
+  readers now consume those actual data, including their original owners.
+- Some object and lift branches inspected only the fields their native routine
+  needed, allowing a nested foreign token in another retained field to be
+  overlooked. The framing boundary now visits every dependency before dispatch.
+- Finite graphs checked complete domain keys but omitted the check against an
+  actually supplied codomain inventory. The shared graph reader now checks it.
+- Supported mapped Core images and a declared cyclic-quotient automorphism target
+  lacked native endpoint views for subsequent operations. Their complete public
+  signatures now select the existing readers while the original descriptors and
+  actual returned points remain attached.
+
+Both manifests and all 66 extension registration pairs remain unchanged. The
+current precise native implementation limits are recorded in the extension
+README's existing table: arbitrary infinite functions/subsets, other selected
+categories and set-valued functors, unsupported ring/module/form representations,
+general-ring kernels, arbitrary summable families and arbitrary structured
+comparison/creation actions remain ordinary `unsupported` cases. This bounded
+review found no missing public wire type needed for the repairs. Its own framed
+engineering cases check shape, reuse and ownership only; they supply no
+mathematical correctness or acceptance evidence.

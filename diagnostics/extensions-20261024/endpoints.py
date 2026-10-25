@@ -74,7 +74,15 @@ class EndpointInterfaces:
         if tag == "map":
             action, original = fields(arrow, tag, 2)
             if self.carrier_action(action):
-                return node("functorAction", action, node("morphismEndpoint", original, side))
+                return node("functorAction", action, self.component_endpoint(original, side))
+            if self.tag(action) in {"con.automorphisms", "fun.core_sets.automorphisms",
+                                    "fun.core_groups.automorphisms", "fun.core_sets.two_subsets"}:
+                source, target, _, _ = self.core_comparison(original)
+                return node("functorAction", action,
+                            node("coreObject", source if side == "source" else target))
+            if self.tag(action) == "fun.modules.reindex":
+                fields(action, "fun.modules.reindex", 1)
+                return node("functorAction", action, self.component_endpoint(original, side))
             raise Unsupported("the selected mapped endpoint has no implemented native reader")
         if tag == "cellComponent":
             cell, parameters, receiver, inverse = fields(arrow, tag, 4)
@@ -120,11 +128,9 @@ class EndpointInterfaces:
             return node("objectProduct", monoid, monoid) if side == "source" else monoid
         if tag == "op.monoids.one":
             monoid, = fields(arrow, tag, 1)
-            if side == "source":
-                # A native reader does not manufacture the terminal point or
-                # its inventory; the actual request supplies that comparison.
-                raise Unsupported("the terminal endpoint needs its supplied point data")
-            return monoid
+            # This is native decoding context from the published signature,
+            # not an inventory or a replacement for the supplied comparison.
+            return node("obj.sets.fin", 1) if side == "source" else monoid
         if tag == "op.groups.inverse":
             return fields(arrow, tag, 1)[0]
         if tag in {"mor.sets.equality", "op.linear_orders.le", "op.linear_orders.lt"}:
@@ -166,6 +172,11 @@ class EndpointInterfaces:
             modulus, = fields(arrow, tag, 1)
             self.natural(modulus, "the selected endpoint modulus")
             return node("obj.sets.integers") if side == "source" else node("obj.sets.cyclic_quotient", modulus)
+        if tag == "mor.groups.cyclic_quotient_aut_by_unit" and side == "target":
+            modulus, = fields(arrow, tag, 1)
+            self.natural(modulus, "the selected endpoint modulus")
+            return node("functorAction", node("fun.core_groups.automorphisms"),
+                        node("coreObject", node("obj.groups.cyclic_quotient", modulus)))
         if tag in {"mor.sets.automorphism_forward", "mor.sets.automorphism_backward",
                    "mor.groups.automorphism_forward", "mor.groups.automorphism_backward"}:
             receiver, _ = fields(arrow, tag, 2)

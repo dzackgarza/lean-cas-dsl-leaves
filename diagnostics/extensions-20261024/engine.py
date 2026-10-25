@@ -114,6 +114,12 @@ class Engine(EndpointInterfaces):
 
     def ring(self, selected):
         tag = self.tag(selected)
+        if tag == "valueData":
+            return self.ring(fields(selected, tag, 1)[0])
+        if tag == "finiteData":
+            original, _ = fields(selected, tag, 2)
+            inventory(selected)
+            return self.ring(original)
         if tag in self.rational_ids | self.integer_ids | self.dual_x_ids | self.dual_y_ids:
             fields(selected, tag, 0)
             if tag in self.rational_ids:
@@ -337,6 +343,8 @@ class Engine(EndpointInterfaces):
 
     def module(self, selected):
         tag = self.tag(selected)
+        if tag == "valueData":
+            return self.module(fields(selected, tag, 1)[0])
         if tag == "opaqueData":
             native = self.session.get(selected)
             if isinstance(native, Form):
@@ -409,6 +417,8 @@ class Engine(EndpointInterfaces):
 
     def form(self, selected):
         tag = self.tag(selected)
+        if tag == "valueData":
+            return self.form(fields(selected, tag, 1)[0])
         if tag == "opaqueData":
             native = self.session.get(selected)
             if not isinstance(native, Form):
@@ -504,6 +514,9 @@ class Engine(EndpointInterfaces):
         return ports[index]
 
     def closed_domain(self, domain):
+        if self.tag(domain) == "finiteData":
+            original, _ = fields(domain, "finiteData", 2)
+            return self.closed_domain(original) and len(inventory(domain)) == 1
         return self.tag(domain) == "obj.sets.fin" and fields(domain, "obj.sets.fin", 1) == [1]
 
     def point(self, data, target, domain):
@@ -927,6 +940,11 @@ class Engine(EndpointInterfaces):
         if self.closed_domain(domain) and not self.callable_argument(argument, domain, source):
             return action(self.point(argument, source, domain))
         original = self.function(argument, domain, source)
+        if operation == "op.monoids.one" and self.closed_domain(domain):
+            # The public nullary-point interface keeps its actual terminal
+            # comparison, while its global result uses ordinary scalar data.
+            # Generalized domains below continue to return complete callables.
+            return action(original(inventory(domain)[0]))
         # A returned callable is the actual composite on the complete original
         # domain. Keeping it owned preserves native metadata and dependencies,
         # including finite and singleton domains, without materializing samples.
