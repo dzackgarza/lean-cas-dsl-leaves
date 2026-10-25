@@ -523,3 +523,42 @@ comparison/creation actions remain ordinary `unsupported` cases. This bounded
 review found no missing public wire type needed for the repairs. Its own framed
 engineering cases check shape, reuse and ownership only; they supply no
 mathematical correctness or acceptance evidence.
+
+## V1 public-interface conformance completion, 2026-10-25
+
+This bounded review covers only the existing nineteen registration pairs of
+`diagnostics/v1` at published leaf base
+`51e0e6ebd25a2f2a88097ae3081a3c34970cc29d`. Its public inputs are contract
+`90d7d3f1833cff39b77024dcee2dc43213e623ad`, the supplied declaration export
+SHA256 `43392ae1c6636276519113d07c4cdc3ce8f8eeead1b4336db574c57269216079`,
+their public provenance, and the existing specimen's engineering material.
+No kernel source, protected mathematical questions, expected answers, acceptance
+records, downstream execution report or other agent's work was used.
+
+The existing compact F9 comparison branch returned a bare `element`, omitting
+the required `valueData` envelope. Whole-callable requests were treated as
+point data or failed at a missing finite inventory. Owned projections retained
+their native parent without their complete public source, while some nested
+owner fields, endpoint changes and parameter changes were not checked. Common
+`morphismEndpoint` and `constructionField` object/map consumers were absent.
+Typed matrix and coefficient callables also confused a structured coefficient
+ring with its actual carrier endpoint. These were adapter gaps in already
+published interfaces.
+
+The specimen now retains actual callable dependencies and both endpoint fields,
+executes whole requests through the existing native routines, reads complete
+supplied object/map fields, distinguishes global scalar and other generalized
+domains, checks owners recursively before dispatch, and consumes the actual
+typed carrier endpoints. Explicit identity wiring preserves already decoded
+native records. Exact scalar and finite inventory/graph framing is checked
+without treating it as a mathematical result. The existing F9 constructors,
+native algorithms and all manifests remain unchanged. The extension diagnostic
+is unchanged.
+
+The V1 README records precise ordinary native limits: other selected parents and
+arbitrary functions, Units parents for product construction, unsupplied graph
+inventories or intermediate endpoints, the unstored pullback center, incomplete
+algebra records, other comparisons and unrelated operations. No new public wire
+type was required. The 143 independent engineering requests check framing,
+returned-data reuse, owner handling and error strata only. They assert no
+mathematical answers and carry no acceptance standing.

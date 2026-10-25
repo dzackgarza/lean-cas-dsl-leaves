@@ -87,7 +87,7 @@ class NativeUnitData:
 
 class SageDiagnostic:
     NAME = "sage-v1-diagnostic"
-    VERSION = "0.5.0"
+    VERSION = "0.6.0"
     POINT_OPERATIONS = (
         "mor.sets.matrix_rows",
         "mor.sets.matrix_charpoly",
@@ -135,6 +135,17 @@ class SageDiagnostic:
         "obj.sets.integers_mod": "residues",
         "obj.rings.integers_mod": "residues",
         "obj.commutative_rings.integers_mod": "residues",
+    }
+    PARAMETER_COUNTS = {
+        "mor.sets.matrix_rows": 2, "mor.sets.matrix_charpoly": 2,
+        "obj.sets.matrices#application": 2, "obj.sets.polynomials#application": 2,
+        "mor.sets.polynomial_derivative": 1, "mor.sets.polynomial_degree": 1,
+        "mor.sets.polynomial_own_evaluation": 1, "op.rings.add": 1,
+        "op.rings.mul": 1, "op.rings.pow": 2, "op.rings.neg": 1,
+        "mor.sets.equality": 1, "mor.sets.divide": 1,
+        "mor.sets.f9_x_constants": 0, "mor.sets.f9_y_constants": 0,
+        "mor.sets.tuple_empty": 1, "mor.sets.tuple_cons": 2,
+        "op.semirings.add": 1, "op.semirings.mul": 1, "op.semirings.pow": 2,
     }
 
     def __init__(self, port):
@@ -206,12 +217,130 @@ class SageDiagnostic:
         if not isinstance(token, str) or not token:
             raise ValueError("an opaque token must be a nonempty string")
         if token not in self._owned:
-            raise ValueError("opaque data are not owned by this live connection")
+            raise NotImplementedError("opaque data are not owned by this live connection")
         return self._owned[token]
+
+    def check_owners(self, data):
+        """Owners survive every public wrapper, including unused record fields."""
+        if isinstance(data, dict):
+            if tag_of(data) == "opaqueData":
+                self.entry(data)
+            for value in data.values():
+                self.check_owners(value)
+        elif isinstance(data, list):
+            for value in data:
+                self.check_owners(value)
+
+    def check_parameters(self, operation, parameters):
+        if operation not in self.PARAMETER_COUNTS:
+            raise NotImplementedError("operation has no diagnostic engine wrapper")
+        if not isinstance(parameters, list) or len(parameters) != self.PARAMETER_COUNTS[operation]:
+            raise ValueError("incorrect complete parameters for the selected callable")
+        if operation in ("op.rings.pow", "op.semirings.pow", "mor.sets.tuple_cons"):
+            natural(parameters[1])
+        if operation in ("mor.sets.matrix_rows", "mor.sets.matrix_charpoly", "obj.sets.matrices#application"):
+            natural(parameters[0])
+
+    def endpoint_shape(self, arrow, selector):
+        """Native data layout at a supplied declared endpoint, not a new object row.
+
+        The descriptor remains morphismEndpoint(arrow, selector) on the wire.
+        These layouts come from the published signatures of existing adapters.
+        They neither provide an inventory nor identify two endpoint descriptors.
+        """
+        arrow = unbox(arrow)
+        tag = tag_of(arrow)
+        if tag == "map":
+            edge, inner = fields(arrow, tag, 2)
+            self.require_forget_edge(edge)
+            return node("functorAction", edge, self.endpoint_shape(inner, selector))
+        if tag == "compose":
+            first, second = fields(arrow, tag, 2)
+            self.arrow_endpoints(arrow)
+            return self.endpoint_shape(first if selector == "source" else second, selector)
+        if tag == "mediator":
+            first, second = fields(arrow, tag, 2)
+            self.arrow_endpoints(arrow)
+            if selector == "source":
+                return self.endpoint_shape(first, "source")
+            return node("objectProduct", self.endpoint_shape(first, "target"),
+                        self.endpoint_shape(second, "target"))
+        if tag == "objectField":
+            object_id, field, parameters = self.port.object_field(arrow)
+            if len(parameters) != 1:
+                raise ValueError("the selected object field needs its complete parameter")
+            if object_id == "obj.sets.polynomials" and field == "constants":
+                endpoints = (parameters[0], node(object_id, *parameters))
+            elif object_id == "obj.sets.units" and field == "inclusion":
+                endpoints = (node(object_id, *parameters), parameters[0])
+            else:
+                raise NotImplementedError("this object field has no diagnostic endpoint adapter")
+        elif tag == "generator":
+            object_id, parameters = fields(arrow, tag, 2)
+            if not ((object_id in ("obj.sets.f9_x", "obj.sets.f9_y") and parameters == [])
+                    or (object_id == "obj.sets.polynomials" and isinstance(parameters, list) and len(parameters) == 1)):
+                raise NotImplementedError("this generator has no diagnostic endpoint adapter")
+            endpoints = (node("obj.sets.fin", 1), node(object_id, *parameters))
+        elif tag in self.PARAMETER_COUNTS:
+            p = fields(arrow, tag)
+            self.check_parameters(tag, p)
+            if tag.startswith("op.rings.") or tag in self.SEMIRING_OPERATIONS:
+                pair = tag in ("op.rings.add", "op.rings.mul", "op.semirings.add", "op.semirings.mul")
+                endpoints = (node("objectProduct", p[0], p[0]) if pair else p[0], p[0])
+            elif tag == "mor.sets.equality":
+                endpoints = (node("objectProduct", p[0], p[0]), node("obj.sets.truth_values"))
+            elif tag == "mor.sets.divide":
+                endpoints = (node("objectProduct", p[0], node("obj.sets.units", p[0])), p[0])
+            elif tag in ("mor.sets.f9_x_constants", "mor.sets.f9_y_constants"):
+                endpoints = (node("obj.sets.integers_mod", 3),
+                             node("obj.sets.f9_x" if tag.endswith("x_constants") else "obj.sets.f9_y"))
+            elif tag == "mor.sets.tuple_empty":
+                endpoints = (node("obj.sets.fin", 1), node("obj.sets.vectors", p[0], 0))
+            elif tag == "mor.sets.tuple_cons":
+                endpoints = (node("objectProduct", p[0], node("obj.sets.vectors", p[0], p[1])),
+                             node("obj.sets.vectors", p[0], p[1] + 1))
+            elif tag in ("mor.sets.matrix_rows", "mor.sets.matrix_charpoly", "obj.sets.matrices#application"):
+                n, coefficient = p
+                matrix = node("obj.sets.matrices", n, coefficient)
+                vector = node("obj.sets.vectors", coefficient, n)
+                if tag == "mor.sets.matrix_rows":
+                    endpoints = (node("obj.sets.vectors", vector, n), matrix)
+                elif tag == "mor.sets.matrix_charpoly":
+                    endpoints = (matrix, node("obj.sets.polynomials", coefficient))
+                else:
+                    endpoints = (node("objectProduct", matrix, vector), vector)
+            else:
+                polynomial = node("obj.sets.polynomials", p[0])
+                if tag == "mor.sets.polynomial_derivative":
+                    endpoints = (polynomial, polynomial)
+                elif tag == "mor.sets.polynomial_degree":
+                    endpoints = (polynomial, node("obj.sets.degrees"))
+                else:
+                    target = p[0] if tag == "mor.sets.polynomial_own_evaluation" else self.algebra_data(*p)[0]
+                    endpoints = (node("objectProduct", polynomial, target), target)
+        else:
+            endpoints = self.arrow_endpoints(arrow)
+        result = endpoints[0 if selector == "source" else 1]
+        if result is None:
+            raise NotImplementedError("this declared endpoint needs supported complete callable data")
+        return result
 
     def carrier_descriptor(self, descriptor):
         # Only the explicitly supported published forget actions are lowered.
         # Unknown actions are not erased or guessed from a native carrier.
+        descriptor = unbox(descriptor)
+        if tag_of(descriptor) == "morphismEndpoint":
+            arrow, selector = self.port.morphism_endpoint(descriptor)
+            return self.carrier_descriptor(self.endpoint_shape(arrow, selector))
+        if tag_of(descriptor) == "constructionField":
+            operation, diagram, packet, index = self.port.construction_field(descriptor)
+            if index != 0:
+                raise ValueError("a cone map field cannot be used as an object")
+            apex, _targets, _legs = self.construction_cone(operation, diagram, packet)
+            return self.carrier_descriptor(apex)
+        if tag_of(descriptor) == "subobjectApex":
+            receiver, = fields(descriptor, "subobjectApex", 1)
+            return self.carrier_descriptor(self.arrow_record(receiver)[0])
         if tag_of(descriptor) == "functorAction":
             edge, source = fields(descriptor, "functorAction", 2)
             self.require_forget_edge(edge)
@@ -222,6 +351,30 @@ class SageDiagnostic:
             return self.carrier_descriptor(actual_apex)
         return descriptor
 
+    def object_data(self, descriptor):
+        """Read actual object fields; do not erase a selected structural action."""
+        descriptor = unbox(descriptor)
+        tag = tag_of(descriptor)
+        if tag in ("constructionApex", "constructionField"):
+            data = fields(descriptor, tag, 3 if tag == "constructionApex" else 4)
+            if tag == "constructionField" and natural(data[3]) != 0:
+                raise ValueError("a cone map field cannot be used as an object")
+            return self.object_data(self.construction_cone(*data[:3])[0])
+        if tag == "subobjectApex":
+            receiver, = fields(descriptor, tag, 1)
+            return self.object_data(self.arrow_record(receiver)[0])
+        if tag == "morphismEndpoint":
+            arrow, selector = self.port.morphism_endpoint(descriptor)
+            endpoint = self.arrow_endpoints(arrow)[0 if selector == "source" else 1]
+            if endpoint is not None:
+                return self.object_data(endpoint)
+        return descriptor
+
+    def check_endpoints(self, source, target, actual_source, actual_target):
+        for selected, actual, name in ((source, actual_source, "source"), (target, actual_target, "target")):
+            if selected is not None and actual is not None and self.object_data(selected) != self.object_data(actual):
+                raise ValueError("a callable changed its supplied complete %s" % name)
+
     def arrow_endpoints(self, arrow):
         """Read supplied endpoint context without evaluating a diagram's arrows."""
         arrow = unbox(arrow)
@@ -229,12 +382,9 @@ class SageDiagnostic:
         if tag == "typedMap":
             source, target, _callable = self.port.typed_map(arrow)
             return source, target
-        if tag == "arrowHom":
-            receiver, = fields(arrow, "arrowHom", 1)
-            receiver = unbox(receiver)
-            if tag_of(receiver) not in ("arrow", "subobject"):
-                raise ValueError("arrowHom requires its complete returned Arrow record")
-            source, target, _callable = fields(receiver, tag_of(receiver), 3)
+        if tag in ("arrowHom", "subobjectInclusion"):
+            receiver, = fields(arrow, tag, 1)
+            source, target, _callable = self.arrow_record(receiver)
             return source, target
         if tag == "identity":
             source, target = fields(arrow, "identity", 2)
@@ -250,8 +400,7 @@ class SageDiagnostic:
             first, second = fields(arrow, "compose", 2)
             source, middle = self.arrow_endpoints(first)
             other_middle, target = self.arrow_endpoints(second)
-            if middle is not None and other_middle is not None and middle != other_middle:
-                raise ValueError("a diagram composition changed its complete intermediate endpoint")
+            self.check_endpoints(None, middle, None, other_middle)
             return source, target
         if tag == "incl.sets.fin_integers_mod":
             modulus, = fields(arrow, tag, 1)
@@ -269,13 +418,70 @@ class SageDiagnostic:
         if isinstance(arrow, list) or tag == "finiteGraph":
             return None, None
         if tag == "opaqueData":
-            self.entry(arrow)
+            entry = self.entry(arrow)
+            if entry.callable:
+                return entry.domain, entry.descriptor
             return None, None
-        if tag in ("constructionLeg", "presentation", "objectField", "mediator",
-                   "element", "point", "generator", "mor.sets.tuple_empty",
+        if tag in ("constructionLeg", "constructionField"):
+            return self.construction_map(arrow)[:2]
+        if tag == "presentation":
+            comparison, parameters, inverse = fields(arrow, tag, 3)
+            if comparison != "cmp.f9.translation":
+                raise NotImplementedError("this comparison has no diagnostic endpoint adapter")
+            self.f9_comparison(parameters, inverse)
+            endpoints = (node("obj.commutative_rings.f9_x"), node("obj.commutative_rings.f9_y"))
+            return endpoints[::-1] if inverse else endpoints
+        if tag == "mediator":
+            first, second = fields(arrow, tag, 2)
+            source, left = self.arrow_endpoints(first)
+            other_source, right = self.arrow_endpoints(second)
+            self.check_endpoints(source, None, other_source, None)
+            return source if source is not None else other_source, (
+                node("objectProduct", left, right) if left is not None and right is not None else None)
+        if tag == "point":
+            inner, = fields(arrow, tag, 1)
+            return self.arrow_endpoints(inner)
+        if tag == "element":
+            selected, _data = fields(arrow, tag, 2)
+            return node("obj.sets.fin", 1), selected
+        if tag == "pointView":
+            target, _original, domain = fields(arrow, tag, 3)
+            return domain, target
+        if tag == "admittedPoint":
+            _object_id, _parameters, domain, _source, target, _data = self.port.admitted_point(arrow)
+            return domain, target
+        if tag == "constrainedPoint":
+            _constructor, domain, _source, target, _data = self.port.constrained_point(arrow)
+            return domain, target
+        if tag in ("objectField", "generator", "mor.sets.tuple_empty",
                    *self.POINT_OPERATIONS, *self.SEMIRING_OPERATIONS):
             return None, None
         raise NotImplementedError("this diagram arrow needs supported explicit endpoint context")
+
+    def arrow_record(self, receiver):
+        receiver = unbox(receiver)
+        if tag_of(receiver) == "objectPresentation":
+            _requested, receiver = fields(receiver, "objectPresentation", 2)
+            receiver = unbox(receiver)
+        if tag_of(receiver) not in ("arrow", "subobject"):
+            raise ValueError("an Arrow projection requires its complete returned record")
+        data = fields(receiver, tag_of(receiver))
+        if len(data) not in (3, 4):
+            raise ValueError("an Arrow record needs its complete source, target and map")
+        return tuple(data[:3])
+
+    def construction_map(self, arrow):
+        tag = tag_of(arrow)
+        operation, diagram, packet, index = fields(arrow, tag, 4)
+        apex, targets, legs = self.construction_cone(operation, diagram, packet)
+        if tag == "constructionField":
+            index = natural(index)
+            if index not in (1, 2):
+                raise ValueError("the selected cone field is not one of its two stored maps")
+            slot = index - 1
+        else:
+            slot = self.construction_slot(operation, index)
+        return apex, targets[slot], legs[slot]
 
     def diagram_targets(self, operation, diagram):
         if operation == "lim.sets.product":
@@ -386,7 +592,7 @@ class SageDiagnostic:
         if tag == "finiteData" and len(args) == 2:
             base = self.parent(args[0])
             return self.FiniteEnumeratedSet([self.native_coerce(base, self.decode(x, args[0]))
-                                             for x in args[1]])
+                                             for x in self.inventory(descriptor)])
         raise NotImplementedError("unsupported selected object descriptor: %s" % tag)
 
     def graph(self, data, inventory):
@@ -439,29 +645,42 @@ class SageDiagnostic:
                     n, coefficient = fields(descriptor, "obj.sets.matrices", 2)
                     return self.matrix_data(data, natural(n), coefficient)
                 raise ValueError("callable data were used as an ordinary native point")
+            self.check_endpoints(None, selected, None, entry.descriptor)
             return entry.value
         if tag == "element":
             actual, expression = fields(data, "element", 2)
+            self.check_endpoints(None, selected, None, actual)
             self.carrier_descriptor(actual)
             return self.expression(expression, actual, domain)
         if tag == "pointView":
             target, original, original_domain = fields(data, "pointView", 3)
             if domain is not None and original_domain != domain:
                 raise ValueError("a point view changed its supplied generalized domain")
+            self.check_endpoints(None, selected, None, target)
+            if tag_of(target) != "functorAction":
+                raise ValueError("a point view requires its complete selected functor action")
             self.carrier_descriptor(target)
-            return self.decode(original, target, original_domain)
+            return self.decode(original, None, original_domain)
         if tag == "admittedPoint":
             object_id, parameters, original_domain, original_target, target, original = self.port.admitted_point(data)
             if domain is not None and original_domain != domain:
                 raise ValueError("an admitted point changed its supplied generalized domain")
+            self.check_endpoints(None, selected, None, target)
             native = self.decode(original, original_target, original_domain)
             return self.admitted_data(object_id, parameters, target, native)
+        if tag == "constrainedPoint":
+            _constructor, original_domain, original_type, target, original = self.port.constrained_point(data)
+            if domain is not None and original_domain != domain:
+                raise ValueError("a constrained point changed its original generalized domain")
+            self.check_endpoints(None, selected, None, target)
+            return self.native_coerce(self.parent(target), self.decode(original, original_type, original_domain))
         if tag == "point":
             arrow, = fields(data, "point", 1)
             return self.point_arrow(arrow, selected, domain)
         if tag in ("compose", "map", "generator", "mor.sets.tuple_empty", "mediator"):
             return self.point_arrow(data, selected, domain)
 
+        complete_selected = selected
         selected = self.carrier_descriptor(selected)
         selected_tag = tag_of(selected)
         if selected is None:
@@ -469,7 +688,10 @@ class SageDiagnostic:
         args = fields(selected, selected_tag)
         if selected_tag == "finiteData":
             base, _inventory = fields(selected, "finiteData", 2)
-            return self.parent(selected)(self.native_coerce(self.parent(base), self.decode(data, base, domain)))
+            native = self.native_coerce(self.parent(base), self.decode(data, base, domain))
+            if native not in self.parent(selected):
+                raise ValueError("point data lie outside the supplied actual inventory")
+            return native
         if selected_tag == "obj.sets.units":
             monoid, = fields(selected, "obj.sets.units", 1)
             if not isinstance(data, list) or len(data) != 2:
@@ -498,7 +720,7 @@ class SageDiagnostic:
                 raise ValueError("a truth observation requires a JSON boolean")
             return data
         if tag == "typedMap":
-            return self.point_arrow(data, selected, domain)
+            return self.point_arrow(data, complete_selected, domain)
         if tag is not None:
             raise NotImplementedError("this public point descriptor has no diagnostic adapter")
         if self.SCALARS.get(selected_tag) == "rationals":
@@ -513,6 +735,11 @@ class SageDiagnostic:
         if type(data) is int:
             if self.SCALARS.get(selected_tag) == "naturals" or selected_tag in self.FIN_OBJECTS:
                 natural(data)
+            if selected_tag in self.FIN_OBJECTS and data >= natural(args[0]):
+                raise ValueError("finite point data lie outside the selected range")
+            if self.SCALARS.get(selected_tag) == "residues" and natural(args[0]) > 0:
+                if not 0 <= data < args[0]:
+                    raise ValueError("modular point data must be a canonical nonnegative residue")
             return self.parent(selected)(data)
         raise NotImplementedError("no diagnostic codec for this point representation")
 
@@ -549,6 +776,9 @@ class SageDiagnostic:
             if operation not in ("op.rings.add", "op.rings.mul", "op.rings.pow", "op.rings.neg",
                                  *self.SEMIRING_OPERATIONS):
                 raise NotImplementedError("the diagnostic expression adapter supports selected ring and semiring operations")
+            self.check_parameters(operation, parameters)
+            if selected is not None and parameters[0] != selected:
+                raise ValueError("an operation expression changed its complete selected structure")
             expected = 2 if operation in ("op.rings.add", "op.rings.mul", "op.semirings.add", "op.semirings.mul") else 1
             if len(operands) != expected:
                 raise ValueError("incorrect operand count for the selected scalar operation")
@@ -568,7 +798,19 @@ class SageDiagnostic:
         return data
 
     def inventory(self, descriptor):
-        descriptor = self.carrier_descriptor(descriptor)
+        # A declared endpoint is object data, never an implicit inventory. The
+        # caller can supply finiteData at exactly that retained descriptor.
+        descriptor = unbox(descriptor)
+        if tag_of(descriptor) == "morphismEndpoint":
+            self.port.morphism_endpoint(descriptor)
+            raise NotImplementedError("a declared endpoint needs its actual finiteData inventory")
+        if tag_of(descriptor) == "functorAction":
+            edge, original = fields(descriptor, "functorAction", 2)
+            self.require_forget_edge(edge)
+            return self.inventory(original)
+        actual = self.object_data(descriptor)
+        if actual != descriptor:
+            return self.inventory(actual)
         if tag_of(descriptor) in self.FIN_OBJECTS:
             n, = fields(descriptor, tag_of(descriptor), 1)
             return list(range(natural(n)))
@@ -604,23 +846,60 @@ class SageDiagnostic:
             if len(values) != n:
                 raise ValueError("owned vector data have the wrong supplied dimension")
             return values
-        if tag_of(data) in ("element", "point", "pointView", "admittedPoint"):
+        if tag_of(data) in ("element", "point", "pointView", "admittedPoint", "constrainedPoint"):
             values = list(self.decode(data, node("obj.sets.vectors", target, n)))
             if len(values) != n:
                 raise ValueError("vector point data have the wrong supplied dimension")
             return values
-        return [self.call_arrow(data, self.ZZ(i), source=domain)
+        return [self.call_arrow(data, self.ZZ(i), source=domain, target=target)
                 for i in inventory]
 
     def matrix_data(self, data, n, coefficient):
         data = unbox(data)
         if tag_of(data) == "opaqueData" and not self.entry(data).callable:
             return self.matrix(self.parent(coefficient), n, n, self.entry(data).value)
-        if tag_of(data) in ("element", "point", "pointView", "admittedPoint"):
+        if tag_of(data) in ("element", "point", "pointView", "admittedPoint", "constrainedPoint"):
             return self.matrix(self.parent(coefficient), n, n,
                                self.decode(data, node("obj.sets.matrices", n, coefficient)))
-        row_object = node("obj.sets.vectors", coefficient, n)
-        rows = self.finite_values(data, n, row_object)
+        # K is a selected commutative ring; a callable's row coefficients are
+        # points of its carrier. Keep any supplied complete carrier endpoints
+        # instead of substituting the structured ring object as their target.
+        if isinstance(data, list) or tag_of(data) == "finiteGraph":
+            rows = []
+            for row in self.graph(data, list(range(n))):
+                row = unbox(row)
+                if isinstance(row, list) or tag_of(row) == "finiteGraph":
+                    values = []
+                    for point in self.graph(row, list(range(n))):
+                        actual = unbox(point)
+                        selected = coefficient
+                        if tag_of(actual) == "opaqueData":
+                            selected = self.entry(actual).descriptor
+                        elif tag_of(actual) == "element":
+                            selected = fields(actual, "element", 2)[0]
+                        elif tag_of(actual) == "pointView":
+                            selected = fields(actual, "pointView", 3)[0]
+                        values.append(self.native_coerce(self.parent(coefficient), self.decode(point, selected)))
+                    rows.append(values)
+                    continue
+                row_target = coefficient
+                if not isinstance(row, list) and tag_of(row) != "finiteGraph":
+                    _source, actual_target = self.arrow_endpoints(row)
+                    if actual_target is not None:
+                        row_target = actual_target
+                        if tag_of(row) in ("element", "point", "pointView", "admittedPoint", "constrainedPoint"):
+                            row_target, dimension = fields(self.carrier_descriptor(actual_target), "obj.sets.vectors", 2)
+                            if natural(dimension) != n:
+                                raise ValueError("a matrix row point changed its selected dimension")
+                rows.append(self.finite_values(row, n, row_target))
+        else:
+            _source, row_object = self.arrow_endpoints(data)
+            if row_object is None:
+                raise NotImplementedError("a matrix row callable needs its actual row endpoint")
+            _row_coefficient, dimension = fields(self.carrier_descriptor(row_object), "obj.sets.vectors", 2)
+            if natural(dimension) != n:
+                raise ValueError("a matrix row callable changed its selected dimension")
+            rows = self.finite_values(data, n, row_object)
         return self.matrix(self.parent(coefficient), n, n, [list(row) for row in rows])
 
     def polynomial_data(self, data, coefficient):
@@ -634,9 +913,10 @@ class SageDiagnostic:
             raise ValueError("a supplied finite support repeats an index")
         if isinstance(unbox(coefficients), list) or tag_of(unbox(coefficients)) == "finiteGraph":
             raise NotImplementedError("a finite support graph is not a total coefficient function on Nat")
+        _domain, actual_target = self.arrow_endpoints(coefficients)
         values = {i: self.native_coerce(self.parent(coefficient),
                                         self.call_arrow(coefficients, self.ZZ(i),
-                                                        source=node("obj.sets.naturals")))
+                                                        source=node("obj.sets.naturals"), target=actual_target))
                   for i in support}
         return self.parent(node("obj.sets.polynomials", coefficient))(values)
 
@@ -658,21 +938,7 @@ class SageDiagnostic:
         return target, hom
 
     def compute(self, operation, parameters, value):
-        arities = {
-            "mor.sets.matrix_rows": 2, "mor.sets.matrix_charpoly": 2,
-            "obj.sets.matrices#application": 2, "obj.sets.polynomials#application": 2,
-            "mor.sets.polynomial_derivative": 1, "mor.sets.polynomial_degree": 1,
-            "mor.sets.polynomial_own_evaluation": 1, "op.rings.add": 1,
-            "op.rings.mul": 1, "op.rings.pow": 2, "op.rings.neg": 1,
-            "mor.sets.equality": 1, "mor.sets.divide": 1,
-            "mor.sets.f9_x_constants": 0, "mor.sets.f9_y_constants": 0,
-            "mor.sets.tuple_empty": 1, "mor.sets.tuple_cons": 2,
-            "op.semirings.add": 1, "op.semirings.mul": 1, "op.semirings.pow": 2,
-        }
-        if operation not in arities:
-            raise NotImplementedError("operation has no diagnostic engine wrapper")
-        if len(parameters) != arities[operation]:
-            raise ValueError("incorrect complete parameters for the selected callable")
+        self.check_parameters(operation, parameters)
         if operation.startswith("op.rings.") or operation in self.SEMIRING_OPERATIONS:
             ring = self.parent(parameters[0])
             if operation in ("op.rings.add", "op.semirings.add"):
@@ -732,38 +998,23 @@ class SageDiagnostic:
             return transported(self.parent(target)(value[1]))
         raise NotImplementedError("operation has no diagnostic engine wrapper")
 
-    def result_data(self, operation, parameters, value, target, domain):
-        if operation == "mor.sets.equality":
-            return value
-        if operation == "mor.sets.polynomial_degree":
-            return node("none") if value == self.bottom else node("some", int(value))
-        if operation == "obj.sets.matrices#application":
-            return [[i, self.component_data(value[i], parameters[1], domain)]
-                    for i in range(natural(parameters[0]))]
-        if operation == "mor.sets.polynomial_own_evaluation":
-            return self.component_data(value, parameters[0], domain)
-        if operation == "obj.sets.polynomials#application":
-            coefficient_target, _hom = self.algebra_data(parameters[0], parameters[1])
-            return self.component_data(value, coefficient_target, domain)
-        if operation in ("mor.sets.tuple_empty", "mor.sets.tuple_cons"):
-            return [[i, self.component_data(x, parameters[0], domain)] for i, x in enumerate(value)]
-        if operation.startswith("op.rings."):
-            descriptor = self.carrier_descriptor(parameters[0])
-            if tag_of(descriptor) in self.SCALARS:
-                return self.scalar_data(value, parameters[0])
-        return self.own(value, target, domain)
-
     def component_data(self, value, descriptor, domain):
         selected = self.carrier_descriptor(descriptor)
         if tag_of(selected) in self.SCALARS:
             return self.scalar_data(value, descriptor)
         if tag_of(selected) in self.FIN_OBJECTS:
-            return int(value)
+            n, = fields(selected, tag_of(selected), 1)
+            value = natural(int(value))
+            if value >= natural(n):
+                raise ValueError("finite result data lie outside the selected range")
+            return value
         if tag_of(selected) == "finiteData":
             base, _inventory = fields(selected, "finiteData", 2)
+            if value not in self.parent(selected):
+                raise ValueError("result data lie outside the supplied actual inventory")
             return self.component_data(value, base, domain)
         if tag_of(selected) == "obj.sets.degrees":
-            return node("none") if value == self.bottom else node("some", int(value))
+            return node("none") if value == self.bottom else node("some", natural(int(value)))
         if tag_of(selected) == "obj.sets.truth_values":
             return bool(value)
         if tag_of(selected) == "objectProduct":
@@ -771,35 +1022,57 @@ class SageDiagnostic:
             return [self.component_data(value[0], left, domain),
                     self.component_data(value[1], right, domain)]
         if tag_of(selected) == "obj.sets.vectors":
-            coefficient, _dimension = fields(selected, "obj.sets.vectors", 2)
+            coefficient, dimension = fields(selected, "obj.sets.vectors", 2)
+            if len(value) != natural(dimension):
+                raise ValueError("vector result data changed the selected dimension")
             return [[i, self.component_data(x, coefficient, domain)] for i, x in enumerate(value)]
         return self.own(value, descriptor, domain)
 
     def apply(self, operation, request):
         op, parameters, arrow, domain, source, target, argument = self.port.point_invocation(request, operation)
+        self.check_parameters(op, parameters)
+        selected_arrow = unbox(arrow)
+        while tag_of(selected_arrow) in ("typedMap", "map"):
+            selected_arrow = unbox(fields(selected_arrow, tag_of(selected_arrow))[-1])
+        if tag_of(selected_arrow) == op and fields(selected_arrow, op) != parameters:
+            raise ValueError("the actual callable changed the invocation's complete parameters")
+        self.check_callable_fields(arrow, source, target)
 
         def run(native):
-            value = self.call_arrow(arrow, native, source=source, target=target)
-            return self.result_data(op, parameters, value, target, domain)
+            return self.call_arrow(arrow, native, source=source, target=target)
 
-        return self.at_domain(domain, source, argument, run)
+        return self.at_domain(domain, source, target, argument, run)
 
-    def at_domain(self, domain, source, argument, run):
+    def at_domain(self, domain, source, target, argument, run):
         # A closed input retains the public terminal-source descriptor. Other
-        # finite domains keep their actual inventory and supplied action.
-        if domain == node("obj.sets.fin", 1):
-            result = run(self.decode(argument, source, domain))
-            return result if tag_of(result) == "opaqueData" else self.port.value_data(result)
-        inventory = self.inventory(domain)
+        # domains keep their actual inventory or the complete owned callable.
         argument = unbox(argument)
-        if isinstance(argument, list) or tag_of(argument) == "finiteGraph":
-            native = [self.decode(value, source)
-                      for value in self.graph(argument, inventory)]
-        else:
-            native = [self.call_arrow(argument, self.decode(key, domain), source=domain, target=source)
-                      for key in inventory]
+        if domain == node("obj.sets.fin", 1):
+            callable_source, callable_target = (None, None)
+            if tag_of(argument) in ("identity", "typedMap", "opaqueData"):
+                callable_source, callable_target = self.arrow_endpoints(argument)
+            if (callable_source == domain and callable_target == source):
+                native = self.call_arrow(argument, self.decode(0, domain), source=domain, target=source)
+            else:
+                native = self.decode(argument, source, domain)
+            result = self.component_data(run(native), target, domain)
+            return result if tag_of(result) == "opaqueData" else self.port.value_data(result)
+
+        self.check_callable_fields(argument, domain, source)
+
+        def native_callable(value):
+            return run(self.call_arrow(argument, value, source=domain, target=source))
+
+        try:
+            inventory = self.inventory(domain)
+        except NotImplementedError:
+            if isinstance(argument, list) or tag_of(argument) == "finiteGraph":
+                raise NotImplementedError("a callable graph needs its actual domain inventory")
+            self.arrow_endpoints(argument)
+            return self.own(native_callable, target, domain, callable=True)
         return self.port.value_data(node("finiteGraph", inventory,
-                                         [[key, run(value)] for key, value in zip(inventory, native)]))
+            [[key, self.component_data(native_callable(self.decode(key, domain)), target, None)]
+             for key in inventory]))
 
     def comparison(self, request):
         if tag_of(request) == "presentationApply":
@@ -808,19 +1081,19 @@ class SageDiagnostic:
             if self.parent(source) is not native_map.domain() or self.parent(target) is not native_map.codomain():
                 raise ValueError("the selected F9 comparison endpoints differ from the request")
             native = native_map(self.native_coerce(native_map.domain(), self.decode(argument, source)))
-            return node("element", target, self.field_expression(native))
+            return self.port.value_data(node("element", target, self.field_expression(native)))
         _op, parameters, arrow, domain, source, target, argument = self.port.point_invocation(request, "cmp.f9.translation")
         if parameters:
             raise ValueError("the published F9 comparison has no explicit parameters")
 
         def run(native):
-            result = self.call_arrow(arrow, native, source=source, target=target)
-            return self.own(result, target, domain)
+            return self.call_arrow(arrow, native, source=source, target=target)
 
-        return self.at_domain(domain, source, argument, run)
+        self.check_callable_fields(arrow, source, target)
+        return self.at_domain(domain, source, target, argument, run)
 
     def f9_comparison(self, parameters, inverse):
-        if parameters or type(inverse) is not bool:
+        if not isinstance(parameters, list) or parameters or type(inverse) is not bool:
             raise ValueError("the F9 presentation arrow requires [] parameters and a Boolean direction")
         return self.f9_presentations()[3 if inverse else 2]
 
@@ -836,7 +1109,7 @@ class SageDiagnostic:
     def point_arrow(self, arrow, selected=None, domain=None):
         arrow = unbox(arrow)
         tag = tag_of(arrow)
-        if tag in ("element", "opaqueData", "pointView", "admittedPoint"):
+        if tag in ("element", "opaqueData", "pointView", "admittedPoint", "constrainedPoint"):
             return self.decode(arrow, selected, domain)
         if tag == "point":
             inner, = fields(arrow, "point", 1)
@@ -844,17 +1117,24 @@ class SageDiagnostic:
         if tag == "map":
             edge, inner = fields(arrow, "map", 2)
             self.require_forget_edge(edge)
-            return self.point_arrow(inner, selected, domain)
+            return self.point_arrow(inner, self.unmap_endpoint(selected, edge),
+                                    self.unmap_endpoint(domain, edge) or domain)
         if tag == "compose":
             first, second = fields(arrow, "compose", 2)
-            return self.call_arrow(second, self.point_arrow(first, domain=domain))
+            _source, middle = self.arrow_endpoints(first)
+            other_middle, _target = self.arrow_endpoints(second)
+            self.check_endpoints(None, middle, None, other_middle)
+            middle = middle if middle is not None else other_middle
+            return self.call_arrow(second, self.point_arrow(first, selected=middle, domain=domain),
+                                   source=middle, target=selected)
         if tag == "mediator":
             first, second = fields(arrow, "mediator", 2)
-            return self.point_arrow(first, domain=domain), self.point_arrow(second, domain=domain)
+            targets = (None, None) if selected is None else fields(self.carrier_descriptor(selected), "objectProduct", 2)
+            return (self.point_arrow(first, targets[0], domain),
+                    self.point_arrow(second, targets[1], domain))
         if tag == "typedMap":
             source, target, _callable = self.port.typed_map(arrow)
-            if domain is not None and source != domain:
-                raise ValueError("a selected point's callable changed its supplied domain")
+            self.check_endpoints(domain, selected, source, target)
             inventory = self.inventory(source)
             if len(inventory) != 1:
                 raise NotImplementedError("a nonconstant generalized callable needs its actual application input")
@@ -870,16 +1150,62 @@ class SageDiagnostic:
             return self.compute(tag, fields(arrow, tag, 1), None)
         raise NotImplementedError("unsupported closed-point arrow descriptor")
 
+    def unmap_endpoint(self, descriptor, edge):
+        descriptor = self.object_data(descriptor)
+        if tag_of(descriptor) == "functorAction":
+            actual_edge, original = fields(descriptor, "functorAction", 2)
+            self.require_forget_edge(actual_edge)
+            if actual_edge != edge:
+                raise ValueError("a mapped callable changed its supplied structural action")
+            return original
+        if tag_of(descriptor) == "morphismEndpoint":
+            arrow, selector = self.port.morphism_endpoint(descriptor)
+            arrow = unbox(arrow)
+            if tag_of(arrow) == "map":
+                actual_edge, inner = fields(arrow, "map", 2)
+                if actual_edge != edge:
+                    raise ValueError("a mapped endpoint changed its supplied structural action")
+                return node("morphismEndpoint", inner, selector)
+        return None
+
+    def check_callable_fields(self, arrow, source, target):
+        """Check explicit retained endpoint fields before deferring native work."""
+        arrow = unbox(arrow)
+        actual_source, actual_target = self.arrow_endpoints(arrow)
+        tag = tag_of(arrow)
+        if tag in ("typedMap", "opaqueData", "identity", "constructionLeg", "constructionField",
+                   "arrowHom", "subobjectInclusion", "pointView", "admittedPoint", "constrainedPoint"):
+            self.check_endpoints(source, target, actual_source, actual_target)
+        if tag == "typedMap":
+            _source, _target, inner = self.port.typed_map(arrow)
+            self.check_callable_fields(inner, actual_source, actual_target)
+        elif tag == "compose":
+            first, second = fields(arrow, tag, 2)
+            _first_source, middle = self.arrow_endpoints(first)
+            other_middle, _target = self.arrow_endpoints(second)
+            middle = middle if middle is not None else other_middle
+            self.check_callable_fields(first, source, middle)
+            self.check_callable_fields(second, middle, target)
+        elif tag == "map":
+            edge, inner = fields(arrow, tag, 2)
+            self.require_forget_edge(edge)
+            self.check_callable_fields(inner, self.unmap_endpoint(source, edge), self.unmap_endpoint(target, edge))
+        elif tag == "mediator":
+            first, second = fields(arrow, tag, 2)
+            targets = (None, None) if target is None else fields(self.carrier_descriptor(target), "objectProduct", 2)
+            self.check_callable_fields(first, source, targets[0])
+            self.check_callable_fields(second, source, targets[1])
+        elif tag == "point":
+            inner, = fields(arrow, tag, 1)
+            self.check_callable_fields(inner, source, target)
+
     def call_arrow(self, arrow, value, *, source=None, target=None):
         """Lower only supplied public map data; this adds no dispatch address."""
         arrow = unbox(arrow)
         tag = tag_of(arrow)
         if tag == "typedMap":
             actual_source, actual_target, callable_data = self.port.typed_map(arrow)
-            if source is not None and actual_source != source:
-                raise ValueError("a typed callable changed its supplied complete source")
-            if target is not None and actual_target != target:
-                raise ValueError("a typed callable changed its supplied complete target")
+            self.check_endpoints(source, target, actual_source, actual_target)
             return self.call_arrow(callable_data, value, source=actual_source, target=actual_target)
         if isinstance(arrow, list) or tag == "finiteGraph":
             if source is None or target is None:
@@ -892,70 +1218,91 @@ class SageDiagnostic:
         if tag == "opaqueData":
             entry = self.entry(arrow)
             if entry.callable:
-                return entry.value(entry.source_parent(value))
+                self.check_endpoints(source, target, entry.domain, entry.descriptor)
+                return entry.value(entry.source_parent(value) if entry.source_parent is not None else value)
             descriptor = self.carrier_descriptor(entry.descriptor)
             if tag_of(descriptor) == "obj.sets.vectors":
+                coefficient, dimension = fields(descriptor, "obj.sets.vectors", 2)
+                self.check_endpoints(source, target, node("obj.sets.fin", dimension), coefficient)
                 return entry.value[int(self.NN(value))]
             if tag_of(descriptor) == "obj.sets.matrices":
-                return entry.value.row(int(self.NN(value)))
+                dimension, coefficient = fields(descriptor, "obj.sets.matrices", 2)
+                self.check_endpoints(source, None, node("obj.sets.fin", dimension), None)
+                row = entry.value.row(int(self.NN(value)))
+                if target is not None:
+                    _carrier, n = fields(self.carrier_descriptor(target), "obj.sets.vectors", 2)
+                    if natural(n) != dimension:
+                        raise ValueError("an owned matrix row changed its selected dimension")
+                    # The complete row endpoint carries the coefficient set;
+                    # the stored matrix parameter is a structured ring.
+                    return self.native_coerce(self.parent(target), row)
+                return row
             raise ValueError("an ordinary native point was used as a callable")
         if tag == "compose":
             first, second = fields(arrow, "compose", 2)
-            # Each typed constituent retains its own intermediate endpoint.
-            return self.call_arrow(second, self.call_arrow(first, value, source=source), target=target)
+            _first_source, middle = self.arrow_endpoints(first)
+            other_middle, _second_target = self.arrow_endpoints(second)
+            self.check_endpoints(None, middle, None, other_middle)
+            middle = middle if middle is not None else other_middle
+            return self.call_arrow(second, self.call_arrow(first, value, source=source, target=middle),
+                                   source=middle, target=target)
         if tag == "map":
             edge, inner = fields(arrow, "map", 2)
             self.require_forget_edge(edge)
-            endpoints = []
-            for descriptor in (source, target):
-                if tag_of(descriptor) == "functorAction":
-                    actual_edge, original = fields(descriptor, "functorAction", 2)
-                    self.require_forget_edge(actual_edge)
-                    if actual_edge != edge:
-                        raise ValueError("a mapped callable changed its supplied structural action")
-                    endpoints.append(original)
-                else:
-                    endpoints.append(None)
+            endpoints = [self.unmap_endpoint(descriptor, edge) for descriptor in (source, target)]
             # Unlabelled graphs need these explicitly retained action endpoints;
             # typed/named inner maps carry their own original selected context.
             return self.call_arrow(inner, value, source=endpoints[0], target=endpoints[1])
         if tag == "pointView":
             view, original, original_domain = fields(arrow, "pointView", 3)
+            if tag_of(view) != "functorAction":
+                raise ValueError("a point view requires its complete selected functor action")
             self.carrier_descriptor(view)
-            if source is not None and original_domain != source:
-                raise ValueError("a point view changed its generalized domain")
+            self.check_endpoints(source, target, original_domain, view)
             return self.call_arrow(original, value, source=original_domain)
         if tag == "admittedPoint":
             object_id, parameters, original_domain, original_target, admitted, original = self.port.admitted_point(arrow)
-            if source is not None and original_domain != source:
-                raise ValueError("an admission changed its generalized domain")
+            self.check_endpoints(source, target, original_domain, admitted)
             native = self.call_arrow(original, value, source=original_domain, target=original_target)
             return self.admitted_data(object_id, parameters, admitted, native)
+        if tag == "constrainedPoint":
+            _constructor, original_domain, original_type, selected, original = self.port.constrained_point(arrow)
+            self.check_endpoints(source, target, original_domain, selected)
+            native = self.call_arrow(original, value, source=original_domain, target=original_type)
+            return self.native_coerce(self.parent(selected), native)
         if tag == "presentation":
             comparison, parameters, inverse = fields(arrow, "presentation", 3)
             if comparison != "cmp.f9.translation":
                 raise NotImplementedError("this presentation has no diagnostic engine adapter")
             native_map = self.f9_comparison(parameters, inverse)
+            if source is not None and self.parent(source) is not native_map.domain():
+                raise ValueError("the presentation changed its selected source")
+            if target is not None and self.parent(target) is not native_map.codomain():
+                raise ValueError("the presentation changed its selected target")
             return native_map(self.native_coerce(native_map.domain(), value))
         if tag == "identity":
             domain, codomain = fields(arrow, "identity", 2)
             if domain != codomain:
                 raise ValueError("an identity arrow must retain equal complete endpoints")
-            return self.native_coerce(self.parent(domain), value)
+            self.check_endpoints(source, target, domain, codomain)
+            # This is the supplied wiring of an already decoded native value.
+            # Reconstructing a parent would discard complete record fields such
+            # as the actual value and inverse of an admitted Units operand.
+            self.carrier_descriptor(domain)
+            return value
         if tag == "mediator":
             first, second = fields(arrow, "mediator", 2)
-            return self.call_arrow(first, value, source=source), self.call_arrow(second, value, source=source)
-        if tag == "constructionLeg":
-            operation, diagram, complete_cone, index = fields(arrow, "constructionLeg", 4)
-            apex, targets, legs = self.construction_cone(operation, diagram, complete_cone)
-            slot = self.construction_slot(operation, index)
-            return self.call_arrow(legs[slot], value, source=apex, target=targets[slot])
-        if tag == "arrowHom":
-            receiver, = fields(arrow, "arrowHom", 1)
-            receiver = unbox(receiver)
-            if tag_of(receiver) not in ("arrow", "subobject"):
-                raise ValueError("arrowHom requires its complete returned Arrow record")
-            domain, codomain, stored_map = fields(receiver, tag_of(receiver), 3)
+            targets = (None, None) if target is None else fields(self.carrier_descriptor(target), "objectProduct", 2)
+            return (self.call_arrow(first, value, source=source, target=targets[0]),
+                    self.call_arrow(second, value, source=source, target=targets[1]))
+        if tag in ("constructionLeg", "constructionField"):
+            apex, codomain, leg = self.construction_map(arrow)
+            self.check_endpoints(source, target, apex, codomain)
+            return self.call_arrow(leg, value, source=apex, target=codomain)
+        if tag in ("arrowHom", "subobjectInclusion"):
+            receiver, = fields(arrow, tag, 1)
+            domain, codomain, stored_map = self.arrow_record(receiver)
+            self.check_endpoints(source, target, domain, codomain)
             return self.call_arrow(stored_map, value, source=domain, target=codomain)
         if tag == "objectField":
             object_id, field, parameters = fields(arrow, "objectField", 3)
@@ -977,7 +1324,18 @@ class SageDiagnostic:
             if tag == "incl.sets.integers_rationals":
                 return self.QQ.coerce_map_from(self.ZZ)(self.ZZ(value))
             return self.degrees(self.NN(value))
-        if tag in ("element", "point", "generator", "mor.sets.tuple_empty"):
+        if tag == "point":
+            inner, = fields(arrow, "point", 1)
+            return self.call_arrow(inner, value, source=source, target=target)
+        if tag == "generator":
+            return self.point_arrow(arrow, target, source)
+        if tag == "element":
+            selected, expression = fields(arrow, tag, 2)
+            self.check_endpoints(None, target, None, selected)
+            actual = unbox(expression)
+            if tag_of(actual) in ("typedMap", "finiteGraph", "point") or (
+                    tag_of(actual) == "opaqueData" and self.entry(actual).callable):
+                return self.call_arrow(actual, value, source=source, target=selected)
             if source is not None and len(self.inventory(source)) != 1:
                 raise ValueError("a closed point cannot replace a nonconstant generalized map")
             return self.point_arrow(arrow, target, source)
@@ -991,7 +1349,7 @@ class SageDiagnostic:
         native_product = self.parent(apex)
         maps = []
         for i, target in enumerate((left, right)):
-            callable_data = self.own(native_product.cartesian_projection(i), target, None,
+            callable_data = self.own(native_product.cartesian_projection(i), target, apex,
                                      source_parent=native_product, callable=True)
             maps.append(self.port.map_data(apex, target, callable_data))
         return self.port.value_data(node("cone", apex, *maps))
@@ -1008,13 +1366,18 @@ class SageDiagnostic:
             frame = self.port.read_frame()
             if frame is None:
                 return
-            request_id, operation = frame.get("request_id"), frame.get("op")
-            if operation not in operations:
-                self.port.write_frame({"request_id": request_id, "status": "unsupported", "op": operation})
-                continue
+            request_id = frame.get("request_id") if isinstance(frame, dict) else None
+            operation = frame.get("op") if isinstance(frame, dict) else None
             try:
+                if not isinstance(frame, dict):
+                    raise ValueError("a request frame must be a JSON object")
+                if not isinstance(operation, str) or not operation:
+                    raise ValueError("a request needs its nonempty operation id")
                 if "args" not in frame:
                     raise ValueError("the request omitted its args field")
+                self.check_owners(frame["args"])
+                if operation not in operations:
+                    raise NotImplementedError("this operation has no registration")
                 result = operations[operation](frame["args"])
                 self.port.write_frame({"request_id": request_id, "status": "ok", "value": result})
             except NotImplementedError:

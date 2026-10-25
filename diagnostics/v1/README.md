@@ -104,6 +104,32 @@ The finite-set pullback creation row is no longer accepted as a product creation
 row. This repairs a computational consumer; it adds no pullback construction
 registration or mathematical evidence.
 
+### Public-contract conformance completion, 2026-10-25
+
+This bounded completion starts from the published leaf revision
+`51e0e6ebd25a2f2a88097ae3081a3c34970cc29d` and uses public contract revision
+`90d7d3f1833cff39b77024dcee2dc43213e623ad`. Its additional declaration input is
+the separately supplied public export with SHA-256
+`43392ae1c6636276519113d07c4cdc3ce8f8eeead1b4336db574c57269216079` and its
+public producer provenance. The producer metadata identifies mathematics
+`82d1370de372a00a86391b74fc2566c9547dfcb6` and kernel producer
+`da6af543a8e71e9400f5438ee40a4e395af2f299`; neither implementation was read.
+
+Only this existing specimen, its repository instructions and engineering
+material, the public contract and supplied interface export, and the installed
+Sage runtime were used. No mathematical questions, expected answers, acceptance
+records, kernel implementation, downstream execution reports or other agent's
+work were inspected. The selected F9 constructor and comparison parameters
+remain exactly those already present in the specimen. All nineteen registration
+pairs and every manifest remain unchanged; the extension specimen is unchanged.
+
+The repairs concern common public data translation: a missing result envelope
+on compact presentation replies; whole-callable versus global-point framing;
+actual returned native values and callables; complete endpoint fields and
+parameter arrays; recursively retained owners; coefficient carrier endpoints;
+and object/map projections from complete supplied records. They add no engine
+algorithm, mathematical declaration, proof, certificate or acceptance signal.
+
 ## Launch
 
 Set the public contract checkout and the real Sage-capable interpreter in the
@@ -154,10 +180,10 @@ supported computational parent scope is stated below.
 | `op.rings.pow` | `[R, exponent]` | Native nonnegative power | Exact scalar data or owned polynomial/F9 value |
 | `op.rings.neg` | `[R]` | Native additive inverse | Exact scalar data or owned polynomial/F9 value |
 | `mor.sets.equality` | `[X]` | Equality observation on supplied native computational values | JSON boolean |
-| `mor.sets.divide` | `[M]` | Native division for the original admitted denominator, or native multiplication by the inverse field of a complete supplied Units record, in the selected parent | Owned value |
+| `mor.sets.divide` | `[M]` | Native division for the original admitted denominator, or native multiplication by the inverse field of a complete supplied Units record, in the selected parent | Exact scalar data or an owned native value |
 | `mor.sets.f9_x_constants` | `[]` | Native coefficient-field embedding into the selected first presentation | Owned F9 value |
 | `mor.sets.f9_y_constants` | `[]` | Native coefficient-field embedding into the selected second presentation | Owned F9 value |
-| `cmp.f9.translation` | `[]`, with direction in the retained presentation arrow | Native homomorphism with the independently published generator image | Owned F9 value under `apply`; exact-target `element` under `presentationApply` |
+| `cmp.f9.translation` | `[]`, with direction in the retained presentation arrow | Native homomorphism with the independently published generator image | Owned F9 value under `apply`; `valueData(element(exact_target,...))` under `presentationApply` |
 | `mor.sets.tuple_empty` | `[X]` | Sage's empty Cartesian-product element | Empty complete graph |
 | `mor.sets.tuple_cons` | `[X, n]` | Native Cartesian-product tuple construction from the supplied head and tail | Complete graph, recursively retaining its component data |
 | `lim.sets.product` | Diagram `pair(X,Y)` | Sage `cartesian_product` and its two native `cartesian_projection` maps | Complete cone with both `typedMap` legs |
@@ -225,7 +251,7 @@ the adapter does not discard those actions and call only the final operation.
 Unsupported descriptors return `unsupported` under the unchanged dispatch id.
 
 The F9 comparison additionally accepts the public five-field `presentationApply`
-packet. That interface returns an `element` at exactly the requested target,
+packet. That interface returns `valueData(element(...))` at exactly the requested target,
 serializing Sage's native polynomial representative with existing arithmetic
 constructors. Common `apply` replies keep native F9 results opaque, supporting
 successive use without reconstruction as formal mathematical values.
@@ -234,8 +260,12 @@ Inline replies use `valueData`. Matrices, polynomials, F9 values and projection 
 use `opaqueData` where listed above. Tokens have a random connection prefix and
 refer only to live native values in that process. The local store retains the
 supplied target descriptor and generalized domain; projection entries additionally
-retain the actual native source parent. It contains no reconstructed formal term.
-A token from another connection is rejected, including after a restart. Tokens
+retain the complete source descriptor and actual native source parent. Every
+callable entry retains both complete endpoints, including a deferred native
+callable returned by a whole-map request. It contains no reconstructed formal term.
+A token from another connection is unsupported, including after a restart. Owners
+are checked throughout all supplied fields before dispatch, even a retained field
+which the selected native routine will not read. Tokens
 do not choose their owner or add a registration.
 
 The current published global-point source `obj.sets.fin(1)` accepts ordinary
@@ -253,7 +283,25 @@ view. An infinite factor is not enumerated to manufacture a finite domain.
 inventory, including a singleton inventory or an inventory around a returned
 apex. Generalized finite replies are
 `valueData(finiteGraph(inventory, graph))`; graph values may themselves retain
-owned data. Infinite generalized-domain inputs are not implemented.
+owned data. A whole-callable request uses the supplied identity at the exact
+original domain. When no finite inventory is available, supported symbolic or
+owned inputs retain an owned native callable which invokes the same existing
+engine routines when later applied. This covers supported infinite generalized
+domains without enumeration. An endpoint descriptor alone supplies no inventory,
+even when its declared endpoint is finite or it is carried through a supported
+structural action. Such a request remains callable data unless actual
+`finiteData` is supplied. The registered global-point domain keeps the existing
+scalar convention, including an actual supplied identity comparison; a different
+singleton inventory retains its full graph.
+
+Both endpoints in supplied `typedMap` and owned callable data are checked before
+native work is deferred. Compositions retain the intermediate endpoint context;
+mediators pass each selected target to its actual component. Full parameter
+counts are checked, and a directly selected named callable must retain the same
+parameters as its request, including the exponent or dimension. Result encoding
+uses the actual final target of a supplied composition. These are computational
+framing checks; they do not re-elaborate formal types or prove that a selected
+operation or structural action applies.
 
 ### Objects and values
 
@@ -282,7 +330,7 @@ carrier.
 
 | Public representation | Support |
 | --- | --- |
-| Integer and modular point | JSON integer, lowered into the independently selected native parent |
+| Integer and modular point | JSON integer, lowered into the independently selected native parent; a positive-modulus residue is already in its canonical nonnegative range |
 | Rational record | Two integer data fields `[numerator, denominator]`; the denominator is positive and the record is already reduced; output uses Sage's normalized exact record |
 | Polynomial degree | `none()` and `some(n)` lower to Sage's minus infinity and nonnegative integers; returned degree data can be consumed again by equality |
 | Vector | Complete graph, supported symbolic callable or same-session owned callable on `Fin(n)`; coordinate scalars retain their declared forms |
@@ -293,10 +341,12 @@ carrier.
 | `point` | Complete retained point arrow using the supported descriptors below |
 | `pointView` | Consume its original complete element data; retain nested ownership |
 | `admittedPoint` | Consume the original data at its supplied original target; an admitted unit retains its exact selected monoid and original native value, including nested ownership; supply no admission evidence |
+| `constrainedPoint` | Consume the actual original data at its original type, retaining the supplied constructor name, original generalized domain and selected target; the native parent conversion supplies no predicate evidence |
 | Complete `Units` record | Its two non-proof fields `[value,inverse]`, each in the selected monoid's declared point form; neither inverse equation is checked or asserted |
 | Returned `valueData`/`opaqueData` | Reusable as later point input on the applicable connection |
 | Complete polynomial record | The exposed one-field wrappers retain the two `Finsupp` data slots: finite support and the full coefficient callable on `Nat`; proofs are absent |
 | `typedMap` | Its actual source, target and complete graph, supported symbolic map or same-session owned callable |
+| `morphismEndpoint` | Object data at a supported actual callable's source or target; all callable parameters and owners remain retained, and this descriptor is neither callable nor an inventory |
 
 The ordinary inline vector result contains a complete graph of exact scalar
 coordinates. Empty/cons results recursively retain complete vector component
@@ -342,8 +392,10 @@ supplied inverse field in native multiplication. The adapter neither replaces
 that field with an inferred inverse nor treats the record as membership evidence.
 An admitted denominator uses native division in the selected monoid parent;
 engine failure is a computational failure and supplies no membership conclusion. The selected `presentation` arrow and
-`map` actions along the route listed above are supported, as are identity arrows
-through the corresponding native parent coercion. The declared
+`map` actions along the route listed above are supported. An identity retains
+its exact endpoint fields and forwards the already decoded native value,
+including complete native records; it does not reconstruct or replace a Units
+operand. The declared
 `incl.sets.naturals_integers`, `incl.sets.integers_rationals`,
 `incl.sets.naturals_degrees` and parameterized `incl.sets.fin_integers_mod(n)`
 arrows use native inclusions and coercions when supplied inside these
@@ -372,6 +424,16 @@ explicit `finiteGraph` data, and mixed typed/untyped legs are supported when
 their selected parents and callables have adapters. For a product graph leg,
 the complete `pair` object supplies its target. For a pullback graph leg, the
 source endpoint of the corresponding retained cospan arrow supplies its target.
+
+The common `constructionField` interface reads the same actual complete packet:
+data-port index zero is its object field, and one and two are its stored maps.
+These natural-number port indices are distinct from `constructionLeg`'s typed
+shape indices. The object readers also consume `subobjectApex`, and map readers
+consume `subobjectInclusion` or `arrowHom` from complete Arrow records, including
+an `objectPresentation` wrapper. Actual endpoint and map fields remain attached;
+an optional retained source presentation is neither executed nor asserted to be
+an identification by reading these fields.
+
 The endpoint reader handles `typedMap`, complete `arrowHom` receivers, explicit
 identity arrows, supported `map` actions, compositions retaining their endpoint
 context, and the four scalar inclusions already supported above. Explicit
@@ -421,6 +483,12 @@ have one data slot each, so the existing record codec exposes
 and the results of that supplied callable to Sage's polynomial constructor.
 A complete coefficient callable can be typed, symbolic or owned; a graph only
 on the finite support is rejected because its domain is the natural numbers.
+When a typed or owned coefficient callable retains its actual carrier endpoint,
+that endpoint is used for application. It is not replaced by the structured
+coefficient-ring object. Sage's selected polynomial constructor consumes the
+native coefficient values. Matrix row and column callables make the same
+distinction between their actual coefficient carrier and the selected matrix
+ring parameter, retaining typed endpoints and native returned components.
 There is no private sparse-polynomial wire tag and no implicit zero-extension
 of a supplied graph. Native polynomials and public arithmetic expressions remain
 ordinary supported alternatives.
@@ -535,18 +603,54 @@ an `unsupported` reply. Engine failures and malformed request data produce
 
 ### Remaining interface scope
 
-No additional wire convention was needed for the supported cases. The current
-published terminal source is supported as stated above; arbitrary infinite
-generalized domains are not implemented. Finite callables need their actual
-inventory, a supported public finite scalar descriptor, or factors with those
-forms. A pullback with both unlabelled cospan arrows and unlabelled cone legs
-has no supplied target context and remains unsupported. Endpoint reading for
-other named diagram arrows needs an explicit supported wrapper; it does not
-reconstruct their fields from an operation name. Only the two stored side legs
-of the published pullback constructor are consumed. Unlabelled graphs inside a
-composition need typed constituents to retain intermediate endpoints. Opaque
-values and callables remain local to their original live process. The adapter
-cannot consume another process's tokens, invent a missing coefficient map,
-interpret an unrelated named operation, or turn finite samples into infinite
-functions. These are implementation boundaries, not changes to the public
-mathematical domains or claims of acceptance.
+No additional public wire type was needed for this completion. The existing
+nineteen registrations retain these ordinary implementation limits:
+
+- Native object and coefficient adapters are the selected scalar, F9, polynomial,
+  matrix, vector and product forms listed above. Other rings or arbitrary
+  structured objects are not implemented by a category-wide registration alone.
+  In particular, consuming a complete or admitted Units point for division does
+  not supply a native Units parent for a product-construction factor.
+- An infinite callable must be composed from the supported retained public
+  actions or an actual callable owned here. The adapter does not interpret
+  arbitrary functions, revive another process's token, or extend a finite
+  support table to a total infinite function. Deferred native invocation can
+  still report an unavailable native computation when actually applied.
+- Finite graphs need their actual inventory, a supported primitive finite
+  descriptor, or factors with those forms. An endpoint descriptor does not
+  enumerate itself. Native `Family` and finite-parent operations require their
+  usual supported native key representations.
+- Unlabelled graph compositions need supplied intermediate endpoint context.
+  A pullback with both unlabelled cospan arrows and unlabelled cone legs has no
+  supplied target context and remains unsupported. Other named diagram arrows
+  need a supported explicit endpoint wrapper. The unstored pullback center leg
+  remains unsupported, and there is no pullback-construction registration here.
+- General polynomial algebra application needs the actual complete `Under`
+  record and coefficient map. A name without those supplied fields is not an
+  implementation of that record. Only the existing selected F9 comparison is
+  registered; other comparisons, factorization, analytic functions and unrelated
+  declared operations remain unregistered.
+
+These limits do not narrow a mathematical domain or supply acceptance evidence.
+
+### Completion engineering checkpoint
+
+The completion exercised 143 independently selected requests with the installed
+Sage/passagemath runtime: 57 requests across an initial process, a foreign owner
+and a restart; 57 callable/operand cases in another process; and 28 retained-data
+requests plus one malformed request frame. The cases include all nineteen
+operation/input pairs, the callable form of every callable registration, actual
+returned matrix/vector/polynomial chains, whole finite and infinite maps, full
+coefficient functions, complete selected algebra records, retained native
+matrix rows, F9 components, both comparison packet forms, global and other
+singleton domains, endpoint objects, supplied product/pullback packets, complete
+Arrow fields, explicit selected actions, and owner rejection.
+
+Assertions checked decimal byte framing (including UTF-8), natural request
+identities, ready/reply envelopes, exact retained endpoint and inventory fields,
+error/unsupported strata, unchanged registration scope and clean process EOF.
+They did not assert any computed number, polynomial, equality truth, support
+property, algebra law, cone equation or universal property. These scratch
+engineering cases and their logs are outside the source repository and are not
+mathematical acceptance assertions. Python syntax and the nineteen addresses
+were checked separately against the supplied public declaration export.
