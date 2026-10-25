@@ -1,0 +1,14 @@
+{
+  "backends": [
+    {"name": "sage-module-functor-actions", "command": "python3", "args": ["backend.py"]}
+  ],
+  "registrations": [
+    {"operation": "fun.modules.fibre_inclusion", "input": "fun.modules.fibre_inclusion#input", "backend": "sage-module-functor-actions"},
+    {"operation": "fun.modules.fibre_inclusion#map", "input": "fun.modules.fibre_inclusion#input", "backend": "sage-module-functor-actions"},
+    {"operation": "fun.modules.underlying", "input": "fun.modules.underlying#input", "backend": "sage-module-functor-actions"},
+    {"operation": "fun.modules.underlying#map", "input": "fun.modules.underlying#input", "backend": "sage-module-functor-actions"},
+    {"operation": "fun.arrows_modules.kernel", "input": "fun.arrows_modules.kernel#input", "backend": "sage-module-functor-actions"},
+    {"operation": "fun.subobjects_modules.domain", "input": "fun.subobjects_modules.domain#input", "backend": "sage-module-functor-actions"},
+    {"operation": "fun.subobjects_modules.inclusion", "input": "fun.subobjects_modules.inclusion#input", "backend": "sage-module-functor-actions"}
+  ]
+}
