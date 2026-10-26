@@ -1,8 +1,8 @@
-"""Two object-action adapters over public records and native Sage parents.
+"""Primitive adapters over public records and native Sage parents.
 
 Record order comes from the published constructor signatures and CasContract's
 data-only codec. Native arithmetic stays behind connection-local opaque fields.
-This module supplies no laws, mathematical placements, or additional operations.
+This module supplies no laws or mathematical placements.
 """
 
 from dataclasses import dataclass
@@ -13,7 +13,7 @@ from cas_port import construction_invocation, opaque_data, value_data
 from sage.all import IntegerModRing, LazyPowerSeriesRing, MatrixSpace, NN, PolynomialRing, QQ, ZZ
 
 
-OPERATIONS = ("fun.rings.semiring", "fun.semirings.monoid")
+OPERATIONS = ("fun.rings.semiring", "fun.semirings.monoid", "op.monoids.mul")
 
 
 class Unsupported(Exception):
@@ -63,6 +63,7 @@ class RetainedNative:
     value: object
     request: object
     field: str
+    carrier: object = None
 
 
 class Session:
@@ -73,18 +74,22 @@ class Session:
         self.values = {}
         self.completed = []
 
-    def keep(self, value, request, field):
+    def keep(self, value, request, field, carrier=None):
         token = "%s:%d" % (self.prefix, len(self.values))
-        self.values[token] = RetainedNative(value, request, field)
+        self.values[token] = RetainedNative(value, request, field, carrier)
         return opaque_data(token)
+
+    def get(self, data):
+        token, = fields(inline(data), "opaqueData", 1)
+        if not isinstance(token, str) or not token:
+            raise ValueError("an opaque dependency needs a nonempty token")
+        if token not in self.values:
+            raise Unavailable("the opaque dependency is not owned by this live connection")
+        return self.values[token]
 
     def check_dependencies(self, data):
         if tag(data) == "opaqueData":
-            token, = fields(data, "opaqueData", 1)
-            if not isinstance(token, str) or not token:
-                raise ValueError("an opaque dependency needs a nonempty token")
-            if token not in self.values:
-                raise Unavailable("the opaque dependency is not owned by this live connection")
+            self.get(data)
         if isinstance(data, dict):
             for item in data.values():
                 self.check_dependencies(item)
@@ -136,8 +141,8 @@ class Actions:
     def __init__(self):
         self.session = Session()
 
-    def native_monoid(self, parent, request):
-        keep = lambda value, field: self.session.keep(value, request, field)
+    def native_monoid(self, parent, request, carrier):
+        keep = lambda value, field: self.session.keep(value, request, field, carrier)
         # The single-field Mul, Semigroup, One and NPow records are elided by
         # the public codec. NPow's first argument is the natural exponent.
         multiply = lambda left: lambda right: operator.mul(parent(left), parent(right))
@@ -147,15 +152,16 @@ class Actions:
                 keep(power, "Monoid.toNPow")]
 
     def native_semiring(self, parent, request):
-        keep = lambda value, field: self.session.keep(value, request, field)
+        carrier = self.session.keep(parent, request, "SemiRingCat.carrier")
+        keep = lambda value, field: self.session.keep(value, request, field, carrier)
         add = lambda left: lambda right: operator.add(parent(left), parent(right))
         scale = lambda scalar: lambda value: ZZ(scalar) * parent(value)
         cast = lambda scalar: parent(ZZ(scalar))
         additive = [keep(add, "AddMonoid.toAddSemigroup"),
                     keep(parent.zero(), "AddMonoid.toZero"),
                     keep(scale, "AddMonoid.toNSMul")]
-        return [keep(parent, "SemiRingCat.carrier"),
-                [additive, self.native_monoid(parent, request),
+        return [carrier,
+                [additive, self.native_monoid(parent, request, carrier),
                  keep(cast, "Semiring.toNatCast")]]
 
     @staticmethod
@@ -169,10 +175,15 @@ class Actions:
     def run(self, operation, packet):
         if operation not in OPERATIONS:
             raise Unsupported("the operation is not registered by this specimen")
+        self.session.check_dependencies(packet)
+        if operation == "op.monoids.mul":
+            from monoid_multiplication import Multiplication
+            result = Multiplication(self.session, packet).run()
+            self.session.completed.append((packet, result))
+            return result
         _, parameters, receiver = construction_invocation(packet, operation)
         if parameters:
             raise ValueError("this published primitive has no explicit data parameters")
-        self.session.check_dependencies(packet)
         actual = inline(receiver)
         if operation == "fun.rings.semiring":
             if isinstance(actual, list):
@@ -184,8 +195,8 @@ class Actions:
                 output = self.native_semiring(native_ring(actual), packet)
         elif tag(actual) == "obj.semirings.naturals":
             fields(actual, "obj.semirings.naturals", 0)
-            output = [self.session.keep(NN, packet, "MonCat.carrier"),
-                      self.native_monoid(NN, packet)]
+            carrier = self.session.keep(NN, packet, "MonCat.carrier")
+            output = [carrier, self.native_monoid(NN, packet, carrier)]
         else:
             carrier, _, multiplicative = self.semiring_record(actual)
             output = [carrier, multiplicative]

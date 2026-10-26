@@ -16,6 +16,11 @@
       "operation": "fun.semirings.monoid",
       "input": "fun.semirings.monoid#input",
       "backend": "sage-primitive-actions-20261026"
+    },
+    {
+      "operation": "op.monoids.mul",
+      "input": "cat.monoids",
+      "backend": "sage-primitive-actions-20261026"
     }
   ]
 }

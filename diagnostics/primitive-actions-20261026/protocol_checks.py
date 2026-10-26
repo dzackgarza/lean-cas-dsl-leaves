@@ -17,6 +17,7 @@ import tempfile
 HERE = Path(__file__).resolve().parent
 RING = "fun.rings.semiring"
 MONOID = "fun.semirings.monoid"
+MULTIPLY = "op.monoids.mul"
 
 
 def node(name, *args):
@@ -51,7 +52,7 @@ class Connection:
         self.next_id = 0
         ready = self.read()
         assert ready["op"] == "ready" and ready["protocol"] == 1
-        assert set(ready["capabilities"]) == {RING, MONOID}
+        assert set(ready["capabilities"]) == {RING, MONOID, MULTIPLY}
 
     def read(self):
         header = self.process.stdout.readline()
@@ -67,10 +68,13 @@ class Connection:
         return json.loads(b"".join(chunks))
 
     def call(self, operation, receiver, parameters=None):
+        return self.invoke(operation, {"ctor": operation,
+                                      "args": [] if parameters is None else parameters,
+                                      "receiver": receiver})
+
+    def invoke(self, operation, arguments):
         self.next_id += 1
-        request = {"request_id": self.next_id, "op": operation,
-                   "args": {"ctor": operation, "args": [] if parameters is None else parameters,
-                            "receiver": receiver}}
+        request = {"request_id": self.next_id, "op": operation, "args": arguments}
         payload = json.dumps(request, separators=(",", ":")).encode()
         self.process.stdin.write(str(len(payload)).encode() + b"\n" + payload)
         self.process.stdin.flush()
@@ -98,7 +102,7 @@ def main():
     schema = json.loads((args.contract / "api/manifest.schema.json").read_text())
     manifest_fields(manifest, schema, schema)
     assert [(r["operation"], r["input"]) for r in manifest["registrations"]] == [
-        (RING, RING + "#input"), (MONOID, MONOID + "#input")]
+        (RING, RING + "#input"), (MONOID, MONOID + "#input"), (MULTIPLY, "cat.monoids")]
     environment = dict(os.environ)
     # Preserve a virtualenv's bin/python path; resolving its symlink loses the
     # environment's engine packages.

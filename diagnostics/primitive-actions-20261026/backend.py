@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Persistent public port for exactly two primitive object actions."""
+"""Persistent public port for two object actions and generic monoid multiplication."""
 
 from pathlib import Path
 import sys
@@ -19,7 +19,7 @@ def main():
     actions = Actions()
     write_frame({"op": "ready", "protocol": 1,
                  "backend": "sage-primitive-actions-20261026",
-                 "backend_version": SAGE_VERSION, "adapter_version": "0.1.0",
+                 "backend_version": SAGE_VERSION, "adapter_version": "0.2.0",
                  "capabilities": list(OPERATIONS)})
     while True:
         request = read_frame()
