@@ -64,6 +64,43 @@ class RetainedNative:
     request: object
     field: str
     carrier: object = None
+    context: object = None
+
+
+@dataclass(frozen=True)
+class ProductComputation:
+    """Private receipt for an actual selected field application, not evidence."""
+
+    parameters: object
+    fragment: object
+    packet: object
+    domain: object
+    source: object
+    target: object
+    field: object
+    operands: object
+
+
+@dataclass(frozen=True)
+class PointResult:
+    """A returned scalar retains this actual invocation and its computed data."""
+
+    invocation: object
+    data: object
+
+
+@dataclass(frozen=True)
+class LiteralPoint:
+    fragment: object
+    packet: object
+    carrier: object
+
+
+@dataclass(frozen=True)
+class FieldComputation:
+    field: object
+    operands: object
+    packet: object
 
 
 class Session:
@@ -74,9 +111,9 @@ class Session:
         self.values = {}
         self.completed = []
 
-    def keep(self, value, request, field, carrier=None):
+    def keep(self, value, request, field, carrier=None, context=None):
         token = "%s:%d" % (self.prefix, len(self.values))
-        self.values[token] = RetainedNative(value, request, field, carrier)
+        self.values[token] = RetainedNative(value, request, field, carrier, context)
         return opaque_data(token)
 
     def get(self, data):

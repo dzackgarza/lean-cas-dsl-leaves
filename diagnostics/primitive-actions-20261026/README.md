@@ -265,11 +265,73 @@ It supports:
   implementation here.
 
 The common decoder also allows complete named monoid multiplication fragments
-inside an equality input, using that fragment's supplied monoid field and actual
-endpoints. It does not register or implement a ring/semiring multiplication
+and its selected `operationExpression` inside an equality input, using the
+fragment's supplied monoid field, complete parameter list and actual endpoints.
+An expression retains its original operand fields; it is not retyped as an arrow
+or a synthetic common invocation. This does not register or implement a ring/semiring multiplication
 shortcut. An observation is an untrusted computational Boolean or Boolean-valued
 callable, not a proposition, a certificate, or a declaration that two selected
 structures are equal.
+
+## Producer and consumer codec audit
+
+A subsequent public-only audit completed ordinary representation conversions
+between these same four ports. It added no registration or public tag.
+
+An owned scalar returned by a closed multiplication invocation can now be used
+inside the complete `point` and `typedMap` fragments already accepted in product
+components, mediators, compositions and observations. Its private receipt retains
+the exact seven-field creating invocation, full ordered selected parameters,
+actual input callable, actual action and original returned data. The converter
+requires that invocation's exact closed domain. It checks the complete producing
+monoid against any selected monoid retained in the requested target or point
+owner. Matching native parents, scalar names or carrier data alone cannot
+replace that parameter check.
+
+The requested target remains attached verbatim. A supported point-data conversion
+can read the exact retained carrier field, the producer's complete carrier-action
+path, its named declaration endpoint, its own retained point endpoint, or a named
+scalar codec with an explicit matching selected owner. The checks read the actual
+creating record and its complete request. They do not infer structure from a
+native parent's class. Changed complete parameters are rejected even when their
+native parent, carrier field and multiplication field happen to coincide.
+
+This conversion is specific to scalar point data. An already stored whole or
+generalized `Callable` continues through the strict original source/target checks.
+Its endpoints cannot be relabelled by the scalar converter. A returned point
+also cannot become a constant map on another domain. An object record's scalar
+unit or zero field has no creating point-arrow domain, so an `element` envelope
+must provide its complete point context before it occupies an arrow slot.
+An inline result of a supplied complete multiplication graph likewise retains
+its `element(M,data)` selection through the actual prior monoid-object receipt;
+the consumer reads its exact returned carrier and keeps the original wrapper.
+
+When an earlier owned whole callable is evaluated by a later closed invocation,
+the reply's token retains that later invocation and the actual previously
+computed native value. Its dependency keeps the earlier callable, producing
+fragment, field, selected parameters and operands. The wrapper performs no new
+arithmetic and substitutes no formal representative. Literal and native field
+results also retain their original fragment or field application. Every receipt
+is private implementation data, not a wire certificate or an acceptance claim.
+
+The finite function-observation reader now consumes the specimen's native
+function-valued record fields at their published curried interfaces:
+
+| Retained field | Exact callable interface |
+| --- | --- |
+| `Monoid.toSemigroup`, `AddMonoid.toAddSemigroup` | `carrier → carrier → carrier` |
+| `Monoid.toNPow`, `AddMonoid.toNSMul` | `Nat → carrier → carrier` |
+| `Semiring.toNatCast` | `Nat → carrier` |
+
+Each field is matched to its exact creating object-action request and its actual
+slot in the returned record. The adapter invokes that retained native function.
+Partial applications preserve the supplied operands and return compatible owned
+callable data; final native values retain the same selected carrier. This does
+not curry or reinterpret the separately returned whole multiplication map, whose
+source remains its supplied binary product. Function equality still requires a
+complete finite domain inventory. In particular, a field with the complete
+natural-number source does not acquire a finite observation interface merely
+because a finite sample could be supplied.
 
 ## Representation boundaries and public framing question
 
@@ -289,8 +351,7 @@ would be needed to select one reading in an actually ambiguous untagged case.
 This is a framing question, not a request for mathematical answers or a change
 to any selected declaration.
 
-Other operation-expression families, the equality port's nested algebraic
-`operationExpression` reader, `operationPoint`, `pointView`, admission/constrained
+Other operation-expression families, `operationPoint`, `pointView`, admission/constrained
 wrappers, arbitrary additional carrier paths, unknown whole-object opaque
 records, and unsupported native literal codecs remain implementation gaps.
 These already have public forms; this specimen does not claim a contract defect
@@ -311,6 +372,7 @@ installed Sage/PassageMath interpreter:
 python3 protocol_checks.py --contract /path/to/leaf-contracts --engine /path/to/sage-python
 python3 multiplication_protocol_checks.py --contract /path/to/leaf-contracts --engine /path/to/sage-python
 python3 point_observation_protocol_checks.py --contract /path/to/leaf-contracts --engine /path/to/sage-python
+python3 composability_protocol_checks.py --contract /path/to/leaf-contracts --engine /path/to/sage-python
 ```
 
 These self-designed checks cover the exact manifest rows, framing, complete
@@ -327,5 +389,11 @@ selected-owner rejection, Boolean result shape, native point reuse through
 equality, and isolation between two live sessions. They assert no Boolean answer
 or mathematical result. The shared reader and the equality row are a separate
 leaf implementation change from the earlier multiplication-port addition.
+The composability controls additionally cover owned scalar point fragments,
+later closed results of owned whole callables, declaration and retained-point
+endpoints, selected operation expressions in observations, native curried field
+observations, exact creating-request retention, and rejection of changed complete
+parameters sharing the same carrier. Internal controls inspect retained packet
+and data-object identity only; they do not compare native mathematical values.
 No kernel, acceptance suite, fixed question corpus or runtime acceptance result
 was inspected or run. These controls provide no correctness or acceptance evidence.

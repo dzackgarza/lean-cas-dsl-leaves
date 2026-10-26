@@ -1,7 +1,7 @@
 """Apply the actual curried multiplication field of a supplied MonCat record."""
 
 from cas_port import operation_expression, point_invocation
-from primitive_actions import Unsupported, fields, inline, tag
+from primitive_actions import ProductComputation, Unsupported, fields, inline, tag
 from point_calls import (MULTIPLY, NativePoints, NativeValues, PointCall,
                         monoid_fields, named_set, set_carrier, wire)
 
@@ -34,9 +34,26 @@ class Multiplication(PointCall):
         result.prepare()
         return result
 
-    def prepare(self):
+    @classmethod
+    def at_expression(cls, session, packet, expression, domain, target):
+        operation, parameters, operands = operation_expression(expression)
+        if operation != OPERATION:
+            raise Unsupported("this expression does not select monoid multiplication")
+        if len(parameters) != 1 or len(operands) != 2:
+            raise ValueError("multiplication needs its complete monoid and two operands")
+        result = cls.__new__(cls)
+        result.session, result.packet, result.arrow = session, packet, expression
+        result.selected, result.parameters = parameters[0], parameters
+        # An expression has operand fields, not an arrow-source field. Retain
+        # that distinction instead of fabricating or retyping an invocation.
+        result.source, result.target, result.domain = None, target, domain
+        result.native_values = NativeValues(session)
+        result.prepare(factors=(target, target))
+        return result
+
+    def prepare(self, factors=None):
         self.carrier, self.multiplication, _, _ = monoid_fields(self.selected)
-        self.left, self.right = self.product_factors(self.source)
+        self.left, self.right = self.product_factors(self.source) if factors is None else factors
         self.points = NativePoints(self.session, self.packet, self.carrier,
                                    [self.selected, self.left, self.right, self.target])
         for endpoint in (self.left, self.right, self.target):
@@ -76,7 +93,7 @@ class Multiplication(PointCall):
         except wire.Unsupported as error:
             raise Unsupported(str(error)) from error
 
-    def product(self, pair):
+    def product(self, pair, fragment=None):
         pair = inline(pair)
         if not isinstance(pair, list) or len(pair) != 2:
             raise ValueError("monoid multiplication requires both actual operand fields")
@@ -89,7 +106,10 @@ class Multiplication(PointCall):
             wire.same(inline(native.carrier), inline(self.carrier), "multiplication's retained carrier")
             left, right = (self.points.read(point) for point in pair)
             result = native.value(left)(right)
-            return self.session.keep(result, self.packet, "Monoid.product", self.carrier)
+            context = ProductComputation(self.parameters, self.arrow if fragment is None else fragment,
+                                         self.packet, self.domain, self.source, self.target,
+                                         self.multiplication, pair)
+            return self.session.keep(result, self.packet, "Monoid.product", self.carrier, context)
         # Mul's published field is curried: carrier -> carrier -> carrier.
         maps = wire.node("obj.sets.maps", self.carrier, self.carrier)
         row = self.field_function(multiplication, maps)(self.points.data(pair[0]))
@@ -113,15 +133,13 @@ class Multiplication(PointCall):
         left = self.point_function(operands[0], domain, self.left)
         right = self.point_function(operands[1], domain, self.right)
         return wire.Callable(domain, target, lambda point, retained=(expression, left, right):
-                             self.product([retained[1](point), retained[2](point)]))
+                             self.product([retained[1](point), retained[2](point)], retained[0]))
 
     def interpret(self, arrow, source, target):
         if tag(arrow) == OPERATION:
             self.selection(arrow)
             # A nested named occurrence still consumes the selected record's
             # actual multiplication field at the supplied endpoint framing.
-            actual = self
-            if wire.key(source) != wire.key(self.source) or wire.key(target) != wire.key(self.target):
-                actual = self.at_arrow(self.session, self.packet, arrow, source, target)
+            actual = self.at_arrow(self.session, self.packet, arrow, source, target)
             return wire.Callable(source, target, actual.product)
         raise Unsupported("this callable expression has no implemented reader in the primitive provider")
