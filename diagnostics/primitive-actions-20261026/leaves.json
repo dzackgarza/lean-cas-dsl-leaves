@@ -21,6 +21,11 @@
       "operation": "op.monoids.mul",
       "input": "cat.monoids",
       "backend": "sage-primitive-actions-20261026"
+    },
+    {
+      "operation": "mor.sets.equality",
+      "input": "mor.sets.equality",
+      "backend": "sage-primitive-actions-20261026"
     }
   ]
 }

@@ -1,19 +1,21 @@
 # Primitive object-action specimen
 
 This independently authored specimen contains two complete-request object-action
-registrations and one generic element-operation registration in its own `leaves.json`:
+registrations, one generic element-operation registration, and one existing
+selected-set observation registration in its own `leaves.json`:
 
 | Operation | Input |
 | --- | --- |
 | `fun.rings.semiring` | `fun.rings.semiring#input` |
 | `fun.semirings.monoid` | `fun.semirings.monoid#input` |
 | `op.monoids.mul` | `cat.monoids` |
+| `mor.sets.equality` | `mor.sets.equality` |
 
 Both object requests use `{"ctor": OP, "args": [], "receiver": DATA}`. These published
 declarations have no explicit non-proof parameters. Nonempty parameter arrays are
-rejected. The two map actions are not registered here. The multiplication port
-uses the common `apply` envelope described below. Existing extension and v1
-manifests and registrations are unchanged.
+rejected. The two map actions are not registered here. The multiplication and
+equality ports use the common `apply` envelope described below. Existing extension
+and v1 manifests and registrations are unchanged.
 
 ## Public inputs and field order
 
@@ -90,8 +92,9 @@ no opaque dependencies. A native result remains session-owned, even under
 Foreign or expired tokens return an unavailable computation; no serialized field
 chooses an owner and a new process cannot revive a token. The generic multiplication
 registration below consumes these actual native monoid fields on their owning
-connection. Other later operations still need their own admitted implementation
-or representation bridge.
+connection. The equality registration below also consumes the actual point data
+on that connection. Other later operations still need their own admitted
+implementation or representation bridge.
 
 ## Generic monoid multiplication
 
@@ -109,7 +112,8 @@ The selected `M` is a complete supplied `[carrier, monoid]` record, optionally
 under `valueData`. The monoid has all three published data slots. Multiplication
 uses its actual first slot, the curried `carrier → carrier → carrier` function.
 It does not reconstruct a ring, semiring, source functor, or formal representative.
-The actual source must expose its two `objectProduct` factors. The supplied
+The actual source must expose its two `objectProduct` factors, directly or through
+the supported retained endpoint forms described below. The supplied
 source, target, domain, full parameter list, operands and results remain retained.
 Typed-map wrappers are checked against those exact endpoints; the native parent
 is never used to identify distinct selected descriptors.
@@ -135,7 +139,7 @@ monoids acquire no numeral interface. Other native algebraic points, including
 matrix, polynomial and power-series points, require retained native tokens;
 their alternative literal/expression codecs are not implemented by this port.
 
-The callable reader privately reuses only `extensions-20261024/wire.py`, without
+The shared callable reader privately reuses only `extensions-20261024/wire.py`, without
 importing its backend or registrations. It supports complete finite graphs,
 `typedMap`, `valueData`, identity, mediator, composition with retained shared
 endpoints, supported `element`/`point` wrappers, and this process's returned
@@ -159,6 +163,141 @@ computation. Foreign or expired nested tokens remain unavailable. No registratio
 was added for `op.rings.mul`, `op.semirings.mul`,
 `fun.rings.multiplicative_monoid`, or another target shortcut.
 
+## Complete point and callable inputs
+
+The subsequent point-reader extension is confined to this specimen. Its shared
+`point_calls.py` reads the public contract's scalar-point, pair, callable,
+`typedMap`, mediator and composition forms. It preserves the complete request
+and selected wrappers in retained closures and invocation records. Native scalar
+readers use the selected descriptor or the owned carrier's original request;
+native parent identity never determines a selected structure.
+
+| Input position | Supported reading |
+| --- | --- |
+| A closed product argument | `[left,right]`, recursively reading each actual point field |
+| A generalized product argument | The same ordered two fields, each containing its complete callable at the actual shared domain |
+| A product field containing a complete callable fragment | `typedMap`, `point`, `compose`, `mediator`, a complete finite graph, or an owned callable; its actual endpoint framing is checked before evaluation |
+| A scalar `element(selected,expression)` | Its exact owner remains attached; literals, owned data and supported complete point/callable expressions retain that selection |
+| A selected monoid operation expression | `element(M,operationExpression("op.monoids.mul",[M],[left,right]))`, with both operands decoded recursively and the same full `M` |
+| A complete callable body | The existing finite graph, `finiteGraph`, `identity`, `typedMap`, `mediator`, `compose`, or compatible owned callable representation |
+| A mediator | Both components are complete arrows at the actual shared domain; `element` supplies a complete scalar point arrow at the global domain |
+| A composition | The supplied shared endpoint comes from an actual typed/owned constituent, or the supported full declaration of monoid multiplication or equality |
+
+Function-valued point data retain their own function endpoints. They are not
+automatically evaluated as arrows out of the invocation's generalized domain.
+Conversely, a scalar is not made into a constant map on a non-global domain.
+An untagged array inside an explicit `typedMap` body remains in callable position
+and uses the graph codec. At an untagged product-argument position the reader
+checks the component and graph framings against the actual domain, accepting an
+unambiguous complete reading. It does not choose by a computed mathematical value.
+
+A finite graph's product-valued image can retain complete closed point fragments.
+Evaluation uses the fragment's actual retained global-point domain. If the
+fragment has no retained domain, only the original invocation's actual global
+domain is available. A callable on another domain is not evaluated at a sample
+point to fill a scalar slot. All original graph rows, endpoints, selected owners
+and opaque dependencies remain attached to the computation.
+
+An `objectProduct` can be read through its unchanged `valueData` or `finiteData`
+wrapper, or through `morphismEndpoint` whose actual typed/owned field or supported
+full declaration supplies the product interface. An abstract `morphismEndpoint`
+does not provide a finite inventory. Supplied typed-map and composition endpoints
+are compared as complete descriptors, including their retained parameters.
+A selected target endpoint of a complete monoid multiplication declaration or
+its retained callable also keeps that exact monoid as point-owner context.
+
+Carrier decoding supports the actual owned carrier field and these complete
+selected paths, without registering any of their additional actions:
+
+- `fun.semirings.forget` applied to the complete supplied `SemiRingCat` record.
+- `fun.monoids.semigroup` applied to the complete supplied `MonCat`, followed by
+  `classifierForget("clf.magmas.associative",[])` and then
+  `classifierForget("clf.sets.binary_operation",[])`.
+- `fun.sets.identity` around a supported selected-set descriptor.
+
+The point wrapper's selected owner must be an exact retained context of that
+path. A different monoid or ring wrapper is not accepted merely because Sage
+uses the same parent for it. The native scalar named-set bridge reads the exact
+stored original ring/semiring descriptor for integers, rationals, modular
+integers or naturals; it does not inspect the point's parent to choose a set.
+
+## Selected-set equality observation
+
+The added row is exactly `mor.sets.equality` on the already published
+`mor.sets.equality` complete-request input. The supplied public declaration is
+`CasCatalogue.Foundation.PowerSets.equality : (X : Type) → (X × X) → omega`.
+The contract specifies the truth-value observation codec at
+`obj.sets.truth_values`. Requests retain all seven fields:
+
+```text
+apply("mor.sets.equality", [X], actual_arrow,
+      original_domain, actual_product_source, actual_truth_target, actual_argument)
+```
+
+Both source factors retain the complete selected `X`. Its exact parameter array
+also remains attached to the named arrow and any reused owned operation callable.
+The selected set, original domain, actual arguments, source and target, callable
+fragments, returned results and live ownership are retained by the same process.
+The result at `obj.sets.fin(1)` is `valueData` containing a JSON Boolean. At any
+other domain it is `valueData(typedMap(original_domain,actual_truth_target,token))`;
+each evaluation checks the Boolean result shape. Whole-domain identity arguments
+use that same interface. A later equality invocation can consume its actual
+returned observation callable.
+
+The computation calls existing Sage/Python value equality through `operator.eq`.
+It supports:
+
+- Points belonging to this process's actual retained carrier fields, including
+  its native zero, unit, numeral and multiplication results. Matrix, polynomial
+  and power-series points use their actual native values. Engine equality may
+  fail when the engine cannot decide the supplied values; no approximate or
+  sampled replacement is used.
+- Public scalar data at the selected integer, natural, rational, positive-modulus
+  modular and `Fin(n)` sets, with their representation checks, and JSON Boolean
+  points at the selected truth-value set.
+- The complete carrier-action paths listed above, with the actual native data
+  and selected source structures retained.
+- Ordered products of supported point interfaces.
+- Function-valued points at `obj.sets.maps(D,Y)` when the actual `D` supplies a
+  supported complete finite inventory and `Y` has a supported point reader. The
+  existing callable helper evaluates the actual two functions on that inventory;
+  native equality compares their outputs. Infinite function equality has no
+  implementation here.
+
+The common decoder also allows complete named monoid multiplication fragments
+inside an equality input, using that fragment's supplied monoid field and actual
+endpoints. It does not register or implement a ring/semiring multiplication
+shortcut. An observation is an untrusted computational Boolean or Boolean-valued
+callable, not a proposition, a certificate, or a declaration that two selected
+structures are equal.
+
+## Representation boundaries and public framing question
+
+Supported fragments must have enough retained domain and endpoint data to be
+read at their actual position. A raw native scalar in an unlabelled composition
+slot is not a complete arrow; the public `element`, `point` and `typedMap` forms
+provide that context. A missing shared endpoint for an unlabelled composition
+is not filled with an inferred native carrier. Graphs still require actual
+domain inventories; neither a graph's keys nor a small sample creates one.
+
+The public contract gives untagged arrays both ordered product-data and finite
+graph roles, without a general precedence rule for bytes satisfying both
+framings. This reader checks both against the complete supplied domain. If both
+remain well framed, it reports `unsupported`; `mediator`, `finiteGraph`, or an
+explicit `typedMap` callable body resolves the framing. A public precedence rule
+would be needed to select one reading in an actually ambiguous untagged case.
+This is a framing question, not a request for mathematical answers or a change
+to any selected declaration.
+
+Other operation-expression families, the equality port's nested algebraic
+`operationExpression` reader, `operationPoint`, `pointView`, admission/constrained
+wrappers, arbitrary additional carrier paths, unknown whole-object opaque
+records, and unsupported native literal codecs remain implementation gaps.
+These already have public forms; this specimen does not claim a contract defect
+because it lacks their computational readers. Equality of general infinite
+callables is also unsupported. Lost or foreign owners remain unavailable even
+inside a wrapper, graph, endpoint, selected structure or returned result.
+
 ## Running the specimen and local checks
 
 The manifest starts `python3 backend.py`. The existing `backends/engine_python.py`
@@ -171,6 +310,7 @@ installed Sage/PassageMath interpreter:
 ```sh
 python3 protocol_checks.py --contract /path/to/leaf-contracts --engine /path/to/sage-python
 python3 multiplication_protocol_checks.py --contract /path/to/leaf-contracts --engine /path/to/sage-python
+python3 point_observation_protocol_checks.py --contract /path/to/leaf-contracts --engine /path/to/sage-python
 ```
 
 These self-designed checks cover the exact manifest rows, framing, complete
@@ -181,5 +321,11 @@ The multiplication checks additionally exercise actual same-session point reuse,
 whole maps, generalized maps, later use of returned callables, selected-parameter
 and endpoint preservation, and supplied finite-field data. A synthetic graph
 fixture checks data lookup only and is not asserted to define a monoid.
+The point/observation controls check complete nested fragments, scalar and
+generalized product framing, source and target preservation, callable reuse,
+selected-owner rejection, Boolean result shape, native point reuse through
+equality, and isolation between two live sessions. They assert no Boolean answer
+or mathematical result. The shared reader and the equality row are a separate
+leaf implementation change from the earlier multiplication-port addition.
 No kernel, acceptance suite, fixed question corpus or runtime acceptance result
-was inspected or run. The public encoding was sufficient for these supported forms.
+was inspected or run. These controls provide no correctness or acceptance evidence.

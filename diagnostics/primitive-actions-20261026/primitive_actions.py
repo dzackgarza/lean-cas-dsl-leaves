@@ -13,7 +13,7 @@ from cas_port import construction_invocation, opaque_data, value_data
 from sage.all import IntegerModRing, LazyPowerSeriesRing, MatrixSpace, NN, PolynomialRing, QQ, ZZ
 
 
-OPERATIONS = ("fun.rings.semiring", "fun.semirings.monoid", "op.monoids.mul")
+OPERATIONS = ("fun.rings.semiring", "fun.semirings.monoid", "op.monoids.mul", "mor.sets.equality")
 
 
 class Unsupported(Exception):
@@ -179,6 +179,11 @@ class Actions:
         if operation == "op.monoids.mul":
             from monoid_multiplication import Multiplication
             result = Multiplication(self.session, packet).run()
+            self.session.completed.append((packet, result))
+            return result
+        if operation == "mor.sets.equality":
+            from set_equality import Equality
+            result = Equality(self.session, packet).run()
             self.session.completed.append((packet, result))
             return result
         _, parameters, receiver = construction_invocation(packet, operation)

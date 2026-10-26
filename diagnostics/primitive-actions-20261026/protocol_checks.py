@@ -18,6 +18,7 @@ HERE = Path(__file__).resolve().parent
 RING = "fun.rings.semiring"
 MONOID = "fun.semirings.monoid"
 MULTIPLY = "op.monoids.mul"
+EQUALITY = "mor.sets.equality"
 
 
 def node(name, *args):
@@ -52,7 +53,7 @@ class Connection:
         self.next_id = 0
         ready = self.read()
         assert ready["op"] == "ready" and ready["protocol"] == 1
-        assert set(ready["capabilities"]) == {RING, MONOID, MULTIPLY}
+        assert set(ready["capabilities"]) == {RING, MONOID, MULTIPLY, EQUALITY}
 
     def read(self):
         header = self.process.stdout.readline()
@@ -102,7 +103,8 @@ def main():
     schema = json.loads((args.contract / "api/manifest.schema.json").read_text())
     manifest_fields(manifest, schema, schema)
     assert [(r["operation"], r["input"]) for r in manifest["registrations"]] == [
-        (RING, RING + "#input"), (MONOID, MONOID + "#input"), (MULTIPLY, "cat.monoids")]
+        (RING, RING + "#input"), (MONOID, MONOID + "#input"), (MULTIPLY, "cat.monoids"),
+        (EQUALITY, EQUALITY)]
     environment = dict(os.environ)
     # Preserve a virtualenv's bin/python path; resolving its symlink loses the
     # environment's engine packages.
