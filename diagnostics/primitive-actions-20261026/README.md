@@ -129,6 +129,10 @@ The supported multiplication-field forms are:
   function-valued record field, `finiteGraph` may supply a missing field-domain
   inventory; the nested copies must agree. Ordinary generalized argument maps
   still require their actual source's inventory, not a sampled field domain.
+- Exact `typedMap` framing around either implemented field representation,
+  including typed inner graphs. Both endpoints are checked at the field's
+  published curried interface, and the original field and nested data remain
+  retained. A native function is invoked through that same stored field.
 
 Native operands support this process's retained zero, unit and prior product
 tokens; raw integer/natural/modular points; reduced rational records; and
@@ -333,6 +337,65 @@ complete finite domain inventory. In particular, a field with the complete
 natural-number source does not acquire a finite observation interface merely
 because a finite sample could be supplied.
 
+## Portable-input and record-field completion
+
+The next public-only audit, implemented by adapter `0.3.2`, follows originally
+supplied portable point data through the same readers as returned native points.
+It uses the contract's complete-expression, scalar, callable and endpoint rules
+and the same public declarations recorded above. It adds no registration, public
+tag, mathematical operation, or change to an existing extension/V1 manifest.
+
+| Input form | Completed decoder path |
+| --- | --- |
+| Portable scalar under `element`, `point`, and a complete closed `typedMap` | The selected wrapper remains retained while its actual literal reaches the existing scalar reader. A typed body still has a callable representation, such as a graph or a complete `element` point. |
+| `element(M,fragment)` at an actual carrier or supported named scalar endpoint | The full `M` is checked against its actual prior object-action receipt, or the selected carrier path. A named scalar codec is checked against that receipt's exact original receiver. A producing native point additionally keeps its own full multiplication parameters. |
+| Selected portable data or closed fragments inside product graph images | The same selected-element decoder handles the image field, including images nested inside another ordered product. A generalized graph never supplies a sample domain for a scalar fragment. |
+| A declared endpoint of a complete closed composition | The reader follows the actual source or target constituent to its retained typed field, supported named declaration, or owned creating receipt. Full arrow parameters and the original endpoint envelope remain attached. |
+| Supported carrier paths and set identity around declared endpoints | The private point-codec view retains every original wrapper and selected owner. It does not replace any supplied callable endpoint. |
+| A native scalar field directly inside a selected `point` or `typedMap` fragment | An explicit `element` context and the actual closed domain bind the field to its exact returned record. The original field token is consumed unchanged. A bare scalar field has no invented creating point-arrow domain. |
+| A closed fragment returning a function-valued point | The reader distinguishes the fragment's actual closed domain from the resulting function's own domain. It can then consume the actual native field or complete graph inside a nested product image. |
+
+The existing literal codec explicitly binds these original named owners to
+their public scalar-data interface, with every ordered parameter retained:
+
+| Original selected owner | Scalar interface |
+| --- | --- |
+| `obj.rings.integers()` | `obj.sets.integers()` |
+| `obj.rings.rationals()` | `obj.sets.rationals()` |
+| `obj.rings.integers_mod(n)` | `obj.sets.integers_mod(n)`, at that exact `n` |
+| `obj.semirings.naturals()` | `obj.sets.naturals()` |
+
+An original portable `element` uses its own complete descriptor and expression;
+it does not need an earlier native point result. Native points still use their
+exact creating records and retained producing parameters. A numeral token keeps
+its original element and creating packet. No reverse selection of a structure
+from a native parent or a scalar name occurs.
+
+Native function fields continue to use their exact creating record and their
+published curried interfaces. Complete compositions apply `npow`, `nsmul`, or
+`natCast` to an actual supplied natural point without registering those fields as
+new operations. The multiplication port also consumes an actual native field or
+curried graph kept inside exact `typedMap` framing in the selected monoid record.
+The output retains its actual field application and creating request. No named
+ring/semiring multiplication is substituted for that field.
+
+For graphs with an actual finite codomain inventory, supported image fragments
+reach the same point decoder when evaluated. Scalar serialization reads the
+actual native value only after checking its retained producing request, complete
+parameters and selected target. The complete original graph, image fragments,
+inventory and owners remain retained. The returned field's actual images use the
+same reader. Domain keys are checked for completeness and uniqueness before use;
+no image computation chooses between graph and product-component framings.
+The resulting image data must use the supplied inventory's implemented point-data
+codec. An unknown native codec does not identify two different opaque keys.
+
+All whole and generalized callable checks remain exact. In particular, knowing
+the data interface of `morphismEndpoint(field,"target")` does not authorize
+relabelling that field's whole callable with the wrapper as a different target.
+A closed fragment's explicit typed endpoints must match its supplied position.
+Only the previously documented scalar point-data conversion uses the exact
+retained creating invocation; it does not turn arbitrary callables into points.
+
 ## Representation boundaries and public framing question
 
 Supported fragments must have enough retained domain and endpoint data to be
@@ -373,6 +436,7 @@ python3 protocol_checks.py --contract /path/to/leaf-contracts --engine /path/to/
 python3 multiplication_protocol_checks.py --contract /path/to/leaf-contracts --engine /path/to/sage-python
 python3 point_observation_protocol_checks.py --contract /path/to/leaf-contracts --engine /path/to/sage-python
 python3 composability_protocol_checks.py --contract /path/to/leaf-contracts --engine /path/to/sage-python
+python3 portable_point_protocol_checks.py --contract /path/to/leaf-contracts --engine /path/to/sage-python
 ```
 
 These self-designed checks cover the exact manifest rows, framing, complete
@@ -397,3 +461,15 @@ parameters sharing the same carrier. Internal controls inspect retained packet
 and data-object identity only; they do not compare native mathematical values.
 No kernel, acceptance suite, fixed question corpus or runtime acceptance result
 was inspected or run. These controls provide no correctness or acceptance evidence.
+
+The portable-point controls exercise the advertised integer, natural, rational,
+modular, finite-set and truth-value codecs before any native computation, then
+repeat the supported closed wrappers through owned carriers, complete declared
+endpoints and actual object-action receipts. They also cover nested product
+images, retained generalized domains, every native function-field role, exact
+typed native/graph field reuse, and complete-parameter, endpoint and cross-session
+rejections. Their internal controls inspect original packet, descriptor, field
+and data-object identity only; no native arithmetic or Boolean answer is asserted.
+They also cover the explicit named literal bindings, complete images at an
+inventoried codomain, retained native scalar serialization, and duplicate graph
+inventory rejection. The graph fixtures assert no multiplication table or law.

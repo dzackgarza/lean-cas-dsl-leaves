@@ -1,9 +1,9 @@
 """Apply the actual curried multiplication field of a supplied MonCat record."""
 
-from cas_port import operation_expression, point_invocation
+from cas_port import operation_expression, point_invocation, typed_map
 from primitive_actions import ProductComputation, Unsupported, fields, inline, tag
 from point_calls import (MULTIPLY, NativePoints, NativeValues, PointCall,
-                        monoid_fields, named_set, set_carrier, wire)
+                        monoid_fields, named_set, point_producer, wire)
 
 
 OPERATION = MULTIPLY
@@ -57,9 +57,12 @@ class Multiplication(PointCall):
         self.points = NativePoints(self.session, self.packet, self.carrier,
                                    [self.selected, self.left, self.right, self.target])
         for endpoint in (self.left, self.right, self.target):
+            selected = self.selected_monoid(endpoint)
+            if selected is not None:
+                wire.same(selected, self.selected, "multiplication's complete selected carrier context")
             if wire.key(inline(endpoint)) == wire.key(inline(self.carrier)):
                 continue
-            actual, _ = set_carrier(self.endpoint_view(endpoint))
+            actual = self.endpoint_view(endpoint)
             if wire.key(inline(actual)) == wire.key(inline(self.carrier)):
                 continue
             if self.points.origin is not None and self.points.kind is not None:
@@ -77,7 +80,15 @@ class Multiplication(PointCall):
 
     def field_function(self, data, target):
         data = inline(data)
-        if tag(data) == "opaqueData":
+        if tag(data) == "typedMap":
+            source, actual_target, body = typed_map(data)
+            wire.same(source, self.carrier, "curried field's complete source")
+            wire.same(actual_target, target, "curried field's complete target")
+            actual = self.field_function(body, target)
+            return wire.Callable(source, actual_target,
+                                 lambda point, retained=(data, actual): retained[1](point),
+                                 invocation=actual.invocation)
+        if tag(data) == "opaqueData" or (self.callable_data(data) and tag(data) != "finiteGraph"):
             return self.function(data, self.carrier, target)
         try:
             points = self.inventory(self.carrier)
@@ -87,11 +98,7 @@ class Multiplication(PointCall):
                     raise Unsupported("a function-valued field needs its actual inventory")
                 self.field_points, _ = fields(data, "finiteGraph", 2)
             points = self.field_points
-        try:
-            return wire.graph_callable(data, self.carrier, target,
-                                       finite_inventory=lambda _: points)
-        except wire.Unsupported as error:
-            raise Unsupported(str(error)) from error
+        return self.graph_function(data, self.carrier, target, finite_inventory=lambda _: points)
 
     def product(self, pair, fragment=None):
         pair = inline(pair)
@@ -114,12 +121,19 @@ class Multiplication(PointCall):
         maps = wire.node("obj.sets.maps", self.carrier, self.carrier)
         row = self.field_function(multiplication, maps)(self.points.data(pair[0]))
         result = self.field_function(row, self.carrier)(self.points.data(pair[1]))
+        result = self.resolve_value(result, self.carrier)
+        if tag(inline(result)) == "opaqueData":
+            native, _ = point_producer(self.session, result)
+            wire.same(inline(native.carrier), inline(self.carrier), "curried field result's actual carrier")
+            return result
         try:
             points = self.inventory(self.carrier)
         except Unsupported:
             points = self.field_points
-        if points is not None and wire.key(result) not in {wire.key(p) for p in points}:
-            raise ValueError("the field returned a point outside its actual supplied inventory")
+        if points is not None:
+            result = self.graph_image(result, self.carrier)
+            if wire.key(result) not in {wire.key(p) for p in points}:
+                raise ValueError("the field returned a point outside its actual supplied inventory")
         return result
 
     def expression_function(self, expression, domain, target):

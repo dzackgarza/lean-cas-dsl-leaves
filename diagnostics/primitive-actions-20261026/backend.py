@@ -19,7 +19,7 @@ def main():
     actions = Actions()
     write_frame({"op": "ready", "protocol": 1,
                  "backend": "sage-primitive-actions-20261026",
-                 "backend_version": SAGE_VERSION, "adapter_version": "0.3.1",
+                 "backend_version": SAGE_VERSION, "adapter_version": "0.3.2",
                  "capabilities": list(OPERATIONS)})
     while True:
         request = read_frame()

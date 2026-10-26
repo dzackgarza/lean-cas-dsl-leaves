@@ -32,8 +32,7 @@ class Equality(PointCall):
     def equal(self, left, right, selected):
         view = self.endpoint_view(selected)
         kind = tag(view)
-        if kind != "obj.sets.maps":
-            left, right = self.resolve_value(left, selected), self.resolve_value(right, selected)
+        left, right = self.resolve_value(left, selected), self.resolve_value(right, selected)
         if kind == "objectProduct":
             a, b = self.product_factors(selected)
             l0, l1 = record(self.unwrapped(left, selected), "left product point", 2)

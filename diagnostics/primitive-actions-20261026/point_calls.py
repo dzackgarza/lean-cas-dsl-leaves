@@ -124,7 +124,7 @@ def point_producer(session, data):
             creator, _, _ = record_field(session, native.carrier)
             wire.same(selected, creator.request["receiver"], "literal's exact selected creator")
         else:
-            wire.same(selected, native.carrier, "literal's complete selected scalar set")
+            wire.same(named_set(selected), inline(native.carrier), "literal's complete selected scalar codec")
         return native, None
     if native.field == "Point.field" and isinstance(context, FieldComputation):
         field, _, carrier = record_field(session, context.field)
@@ -236,8 +236,13 @@ class NativePoints:
                 self.parent = IntegerModRing(self.limit) if kind.endswith("integers_mod") else ZZ
 
     def check_owner(self, selected):
-        if not any(wire.key(selected) == wire.key(owner) for owner in self.owners):
-            raise ValueError("the element changed its complete selected context")
+        if any(wire.key(selected) == wire.key(owner) for owner in self.owners):
+            return
+        # These are the already implemented explicit public scalar codecs.
+        # All parameters are read from the supplied owner, not a native parent.
+        if wire.key(named_set(selected)) == wire.key(inline(self.carrier)):
+            return
+        raise ValueError("the element changed its complete selected context")
 
     def data(self, data):
         data = inline(data)
@@ -250,7 +255,10 @@ class NativePoints:
                 literal_owner = self.origin if self.origin is not None else self.carrier
                 named_literal = self.origin is not None or self.kind in {
                     "obj.sets.integers", "obj.sets.rationals", "obj.sets.naturals", "obj.sets.integers_mod"}
-                if (wire.key(selected) != wire.key(literal_owner) or self.parent is None
+                selected_literal = (wire.key(selected) == wire.key(literal_owner)
+                                    or self.origin is None
+                                    and wire.key(named_set(selected)) == wire.key(inline(self.carrier)))
+                if (not selected_literal or self.parent is None
                         or not named_literal):
                     raise Unsupported("this selected owner has no numeral reader")
                 number, = fields(inline(expression), "numeral", 1)
@@ -315,27 +323,66 @@ class PointCall:
         size, = fields(domain, "obj.sets.fin", 1)
         return type(size) is int and size == 1
 
-    def endpoint_view(self, selected):
+    def endpoint_context(self, selected):
+        """Read a supported data interface while retaining every selected owner.
+
+        This view is used only by point codecs. Callable endpoint checks still
+        compare the original descriptors, before any body is interpreted.
+        """
         data = inline(selected)
         if tag(data) == "finiteData":
             original, _ = fields(data, "finiteData", 2)
             wire.inventory(data)
-            return self.endpoint_view(original)
+            view, owners = self.endpoint_context(original)
+            return view, [selected, *owners]
+        if tag(data) == "functorAction":
+            carrier, owners = set_carrier(data)
+            view, nested = self.endpoint_context(carrier)
+            return view, [selected, *owners, *nested]
         if tag(data) == "morphismEndpoint":
             arrow, side = morphism_endpoint(data)
-            actual = wire.retained_endpoint(arrow, side, self.native_values)
-            if actual is None:
-                actual = self.declared_endpoint(arrow, side)
-            if actual is None:
-                token = self.fragment_token(arrow)
-                if token is not None and self.session.get(token).field == "Point.result":
-                    native, _ = point_producer(self.session, token)
-                    creating = point_invocation(native.request, MULTIPLY)
-                    actual = creating[3 if side == "source" else 5]
+            actual = self.arrow_endpoint(arrow, side)
             if actual is None:
                 raise Unsupported("the endpoint needs a supported full declaration or retained field")
-            return self.endpoint_view(actual)
-        return data
+            view, owners = self.endpoint_context(actual)
+            try:
+                producer = self.fragment_selection(arrow) if side == "target" else None
+            except Unsupported:
+                producer = None
+            return view, [selected, *owners, *([] if producer is None else [producer])]
+        return data, [selected]
+
+    def endpoint_view(self, selected):
+        return self.endpoint_context(selected)[0]
+
+    def arrow_endpoint(self, arrow, side):
+        """Use an actual field, complete declaration, or exact scalar receipt."""
+        actual = wire.retained_endpoint(arrow, side, self.native_values)
+        if actual is not None:
+            return actual
+        arrow = inline(arrow)
+        if tag(arrow) in {"point", "element", "compose"}:
+            if tag(arrow) == "point":
+                part, = fields(arrow, "point", 1)
+            elif tag(arrow) == "element":
+                _, part = fields(arrow, "element", 2)
+            else:
+                part = fields(arrow, "compose", 2)[0 if side == "source" else 1]
+            return self.arrow_endpoint(part, side)
+        actual = self.declared_endpoint(arrow, side)
+        if actual is not None:
+            return actual
+        if tag(arrow) == "opaqueData":
+            native = self.session.get(arrow)
+            if native.field == "Point.result":
+                point_producer(self.session, arrow)
+                creating = point_invocation(native.request, MULTIPLY)
+                return creating[3 if side == "source" else 5]
+            if native.field in self.native_function_fields:
+                _, _, carrier, arguments = self.field_interface(arrow)
+                target = self.function_object(arguments[1:], carrier)
+                return arguments[0] if side == "source" else target
+        return None
 
     def declared_endpoint(self, arrow, side):
         arrow = inline(arrow)
@@ -355,35 +402,7 @@ class PointCall:
         return object_product(data)
 
     def point_context(self, target):
-        carrier, owners = set_carrier(self.endpoint_view(target))
-        original = inline(target)
-        while tag(original) == "finiteData":
-            original = inline(fields(original, "finiteData", 2)[0])
-        if tag(original) == "morphismEndpoint":
-            arrow, side = morphism_endpoint(original)
-            # A target endpoint of the complete multiplication declaration
-            # retains its selected MonCat parameter as point-owner context.
-            # The carrier still comes from the actual retained target field.
-            while tag(inline(arrow)) in {"point", "typedMap", "compose"}:
-                arrow = inline(arrow)
-                if tag(arrow) == "typedMap":
-                    arrow = typed_map(arrow)[2]
-                elif tag(arrow) == "compose":
-                    arrow = fields(arrow, "compose", 2)[0 if side == "source" else 1]
-                else:
-                    arrow, = fields(arrow, "point", 1)
-            arrow = inline(arrow)
-            if side == "target" and tag(arrow) == MULTIPLY:
-                owners.extend(fields(arrow, MULTIPLY, 1))
-            elif side == "target" and tag(arrow) == "opaqueData":
-                native = self.session.get(arrow)
-                actual = native.value
-                if (isinstance(actual, wire.Callable) and actual.invocation is not None
-                        and actual.invocation.operation == MULTIPLY):
-                    owners.extend(actual.invocation.parameters)
-                elif native.field == "Point.result":
-                    _, selected = point_producer(self.session, arrow)
-                    owners.append(selected)
+        carrier, owners = self.endpoint_context(target)
         return NativePoints(self.session, self.packet, carrier, [target, *owners])
 
     def check_owner(self, selected, target):
@@ -447,11 +466,13 @@ class PointCall:
     def fragment_selection(self, data):
         """Read the actual output fragment's full selection, never search a packet."""
         data = inline(data)
-        while tag(data) in {"point", "typedMap", "compose"}:
+        while tag(data) in {"point", "typedMap", "compose", "element"}:
             if tag(data) == "point":
                 data = fields(data, "point", 1)[0]
             elif tag(data) == "typedMap":
                 data = typed_map(data)[2]
+            elif tag(data) == "element":
+                data = fields(data, "element", 2)[1]
             else:
                 data = fields(data, "compose", 2)[1]
             data = inline(data)
@@ -523,13 +544,16 @@ class PointCall:
                 wire.same(self.endpoint_view(target), named_set(native.request["receiver"]),
                           "element's explicitly selected scalar codec")
                 return
-            if not isinstance(inline(expression), dict) and self.monoid_receivers(selected):
+            if self.monoid_receivers(selected):
                 carrier, _, _, _ = monoid_fields(selected)
                 target_monoid = self.selected_monoid(target)
                 if target_monoid is not None:
                     wire.same(selected, target_monoid, "portable element's complete selected monoid")
-                actual, _ = set_carrier(self.endpoint_view(target))
-                wire.same(inline(actual), inline(carrier), "portable element's actual returned carrier")
+                actual = self.endpoint_view(target)
+                if wire.key(inline(actual)) != wire.key(inline(carrier)):
+                    native, _, _ = record_field(self.session, carrier)
+                    wire.same(actual, named_set(native.request["receiver"]),
+                              "portable element's exact creating scalar codec")
                 return
             token = self.fragment_token(expression)
             if token is None:
@@ -559,7 +583,12 @@ class PointCall:
     def point_callable(self, data, source, target, owner):
         native, selected = point_producer(self.session, data)
         if native.field != "Point.result" or not isinstance(native.context, PointResult):
-            raise Unsupported("a scalar field needs an element envelope before use as a point arrow")
+            if owner is None or not self.closed(source):
+                raise Unsupported("a scalar field needs a closed element envelope before use as a point arrow")
+            self.check_element(owner, data, target)
+            self.point_context(target).read(data)
+            return wire.Callable(source, target,
+                                 lambda _, retained=(data, native, owner, source, target): retained[0])
         original_domain = point_invocation(native.request, MULTIPLY)[3]
         if not self.closed(original_domain):
             raise Unsupported("the retained value has no closed-point creating invocation")
@@ -569,8 +598,17 @@ class PointCall:
         self.point_target(native, selected, target, owner)
         return wire.Callable(source, target, lambda _, retained=(data, native.context, owner): retained[0])
 
-    def field_callable(self, data, source, target):
-        """Use the public curried interface of this process's actual field."""
+    native_function_fields = {"Monoid.toSemigroup", "AddMonoid.toAddSemigroup",
+                              "Monoid.toNPow", "AddMonoid.toNSMul", "Semiring.toNatCast"}
+
+    @staticmethod
+    def function_object(arguments, carrier):
+        target = carrier
+        for argument in reversed(arguments):
+            target = wire.node("obj.sets.maps", argument, target)
+        return target
+
+    def field_interface(self, data):
         native, record_data, carrier = record_field(self.session, data)
         natural_source = wire.node("obj.sets.naturals")
         arguments = {
@@ -582,12 +620,15 @@ class PointCall:
         }.get(native.field)
         if arguments is None or not callable(native.value):
             raise Unsupported("this record field has no native callable interface")
+        return native, record_data, carrier, arguments
+
+    def field_callable(self, data, source, target):
+        """Use the public curried interface of this process's actual field."""
+        native, record_data, carrier, arguments = self.field_interface(data)
 
         def build(actual, remaining, operands):
             domain = remaining[0]
-            codomain = carrier
-            for argument in reversed(remaining[1:]):
-                codomain = wire.node("obj.sets.maps", argument, codomain)
+            codomain = self.function_object(remaining[1:], carrier)
             points = NativePoints(self.session, self.packet, domain)
 
             def evaluate(point, retained=(data, record_data, operands, actual)):
@@ -631,6 +672,32 @@ class PointCall:
         return tag(data) in {"typedMap", "identity", "compose", "mediator", "finiteGraph", "point",
                              MULTIPLY, EQUALITY}
 
+    def function_value(self, data, target):
+        """Distinguish a function point from a closed arrow into its function set."""
+        view, data = self.endpoint_view(target), inline(data)
+        if tag(view) != "obj.sets.maps" or tag(data) == "point":
+            return False
+        source, codomain = fields(view, "obj.sets.maps", 2)
+        if isinstance(data, list) or tag(data) == "finiteGraph":
+            return True
+        actual_source = self.arrow_endpoint(data, "source")
+        actual_target = self.arrow_endpoint(data, "target")
+        return (wire.key(actual_source) == wire.key(source)
+                and wire.key(actual_target) == wire.key(codomain))
+
+    def element_data(self, original, selected, expression):
+        """Expose checked actual data; its original wrapper stays in the caller."""
+        if tag(inline(expression)) == "opaqueData":
+            try:
+                point_producer(self.session, expression)
+            except Unsupported:
+                pass
+            else:
+                return expression
+        if not isinstance(inline(expression), dict) and self.monoid_receivers(selected):
+            return expression
+        return original
+
     def resolve_value(self, data, target):
         """Consume complete closed fragments in an actual scalar-data field.
 
@@ -642,13 +709,19 @@ class PointCall:
         if tag(value) == "element":
             selected, expression = fields(value, "element", 2)
             self.check_element(selected, expression, target)
+            if self.function_value(expression, target):
+                return data
             expression = inline(expression)
             computational = self.callable_data(expression) or tag(expression) in {"element", "operationExpression"}
+            if not computational:
+                return self.element_data(data, selected, fields(value, "element", 2)[1])
         else:
+            if self.function_value(value, target):
+                return data
             computational = self.callable_data(value) or tag(value) == "operationExpression"
         if not computational:
             return data
-        domain = wire.retained_endpoint(value, "source", self.native_values)
+        domain = self.arrow_endpoint(value, "source")
         if domain is None:
             domain = getattr(self, "domain", None)
         if domain is None or not self.closed(domain):
@@ -670,32 +743,17 @@ class PointCall:
                     or tag(inline(expression)) in {"element", "operationExpression"}):
                 actual = self.point_function(expression, domain, target, owner=selected)
                 return wire.Callable(domain, target, lambda point, retained=(original, actual): retained[1](point))
-            if tag(inline(expression)) == "opaqueData":
-                try:
-                    point_producer(self.session, expression)
-                except Unsupported:
-                    pass
-                else:
-                    return wire.Callable(domain, target,
-                                         lambda _, retained=(original, expression): retained[1])
-            if not isinstance(inline(expression), dict) and self.monoid_receivers(selected):
-                return wire.Callable(domain, target,
-                                     lambda _, retained=(original, expression): retained[1])
-            return wire.Callable(domain, target, lambda _, retained=original: retained)
+            actual = self.element_data(original, selected, expression)
+            return wire.Callable(domain, target, lambda _, retained=(original, actual): retained[1])
         if tag(data) == "operationExpression":
             return self.expression_function(data, domain, target)
         view = self.endpoint_view(target)
         if tag(view) == "objectProduct" and isinstance(data, list):
             return self.product_point_function(original, domain, target)
-        if tag(view) == "obj.sets.maps" and self.closed(domain):
-            source, codomain = fields(view, "obj.sets.maps", 2)
+        if self.closed(domain) and self.function_value(data, target):
             # An actual function-valued point has its own endpoints. A map
             # from the global domain into that function object is different.
-            actual_source = wire.retained_endpoint(data, "source", self.native_values)
-            actual_target = wire.retained_endpoint(data, "target", self.native_values)
-            if isinstance(data, list) or tag(data) == "finiteGraph" or (
-                    wire.key(actual_source) == wire.key(source) and wire.key(actual_target) == wire.key(codomain)):
-                return wire.Callable(domain, target, lambda _, retained=original: retained)
+            return wire.Callable(domain, target, lambda _, retained=original: retained)
         if self.callable_data(data) or isinstance(data, list) and not self.closed(domain):
             return self.function(data, domain, target, owner=owner)
         if not self.closed(domain):
@@ -730,6 +788,102 @@ class PointCall:
             return graph
         raise component_error if component_error is not None else graph_error
 
+    def graph_image(self, data, target):
+        """Read actual image data before checking a supplied finite inventory.
+
+        The enclosing graph keeps the original image and every opaque receipt.
+        Serialization uses only the existing selected scalar codecs; it never
+        reconstructs a formal representative or identifies native parents.
+        """
+        data = self.resolve_value(data, target)
+        view = self.endpoint_view(target)
+        if tag(view) == "objectProduct":
+            while tag(inline(data)) == "element":
+                owner, expression = fields(inline(data), "element", 2)
+                self.check_element(owner, expression, target)
+                data = expression
+            left, right = record(data, "graph's product image", 2)
+            a, b = self.product_factors(target)
+            return [self.graph_image(left, a), self.graph_image(right, b)]
+        if tag(view) in {"obj.sets.truth_values", "obj.sets.maps"}:
+            while tag(inline(data)) == "element":
+                owner, expression = fields(inline(data), "element", 2)
+                self.check_element(owner, expression, target)
+                data = expression
+            value = inline(data)
+            if tag(view) == "obj.sets.truth_values" and type(value) is not bool:
+                raise ValueError("a truth-valued graph image requires a JSON boolean")
+            return value
+        points = self.point_context(target)
+        actual = points.data(data)
+        if points.kind is None:
+            return actual
+        if tag(actual) == "opaqueData":
+            native, producer = point_producer(self.session, actual)
+            if producer is not None:
+                if self.operation == MULTIPLY:
+                    wire.same(self.parameters, [producer], "graph point conversion's complete parameters")
+                self.point_target(native, producer, target, producer)
+        value = points.read(actual)
+        if points.kind == "obj.sets.rationals":
+            return [int(value.numerator()), int(value.denominator())]
+        return int(value)
+
+    def graph_function(self, data, source, target, finite_inventory=None):
+        """Keep the existing graph framing and decode its actual point images."""
+        inventory = self.inventory if finite_inventory is None else finite_inventory
+        original = data
+        if tag(data) == "finiteGraph":
+            points, _ = fields(data, "finiteGraph", 2)
+            if not isinstance(points, list) or len({wire.key(point) for point in points}) != len(points):
+                raise ValueError("finiteGraph requires distinct actual domain points")
+        try:
+            target_points = wire.inventory(target)
+        except wire.Unsupported:
+            pass
+        else:
+            selected_points = inventory(source)
+            if tag(data) == "finiteGraph":
+                points, graph = fields(data, "finiteGraph", 2)
+                if not isinstance(points, list):
+                    raise ValueError("finiteGraph requires an actual point inventory")
+                if {wire.key(point) for point in points} != {wire.key(point) for point in selected_points}:
+                    raise ValueError("the graph changes the supplied domain inventory")
+            else:
+                graph = data
+            if not isinstance(graph, list):
+                raise Unsupported("callable data is not an inline finite graph")
+            entries = {}
+            for row in graph:
+                point, image = record(row, "graph entry", 2)
+                encoded = wire.key(point)
+                if encoded in entries:
+                    raise ValueError("a callable graph repeats a domain point")
+                entries[encoded] = image
+            selected = [wire.key(point) for point in selected_points]
+            if len(set(selected)) != len(selected) or set(entries) != set(selected):
+                raise ValueError("the graph must retain every actual domain point exactly once")
+            target_keys = {wire.key(point) for point in target_points}
+
+            def evaluate(point, retained=(original, entries, target)):
+                _, original_images, original_target = retained
+                encoded = wire.key(point)
+                if encoded not in original_images:
+                    raise ValueError("the supplied point is absent from the actual domain inventory")
+                image = self.graph_image(original_images[encoded], original_target)
+                if wire.key(image) not in target_keys:
+                    raise ValueError("a callable graph has an image outside the supplied codomain inventory")
+                return image
+
+            # Framing never evaluates images to choose between graph and
+            # component readings of a bare product array.
+            return wire.Callable(source, target, evaluate)
+        try:
+            actual = wire.graph_callable(data, source, target, finite_inventory=inventory)
+        except wire.Unsupported as error:
+            raise Unsupported(str(error)) from error
+        return wire.Callable(source, target, lambda point, retained=(original, actual): retained[1](point))
+
     def function(self, data, source, target, owner=None):
         data = inline(data)
         # Keep a typed body's callable position explicit, including raw graphs.
@@ -742,15 +896,11 @@ class PointCall:
                                  invocation=actual.invocation)
         if tag(data) == "compose":
             first, second = fields(data, "compose", 2)
-            before = wire.retained_endpoint(first, "target", self.native_values)
-            after = wire.retained_endpoint(second, "source", self.native_values)
+            before = self.arrow_endpoint(first, "target")
+            after = self.arrow_endpoint(second, "source")
             if before is not None and after is not None:
                 wire.same(before, after, "composition's retained shared endpoint")
             middle = before if before is not None else after
-            if middle is None:
-                middle = self.declared_endpoint(second, "source")
-            if middle is None:
-                middle = self.declared_endpoint(first, "target")
             if middle is None:
                 raise Unsupported("composition needs an actual retained or declared shared endpoint")
             f, g = self.function(first, source, middle), self.function(second, middle, target, owner=owner)
@@ -765,10 +915,11 @@ class PointCall:
             return (self.function(fields(data, "point", 1)[0], source, target, owner=owner) if tag(data) == "point"
                     else self.point_function(data, source, target, owner=owner))
         if tag(data) == "opaqueData" and not isinstance(self.session.get(data).value, wire.Callable):
-            if self.session.get(data).field in {"Monoid.toSemigroup", "AddMonoid.toAddSemigroup",
-                                                "Monoid.toNPow", "AddMonoid.toNSMul", "Semiring.toNatCast"}:
+            if self.session.get(data).field in self.native_function_fields:
                 return self.field_callable(data, source, target)
             return self.point_callable(data, source, target, owner)
+        if isinstance(data, list) or tag(data) == "finiteGraph":
+            return self.graph_function(data, source, target)
         try:
             return wire.framed_callable(data, source, target, self.native_values, self.interpret,
                                         finite_inventory=self.inventory, product_factors=self.product_factors)
