@@ -1,0 +1,21 @@
+{
+  "backends": [
+    {
+      "name": "sage-primitive-actions-20261026",
+      "command": "python3",
+      "args": ["backend.py"]
+    }
+  ],
+  "registrations": [
+    {
+      "operation": "fun.rings.semiring",
+      "input": "fun.rings.semiring#input",
+      "backend": "sage-primitive-actions-20261026"
+    },
+    {
+      "operation": "fun.semirings.monoid",
+      "input": "fun.semirings.monoid#input",
+      "backend": "sage-primitive-actions-20261026"
+    }
+  ]
+}

@@ -31,8 +31,20 @@ class EndpointInterfaces:
         if target is None or key(target) == key(selected):
             return
         if self.tag(target) == "morphismEndpoint":
-            context = self.scalar_element_carrier(self.endpoint_view(target))
+            context = self.endpoint_view(target)
             return self.check_element_target(context, selected)
+        # A typedMap may retain the complete supplied carrier-action chain
+        # instead of a named set. Read only already supported public actions
+        # and require the exact selected structure at its root. This is codec
+        # context, not equality of native parents or a replacement endpoint.
+        context = target
+        while self.tag(context) == "functorAction":
+            action, receiver = fields(context, "functorAction", 2)
+            if not self.carrier_action(action):
+                break
+            if key(receiver) == key(selected):
+                return
+            context = receiver
         same(target, self.scalar_element_carrier(selected), "element's complete scalar target")
 
     def retained_map_endpoint(self, arrow, side):
