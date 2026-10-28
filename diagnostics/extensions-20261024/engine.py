@@ -61,6 +61,9 @@ class Form:
     pairing: object
     context: object
 
+    def change_values(self, change, context):
+        return Form(self.module, lambda x, y: change(self.pairing(x, y)), context)
+
 
 class Engine(EndpointInterfaces):
     comparison = "cmp.rational_dual.translation"
@@ -447,7 +450,7 @@ class Engine(EndpointInterfaces):
                     raise Unsupported("this diagnostic formed module requires rational scalars")
                 original = self.form(receiver)
                 change = self.function(value_map, source_values, target_values)
-                return Form(original.module, lambda x, y: change(original.pairing(x, y)), selected)
+                return original.change_values(change, selected)
         if tag == "morphismEndpoint":
             arrow, side = morphism_endpoint(selected)
             atag = self.tag(arrow)

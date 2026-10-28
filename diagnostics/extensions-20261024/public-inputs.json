@@ -582,5 +582,34 @@
     },
     "publicInterfaceGap": null,
     "implementationLimits": "The existing README Deliberate limits table remains authoritative for this diagnostic: arbitrary categories/functors, unsupported carriers, general-ring kernels, arbitrary infinite subsets/functions/series and arbitrary structured projection/creation actions remain unsupported."
+  },
+  "liftImageMetadata20261028": {
+    "baseLeafRevision": "2f35244884649c9268567bb9968840a34559a11c",
+    "publicContractRevision": "34bb8abbdbb49699015f63840cf86ed67f438003",
+    "publicContractBranch": "work/complete-method-request-20261027",
+    "publicContractFiles": {
+      "python/cas_port.py": "917acdccb6c099c018d9d0dd843c83c20a41de314aa3c4eab301a541790c1318",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/README.md": "f049769df1acc29f58d1a013f6a20041898bde3ba8bbac99d8b4701767cc47fb"
+    },
+    "unchangedExtensionManifestSha256": "0af9314a206ca8fb7028da77f75c5adeb4b0c4a04c309d06594aa532a4d3597d",
+    "scope": "Actual lift image metadata at the two existing bilinear-module lift field/factor registrations. Preserve supplied endpoints; use the existing native image adapters when forward supplies its image; retain the explicitly admitted legacy omission form. No new mathematical algorithm or registration.",
+    "inputBoundary": "Only the existing independent leaf package and its own engineering material, repository guidance, the public contract, and installed engine setup were consulted. No kernel implementation, expected answer, acceptance test or downstream runtime report was read.",
+    "engineVersion": "Sage/passagemath 10.8.13",
+    "engineeringChecks": {
+      "liftImages": {
+        "primaryConnectionRequests": 48,
+        "separateConnectionRequests": 5,
+        "completeFieldFactorReuseCycles": 6,
+        "malformedMetadataControls": 12,
+        "foreignOwnerControls": 3,
+        "result": "completed"
+      },
+      "existingExtensionSmoke": {
+        "requests": 74,
+        "result": "completed"
+      },
+      "boundary": "Public framing, exact endpoint retention, successive consumption and ownership only. Boolean observation shape is checked without asserting its value. No mathematical correctness or acceptance claim."
+    }
   }
 }

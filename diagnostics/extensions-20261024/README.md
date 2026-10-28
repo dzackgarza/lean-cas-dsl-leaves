@@ -133,6 +133,26 @@ factor consumes both actual input maps and returns the declared underlying base
 map action. It also retains all prior outputs. No inverse equation, compatibility
 proof, monicity evidence or universal-property certificate is manufactured.
 
+The public `lift_images` interface at contract `34bb8abb` supplies actual source
+and comparison image data independently of the five ordered field arguments.
+Both supported lifts read that metadata, retain the complete source Arrow image
+for `liftInput` and the source object image for `monoLiftInput` and factors, and
+check map prefixes against the actual supplied comparison endpoints. A supplied
+`comparisonImage` is never replaced by a `functorAction` descriptor. When a new
+forward request omits that optional image, its reply supplies an owned native
+image of the actual preceding lifted object: its stored module for restriction,
+or the existing change-of-values wrapper for the selected change-value action.
+Backward and factor requests retain that exact endpoint. Only omission of both
+metadata fields selects the public legacy recipe form.
+
+`lift_images_smoke.py` exercises both registered lift families through their
+unchanged field and factor addresses, including returned images used by another
+prescribed lift, malformed stage metadata and foreign owners. It checks framing,
+exact data passage and successive consumption. Its equality observations check
+only the Boolean reply shape; no computed mathematical answer or law is asserted.
+The existing native calculations, registration inventory and implementation
+limits remain unchanged.
+
 ## Generic interface completion
 
 The five additional addresses consume the candidate public API with SHA256
@@ -506,6 +526,13 @@ The completion protocol checks can also be run directly:
 
 ```sh
 python3 completion_smoke.py --contract /absolute/path/to/public-contract \
+  --engine /absolute/path/to/sage/python
+```
+
+The actual-image lift protocol checks use the same public helper and engine:
+
+```sh
+python3 lift_images_smoke.py --contract /absolute/path/to/public-contract \
   --engine /absolute/path/to/sage/python
 ```
 

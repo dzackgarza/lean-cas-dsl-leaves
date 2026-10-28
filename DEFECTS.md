@@ -656,3 +656,29 @@ All seven manifests and existing native algorithms remain unchanged. The
 previously documented native routine limits, including the unimplemented kernel
 functor morphism action, remain. This bounded check asserts no mathematical
 answer or law and has no correctness or acceptance standing.
+
+## Actual lift-image metadata, 2026-10-28
+
+The independent extension adapter at `2f352448` still reconstructed
+`functorAction(action, object)` for every comparison endpoint. Public contract
+`34bb8abbdbb49699015f63840cf86ed67f438003` publishes actual `sourceImage` and
+`comparisonImage` data through `lift_images`, including a forward result that may
+supply its own complete image endpoint. Treating an actual image as the legacy
+recipe loses that data and is an adapter deficiency against the public contract.
+
+The two existing bilinear-module lift implementations now consume and retain
+those fields in their original field and factor requests. The existing native
+module and change-value adapters supply an owned image when forward has no
+preselected endpoint. Supplied images are preserved exactly, and symbolic action
+endpoints are used only for the explicitly admitted metadata-free legacy form.
+The same selected parameters, original source, base inclusion and earlier outputs
+remain attached. No mathematical algorithm or registration was added or changed.
+
+The leaf's own new conformance run completed 48 primary-connection requests and
+five requests on a separate connection: six full field/factor/reuse sequences,
+twelve malformed-metadata controls and three foreign-owner controls. The existing
+74-request extension smoke run also completed. These checks concern public shape,
+endpoint retention, reuse and owner handling only; they assert no computed
+mathematical answer and are not acceptance evidence. Only the existing independent
+leaf package, public contract and installed engine were read; no downstream
+implementation, expected answer, acceptance test or runtime report was consulted.
