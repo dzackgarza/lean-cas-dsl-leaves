@@ -834,5 +834,83 @@
     },
     "publicInterfaceGap": null,
     "implementationLimits": "Existing supported native module and callable representations only. Both finite and infinite object images are returned as owned native data. The new map port requires actual native ModuleImage results; unsupported portable image encodings, arbitrary foreign native values and unsupported module/callable readers remain computation gaps."
+  },
+  "structuralCarrierActions20261029": {
+    "baseLeafRevision": "7113a646bba4cd52cab4a7f1eb9c731f8a653566",
+    "baseLeafTree": "fb932513f1c8a6da5016fda647fa0528bde23058",
+    "publicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6",
+    "publicContractTree": "968ea95a5f8e7f76de95461999e8bafee74f2d39",
+    "publicContractFiles": {
+      "api/manifest.md": "18a61df15642a9963c643df784352de91e2809cabdb1ef6d11d2761acdf1177f",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/declared-ports.json": "642b7290d5441d7409fa6992732a97166907de8e69eafeb9e6df468aa7d73c4c",
+      "python/cas_port.py": "1a061bfbc3dc40dadc157deaeb11dbd838d7f2710e53f1fe8f369bd60d43e6f5"
+    },
+    "namedFunctors": [
+      "fun.modules.additive_group",
+      "fun.additive_groups.to_groups",
+      "fun.groups.monoid",
+      "fun.monoids.semigroup",
+      "fun.rings.additive_commutative_monoid",
+      "fun.additive_commutative_monoids.additive_monoid",
+      "fun.additive_monoids.underlying",
+      "fun.rings.multiplicative_monoid"
+    ],
+    "classifierForgetIds": [
+      "clf.magmas.associative",
+      "clf.sets.binary_operation"
+    ],
+    "newRegistrationPairs": 20,
+    "totalRegistrationPairs": 91,
+    "scope": "Ten existing structural actions and their paired map ports, using supported native ring/module carrier adapters in the same extension session. Shared framing hooks preserve complete actual image/source data and exact ordinary or derived action parameters.",
+    "inputBoundary": "Only the existing leaf source, applicable instructions, the same pinned public contract documentation/reference helper/generated catalogue and the installed engine were used. No kernel, acceptance suite or expected-answer fixture, HANDOFF, downstream runtime report or other author workspace was inspected. No Lean/compiler was run; the frozen base commit was not amended.",
+    "nativeCalls": "Existing Module.add/zero/negate and point codecs, native regular-module readers, native monoid callbacks and original complete callables. Sage performs the scalar and linear computations. No new mathematical algorithm or public encoding.",
+    "engineVersion": "Sage/passagemath 10.8.13",
+    "engineeringChecks": {
+      "script": "carrier_functor_smoke.py",
+      "primaryConnectionRequests": 217,
+      "foreignOwnerRequests": 3,
+      "result": "completed",
+      "coverage": [
+        "Twenty concrete operation/input pairs present in public inventories; exact classifierForget descriptors",
+        "Successive module-to-Set, ring-additive-to-Set and ring-multiplicative-to-Set object and map actions",
+        "Actual returned kernel inclusion through the complete module carrier route",
+        "Owned coefficient rings and finite carrier consumers",
+        "Existing additive, group-inverse and monoid consumers on returned native images",
+        "Whole and generalized callable reuse with retained source and target images",
+        "Repeated valueData wrappers, explicit supported portable carrier descriptors and infinite scalar-addition callable models",
+        "Invalid ordered/nested parameters, action identities, original/image/callable interfaces and closed nested owners"
+      ],
+      "regressions": [
+        {
+          "script": "module_functor_smoke.py",
+          "primaryConnectionRequests": 122,
+          "foreignOwnerRequests": 3,
+          "result": "completed"
+        },
+        {
+          "script": "generic_smoke.py",
+          "primaryConnectionRequests": 36,
+          "result": "completed"
+        },
+        {
+          "script": "additive_smoke.py",
+          "primaryConnectionRequests": 66,
+          "foreignOwnerRequests": 1,
+          "result": "completed"
+        }
+      ],
+      "boundary": "Protocol statuses, framing, result shapes, selected data retention, actual native result/callable consumption and ownership only. No arithmetic result, equality truth, cardinality answer, functor law or mathematical acceptance outcome is asserted."
+    },
+    "independentSourceReview": {
+      "scope": "Bounded leaf-only static review with focused reinspections; no execution, edits or mathematical acceptance claim",
+      "resolvedFindings": [
+        "Preserve the existing scalar_addition native model on ring-additive group paths rather than replacing it with the generic module_addition model.",
+        "Inspect repeated valueData wrappers in the private operation-tuple reader while retaining the complete original receiver and request."
+      ],
+      "remainingConcreteFindings": "None identified in the final focused reinspection."
+    },
+    "publicInterfaceGap": null,
+    "implementationLimits": "Ring/module-backed native carriers only, including supported existing symbolic carrier inputs and actual owned images. Arbitrary cyclic/automorphism-group/monoid/magma object-action readers are not added. Actual image records are required at the new map boundaries. Opaque dependencies retain their original live supplier."
   }
 }

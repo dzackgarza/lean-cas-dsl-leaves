@@ -22,7 +22,8 @@ from native_polynomial import build as polynomial_action
 from generic_interfaces import GenericInterfaces
 from additive_interfaces import AdditiveInterfaces
 from power_interfaces import PowerObjectInterfaces
-from module_functor_interfaces import ModuleFunctorInterfaces, ModuleImage
+from module_functor_interfaces import ModuleImage
+from carrier_functor_interfaces import CarrierFunctorInterfaces
 
 
 @dataclass(frozen=True)
@@ -95,7 +96,7 @@ class RestrictedModule(Module):
         return self.original.scale(native_scalar, value)
 
 
-class ExtensionEngine(ModuleFunctorInterfaces, PowerObjectInterfaces, AdditiveInterfaces, GenericInterfaces, Engine):
+class ExtensionEngine(CarrierFunctorInterfaces, PowerObjectInterfaces, AdditiveInterfaces, GenericInterfaces, Engine):
     modular_ids = {"obj.sets.integers_mod", "obj.rings.integers_mod", "obj.commutative_rings.integers_mod"}
     quotient_ids = {"obj.sets.cyclic_quotient", "obj.groups.cyclic_quotient"}
     cyclic_ids = {"obj.groups.cyclic"}
@@ -105,7 +106,7 @@ class ExtensionEngine(ModuleFunctorInterfaces, PowerObjectInterfaces, AdditiveIn
                          "fun.modules.reindex", "lim.sets.product", "fun.arrows_modules.kernel",
                          "meth.kernel", "meth.arrow_ker", "fun.additive_groups.additive_monoid",
                          "fun.commutative_rings.ring", "fun.modules.fibre_inclusion",
-                         "fun.modules.underlying"}
+                         "fun.modules.underlying"} | CarrierFunctorInterfaces.module_action_operations
 
     def ring(self, selected):
         if self.tag(selected) in self.modular_ids:
@@ -842,6 +843,12 @@ class ExtensionEngine(ModuleFunctorInterfaces, PowerObjectInterfaces, AdditiveIn
         if tag == "op.groups.inverse":
             selected, = fields(arrow, tag, 1)
             try:
+                additive = self.native_group_carrier(selected)
+            except Unsupported:
+                pass
+            else:
+                return Callable(source, target, additive.negate)
+            try:
                 group = self.aut_context(selected)
             except Unsupported:
                 self.cyclic_context(selected)
@@ -1141,7 +1148,7 @@ class ExtensionEngine(ModuleFunctorInterfaces, PowerObjectInterfaces, AdditiveIn
         return super().equal(left, right, selected)
 
     def object_application(self, operation, packet):
-        if operation in self.module_functors:
+        if operation in self.module_action_operations:
             return self.module_functor_object(operation, packet)
         original_request = packet
         method_parameters = None

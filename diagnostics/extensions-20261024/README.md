@@ -5,7 +5,7 @@ the public contract, declaration exports and authorized interface documentation
 recorded in `public-inputs.json`. No kernel implementation, acceptance assertion,
 expected-answer fixture or downstream execution report was consulted. Diagnostic
 work stayed in this subtree. It ships no Lean and changes no mathematical or
-protocol declaration. The manifest contains 71 public operation/input pairs.
+protocol declaration. The manifest contains 91 public operation/input pairs.
 
 Sage 10.8 supplies exact quotient-ring, modular, polynomial, matrix, module and lazy
 power-series computations. Sage's permutation groups and native GAP supply the
@@ -32,6 +32,7 @@ does not claim an implementation for every object of that category.
 | `cmp.groups.cyclic_quotient_residue`, `mor.sets.cyclic_quotient_map`, `mor.groups.cyclic_quotient_aut_by_unit` | Actual quotient/residue transport, integer quotient images and multiplication by the actual selected unit with its native inverse. Finite automorphism computation requires positive modulus. |
 | `mor.commutative_rings.integer_coefficients`, `fun.modules.reindex`, `fun.modules.reindex#cartesian`, `op.modules.scalar_action` | Supported native regular and vector modules over integers, rationals, integer-quotient rings and the two rational dual-number rings, together with the existing rational subspaces and formed carriers. Native scalar action applies the actual selected base map. The reindex declaration has one explicit parameter, that map. The named `obj.modules_r.restricted_regular` separately retains `R`, `S`, `q`. A cartesian invocation keeps the nested `[functorParameters,receiver]` array. Reindexed morphisms and cartesian maps retain the complete original map and selected modules. |
 | `fun.modules.fibre_inclusion`, `fun.modules.fibre_inclusion#map`, `fun.modules.underlying`, `fun.modules.underlying#map` | Object and map actions consume the existing native module and callable readers in this session, including actual returned subspaces and restrictions. The fibre action retains `[R]`; the underlying action retains `[]`. Object images and whole/generalized callables remain owned, with complete original and actual-image endpoints. |
+| The eight named structural carrier functors and both classifier-forget actions listed below, with their paired map ports | Supported ring/module native carriers, their actual operation callbacks, exact action and original receiver, and complete source/image callable interfaces. Classifier forgetting retains the selected complete descriptor; it supplies no classification law. |
 | `mor.sets.successor_power_series_terms`, `bind.sets.power_series_sum`, `mor.sets.power_series_coefficient` | The supplied infinite successor family in the selected coefficient ring, a native lazy infinite sum and requested coefficient observations. The binder also consumes its actual owned whole-family result and identity compositions retaining that native family metadata. No finite truncation or replacement closed-form series is used. |
 | `mor.modules.rectangular_linear_map`, `row_linear_map` | Actual matrices read from complete nested finite callables, at all supplied dimensions including zero, over supported coefficient rings. Rational maps retain exact Sage matrix representations. |
 | The three published degenerate-plane morphisms; `mor.sets.bilin_module_pairing` | The documented linear actions and four documented forms, together with actual native lifted forms. Scalar and value-module selections remain in the context. |
@@ -90,6 +91,78 @@ second native process. No kernel, acceptance test or downstream report was read.
 The standalone `module_functor_smoke.py` checks public framing, complete selected
 data, returned-data reuse and ownership only; it asserts no computed arithmetic
 answer, equality truth or functor law.
+
+## Structural carrier actions
+
+`carrier_functor_interfaces.py` extends the same owned-image adapter for ten
+published structural actions. It adds their object and map registrations, each
+on the exact complete-request input published by the pinned contract:
+
+| Object operation | Complete request parameters | Published source and target |
+| --- | --- | --- |
+| `fun.modules.additive_group` | `[]` | Total modules to additive groups |
+| `fun.additive_groups.to_groups` | `[]` | Additive groups to groups |
+| `fun.groups.monoid` | `[]` | Groups to monoids |
+| `fun.monoids.semigroup` | `[]` | Monoids to semigroups |
+| `fun.rings.additive_commutative_monoid` | `[]` | Rings to additive commutative monoids |
+| `fun.additive_commutative_monoids.additive_monoid` | `[]` | Additive commutative monoids to additive monoids |
+| `fun.additive_monoids.underlying` | `[]` | Additive monoids to Sets |
+| `fun.rings.multiplicative_monoid` | `[]` | Rings to multiplicative monoids |
+| `action:{"classifierForget":"clf.magmas.associative"}` | `[classifierForget("clf.magmas.associative", [])]` | Semigroups to magmas |
+| `action:{"classifierForget":"clf.sets.binary_operation"}` | `[classifierForget("clf.sets.binary_operation", [])]` | Magmas to Sets |
+
+For each row the map operation appends `#map`, and both registrations use the
+input obtained by appending `#input` to the object operation. These concrete
+addresses occur in the public `operations` and `inputForms` inventories; the two
+classifier actions also occur in `edgeActions`. The derived actions use
+`action_invocation` and `action_map_invocation`. Their complete descriptor is
+retained both in the invocation parameter array and in the map action, including
+the classifier's explicit empty parameter array.
+
+Native scope is the existing supported ring/module carriers. A module's additive
+callbacks come from its actual native module. Ring multiplication uses the
+existing native multiplicative-monoid adapter. Subsequent structural steps keep
+those actual callbacks, point codecs, native object, complete source receiver and
+request in a `CarrierImage`. The group, monoid and additive operation readers can
+consume the corresponding returned objects through their existing ports; the
+group inverse reader uses the native module's existing negation callback. No new
+algorithm, public wire constructor, mathematical declaration or law is supplied.
+
+The shared map adapter retains the original callable, original source-category
+endpoints, actual image endpoints and generalized domain. It therefore supports
+successive module/additive/group/monoid/semigroup/magma/Set actions, as well as the
+ring-additive and ring-multiplicative paths, without replacing earlier outputs
+with recipes. Repeated `valueData` wrappers are inspected only by private input
+readers; the complete original receiver and endpoint packets stay retained.
+The existing scalar-addition native model survives ring-additive group inputs,
+including wrapped symbolic inputs and their owned image results.
+
+This bounded implementation does not add object-action readers for arbitrary
+cyclic groups, automorphism groups, monoids or magmas, even where some existing
+primitive operation can independently consume one of those values. Unsupported
+native representations remain unsupported. Classifier-forget source structures
+must be supplied through the supported actual carrier records or explicit
+existing ring/module carrier descriptors. These implementation limits do not
+alter any published mathematical domain.
+
+The focused standalone run is:
+
+```sh
+python3 carrier_functor_smoke.py --contract /absolute/path/to/public-contract \
+  --engine /absolute/path/to/sage/python
+```
+
+It completed 217 primary requests and three closed-owner controls. The cases
+compose all ten actions, reuse an actual returned kernel inclusion through the
+full carrier route, retain owned coefficient rings, consume the resulting
+additive/monoid/group interfaces, and preserve whole and generalized callables.
+They include wrapped ring-additive groups, native infinite scalar-callable
+consumption, malformed action/parameter/endpoint packets, invalid callable
+interfaces, and nested expired owners. The affected shared module, generic and
+additive checks completed 122, 36 and 66 primary requests, with three and one
+closed-owner controls in the module and additive checks. Assertions concern
+protocol shapes and data consumption only, not arithmetic values, equality
+truth, cardinality answers, laws or mathematical acceptance.
 
 ## Ordinary underlying-ring object action
 

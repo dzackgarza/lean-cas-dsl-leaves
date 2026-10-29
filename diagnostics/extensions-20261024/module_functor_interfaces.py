@@ -34,6 +34,24 @@ class ModuleImage(Module):
 
 class ModuleFunctorInterfaces:
     module_functors = {FIBRE, UNDERLYING}
+    module_action_operations = module_functors
+
+    def module_action(self, action):
+        operation = self.tag(action)
+        return (operation, fields(action, operation)) if operation in self.module_functors else (None, None)
+
+    def module_object_invocation(self, packet, operation):
+        return construction_invocation(packet, operation)
+
+    def module_map_invocation(self, packet, operation):
+        return functor_map_invocation(packet, operation)
+
+    def module_action_native(self, operation, receiver):
+        return self.module(receiver)
+
+    def module_image_record(self, actual, operation, parameters, receiver, scalar_ring, packet):
+        return ModuleImage(actual.native, actual.read, actual.write, operation,
+                           parameters, receiver, actual, scalar_ring, packet)
 
     def module_functor_parameters(self, operation, parameters):
         count = 1 if operation == FIBRE else 0
@@ -41,14 +59,13 @@ class ModuleFunctorInterfaces:
             raise ValueError("the module functor requires all %d ordered parameters" % count)
 
     def module_functor_object(self, operation, packet):
-        _, parameters, receiver = construction_invocation(packet, operation)
+        _, parameters, receiver = self.module_object_invocation(packet, operation)
         self.module_functor_parameters(operation, parameters)
-        actual = self.module(receiver)
+        actual = self.module_action_native(operation, receiver)
         scalar_ring = self.module_scalar_ring(actual)
         if operation == FIBRE and self.ring(parameters[0]) is not scalar_ring:
             raise ValueError("the native module differs from the supplied scalar fibre")
-        image = ModuleImage(actual.native, actual.read, actual.write, operation,
-                            parameters, receiver, actual, scalar_ring, packet)
+        image = self.module_image_record(actual, operation, parameters, receiver, scalar_ring, packet)
         return self.session.keep(image)
 
     def module_functor_image(self, selected, operation, parameters, source):
@@ -90,13 +107,12 @@ class ModuleFunctorInterfaces:
     def interpret_arrow(self, arrow, source, target):
         if self.tag(arrow) == "map":
             action, original = fields(arrow, "map", 2)
-            operation = self.tag(action)
-            if operation in self.module_functors:
+            operation, parameters = self.module_action(action)
+            if operation is not None:
                 if self.module_image(source) is None and self.module_image(target) is None:
                     # Existing nested carrier maps keep their original reader.
                     # The new #map boundary separately requires actual images.
                     return super().interpret_arrow(arrow, source, target)
-                parameters = fields(action, operation)
                 self.module_functor_parameters(operation, parameters)
                 old_source, old_target, _ = typed_map(original)
                 image_source = self.module_functor_image(source, operation, parameters, old_source)
@@ -129,11 +145,11 @@ class ModuleFunctorInterfaces:
         return super().interpret_arrow(arrow, source, target)
 
     def point_application(self, operation, packet):
-        if operation in self.module_functors:
+        if operation in self.module_action_operations:
             raise ValueError("a module object action requires its complete receiver request")
         functor = operation.removesuffix("#map")
-        if operation.endswith("#map") and functor in self.module_functors:
-            _, parameters, arrow, _, source, target, _ = functor_map_invocation(packet, functor)
+        if operation.endswith("#map") and functor in self.module_action_operations:
+            _, parameters, arrow, _, source, target, _ = self.module_map_invocation(packet, functor)
             self.module_functor_parameters(functor, parameters)
             _, original = fields(arrow, "map", 2)
             old_source, old_target, _ = typed_map(original)

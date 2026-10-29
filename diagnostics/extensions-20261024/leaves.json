@@ -10,6 +10,106 @@
   ],
   "registrations": [
     {
+      "operation": "fun.modules.additive_group",
+      "input": "fun.modules.additive_group#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.modules.additive_group#map",
+      "input": "fun.modules.additive_group#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.additive_groups.to_groups",
+      "input": "fun.additive_groups.to_groups#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.additive_groups.to_groups#map",
+      "input": "fun.additive_groups.to_groups#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.groups.monoid",
+      "input": "fun.groups.monoid#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.groups.monoid#map",
+      "input": "fun.groups.monoid#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.monoids.semigroup",
+      "input": "fun.monoids.semigroup#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.monoids.semigroup#map",
+      "input": "fun.monoids.semigroup#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.rings.additive_commutative_monoid",
+      "input": "fun.rings.additive_commutative_monoid#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.rings.additive_commutative_monoid#map",
+      "input": "fun.rings.additive_commutative_monoid#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.additive_commutative_monoids.additive_monoid",
+      "input": "fun.additive_commutative_monoids.additive_monoid#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.additive_commutative_monoids.additive_monoid#map",
+      "input": "fun.additive_commutative_monoids.additive_monoid#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.additive_monoids.underlying",
+      "input": "fun.additive_monoids.underlying#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.additive_monoids.underlying#map",
+      "input": "fun.additive_monoids.underlying#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.rings.multiplicative_monoid",
+      "input": "fun.rings.multiplicative_monoid#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.rings.multiplicative_monoid#map",
+      "input": "fun.rings.multiplicative_monoid#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "action:{\"classifierForget\":\"clf.magmas.associative\"}",
+      "input": "action:{\"classifierForget\":\"clf.magmas.associative\"}#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "action:{\"classifierForget\":\"clf.magmas.associative\"}#map",
+      "input": "action:{\"classifierForget\":\"clf.magmas.associative\"}#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "action:{\"classifierForget\":\"clf.sets.binary_operation\"}",
+      "input": "action:{\"classifierForget\":\"clf.sets.binary_operation\"}#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "action:{\"classifierForget\":\"clf.sets.binary_operation\"}#map",
+      "input": "action:{\"classifierForget\":\"clf.sets.binary_operation\"}#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
       "operation": "fun.modules.fibre_inclusion",
       "input": "fun.modules.fibre_inclusion#input",
       "backend": "independent-extensions-sage"
