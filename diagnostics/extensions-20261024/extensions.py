@@ -730,7 +730,8 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
                 restricted_source = self.restricted_module(parameters, old_source)
                 restricted_target = self.restricted_module(parameters, old_target)
                 retained = (action, original, restricted_source, restricted_target, actual)
-                return Callable(source, target, lambda value, context=retained: context[-1](value), actual.native)
+                return Callable(source, target, lambda value, context=retained: context[-1](value), actual.native,
+                                point_action=actual.at_point)
         if tag == "zero":
             actual_source, actual_target = fields(arrow, tag, 2)
             same(actual_source, source, "the selected zero-map source")
@@ -1144,8 +1145,10 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
                                                      {"product": packet, "port": 1})
                     second_native = polynomial_action(apex_model, right_model, lambda point, _: point[1],
                                                       {"product": packet, "port": 2})
-            first = self.session.keep(Callable(apex, left, lambda point: point[0], first_native))
-            second = self.session.keep(Callable(apex, right, lambda point: point[1], second_native))
+            first = self.session.keep(Callable(apex, left, lambda point: point[0], first_native,
+                                               point_action=lambda point, read: self.product_point(point, apex, read)[0]))
+            second = self.session.keep(Callable(apex, right, lambda point: point[1], second_native,
+                                                point_action=lambda point, read: self.product_point(point, apex, read)[1]))
             return node("cone", apex, map_data(apex, left, first), map_data(apex, right, second))
         if operation == "con.automorphisms":
             _, parameters, receiver = construction_invocation(packet, operation)

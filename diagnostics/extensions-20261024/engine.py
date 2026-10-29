@@ -604,6 +604,23 @@ class Engine(EndpointInterfaces):
         # convention. A different singleton retains its complete callable.
         return self.tag(domain) == "obj.sets.fin" and fields(domain, "obj.sets.fin", 1) == [1]
 
+    def product_point(self, data, selected, read):
+        """Read the product frame while leaving each actual component intact."""
+        tag = self.tag(data)
+        if tag == "valueData":
+            return self.product_point(fields(data, tag, 1)[0], selected, read)
+        if tag == "element":
+            actual, expression = fields(data, tag, 2)
+            self.check_element_target(selected, actual)
+            return self.product_point(expression, selected, read)
+        if tag == "mediator":
+            return fields(data, tag, 2)
+        if not isinstance(data, list):
+            data = read(data, selected)
+        if not isinstance(data, list) or len(data) != 2:
+            raise ValueError("a product point omits an ordered component")
+        return data
+
     def point(self, data, target, domain):
         tag = self.tag(data)
         if self.tag(target) == "obj.sets.maps" and tag in {"typedMap", "compose", "mediator", "powerObjectMap"}:
@@ -664,7 +681,9 @@ class Engine(EndpointInterfaces):
                 domain = self.component_endpoint(arrow, "source")
             if domain is None or not self.closed_domain(domain):
                 raise Unsupported("a closed point needs its supplied terminal domain")
-            return self.function(arrow, domain, target)(inventory(domain)[0])
+            actual = self.function(arrow, domain, target)
+            return actual.at_point(inventory(domain)[0],
+                                   lambda point, selected: self.point(point, selected, domain))
         if tag == "mediator":
             left, right = fields(data, tag, 2)
             left_target, right_target = self.product_factors(target, (left, right))
@@ -674,7 +693,9 @@ class Engine(EndpointInterfaces):
                 domain = self.component_endpoint(data, "source")
             if domain is None or not self.closed_domain(domain):
                 raise Unsupported("a point arrow needs its actual generalized domain")
-            return self.function(data, domain, target)(inventory(domain)[0])
+            actual = self.function(data, domain, target)
+            return actual.at_point(inventory(domain)[0],
+                                   lambda point, selected: self.point(point, selected, domain))
         return data
 
     def function(self, data, source, target):
@@ -797,19 +818,21 @@ class Engine(EndpointInterfaces):
         native = (NativeComposition(original.native, action.native)
                   if original.native is not None and action.native is not None else None)
         return Callable(original.source, action.target,
-                        lambda point: action(original(point)), native)
+                        lambda point: action(original(point)), native,
+                        point_action=lambda point, read: action.at_point(original.at_point(point, read), read))
 
     def apply_comparison(self, action, argument, operation, parameters, packet):
         domain = self.callable_domain(argument)
+        read = lambda point, selected: self.point(point, selected, domain)
         if domain is None:
-            return action(argument)
+            return action.at_point(argument, read)
         original = self.function(argument, domain, action.source)
         if self.closed_domain(domain):
-            return action(original(inventory(domain)[0]))
+            return action.at_point(original.at_point(inventory(domain)[0], read), read)
         result = self.postcompose(original, action)
         retained = Invocation(operation, parameters, packet, original, action)
         return self.session.keep(Callable(result.source, result.target, result.action,
-                                          result.native, retained))
+                                          result.native, retained, result.point_action))
 
     def interpret_arrow(self, arrow, source, target):
         tag = self.tag(arrow)
@@ -822,8 +845,7 @@ class Engine(EndpointInterfaces):
             if middle is None:
                 middle = second_source if second_source is not None else self.intermediate(first)
             f, g = self.function(first, source, middle), self.function(second, middle, target)
-            native = NativeComposition(f.native, g.native) if f.native is not None and g.native is not None else None
-            return Callable(source, target, lambda value: g(f(value)), native)
+            return self.postcompose(f, g)
         if tag == "element":
             selected, expression = fields(arrow, tag, 2)
             self.check_element_target(target, selected)
@@ -840,7 +862,7 @@ class Engine(EndpointInterfaces):
             if not self.carrier_action(action):
                 raise Unsupported("this selected point view has no native carrier adapter")
             actual = self.function(original, domain, original_target)
-            return Callable(source, target, actual, actual.native)
+            return Callable(source, target, actual, actual.native, point_action=actual.at_point)
         if tag in {"admittedPoint", "constrainedPoint"}:
             if tag == "admittedPoint":
                 _, _, domain, original_target, selected, original = admitted_point(arrow)
@@ -849,7 +871,7 @@ class Engine(EndpointInterfaces):
             same(source, domain, "retained point family's original domain")
             same(target, selected, "retained point family's complete target")
             actual = self.function(original, domain, original_target)
-            return Callable(source, target, actual, actual.native)
+            return Callable(source, target, actual, actual.native, point_action=actual.at_point)
         if tag == "point":
             return self.function(fields(arrow, tag, 1)[0], source, target)
         if tag == "presentation":
@@ -881,21 +903,22 @@ class Engine(EndpointInterfaces):
                 # interpreting its selected structural view at the supplied ends.
                 old_source, old_target = source, target
             original_callable = self.function(original, old_source, old_target)
-            return Callable(source, target, original_callable, original_callable.native)
+            return Callable(source, target, original_callable, original_callable.native,
+                            point_action=original_callable.at_point)
         if tag in {"arrowHom", "subobjectInclusion"}:
             receiver, = fields(arrow, tag, 1)
             actual_source, actual_target, actual_map = self.arrow_record(receiver)
             self.same_endpoint(source, actual_source, arrow, "source", "stored Arrow map source")
             self.same_endpoint(target, actual_target, arrow, "target", "stored Arrow map target")
             actual = self.function(actual_map, actual_source, actual_target)
-            return Callable(source, target, actual, actual.native)
+            return Callable(source, target, actual, actual.native, point_action=actual.at_point)
         if tag in {"constructionField", "constructionLeg"}:
             actual_map = self.project_field(arrow)
             actual_source, actual_target, _ = typed_map(actual_map)
             self.same_endpoint(source, actual_source, arrow, "source", "stored construction map source")
             self.same_endpoint(target, actual_target, arrow, "target", "stored construction map target")
             actual = self.function(actual_map, actual_source, actual_target)
-            return Callable(source, target, actual, actual.native)
+            return Callable(source, target, actual, actual.native, point_action=actual.at_point)
         if tag == "generator":
             object_id, parameters = fields(arrow, tag, 2)
             selected = node(object_id, *parameters)
@@ -913,7 +936,8 @@ class Engine(EndpointInterfaces):
                 expected = self.dual_x if object_id in self.dual_x_ids else self.dual_y
                 if self.ring(source) is not expected or self.ring(target) is not expected:
                     raise ValueError("the selected carrier identification changes presentation")
-                return Callable(source, target, lambda value: value, NativeIdentity(source, target))
+                return Callable(source, target, lambda value: value, NativeIdentity(source, target),
+                                point_action=lambda point, read: point)
             raise Unsupported("this published object field is outside the specimen")
         if tag in self.ring_operations:
             parameters = fields(arrow, tag, 2 if tag == "op.rings.pow" else 1)
@@ -1079,35 +1103,20 @@ class Engine(EndpointInterfaces):
         self.invocation_selection(arrow, operation, parameters)
         action = self.function(arrow, source, target)
         if self.closed_domain(domain) and not self.callable_argument(argument, domain, source):
-            if operation in self.ring_operations:
-                # Complete supplied graph keys are data, including element
-                # envelopes. Evaluating such a key before lookup would replace
-                # the key retained by the actual returned callable.
-                try:
-                    points = self.retained_point_inventory(source)
-                except Unsupported:
-                    pass
-                else:
-                    actual = argument
-                    while True:
-                        if any(key(actual) == key(point) for point in points):
-                            return action(actual)
-                        if self.tag(actual) != "valueData":
-                            break
-                        actual = fields(actual, "valueData", 1)[0]
-            return action(self.point(argument, source, domain))
+            return action.at_point(argument, lambda point, selected: self.point(point, selected, domain))
         original = self.function(argument, domain, source)
         if self.closed_domain(domain):
             # The actual global domain keeps its scalar convention, including
             # an explicitly supplied identity or terminal comparison.
-            return action(original(inventory(domain)[0]))
+            read = lambda point, selected: self.point(point, selected, domain)
+            return action.at_point(original.at_point(inventory(domain)[0], read), read)
         # A returned callable is the actual composite on the complete original
         # domain. Keeping it owned preserves native metadata and dependencies,
         # including finite and singleton domains, without materializing samples.
         result = self.postcompose(original, action)
         retained = Invocation(operation, parameters, packet, original, action)
         return self.session.keep(Callable(result.source, result.target, result.action,
-                                          result.native, retained))
+                                          result.native, retained, result.point_action))
 
     def presentation_application(self, packet):
         parameters, inverse, source, target, argument = presentation_invocation(packet)

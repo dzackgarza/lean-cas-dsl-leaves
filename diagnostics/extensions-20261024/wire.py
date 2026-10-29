@@ -82,9 +82,20 @@ class Callable:
     action: object
     native: object = None
     invocation: object = None
+    point_action: object = None
 
     def __call__(self, point):
         return self.action(point)
+
+    def at_point(self, point, read):
+        """Use this callable's actual input reader for a public point packet.
+
+        Native actions keep their ordinary point decoder. Graphs and structural
+        combinations retain their own framing before a native reader sees it.
+        """
+        if self.point_action is not None:
+            return self.point_action(point, read)
+        return self.action(read(point, self.source))
 
 
 @dataclass(frozen=True)
@@ -238,7 +249,19 @@ def graph_callable(data, source, target, finite_inventory=inventory):
             raise ValueError("the supplied point is absent from the actual domain inventory")
         return entries[encoded]
 
-    return Callable(source, target, evaluate)
+    def evaluate_point(point, read):
+        actual = point
+        while True:
+            # A valueData envelope can itself be an explicitly supplied key.
+            # Check the exact key before inspecting an outer result envelope.
+            if key(actual) in entries:
+                return evaluate(actual)
+            if not isinstance(actual, dict) or actual.get("ctor") != "valueData":
+                break
+            actual, = fields(actual, "valueData", 1)
+        return evaluate(read(point, source))
+
+    return Callable(source, target, evaluate, point_action=evaluate_point)
 
 
 def framed_callable(data, source, target, session, interpret, finite_inventory=inventory,
@@ -270,14 +293,16 @@ def framed_callable(data, source, target, session, interpret, finite_inventory=i
         same(actual_source, source, "identity source")
         same(actual_target, target, "identity target")
         same(source, target, "identity endpoints")
-        return Callable(source, target, lambda point: point, NativeIdentity(source, target))
+        return Callable(source, target, lambda point: point, NativeIdentity(source, target),
+                        point_action=lambda point, read: point)
     if isinstance(data, dict) and data.get("ctor") == "mediator":
         left, right = fields(data, "mediator", 2)
         left_target, right_target = product_factors(target, (left, right))
         f = framed_callable(left, source, left_target, session, interpret, finite_inventory, product_factors)
         g = framed_callable(right, source, right_target, session, interpret, finite_inventory, product_factors)
         native = NativeMediator(source, target, f.native, g.native) if f.native is not None and g.native is not None else None
-        return Callable(source, target, lambda point: [f(point), g(point)], native)
+        return Callable(source, target, lambda point: [f(point), g(point)], native,
+                        point_action=lambda point, read: [f.at_point(point, read), g.at_point(point, read)])
     if isinstance(data, dict) and data.get("ctor") == "compose":
         first, second = fields(data, "compose", 2)
         if isinstance(first, dict) and first.get("ctor") == "typedMap":
@@ -293,7 +318,8 @@ def framed_callable(data, source, target, session, interpret, finite_inventory=i
         f = framed_callable(first, source, middle, session, interpret, finite_inventory, product_factors)
         g = framed_callable(second, middle, target, session, interpret, finite_inventory, product_factors)
         native = NativeComposition(f.native, g.native) if f.native is not None and g.native is not None else None
-        return Callable(source, target, lambda point: g(f(point)), native)
+        return Callable(source, target, lambda point: g(f(point)), native,
+                        point_action=lambda point, read: g.at_point(f.at_point(point, read), read))
     if isinstance(data, dict) and data.get("ctor") == "morphismEndpoint":
         morphism_endpoint(data)
         raise ValueError("a morphism endpoint is object data, not a callable")

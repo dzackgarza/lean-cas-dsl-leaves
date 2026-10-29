@@ -50,6 +50,32 @@ class EndpointInterfaces:
         same(self.scalar_element_carrier(target), self.scalar_element_carrier(selected),
              "element's complete scalar target")
 
+    def check_structure_target(self, target, selected):
+        """Keep an operation's selected structure through explicit carrier views.
+
+        Unlike a scalar-codec check, this never erases the selected structure or
+        opens an owned object to compare its native representation or source.
+        """
+        if target is None:
+            return
+        while key(target) != key(selected):
+            tag = self.tag(target)
+            if tag == "valueData":
+                target, = fields(target, tag, 1)
+            elif tag == "finiteData":
+                inventory(target)
+                target, _ = fields(target, tag, 2)
+            elif tag == "morphismEndpoint":
+                target = self.endpoint_view(target)
+            elif tag == "functorAction":
+                action, receiver = fields(target, tag, 2)
+                if not self.carrier_action(action):
+                    break
+                target = receiver
+            else:
+                break
+        same(target, selected, "point's complete selected structure")
+
     def retained_map_endpoint(self, arrow, side):
         """Read actual callable fields through wrappers and stored projections."""
         actual = retained_endpoint(arrow, side, self.session)

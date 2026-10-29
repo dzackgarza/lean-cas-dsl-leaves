@@ -48,7 +48,8 @@ class PowerObjectInterfaces:
             context.update({"original": actual, "inventory": points})
             def subset(point, retained=context):
                 self.finite_ordinal(point, 1)
-                image = self.finite_subset([retained["original"](value)
+                image = self.finite_subset([retained["original"].at_point(
+                                                value, lambda data, selected: self.point(data, selected, None))
                                             for value in retained["inventory"]], ambient, retained)
                 return self.session.keep(image)
             return Callable(source, target, subset)
@@ -60,7 +61,8 @@ class PowerObjectInterfaces:
             self.finite_ordinal(point, 1)
             selected = []
             for value in retained["inventory"]:
-                answer = retained["original"](value)
+                answer = retained["original"].at_point(
+                    value, lambda data, selected: self.point(data, selected, None))
                 if type(answer) is not bool:
                     raise ValueError("the actual predicate result is not Boolean point data")
                 if answer:

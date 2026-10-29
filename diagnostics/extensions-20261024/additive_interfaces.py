@@ -103,9 +103,11 @@ class AdditiveInterfaces:
     def point(self, data, target, domain):
         if self.tag(data) == "element":
             selected, expression = fields(data, "element", 2)
+            self.check_element_target(target, selected)
             if self.tag(expression) == "operationExpression":
                 operation, _, _ = operation_expression(expression)
                 if operation == self.additive_operation:
+                    self.check_structure_target(target, selected)
                     actual = self.additive_monoid_native(selected)
                     return actual.write(self.additive_value(data, selected, domain))
         if self.tag(data) == "operationExpression":
@@ -113,6 +115,7 @@ class AdditiveInterfaces:
             if operation == self.additive_operation:
                 if len(parameters) != 1:
                     raise ValueError("addition omits or adds its selected additive monoid")
+                self.check_structure_target(target, parameters[0])
                 actual = self.additive_monoid_native(parameters[0])
                 return actual.write(self.additive_value(data, parameters[0], domain))
         return super().point(data, target, domain)

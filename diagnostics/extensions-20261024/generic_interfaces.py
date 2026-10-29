@@ -38,6 +38,7 @@ class GenericInterfaces:
             raise Unsupported("this nullary operation has no implemented point adapter")
         if len(parameters) != 1:
             raise ValueError("the nullary monoid point requires its complete selected monoid")
+        same(parameters[0], selected, "nullary point's complete selected structure")
         if isinstance(comparison, list) or self.tag(comparison) == "finiteGraph":
             # The operation's published categorical source is Fin(1); the
             # supplied graph still provides every actual comparison value.
@@ -48,19 +49,21 @@ class GenericInterfaces:
         action = self.function(node(operation, *parameters), source, selected)
         context = (data, actual, action)
         return Callable(domain, selected,
-                        lambda point, retained=context: retained[2](retained[1](point)))
+                        lambda point, retained=context: retained[2](retained[1](point)),
+                        point_action=lambda point, read: action.at_point(actual.at_point(point, read), read))
 
     def point(self, data, target, domain):
         tag = self.tag(data)
         if tag == "element":
             selected, expression = fields(data, tag, 2)
+            self.check_element_target(target, selected)
             expression_tag = self.tag(expression)
             if expression_tag == "operationPoint":
-                return self.point(expression, selected, domain)
+                return self.point(expression, target, domain)
             if expression_tag == "operationExpression":
                 operation, _, _ = operation_expression(expression)
                 if operation in {"op.monoids.mul", "op.monoids.one", "op.groups.inverse"}:
-                    return self.point(expression, selected, domain)
+                    return self.point(expression, target, domain)
             if expression_tag == "mul":
                 try:
                     self.monoid_operations(selected)
@@ -69,15 +72,16 @@ class GenericInterfaces:
                 else:
                     operands = fields(expression, "mul", 2)
                     return self.point(node("operationExpression", "op.monoids.mul", [selected], operands),
-                                      selected, domain)
+                                      target, domain)
         if tag == "operationPoint":
             actual = self.operation_point_callable(data)
-            same(actual.target, target, "nullary point's complete selected target")
+            self.check_structure_target(target, actual.target)
             if domain is not None:
                 same(actual.source, domain, "nullary point's original generalized domain")
             if not self.closed_domain(actual.source):
                 raise Unsupported("a non-global nullary point retains its original callable domain")
-            return actual(inventory(actual.source)[0])
+            return actual.at_point(inventory(actual.source)[0],
+                                   lambda point, selected: self.point(point, selected, actual.source))
         if tag == "operationExpression":
             operation, parameters, operands = operation_expression(data)
             if operation in {"op.monoids.mul", "op.monoids.one", "op.groups.inverse"}:
@@ -87,7 +91,7 @@ class GenericInterfaces:
                 if len(operands) != arity:
                     raise ValueError("the operation expression has a different operand count")
                 selected = parameters[0]
-                same(selected, target, "operation expression's complete selected structure")
+                self.check_structure_target(target, selected)
                 values = [self.point(value, target, domain) for value in operands]
                 if operation == "op.groups.inverse":
                     return self.function(node(operation, selected), selected, selected)(values[0])
@@ -95,13 +99,21 @@ class GenericInterfaces:
                 return unit() if arity == 0 else multiply(*values)
         return super().point(data, target, domain)
 
-    def morphism_function(self, data, object_id, parameters, source, target):
+    def morphism_function(self, data, object_id, parameters, source, target, read=None):
         """Use the complete supplied function under its selected admission."""
         if len(parameters) != self.morphism_objects[object_id]:
             raise ValueError("the selected hom object omits or adds a declaration parameter")
         if self.tag(data) == "valueData":
             return self.morphism_function(fields(data, "valueData", 1)[0], object_id,
-                                          parameters, source, target)
+                                          parameters, source, target, read)
+        if self.tag(data) == "element":
+            selected, expression = fields(data, "element", 2)
+            same(selected, node(object_id, *parameters), "function-valued point's selected hom object")
+            return self.morphism_function(expression, object_id, parameters, source, target, read)
+        if self.tag(data) == "point":
+            selected = node(object_id, *parameters)
+            actual = read(data, selected) if read is not None else self.point(data, selected, None)
+            return self.morphism_function(actual, object_id, parameters, source, target, read)
         if self.tag(data) == "admittedPoint":
             selected_id, selected_parameters, domain, original_type, admitted, original = admitted_point(data)
             if selected_id != object_id:
@@ -113,7 +125,8 @@ class GenericInterfaces:
             same(actual_target, target, "admitted function's original target")
             actual = self.function(original, actual_source, actual_target)
             retained = (object_id, parameters, domain, original_type, admitted, original, actual)
-            return Callable(source, target, lambda point, context=retained: context[-1](point), actual.native)
+            return Callable(source, target, lambda point, context=retained: context[-1](point), actual.native,
+                            point_action=actual.at_point)
         return self.function(data, source, target)
 
     def subset_key(self, point, ambient):
@@ -288,7 +301,7 @@ class GenericInterfaces:
                 actual_family = self.function(original, domain, original_type)
                 retained = (arrow, actual_family)
                 return Callable(source, target, lambda point, context=retained: context[1](point),
-                                actual_family.native)
+                                actual_family.native, point_action=actual_family.at_point)
         if tag in applications:
             object_id = applications[tag]
             parameters = fields(arrow, tag, self.morphism_objects[object_id])
@@ -300,12 +313,13 @@ class GenericInterfaces:
             if self.tag(target) == "morphismEndpoint":
                 self.same_endpoint(target, None, arrow, "target", "application's complete target")
                 argument_target = parameters[-1]
+            def apply_point(pair, read):
+                pair = self.product_point(pair, source, read)
+                actual = self.morphism_function(pair[0], object_id, parameters, argument_source, argument_target, read)
+                return actual.at_point(pair[1], read)
             def apply(pair):
-                if not isinstance(pair, list) or len(pair) != 2:
-                    raise ValueError("a morphism application requires its actual function and argument")
-                actual = self.morphism_function(pair[0], object_id, parameters, argument_source, argument_target)
-                return actual(pair[1])
-            return Callable(source, target, apply)
+                return apply_point(pair, lambda point, selected: self.point(point, selected, None))
+            return Callable(source, target, apply, point_action=apply_point)
         if tag == "objectField":
             object_id, selector, parameters = object_field(arrow)
             if object_id in self.morphism_objects and selector == "inclusion":
@@ -326,7 +340,8 @@ class GenericInterfaces:
                 subset = self.finite_subset(data, ambient_source)
                 context = {"arrow": arrow, "source": source, "target": target,
                            "actualFunction": actual, "actualSubset": subset}
-                image = self.finite_subset([actual(point) for point in subset.points], ambient_target, context)
+                image = self.finite_subset([actual.at_point(point, lambda value, selected: self.point(value, selected, None))
+                                           for point in subset.points], ambient_target, context)
                 return self.session.keep(image)
             return Callable(source, target, direct_image)
         if tag in {"op.monoids.mul", "op.monoids.one"}:

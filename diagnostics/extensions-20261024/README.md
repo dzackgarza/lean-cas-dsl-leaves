@@ -91,6 +91,45 @@ was supplied and the retained native ring is finite, the existing Sage finite-ri
 iteration supplies its complete native carrier. An unenumerated `morphismEndpoint`
 still gains no inventory. Native objects and callables keep their original session.
 
+### Owned-result composability
+
+Public point application now follows the actual callable's retained input reader.
+A complete finite graph checks its exact original key before inspecting any outer
+`valueData` envelope. A native action still receives its ordinary decoded point.
+Composition and mediators preserve this distinction separately for each actual
+constituent, including returned owned families, explicit closed-point arrows,
+comparisons and transparent structural/admission wrappers. This is private
+reader metadata; the complete public endpoints, operation parameters, request
+and live owner remain unchanged. No operation address selects a graph codec.
+
+Existing direct-image, power-image/predicate and morphism-application readers
+also preserve the original point until the actual inner callable consumes it.
+Returned product projections retain each original component's framing.
+Function-valued elements and closed points retain the complete hom-object
+selection. Nested monoid and additive expressions keep the caller's selected
+target. A target can expose that exact structure through an explicit supported
+forward carrier view; sharing a scalar codec or a native parent does not identify
+two selected structures.
+
+`composability_smoke.py` exercises 103 requests and two closed-session owner
+controls. Its independently selected chains use ordinary owned ring images as
+regular-module coefficients, return restricted modules and additive monoids,
+and reuse their actual point/callable data. It consumes complete returned kernel
+arrows and product cones through existing ports. It also checks decorated finite
+graph keys on a supplied source and on an owned ring image, mixed graph/native
+mediators, inner callable readers, typed and untyped closed function points,
+exact parameter and endpoint controls, nullary carrier views and nested selection
+rejection. The 103-request ring, 36-request generic and
+66-request additive protocol checks were rerun for the shared readers, with
+their existing ownership controls. These checks assert result shape and public
+framing, not arithmetic answers or mathematical correctness.
+
+```sh
+CAS_LEAF_CONTRACT_PATH=/absolute/path/to/public-contract \
+CAS_SAGE_PYTHON=/absolute/path/to/sage/python \
+python3 composability_smoke.py
+```
+
 ## Whole-map equality
 
 For `obj.sets.maps(domain, codomain)`, finite-domain equality evaluates both actual

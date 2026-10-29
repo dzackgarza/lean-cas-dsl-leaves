@@ -686,5 +686,49 @@
     },
     "publicInterfaceGap": null,
     "implementationLimits": "The existing supported native ring representations and README limits remain. The public map addresses are now published, but ordinary ring map registration is outside this conformance change."
+  },
+  "ownedResultComposability20261029": {
+    "baseLeafRevision": "f7ed66d96670fc588e87a0c478d77bde867c50f7",
+    "baseLeafTree": "6f7c0db6c026b0d4f9f01bd00ce45159a1f79017",
+    "publicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6",
+    "publicContractTree": "968ea95a5f8e7f76de95461999e8bafee74f2d39",
+    "publicContractFiles": {
+      "CasContract/Port.lean": "4082a8525f92ad945accd37935add2c31e8fda3e85d52328eb4b9a7b1339f777",
+      "python/cas_port.py": "1a061bfbc3dc40dadc157deaeb11dbd838d7f2710e53f1fe8f369bd60d43e6f5",
+      "api/manifest.md": "18a61df15642a9963c643df784352de91e2809cabdb1ef6d11d2761acdf1177f",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/declared-ports.json": "642b7290d5441d7409fa6992732a97166907de8e69eafeb9e6df468aa7d73c4c"
+    },
+    "unchangedManifestSha256": "ac9ad362b840702b96db513f00195ccc4e53ad30f2c2495a1d0b30e6f4985d33",
+    "unchangedRegistrationPairs": 67,
+    "scope": "Composition of existing registered ports and actual owned results, including ordinary RingImage coefficients, modules, additive monoids, complete Arrow/cone results and retained finite graphs. Private callable and point readers only; no new registration, native algorithm, Lean code or public wire field.",
+    "readerCorrections": [
+      "Retain each callable's point-input reader: graphs check exact original keys before outer valueData unwraps; native actions keep their existing point decoding. No codec is selected by the dispatched operation id.",
+      "Propagate the actual reader through composition, mediator branches, owned Invocation copies, closed point/callable-argument evaluation, comparisons and transparent structural/admission wrappers while preserving complete endpoints, requests and ownership.",
+      "Existing direct-image, power image/predicate and hom-application consumers pass original data to the actual inner callable reader; hom points preserve complete element/point framing. Returned product projections retain original component packets through the same product-frame reader.",
+      "Keep the caller's target while decoding nested monoid/additive expressions. Permit explicit supported forward carrier views of that exact selected structure without opening owned objects or equating native codecs."
+    ],
+    "inputBoundary": "Only this leaf source, its applicable instructions and the published public contract documentation, reference helper and generated declarations were inspected. Protocol cases were selected independently from those inputs. No kernel, mathematical proof source, external test or acceptance assertion/result, downstream report or another agent's history was inspected. No Lean, Lake or compiler was run; no remote reference was written.",
+    "engineVersion": "Sage/passagemath 10.8.13",
+    "engineeringChecks": {
+      "script": "composability_smoke.py",
+      "primaryConnectionRequests": 103,
+      "foreignOwnerRequests": 2,
+      "result": "completed",
+      "regressions": [
+        {"script": "ring_protocol_smoke.py", "primaryConnectionRequests": 103, "foreignOwnerRequests": 2, "result": "completed"},
+        {"script": "generic_smoke.py", "primaryConnectionRequests": 36, "result": "completed"},
+        {"script": "additive_smoke.py", "primaryConnectionRequests": 66, "foreignOwnerRequests": 1, "result": "completed"}
+      ],
+      "pythonSourcesAstParsed": 9,
+      "boundary": "Public packet framing, complete selected descriptors and parameters, result shapes, actual owned-result consumption, retained exact graph keys and ownership only. No expected arithmetic value, equality truth, cardinality, equation, law or mathematical acceptance outcome is asserted."
+    },
+    "independentSourceReview": {
+      "scope": "Static review of the concrete leaf diff and public-only conformance cases, including final focused reinspection of the nullary selection check.",
+      "result": "Completed with all concrete findings resolved; no remaining concrete defect identified in the bounded reviewed changes.",
+      "boundary": "The reviewer executed no code and made no mathematical correctness or downstream acceptance claim."
+    },
+    "publicInterfaceGap": null,
+    "implementationLimits": "The existing native representations and README limits remain. This is bounded conformance of the supplied cases, not an implementation claim for all category objects. Ordinary ring map registration remains outside this change."
   }
 }
