@@ -226,6 +226,14 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
                 return value
             if isinstance(value, Module):
                 return self.finite_module_object(selected, value)
+            if isinstance(value, RingImage):
+                try:
+                    points = self.retained_point_inventory(selected)
+                except Unsupported:
+                    if not value.native.is_finite():
+                        raise Unsupported("the retained native ring has an infinite carrier")
+                    points = tuple(self.encode_scalar(point, selected) for point in value.native)
+                return FiniteObject(selected, tuple(points), Set(range(len(points))))
             if isinstance(value, AutomorphismGroup):
                 return self.finite_automorphism_object(selected, value)
         try:

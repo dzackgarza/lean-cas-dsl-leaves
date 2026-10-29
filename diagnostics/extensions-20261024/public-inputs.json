@@ -641,8 +641,50 @@
       "missingOperation": "fun.commutative_rings.ring#map",
       "missingInput": "fun.commutative_rings.ring#input",
       "description": "The published Port, Python helper and wire guide describe registered functor map framing, but api/declared-ports.json omits this operation/input pair. api/manifest.md says the address rules do not substitute for actual admission inventories. The ordinary object operation and cat.commutative_rings input are present.",
-      "boundedResponse": "Register the ordinary object action only. Defer map registration until the contract owner publishes a coherent admission inventory; do not infer a downstream admission result."
+      "boundedResponse": "Register the ordinary object action only. Defer map registration until the contract owner publishes a coherent admission inventory; do not infer a downstream admission result.",
+      "resolvedByPublicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6"
     },
     "implementationLimits": "Only the existing native ring readers are supported. Arbitrary commutative-ring representations and the ordinary map port remain outside this addition."
+  },
+  "ringProtocolConformance20261029": {
+    "baseLeafRevision": "719a1321f6c964db052b9fee96a996accb82bc99",
+    "baseLeafTree": "429ec639c84b9dc007d56f0dee0b4ca18e145f19",
+    "publicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6",
+    "publicContractTree": "968ea95a5f8e7f76de95461999e8bafee74f2d39",
+    "publicContractFiles": {
+      "CasContract/Port.lean": "4082a8525f92ad945accd37935add2c31e8fda3e85d52328eb4b9a7b1339f777",
+      "python/cas_port.py": "1a061bfbc3dc40dadc157deaeb11dbd838d7f2710e53f1fe8f369bd60d43e6f5",
+      "api/manifest.md": "18a61df15642a9963c643df784352de91e2809cabdb1ef6d11d2761acdf1177f",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/declared-ports.json": "642b7290d5441d7409fa6992732a97166907de8e69eafeb9e6df468aa7d73c4c"
+    },
+    "unchangedManifestSha256": "ac9ad362b840702b96db513f00195ccc4e53ad30f2c2495a1d0b30e6f4985d33",
+    "unchangedRegistrationPairs": 67,
+    "scope": "Existing ring-operation point, endpoint, callable and composition readers, including ordinary structural-action descriptors and actual owned RingImage outputs. No new registrations, native mathematics algorithms, Lean code or protocol tags.",
+    "readerCorrections": [
+      "Read the retained scalar codec through exact supported structural-action descriptors, finiteData/valueData wrappers and actual RingImage source data without rewriting request endpoints or identifying native parents.",
+      "Read wrapped product factors while preserving the original product and callable endpoint descriptors.",
+      "Consume complete closed point arrows inside generalized data using their own retained or declared source; unary ring callbacks retain the actual source codec.",
+      "Preserve supplied finite graph keys before point decoding, including valueData keys, paired keys and mixed retained/native finite products. Reuse the existing finite-ring and product readers; no inventory is inferred for an unenumerated morphismEndpoint."
+    ],
+    "inputBoundary": "Only this leaf repository, its applicable instructions, the public contract documentation/reference helper and published declaration inventories were inspected. The supplied installed engine was used directly. No kernel source, mathematical proof source, external test or acceptance assertion/result, downstream report or another agent's history was inspected. No Lean, Lake or compiler was run.",
+    "engineVersion": "Sage/passagemath 10.8.13",
+    "engineeringChecks": {
+      "script": "ring_protocol_smoke.py",
+      "completedGroups": 31,
+      "primaryConnectionRequests": 103,
+      "foreignOwnerRequests": 2,
+      "result": "completed",
+      "ordinaryObjectRegression": {
+        "script": "ring_image_smoke.py",
+        "objectRepresentations": 8,
+        "primaryConnectionRequests": 48,
+        "foreignOwnerRequests": 2,
+        "result": "completed"
+      },
+      "boundary": "Public packet framing, response shapes, complete descriptor and parameter retention, actual returned-data consumption, original graph keys and ownership only. No expected arithmetic value, equation, functor law or mathematical acceptance outcome is asserted."
+    },
+    "publicInterfaceGap": null,
+    "implementationLimits": "The existing supported native ring representations and README limits remain. The public map addresses are now published, but ordinary ring map registration is outside this conformance change."
   }
 }

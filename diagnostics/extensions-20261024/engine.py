@@ -86,6 +86,10 @@ class Engine(EndpointInterfaces):
     carrier_actions = {
         "fun.sets.identity", "fun.commutative_rings.ring",
         "fun.rings.additive_group", "fun.rings.multiplicative_monoid",
+        "fun.rings.additive_commutative_monoid",
+        "fun.additive_commutative_monoids.additive_monoid",
+        "fun.commutative_rings.multiplicative_commutative_monoid",
+        "fun.commutative_monoids.monoid",
         "fun.additive_groups.to_groups", "fun.additive_groups.additive_monoid",
         "fun.groups.monoid", "fun.monoids.semigroup",
         "fun.additive_monoids.underlying", "fun.modules.fibre_inclusion",
@@ -123,6 +127,44 @@ class Engine(EndpointInterfaces):
     @staticmethod
     def tag(data):
         return data.get("ctor") if isinstance(data, dict) else None
+
+    def scalar_element_carrier(self, selected):
+        if self.tag(selected) == "opaqueData":
+            actual = self.session.get(selected)
+            if isinstance(actual, RingImage):
+                # The object adapter retained the source's point encoding.
+                # Read it as codec context, keeping the owned image itself in
+                # every request, returned callable and scalar selection.
+                return self.scalar_element_carrier(actual.source)
+        return super().scalar_element_carrier(selected)
+
+    def retained_point_inventory(self, selected):
+        """Keep supplied keys, using the existing complete product decoder."""
+        tag = self.tag(selected)
+        if tag in {"finiteData", "obj.sets.fin"}:
+            return inventory(selected)
+        if tag == "valueData":
+            return self.retained_point_inventory(fields(selected, tag, 1)[0])
+        if tag == "opaqueData":
+            actual = self.session.get(selected)
+            if isinstance(actual, RingImage):
+                return self.retained_point_inventory(actual.source)
+        if tag == "functorAction":
+            action, receiver = fields(selected, tag, 2)
+            if self.carrier_action(action):
+                return self.retained_point_inventory(receiver)
+        if tag == "objectProduct":
+            left, right = fields(selected, tag, 2)
+            # A retained factor key must survive even when the other factor
+            # uses its existing native finite codec. The complete product
+            # reader still refuses an unenumerated or infinite factor.
+            for factor in (left, right):
+                try:
+                    self.retained_point_inventory(factor)
+                except Unsupported:
+                    continue
+                return self.finite_object(selected).points
+        raise Unsupported("this object has no retained explicit point inventory")
 
     def ring(self, selected):
         tag = self.tag(selected)
@@ -615,6 +657,11 @@ class Engine(EndpointInterfaces):
             return self.encode_scalar(self.expression(expression, selected, domain), target)
         if tag == "point":
             arrow, = fields(data, tag, 1)
+            if domain is None:
+                # A value in a retained graph can itself be a complete closed
+                # point. Read that arrow's own source; the graph's domain is
+                # not a replacement for it.
+                domain = self.component_endpoint(arrow, "source")
             if domain is None or not self.closed_domain(domain):
                 raise Unsupported("a closed point needs its supplied terminal domain")
             return self.function(arrow, domain, target)(inventory(domain)[0])
@@ -623,6 +670,8 @@ class Engine(EndpointInterfaces):
             left_target, right_target = self.product_factors(target, (left, right))
             return [self.point(left, left_target, domain), self.point(right, right_target, domain)]
         if tag in {"compose", "typedMap", "powerObjectMap"}:
+            if domain is None:
+                domain = self.component_endpoint(data, "source")
             if domain is None or not self.closed_domain(domain):
                 raise Unsupported("a point arrow needs its actual generalized domain")
             return self.function(data, domain, target)(inventory(domain)[0])
@@ -882,12 +931,13 @@ class Engine(EndpointInterfaces):
                 native = polynomial_action(source_model, target_model, symbolic,
                                            {"arrow": arrow, "source": source, "target": target})
             def compute(value):
+                decoded = self.point(value, source, None)
                 if tag in {"op.rings.add", "op.rings.mul"}:
-                    values = self.point(value, source, None)
+                    values = decoded
                     if not isinstance(values, list) or len(values) != 2:
                         raise ValueError("a binary ring operation requires both operands")
                 else:
-                    values = [value]
+                    values = [decoded]
                 scalars = [self.scalar(x, parameters[0]) for x in values]
                 return self.encode_scalar(self.ring_operation(tag, parameters, scalars), target)
             return Callable(source, target, compute, native)
@@ -1029,6 +1079,22 @@ class Engine(EndpointInterfaces):
         self.invocation_selection(arrow, operation, parameters)
         action = self.function(arrow, source, target)
         if self.closed_domain(domain) and not self.callable_argument(argument, domain, source):
+            if operation in self.ring_operations:
+                # Complete supplied graph keys are data, including element
+                # envelopes. Evaluating such a key before lookup would replace
+                # the key retained by the actual returned callable.
+                try:
+                    points = self.retained_point_inventory(source)
+                except Unsupported:
+                    pass
+                else:
+                    actual = argument
+                    while True:
+                        if any(key(actual) == key(point) for point in points):
+                            return action(actual)
+                        if self.tag(actual) != "valueData":
+                            break
+                        actual = fields(actual, "valueData", 1)[0]
             return action(self.point(argument, source, domain))
         original = self.function(argument, domain, source)
         if self.closed_domain(domain):

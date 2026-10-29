@@ -56,14 +56,40 @@ on that connection. All nested input tokens still require their original live
 owner; no source object is replaced with a familiar named ring or an action recipe.
 
 This addition registers only `fun.commutative_rings.ring` on the already published
-source-category input `cat.commutative_rings`. At public contract publication
+source-category input `cat.commutative_rings`. At the earlier public contract publication
 `fcefc8ba8296bd4d771cabd8b805c9061ada7513`, the guide documents a map operation
 `fun.commutative_rings.ring#map` and complete-request input
 `fun.commutative_rings.ring#input`, but `api/declared-ports.json` omits both addresses.
 `api/manifest.md` explicitly requires the concrete exported inventories rather
-than inferring admission from the address rules. That publication gap is recorded
-in `public-inputs.json`; no map registration or contract edit is included here.
+than inferring admission from the address rules. Published contract main
+`5db631a34c9d4f65a535fad61b6f76af39fb56f6` now includes both addresses and resolves
+that publication gap. The consumed revisions are recorded in `public-inputs.json`.
+The bounded object adapter and its subsequent reader corrections add no map registration.
 An `apply` packet at the unsuffixed object operation is rejected as malformed.
+
+### Complete ring-point and callable readers
+
+The ring-operation readers also consume complete selected carrier routes around
+the supported named rings and owned `RingImage` outputs. The private scalar-codec
+reader follows only the explicit supported carrier actions and retained source
+data. It does not compare native parents to identify endpoints, select a route,
+or rewrite the request. The published additive-commutative and
+multiplicative-commutative ring paths retain their exact action descriptors and
+parameters, like the previously supported additive-group and monoid paths.
+
+Product readers retain `valueData` and supported carrier-action wrappers while
+reading their actual factors. Closed point data inside a generalized callable's
+graph use the point arrow's retained or declared source; that source is not
+replaced by the graph's domain. Unary ring callbacks use the same complete input
+point reader as binary callbacks. Composition continues to execute the supplied
+constituents in their original order, with their original endpoints.
+
+A finite owned ring image retains any actual supplied `finiteData` point keys.
+The graph consumer uses those exact keys, including complete element envelopes;
+it does not replace them by evaluated coordinates before lookup. If no inventory
+was supplied and the retained native ring is finite, the existing Sage finite-ring
+iteration supplies its complete native carrier. An unenumerated `morphismEndpoint`
+still gains no inventory. Native objects and callables keep their original session.
 
 ## Whole-map equality
 
@@ -564,6 +590,24 @@ and both dual-number presentations. The checks exercise actual image, callable
 and scalar reuse, public wrapper reuse, malformed requests, unsupported native
 data and distinct retained presentations. They assert response shapes and owner
 handling only, with no computed mathematical answer or acceptance claim.
+
+The ring-point and callable reader conformance check uses the same public helper:
+
+```sh
+python3 ring_protocol_smoke.py --contract /absolute/path/to/public-contract \
+  --engine /absolute/path/to/sage/python
+```
+
+The recorded run completed 31 groups and 103 requests on the supplying connection,
+followed by two foreign-owner controls after it closed. It covers all four ring
+operations; complete multiplicative, additive-commutative and
+multiplicative-commutative carrier descriptions; named and owned native rings;
+original source point reuse; ordinary and generalized point views; typed and
+composed callables; wrapped product mediators; and retained finite graph keys.
+Changed callable endpoints, declaration parameters, point-view selections and
+graph inventories remain rejected. These are public encoding and data-consumption
+checks within the existing native implementation scope; no arithmetic result,
+equation, functor law or mathematical acceptance outcome is asserted.
 
 The actual-image lift protocol checks use the same public helper and engine:
 

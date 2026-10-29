@@ -12,8 +12,25 @@ from wire import (Callable, Unsupported, fields, inventory, key, node,
 
 class EndpointInterfaces:
     def scalar_element_carrier(self, selected):
-        """Private codec context for the existing named scalar selections."""
+        """Private scalar-codec context, keeping every selected action in place.
+
+        This only reads the layout of explicit supported carrier actions. It
+        never compares native parents or rewrites an endpoint or point packet.
+        """
         tag = self.tag(selected)
+        if tag == "valueData":
+            return self.scalar_element_carrier(fields(selected, tag, 1)[0])
+        if tag == "finiteData":
+            original, _ = fields(selected, tag, 2)
+            inventory(selected)
+            return self.scalar_element_carrier(original)
+        if tag == "morphismEndpoint":
+            return self.scalar_element_carrier(self.endpoint_view(selected))
+        if tag == "functorAction":
+            action, receiver = fields(selected, tag, 2)
+            if not self.carrier_action(action):
+                raise Unsupported("this selected scalar view has no implemented carrier decoder")
+            return self.scalar_element_carrier(receiver)
         families = ((self.rational_ids, "obj.sets.rationals"),
                     (self.integer_ids, "obj.sets.integers"),
                     (self.dual_x_ids, "obj.sets.rational_dual_x"),
@@ -30,10 +47,8 @@ class EndpointInterfaces:
         # their known codec layout, never equality of native parents or maps.
         if target is None or key(target) == key(selected):
             return
-        if self.tag(target) == "morphismEndpoint":
-            context = self.scalar_element_carrier(self.endpoint_view(target))
-            return self.check_element_target(context, selected)
-        same(target, self.scalar_element_carrier(selected), "element's complete scalar target")
+        same(self.scalar_element_carrier(target), self.scalar_element_carrier(selected),
+             "element's complete scalar target")
 
     def retained_map_endpoint(self, arrow, side):
         """Read actual callable fields through wrappers and stored projections."""
@@ -264,6 +279,13 @@ class EndpointInterfaces:
     def product_factors(self, selected, components=None):
         """Consume either public product form without rewriting its descriptor."""
         tag = self.tag(selected)
+        if tag == "valueData":
+            return self.product_factors(fields(selected, tag, 1)[0], components)
+        if tag == "functorAction":
+            action, receiver = fields(selected, tag, 2)
+            if self.carrier_action(action):
+                return self.product_factors(receiver, components)
+            raise Unsupported("this selected product view has no implemented carrier decoder")
         if tag == "objectProduct":
             return object_product(selected)
         if tag == "finiteData":
