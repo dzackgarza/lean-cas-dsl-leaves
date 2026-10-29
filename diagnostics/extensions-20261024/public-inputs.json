@@ -781,5 +781,58 @@
       "Existing native representations and README limitations remain; this inventory does not claim every envelope combination or every object in a registered category is implemented.",
       "Registrations and the public contract remain unchanged; no algorithms, mathematical declarations or new semantic rows were added."
     ]
+  },
+  "moduleFunctorActions20261029": {
+    "baseLeafRevision": "11201337b491b9a354cd3385984f8a494fc83a88",
+    "baseLeafTree": "ab9ee61288ee0d52e426666f4c1099301defecfa",
+    "publicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6",
+    "publicContractTree": "968ea95a5f8e7f76de95461999e8bafee74f2d39",
+    "publicContractFiles": {
+      "api/manifest.md": "18a61df15642a9963c643df784352de91e2809cabdb1ef6d11d2761acdf1177f",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/declared-ports.json": "642b7290d5441d7409fa6992732a97166907de8e69eafeb9e6df468aa7d73c4c",
+      "python/cas_port.py": "1a061bfbc3dc40dadc157deaeb11dbd838d7f2710e53f1fe8f369bd60d43e6f5"
+    },
+    "priorArt": "diagnostics/module_functor_actions at the base leaf revision; public framing and native interface discipline only",
+    "newRegistrationPairs": 4,
+    "totalRegistrationPairs": 71,
+    "scope": "The existing module fibre-inclusion and underlying object/map actions in the extension backend session. Existing native Module/Callable readers, complete selected request and actual-image data, no new mathematical algorithm or public encoding.",
+    "inputBoundary": "Only this leaf repository, its instructions and prior art, the pinned public contract documentation/reference helper/generated inventories, and the installed engine were inspected. No kernel, acceptance suite or expected-answer fixture, HANDOFF, downstream runtime report or other author workspace was inspected. No Lean or compiler was run. A separate reviewer inspected only this leaf diff and the same public contract.",
+    "engineVersion": "Sage/passagemath 10.8.13",
+    "engineeringChecks": {
+      "script": "module_functor_smoke.py",
+      "primaryConnectionRequests": 122,
+      "foreignOwnerRequests": 3,
+      "result": "completed",
+      "coverage": [
+        "Four published operation/input addresses and exact parameter arity",
+        "Portable finite module/source-graph input, ordinary rational modules and zero-dimensional vectors",
+        "Existing owned coefficient rings, actual returned kernel/inclusion data and scalar-restriction modules",
+        "Whole and generalized callable reuse with exact original and actual-image endpoints",
+        "Repeated valueData image/callable wrappers, original typed/untyped nested symbolic carrier-map readers",
+        "Changed ordered parameters, action identity, original/image/callable endpoints and expired nested owners"
+      ],
+      "regressions": [
+        {
+          "script": "generic_smoke.py",
+          "primaryConnectionRequests": 36,
+          "result": "completed"
+        },
+        {
+          "script": "additive_smoke.py",
+          "primaryConnectionRequests": 66,
+          "foreignOwnerRequests": 1,
+          "result": "completed"
+        }
+      ],
+      "boundary": "Public framing, result shapes, parameter/endpoint retention, consumption of actual returned data and owner handling only. No arithmetic result, equality truth, functor law or mathematical acceptance outcome is asserted."
+    },
+    "independentSourceReview": {
+      "scope": "Leaf-only static review and focused reinspection; no execution or mathematical acceptance claim",
+      "findingResolved": "The new map adapter initially intercepted previously supported nested symbolic carrier maps. Strict actual-image validation now belongs to the new registered #map boundary; existing nested readers remain available. The focused protocol check exercises both typed and untyped prior nested descriptors.",
+      "remainingConcreteFindings": "None identified within the reviewed change."
+    },
+    "publicInterfaceGap": null,
+    "implementationLimits": "Existing supported native module and callable representations only. Both finite and infinite object images are returned as owned native data. The new map port requires actual native ModuleImage results; unsupported portable image encodings, arbitrary foreign native values and unsupported module/callable readers remain computation gaps."
   }
 }

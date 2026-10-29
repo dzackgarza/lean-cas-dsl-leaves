@@ -5,7 +5,7 @@ the public contract, declaration exports and authorized interface documentation
 recorded in `public-inputs.json`. No kernel implementation, acceptance assertion,
 expected-answer fixture or downstream execution report was consulted. Diagnostic
 work stayed in this subtree. It ships no Lean and changes no mathematical or
-protocol declaration. The manifest contains 67 public operation/input pairs.
+protocol declaration. The manifest contains 71 public operation/input pairs.
 
 Sage 10.8 supplies exact quotient-ring, modular, polynomial, matrix, module and lazy
 power-series computations. Sage's permutation groups and native GAP supply the
@@ -31,6 +31,7 @@ does not claim an implementation for every object of that category.
 | General Sets `automorphism_evaluation`, `automorphism_inverse_evaluation` | The selected Sets identity functor. Other set-valued functors are explicitly unsupported. |
 | `cmp.groups.cyclic_quotient_residue`, `mor.sets.cyclic_quotient_map`, `mor.groups.cyclic_quotient_aut_by_unit` | Actual quotient/residue transport, integer quotient images and multiplication by the actual selected unit with its native inverse. Finite automorphism computation requires positive modulus. |
 | `mor.commutative_rings.integer_coefficients`, `fun.modules.reindex`, `fun.modules.reindex#cartesian`, `op.modules.scalar_action` | Supported native regular and vector modules over integers, rationals, integer-quotient rings and the two rational dual-number rings, together with the existing rational subspaces and formed carriers. Native scalar action applies the actual selected base map. The reindex declaration has one explicit parameter, that map. The named `obj.modules_r.restricted_regular` separately retains `R`, `S`, `q`. A cartesian invocation keeps the nested `[functorParameters,receiver]` array. Reindexed morphisms and cartesian maps retain the complete original map and selected modules. |
+| `fun.modules.fibre_inclusion`, `fun.modules.fibre_inclusion#map`, `fun.modules.underlying`, `fun.modules.underlying#map` | Object and map actions consume the existing native module and callable readers in this session, including actual returned subspaces and restrictions. The fibre action retains `[R]`; the underlying action retains `[]`. Object images and whole/generalized callables remain owned, with complete original and actual-image endpoints. |
 | `mor.sets.successor_power_series_terms`, `bind.sets.power_series_sum`, `mor.sets.power_series_coefficient` | The supplied infinite successor family in the selected coefficient ring, a native lazy infinite sum and requested coefficient observations. The binder also consumes its actual owned whole-family result and identity compositions retaining that native family metadata. No finite truncation or replacement closed-form series is used. |
 | `mor.modules.rectangular_linear_map`, `row_linear_map` | Actual matrices read from complete nested finite callables, at all supplied dimensions including zero, over supported coefficient rings. Rational maps retain exact Sage matrix representations. |
 | The three published degenerate-plane morphisms; `mor.sets.bilin_module_pairing` | The documented linear actions and four documented forms, together with actual native lifted forms. Scalar and value-module selections remain in the context. |
@@ -44,6 +45,51 @@ does not claim an implementation for every object of that category.
 | `mor.sets.direct_image` | The image of the actual supplied finite subset under the complete selected function, including finite subsets of supported infinite carriers. Whole power-object maps retain that function. Complete finite power domains use Sage's full subset inventory. |
 | `obj.sets.group_morphisms#application`, `obj.sets.module_morphisms#application` | Application of the original complete admitted function at the supplied group pair or scalar ring/module pair. The inclusion keeps that same function. Generalized admitted families keep their original domain. No group or module law is inferred or manufactured. |
 | `mor.sets.equality` | Exact supported scalar, product, module and finite-object points; complete finite-domain maps, including native finite automorphism carriers; complete native rational linear maps; and native polynomial scalar actions as detailed below. |
+
+## Module fibre-inclusion and underlying actions
+
+`module_functor_interfaces.py` adds the four existing registered actions to this
+backend's session. Each registration uses its published complete-request
+`<functor>#input` address. The object actions consume the complete receiver with
+`construction_invocation`; the map actions consume the common seven-field request
+with `functor_map_invocation`. The fibre functor's one selected ring parameter and
+the underlying functor's explicit empty parameter array remain present in every
+required position. The addresses and signatures come from public contract
+`5db631a34c9d4f65a535fad61b6f76af39fb56f6`.
+
+An object reply retains the existing native `Module`, its original read/write
+codec, selected scalar ring, complete receiver and request. Both finite and
+infinite images are owned native data; no finite enumeration is required for
+these object actions. Existing native module consumers can reuse the result on
+the same connection. A restricted module keeps its original scalar-action
+callback and actual base map rather than substituting its native parent's ring.
+
+A map consumes the actual original callable with both source-category endpoints
+and both returned image objects. The retained images must have the same selected
+functor, ordered parameters and original receivers as this request. The supplied
+callable performs the entire action through the existing Sage matrix, native
+callable or complete graph reader. Sage's `coerce_map_from` supplies the native
+scalar identity retained by fibre inclusion. Outputs pass through the existing
+target-module codec. No matrix is fitted to samples and no source map is replaced
+by a declaration recipe. Whole and generalized replies retain their exact
+supplied domains and image targets through the existing `Callable`/`Invocation`
+records. Public `valueData` wrappers preserve those same interfaces and owners.
+
+The new map registration requires actual returned image data. Older explicitly
+supported symbolic carrier maps remain readable when supplied as nested data to
+existing operations. This compatibility reader does not replace the actual
+images required at the new map boundary. Foreign or expired native tokens keep
+the existing session failure behavior. Other native modules, unsupported
+callables and portable image representations without an implemented reader
+remain implementation limits.
+
+The leaf-owned `diagnostics/module_functor_actions` specimen supplied prior art
+for the public requests and ownership discipline. This addition reuses the
+extension backend's existing unbounded native readers instead of installing a
+second native process. No kernel, acceptance test or downstream report was read.
+The standalone `module_functor_smoke.py` checks public framing, complete selected
+data, returned-data reuse and ownership only; it asserts no computed arithmetic
+answer, equality truth or functor law.
 
 ## Ordinary underlying-ring object action
 
@@ -669,6 +715,22 @@ The completion protocol checks can also be run directly:
 python3 completion_smoke.py --contract /absolute/path/to/public-contract \
   --engine /absolute/path/to/sage/python
 ```
+
+The module fibre-inclusion and underlying actions have a focused check:
+
+```sh
+python3 module_functor_smoke.py --contract /absolute/path/to/public-contract \
+  --engine /absolute/path/to/sage/python
+```
+
+The recorded run completed 122 requests on the supplying connection and three
+closed-owner controls. It covers finite portable modules and complete source
+graphs, infinite rational modules, zero-dimensional vectors, owned coefficient
+rings, returned kernel inclusions, scalar restrictions, whole and generalized
+maps, wrapped image interfaces, previous nested symbolic carrier-map readers,
+and malformed selection/endpoint controls. Existing generic and additive
+protocol checks also completed 36 and 66 requests, respectively, with one
+additional additive closed-owner control. These are protocol findings only.
 
 The ordinary underlying-ring object action has a focused public-port check:
 

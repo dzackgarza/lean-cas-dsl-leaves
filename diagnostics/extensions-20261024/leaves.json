@@ -10,6 +10,26 @@
   ],
   "registrations": [
     {
+      "operation": "fun.modules.fibre_inclusion",
+      "input": "fun.modules.fibre_inclusion#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.modules.fibre_inclusion#map",
+      "input": "fun.modules.fibre_inclusion#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.modules.underlying",
+      "input": "fun.modules.underlying#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.modules.underlying#map",
+      "input": "fun.modules.underlying#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
       "operation": "fun.commutative_rings.ring",
       "input": "cat.commutative_rings",
       "backend": "independent-extensions-sage"

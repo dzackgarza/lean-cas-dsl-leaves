@@ -22,6 +22,7 @@ from native_polynomial import build as polynomial_action
 from generic_interfaces import GenericInterfaces
 from additive_interfaces import AdditiveInterfaces
 from power_interfaces import PowerObjectInterfaces
+from module_functor_interfaces import ModuleFunctorInterfaces, ModuleImage
 
 
 @dataclass(frozen=True)
@@ -94,7 +95,7 @@ class RestrictedModule(Module):
         return self.original.scale(native_scalar, value)
 
 
-class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfaces, Engine):
+class ExtensionEngine(ModuleFunctorInterfaces, PowerObjectInterfaces, AdditiveInterfaces, GenericInterfaces, Engine):
     modular_ids = {"obj.sets.integers_mod", "obj.rings.integers_mod", "obj.commutative_rings.integers_mod"}
     quotient_ids = {"obj.sets.cyclic_quotient", "obj.groups.cyclic_quotient"}
     cyclic_ids = {"obj.groups.cyclic"}
@@ -103,7 +104,8 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
                          "fun.core_sets.two_subsets", "meth.two_subsets", "meth.cardinality",
                          "fun.modules.reindex", "lim.sets.product", "fun.arrows_modules.kernel",
                          "meth.kernel", "meth.arrow_ker", "fun.additive_groups.additive_monoid",
-                         "fun.commutative_rings.ring"}
+                         "fun.commutative_rings.ring", "fun.modules.fibre_inclusion",
+                         "fun.modules.underlying"}
 
     def ring(self, selected):
         if self.tag(selected) in self.modular_ids:
@@ -581,6 +583,8 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
                               "coefficient": coefficient})
 
     def module_scalar_ring(self, actual):
+        if isinstance(actual, ModuleImage):
+            return actual.scalar_ring
         if isinstance(actual, RestrictedModule):
             return self.ring(actual.source_ring)
         if isinstance(actual, RegularModule):
@@ -1137,6 +1141,8 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
         return super().equal(left, right, selected)
 
     def object_application(self, operation, packet):
+        if operation in self.module_functors:
+            return self.module_functor_object(operation, packet)
         original_request = packet
         method_parameters = None
         method_functors = {"meth.cardinality": "fun.sets.cardinality",
