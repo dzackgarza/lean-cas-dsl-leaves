@@ -611,5 +611,38 @@
       },
       "boundary": "Public framing, exact endpoint retention, successive consumption and ownership only. Boolean observation shape is checked without asserting its value. No mathematical correctness or acceptance claim."
     }
+  },
+  "ordinaryRingObjectAction20261029": {
+    "baseLeafRevision": "1fc1ee8b438aa6f1c78f21e99359c0408f8233e7",
+    "publicContractPublication": "fcefc8ba8296bd4d771cabd8b805c9061ada7513",
+    "publicContractFiles": {
+      "CasContract/Port.lean": "4082a8525f92ad945accd37935add2c31e8fda3e85d52328eb4b9a7b1339f777",
+      "python/cas_port.py": "1a061bfbc3dc40dadc157deaeb11dbd838d7f2710e53f1fe8f369bd60d43e6f5",
+      "api/manifest.md": "18a61df15642a9963c643df784352de91e2809cabdb1ef6d11d2761acdf1177f",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/declared-ports.json": "f3a17fd1d2fa98d72513fbe9ac333834f64b6b160a9ccd5206b97a5991802b19"
+    },
+    "registration": {
+      "operation": "fun.commutative_rings.ring",
+      "input": "cat.commutative_rings"
+    },
+    "scope": "The ordinary underlying-ring object action reuses the existing Sage native ring readers. Its owned image retains the same native parent, complete supplied receiver and original request; existing ring/scalar helpers consume it. No new native algorithm, mathematics, Lean code, map registration or contract change.",
+    "inputBoundary": "Only this leaf repository, its applicable instructions, the specified published public contract and declaration metadata were inspected. The supplied installed engine executable was used directly. No kernel implementation, mathematical proof source, acceptance assertion/result, other workspace report or another agent's history was inspected.",
+    "engineVersion": "Sage/passagemath 10.8.13",
+    "engineeringChecks": {
+      "script": "ring_image_smoke.py",
+      "objectRepresentations": 8,
+      "primaryConnectionRequests": 48,
+      "foreignOwnerRequests": 2,
+      "result": "completed",
+      "scope": "Published object/source-category address presence, request framing, actual owned ring/callable/scalar consumption, wrappers, selected presentation mismatch and closed-session ownership. No computed mathematical answer or law is asserted; no mathematical acceptance claim."
+    },
+    "publicAdmissionSnapshotGap": {
+      "missingOperation": "fun.commutative_rings.ring#map",
+      "missingInput": "fun.commutative_rings.ring#input",
+      "description": "The published Port, Python helper and wire guide describe registered functor map framing, but api/declared-ports.json omits this operation/input pair. api/manifest.md says the address rules do not substitute for actual admission inventories. The ordinary object operation and cat.commutative_rings input are present.",
+      "boundedResponse": "Register the ordinary object action only. Defer map registration until the contract owner publishes a coherent admission inventory; do not infer a downstream admission result."
+    },
+    "implementationLimits": "Only the existing native ring readers are supported. Arbitrary commutative-ring representations and the ordinary map port remain outside this addition."
   }
 }

@@ -10,6 +10,11 @@
   ],
   "registrations": [
     {
+      "operation": "fun.commutative_rings.ring",
+      "input": "cat.commutative_rings",
+      "backend": "independent-extensions-sage"
+    },
+    {
       "operation": "op.rings.add",
       "input": "cat.rings",
       "backend": "independent-extensions-sage"

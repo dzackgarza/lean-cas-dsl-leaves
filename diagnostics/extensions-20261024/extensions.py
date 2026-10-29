@@ -14,7 +14,7 @@ from cas_port import (admitted_point, cartesian_map, category_parameter, constru
                       construction_invocation, core_iso, core_object,
                       functor_parameter, map_data, morphism_endpoint, object_field,
                       presentation_invocation, structured_projection_action, typed_map)
-from engine import Engine, Form, Module, Scalar, Q, Z
+from engine import Engine, Form, Module, RingImage, Scalar, Q, Z
 from wire import (Callable, NativeComposition, NativeIdentity, NativeMediator,
                   Unsupported, fields, framed_callable, inventory, key, node, public_data, same)
 from native_linear import LinearAction, degree, identity, zero
@@ -102,7 +102,8 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
     object_operations = {"con.automorphisms", "fun.core_sets.automorphisms", "fun.core_groups.automorphisms",
                          "fun.core_sets.two_subsets", "meth.two_subsets", "meth.cardinality",
                          "fun.modules.reindex", "lim.sets.product", "fun.arrows_modules.kernel",
-                         "meth.kernel", "meth.arrow_ker", "fun.additive_groups.additive_monoid"}
+                         "meth.kernel", "meth.arrow_ker", "fun.additive_groups.additive_monoid",
+                         "fun.commutative_rings.ring"}
 
     def ring(self, selected):
         if self.tag(selected) in self.modular_ids:
@@ -965,6 +966,8 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
         return super().point(data, target, domain)
 
     def point_application(self, operation, packet):
+        if operation == "fun.commutative_rings.ring":
+            raise ValueError("the underlying-ring object action requires its complete receiver request")
         from cas_port import point_invocation
         _, parameters, arrow, _, source, target, _ = point_invocation(packet, operation)
         descriptor = self.declaration_data(arrow)
@@ -1071,6 +1074,14 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
         return super().equal(left, right, selected)
 
     def object_application(self, operation, packet):
+        if operation == "fun.commutative_rings.ring":
+            _, parameters, receiver = construction_invocation(packet, operation)
+            if parameters:
+                raise ValueError("the underlying-ring functor has no explicit declaration parameters")
+            # Forgetting the selected commutative structure keeps the same Sage
+            # ring. Retain the actual receiver and every owned dependency; do
+            # not replace them with a named ring or an unevaluated action recipe.
+            return self.session.keep(RingImage(self.ring(receiver), receiver, packet))
         if operation == self.additive_functor:
             _, parameters, receiver = construction_invocation(packet, operation)
             return self.additive_monoid_object(parameters, receiver)

@@ -5,7 +5,7 @@ the public contract, declaration exports and authorized interface documentation
 recorded in `public-inputs.json`. No kernel implementation, acceptance assertion,
 expected-answer fixture or downstream execution report was consulted. Diagnostic
 work stayed in this subtree. It ships no Lean and changes no mathematical or
-protocol declaration. The manifest contains 66 public operation/input pairs.
+protocol declaration. The manifest contains 67 public operation/input pairs.
 
 Sage 10.8 supplies exact quotient-ring, modular, polynomial, matrix, module and lazy
 power-series computations. Sage's permutation groups and native GAP supply the
@@ -21,6 +21,7 @@ does not claim an implementation for every object of that category.
 
 | Family and public addresses | Supported native computation |
 | --- | --- |
+| `fun.commutative_rings.ring` on `cat.commutative_rings` | Ordinary object action on the existing integer, rational, modular and rational dual-number native readers. The owned result retains the actual Sage ring, full source receiver and complete request; existing ring operations consume that image directly. |
 | `op.rings.add`, `mul`, `pow`, `neg`; dual-number coefficient maps | Integer, rational, modular, and the two published rational dual-number rings, including the explicitly supported carrier views. |
 | `cmp.rational_dual.translation` | The actual Sage homomorphisms between the selected dual-number presentations in both directions. |
 | `cmp.sets.fin_reversal`, `mor.sets.fin_rev`; finite order `le`, `lt` | The actual selected dimension and order, including the reversal family at dimension zero. |
@@ -43,6 +44,26 @@ does not claim an implementation for every object of that category.
 | `mor.sets.direct_image` | The image of the actual supplied finite subset under the complete selected function, including finite subsets of supported infinite carriers. Whole power-object maps retain that function. Complete finite power domains use Sage's full subset inventory. |
 | `obj.sets.group_morphisms#application`, `obj.sets.module_morphisms#application` | Application of the original complete admitted function at the supplied group pair or scalar ring/module pair. The inclusion keeps that same function. Generalized admitted families keep their original domain. No group or module law is inferred or manufactured. |
 | `mor.sets.equality` | Exact supported scalar, product, module and finite-object points; complete finite-domain maps, including native finite automorphism carriers; complete native rational linear maps; and native polynomial scalar actions as detailed below. |
+
+## Ordinary underlying-ring object action
+
+The object action reads the public complete receiver request with
+`construction_invocation`. This functor has no explicit declaration parameters.
+It retains the same native Sage ring returned by the existing `ring` reader,
+together with the complete supplied receiver and request, in one owned
+`RingImage`. The existing scalar and ring-operation readers consume the result
+on that connection. All nested input tokens still require their original live
+owner; no source object is replaced with a familiar named ring or an action recipe.
+
+This addition registers only `fun.commutative_rings.ring` on the already published
+source-category input `cat.commutative_rings`. At public contract publication
+`fcefc8ba8296bd4d771cabd8b805c9061ada7513`, the guide documents a map operation
+`fun.commutative_rings.ring#map` and complete-request input
+`fun.commutative_rings.ring#input`, but `api/declared-ports.json` omits both addresses.
+`api/manifest.md` explicitly requires the concrete exported inventories rather
+than inferring admission from the address rules. That publication gap is recorded
+in `public-inputs.json`; no map registration or contract edit is included here.
+An `apply` packet at the unsuffixed object operation is rejected as malformed.
 
 ## Whole-map equality
 
@@ -528,6 +549,21 @@ The completion protocol checks can also be run directly:
 python3 completion_smoke.py --contract /absolute/path/to/public-contract \
   --engine /absolute/path/to/sage/python
 ```
+
+The ordinary underlying-ring object action has a focused public-port check:
+
+```sh
+python3 ring_image_smoke.py --contract /absolute/path/to/public-contract \
+  --engine /absolute/path/to/sage/python
+```
+
+The recorded run completed 48 requests on the supplying connection and two
+foreign-owner controls after that connection closed. Eight object representations
+cover integers, rationals, three selected moduli, a complete finite-data wrapper
+and both dual-number presentations. The checks exercise actual image, callable
+and scalar reuse, public wrapper reuse, malformed requests, unsupported native
+data and distinct retained presentations. They assert response shapes and owner
+handling only, with no computed mathematical answer or acceptance claim.
 
 The actual-image lift protocol checks use the same public helper and engine:
 

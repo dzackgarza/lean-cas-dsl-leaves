@@ -35,6 +35,15 @@ class Scalar:
 
 
 @dataclass(frozen=True)
+class RingImage:
+    """The actual native ring, complete source data and object-action request."""
+
+    native: object
+    source: object
+    request: object
+
+
+@dataclass(frozen=True)
 class Module:
     """Native module structure, with its complete selected point representation."""
 
@@ -119,6 +128,11 @@ class Engine(EndpointInterfaces):
         tag = self.tag(selected)
         if tag == "valueData":
             return self.ring(fields(selected, tag, 1)[0])
+        if tag == "opaqueData":
+            actual = self.session.get(selected)
+            if isinstance(actual, RingImage):
+                return actual.native
+            raise Unsupported("the owned object is not a retained native ring image")
         if tag == "finiteData":
             original, _ = fields(selected, tag, 2)
             inventory(selected)
