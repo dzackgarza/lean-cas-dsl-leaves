@@ -12,7 +12,7 @@ from sage.libs.gap.libgap import libgap
 
 from cas_port import (admitted_point, cartesian_map, category_parameter, constructed_category,
                       construction_invocation, core_iso, core_object,
-                      functor_parameter, map_data, morphism_endpoint, object_field,
+                      functor_parameter, map_data, method_invocation, morphism_endpoint, object_field,
                       presentation_invocation, structured_projection_action, typed_map)
 from engine import Engine, Form, Module, RingImage, Scalar, Q, Z
 from wire import (Callable, NativeComposition, NativeIdentity, NativeMediator,
@@ -354,7 +354,8 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
                 raise Unsupported("a declared endpoint needs its supplied finiteData inventory for a graph")
             return self.finite_object(selected).points
         return framed_callable(data, source, target, self.session, self.interpret_arrow,
-                               supplied_inventory, self.product_factors)
+                               supplied_inventory, self.product_factors,
+                               lambda value, selected: self.point(value, selected, None))
 
     def category_descriptor(self, descriptor):
         """Check public descriptor framing without erasing a selected category.
@@ -418,6 +419,8 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
         return AutomorphismGroup(category, receiver, points, native)
 
     def aut_context(self, selected):
+        if self.tag(selected) == "valueData":
+            return self.aut_context(fields(selected, "valueData", 1)[0])
         if self.tag(selected) == "opaqueData":
             value = self.session.get(selected)
             if isinstance(value, AutomorphismGroup):
@@ -443,21 +446,36 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
                 return self.automorphism_group(category, core_object(receiver))
         raise Unsupported("the actual selected automorphism group is not retained")
 
+    def automorphism_image(self, selected, category, receiver):
+        """Read the supplied image's retained context without replacing it."""
+        actual = self.aut_context(selected)
+        same(actual.category, category, "construction image's complete category selection")
+        same(actual.receiver, receiver, "construction image's complete original receiver")
+        return actual
+
     def point_index(self, point, points, selected):
         try:
             modulus, _ = self.cyclic_context(selected)
         except Unsupported:
             lookup = {key(value): i for i, value in enumerate(points)}
-            if key(point) not in lookup:
+            actual = point
+            while key(actual) not in lookup and self.tag(actual) == "valueData":
+                actual, = fields(actual, "valueData", 1)
+            if key(actual) not in lookup:
+                actual = self.point(point, selected, None)
+            if key(actual) not in lookup:
                 raise ValueError("the actual finite point is outside the supplied inventory")
-            return lookup[key(point)]
+            return lookup[key(actual)]
         return int(self.cyclic_point(point, selected))
 
-    def make_automorphism(self, category, receiver, forward, backward):
-        context = self.automorphism_group(category, receiver)
+    def make_automorphism(self, category, receiver, forward, backward, context=None):
+        context = self.automorphism_group(category, receiver) if context is None else context
+        same(context.category, category, "automorphism native context's selected category")
+        same(context.receiver, receiver, "automorphism native context's selected receiver")
         points = context.points
-        forward_images = [self.point_index(forward(point), points, receiver) for point in points]
-        backward_images = [self.point_index(backward(point), points, receiver) for point in points]
+        read = lambda point, selected: self.point(point, selected, None)
+        forward_images = [self.point_index(forward.at_point(point, read), points, receiver) for point in points]
+        backward_images = [self.point_index(backward.at_point(point, read), points, receiver) for point in points]
         if self.category(category) == "cat.sets":
             native_forward = context.native([i + 1 for i in forward_images])
             native_backward = context.native([i + 1 for i in backward_images])
@@ -498,6 +516,12 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
         tag = self.tag(data)
         if tag == "valueData":
             return self.core_comparison(fields(data, tag, 1)[0])
+        if tag == "typedMap":
+            source, target, original = typed_map(data)
+            actual_source, actual_target, forward, backward = self.core_comparison(original)
+            same(core_object(source), actual_source, "core comparison's complete typed source")
+            same(core_object(target), actual_target, "core comparison's complete typed target")
+            return actual_source, actual_target, forward, backward
         if tag == "map":
             action, original = fields(data, tag, 2)
             if self.tag(action) != "constructorMap":
@@ -716,12 +740,25 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
                     fields(action, atag, 0)
                     category = node("category", "cat.sets" if atag == "fun.core_sets.automorphisms" else "cat.groups", [])
                 self.category(category)
+                if atag == "con.automorphisms":
+                    framed = original
+                    while self.tag(framed) == "valueData":
+                        framed, = fields(framed, "valueData", 1)
+                    typed_map(framed)
                 old_source, old_target, forward, backward = self.core_comparison(original)
+                source_context = self.automorphism_image(source, category, old_source)
+                target_context = self.automorphism_image(target, category, old_target)
                 def conjugate(data):
                     automorphism = self.automorphism(data, category, old_source)
-                    forward_image = Callable(old_target, old_target, lambda point: forward(automorphism.forward(backward(point))))
-                    backward_image = Callable(old_target, old_target, lambda point: forward(automorphism.backward(backward(point))))
-                    return self.session.keep(self.make_automorphism(category, old_target, forward_image, backward_image))
+                    f = self.postcompose(self.postcompose(backward, automorphism.forward), forward)
+                    g = self.postcompose(self.postcompose(backward, automorphism.backward), forward)
+                    context = (action, original, source, target, source_context, target_context, automorphism, f, g)
+                    forward_image = Callable(old_target, old_target, lambda point, retained=context: retained[-2](point),
+                                             f.native, point_action=lambda point, read, retained=context: retained[-2].at_point(point, read))
+                    backward_image = Callable(old_target, old_target, lambda point, retained=context: retained[-1](point),
+                                              g.native, point_action=lambda point, read, retained=context: retained[-1].at_point(point, read))
+                    return self.session.keep(self.make_automorphism(category, old_target, forward_image,
+                                                                    backward_image, target_context))
                 return Callable(source, target, conjugate)
             if atag == "fun.modules.reindex":
                 parameters = fields(action, atag, 1)
@@ -815,19 +852,29 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
             receiver, data = fields(arrow, tag, 2)
             category = node("category", "cat.sets" if tag.startswith("mor.sets") else "cat.groups", [])
             actual = self.automorphism(data, category, receiver)
-            return Callable(source, target, actual.backward if tag.endswith("_backward") else actual.forward)
+            selected = actual.backward if tag.endswith("_backward") else actual.forward
+            return Callable(source, target, selected, point_action=selected.at_point)
         if tag in {"mor.sets.automorphism_evaluation", "mor.sets.automorphism_inverse_evaluation"}:
             category, functor, receiver = fields(arrow, tag, 3)
             category_id = self.category(category)
             functor_id, parameters = functor_parameter(functor)
             if parameters or (category_id, functor_id) not in {("cat.sets", "fun.sets.identity")}:
                 raise Unsupported("this selected set-valued functor has no implemented action here")
+            def evaluate_point(pair, read):
+                pair = self.product_point(pair, source, read)
+                datum = pair[0]
+                inspected = datum
+                while self.tag(inspected) == "valueData":
+                    inspected, = fields(inspected, "valueData", 1)
+                if self.tag(inspected) in {"element", "point", "compose", "typedMap"}:
+                    selected, _ = self.product_factors(source)
+                    datum = read(datum, selected)
+                actual = self.automorphism(datum, category, receiver)
+                selected = actual.backward if tag.endswith("inverse_evaluation") else actual.forward
+                return selected.at_point(pair[1], read)
             def evaluate(pair):
-                if not isinstance(pair, list) or len(pair) != 2:
-                    raise ValueError("automorphism evaluation requires the actual automorphism and point")
-                actual = self.automorphism(pair[0], category, receiver)
-                return actual.backward(pair[1]) if tag.endswith("inverse_evaluation") else actual.forward(pair[1])
-            return Callable(source, target, evaluate)
+                return evaluate_point(pair, lambda point, selected: self.point(point, selected, None))
+            return Callable(source, target, evaluate, point_action=evaluate_point)
         if tag == "mor.commutative_rings.integer_coefficients":
             coefficient, = fields(arrow, tag, 1)
             selected_parent = self.ring(coefficient)
@@ -919,6 +966,8 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
         return super().interpret_arrow(arrow, source, target)
 
     def finite_ordinal(self, value, dimension):
+        if self.tag(value) == "valueData":
+            return self.finite_ordinal(fields(value, "valueData", 1)[0], dimension)
         if self.tag(value) == "element":
             _, expression = fields(value, "element", 2)
             value, = fields(expression, "numeral", 1)
@@ -951,6 +1000,7 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
     def point(self, data, target, domain):
         if self.tag(data) == "element":
             selected, expression = fields(data, "element", 2)
+            self.check_element_target(target, selected)
             if self.tag(expression) == "numeral":
                 original = self.underlying_receiver(selected)
                 if self.tag(original) in {"obj.sets.fin", "obj.finite_sets.fin",
@@ -993,11 +1043,13 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
             action, original = fields(descriptor, "map", 2)
             same(fields(action, "con.automorphisms", 1), parameters,
                  "the construction map's selected category parameters")
+            framed = original
+            while self.tag(framed) == "valueData":
+                framed, = fields(framed, "valueData", 1)
+            typed_map(framed)
             old_source, old_target, _, _ = self.core_comparison(original)
-            self.same_endpoint(source, node("functorAction", action, node("coreObject", old_source)),
-                               descriptor, "source", "the construction map's full source image")
-            self.same_endpoint(target, node("functorAction", action, node("coreObject", old_target)),
-                               descriptor, "target", "the construction map's full target image")
+            self.automorphism_image(source, parameters[0], old_source)
+            self.automorphism_image(target, parameters[0], old_target)
         return super().point_application(operation, packet)
 
     def equal(self, left, right, selected):
@@ -1041,7 +1093,8 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
             points = self.finite_object(domain).points
             # Every actual domain point is inspected. An infinite domain raises
             # Unsupported above; no finite sample is called whole-map equality.
-            return all(self.equal(f(point), g(point), codomain) for point in points)
+            read = lambda point, selected: self.point(point, selected, None)
+            return all(self.equal(f.at_point(point, read), g.at_point(point, read), codomain) for point in points)
         if tag == "obj.sets.truth_values":
             if type(left) is not bool or type(right) is not bool:
                 raise ValueError("a truth-valued point requires a Boolean")
@@ -1077,12 +1130,31 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
         else:
             a = self.automorphism(left, context.category, context.receiver)
             b = self.automorphism(right, context.category, context.receiver)
-            return all(self.equal(a.forward(point), b.forward(point), context.receiver)
-                       and self.equal(a.backward(point), b.backward(point), context.receiver)
+            read = lambda point, selected: self.point(point, selected, None)
+            return all(self.equal(a.forward.at_point(point, read), b.forward.at_point(point, read), context.receiver)
+                       and self.equal(a.backward.at_point(point, read), b.backward.at_point(point, read), context.receiver)
                        for point in context.points)
         return super().equal(left, right, selected)
 
     def object_application(self, operation, packet):
+        original_request = packet
+        method_parameters = None
+        method_functors = {"meth.cardinality": "fun.sets.cardinality",
+                           "meth.kernel": "fun.arrows_modules.kernel",
+                           "meth.arrow_ker": "fun.arrows_modules.kernel"}
+        if operation in method_functors:
+            if (self.tag(packet) == operation or isinstance(packet, dict) and "receiver" in packet
+                    or isinstance(self.tag(packet), str) and self.tag(packet).startswith("meth.")):
+                functor = method_functors[operation]
+                _, actions, packet = method_invocation(packet, operation, functor)
+                if len(actions) != 1:
+                    raise ValueError("an owner-category method requires no residual action descriptors")
+                count = 0 if operation == "meth.cardinality" else 1
+                method_parameters = fields(actions[0], functor, count)
+            elif operation != "meth.cardinality":
+                # The published kernel functor has an explicit scalar argument;
+                # the zero-parameter legacy receiver exception cannot supply it.
+                raise ValueError("a kernel method requires its complete selected functor request")
         if operation == "fun.commutative_rings.ring":
             _, parameters, receiver = construction_invocation(packet, operation)
             if parameters:
@@ -1102,6 +1174,9 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
                     raise Unsupported("the native kernel implementation requires the selected rational scalar ring")
             else:
                 arrow = packet
+                parameters = method_parameters
+                if self.ring(parameters[0]) is not QQ:
+                    raise Unsupported("the native kernel implementation requires the selected rational scalar ring")
             source, target, defining_map = self.arrow_record(arrow)
             actual_source, actual_target = self.module(source), self.module(target)
             callable_data = self.function(defining_map, source, target)
@@ -1118,7 +1193,8 @@ class ExtensionEngine(PowerObjectInterfaces, AdditiveInterfaces, GenericInterfac
             kernel_module = Module(native_kernel, read_kernel, write_kernel)
             kernel_object = self.session.keep(kernel_module)
             inclusion = LinearAction(identity_matrix(QQ, degree(kernel_module)), kernel_module,
-                                     actual_source, {"kernelOf": arrow, "parameters": parameters})
+                                     actual_source, {"kernelOf": arrow, "parameters": parameters,
+                                                     "request": original_request})
             inclusion_data = self.session.keep(Callable(kernel_object, source, inclusion, inclusion))
             return node("arrow", kernel_object, source, map_data(kernel_object, source, inclusion_data))
         if operation == "lim.sets.product":

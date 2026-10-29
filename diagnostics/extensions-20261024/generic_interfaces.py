@@ -272,7 +272,8 @@ class GenericInterfaces:
                                                                 forward, backward))
             def unit():
                 actual = Callable(group.receiver, group.receiver, lambda point: point,
-                                  NativeIdentity(group.receiver, group.receiver))
+                                  NativeIdentity(group.receiver, group.receiver),
+                                  point_action=lambda point, read: point)
                 return self.session.keep(self.make_automorphism(group.category, group.receiver,
                                                                 actual, actual))
             return multiply, unit, "native_automorphism_composition"

@@ -130,6 +130,61 @@ CAS_SAGE_PYTHON=/absolute/path/to/sage/python \
 python3 composability_smoke.py
 ```
 
+### Public-envelope inventory and consumer follow-up
+
+`envelope-coverage.json` inventories all 67 unchanged operations in nine request
+frame groups and fourteen envelope families. Its per-constructor source occurrences
+are static coverage clues, separate from executed checks. The consumed published
+snapshot omits 25 operation addresses and 19 input addresses from this diagnostic's
+manifest; their exact lists are recorded. Several belong to the specimen's earlier
+additional declaration exports. The manifest is unchanged, and the inventory makes
+no inference about current admission. In particular, this snapshot supplies no
+`meth.two_subsets` entry or linked-functor metadata, so its historical reader is
+not expanded from a guessed binding.
+
+The published links for `meth.cardinality`, `meth.kernel` and `meth.arrow_ker`
+are present. Their complete method requests now use `method_invocation`, retain
+the final selected functor descriptor and consume its explicit parameters. These
+owner-category registrations require an empty residual route. The kernel methods
+require their supplied scalar ring; they cannot infer it from a raw receiver.
+Cardinality retains the zero-parameter legacy receiver alternative.
+
+Finite graph codomain checks read actual returned `valueData` and complete point
+expressions in the declared target's codec without replacing the retained graph
+outputs. Finite-map observations and native automorphism consumers use the actual
+callable's point reader. Native finite indexing checks an exact retained key first,
+then outer envelopes or the actual receiver's existing point decoder. Returned
+automorphism directions and evaluation preserve this reader at both input and
+output boundaries. Their native permutation/GAP algorithms are unchanged.
+
+Construction maps consume the complete original typed Core arrow and both
+directions, including when nested inside composition. They read the supplied
+construction image's retained category and receiver, and use the actual target
+image's native group. Returned maps keep that image data, selected action and
+original comparison. A symbolic image recipe does not replace an owned image.
+Complete cone readers also consume repeated outer `valueData` envelopes.
+
+`envelope_smoke.py` adds 64 requests and three closed-session owner controls.
+It exercises actual returned graph outputs, finite observers, returned and
+composed automorphisms, typed Core maps using owned images, complete method
+requests and the previously unexercised `constructionApex`, `arrowHom`,
+`subobjectInclusion` and `subobjectApex` wrappers. Malformed constrained-point
+framing is checked; a positive instance remains pending an actual published or
+supplied constructor/type selection. No constructor is invented for coverage.
+
+The 103-request composability, 103-request ring, 99-request completion and
+74-request original protocol checks were rerun for these shared readers, with
+their existing ownership controls. The original smoke's two construction-map
+examples now retain the published typed Core source/target fields. All checks
+concern framing, selected data, response shape and ownership; no arithmetic or
+equality truth, cardinality answer, law or mathematical acceptance is asserted.
+
+```sh
+CAS_LEAF_CONTRACT_PATH=/absolute/path/to/public-contract \
+CAS_SAGE_PYTHON=/absolute/path/to/sage/python \
+python3 envelope_smoke.py
+```
+
 ## Whole-map equality
 
 For `obj.sets.maps(domain, codomain)`, finite-domain equality evaluates both actual

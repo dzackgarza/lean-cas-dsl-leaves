@@ -730,5 +730,56 @@
     },
     "publicInterfaceGap": null,
     "implementationLimits": "The existing native representations and README limits remain. This is bounded conformance of the supplied cases, not an implementation claim for all category objects. Ordinary ring map registration remains outside this change."
+  },
+  "envelopeConsumerReview20261029": {
+    "baseLeafRevision": "0480ea755d82e16cc06ad5d148be89c524c5f073",
+    "baseLeafTree": "5a1e915be13a57a2f173af09e30c1089eac21fb0",
+    "publicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6",
+    "publicContractTree": "968ea95a5f8e7f76de95461999e8bafee74f2d39",
+    "publicContractFiles": {
+      "CasContract/Port.lean": "4082a8525f92ad945accd37935add2c31e8fda3e85d52328eb4b9a7b1339f777",
+      "python/cas_port.py": "1a061bfbc3dc40dadc157deaeb11dbd838d7f2710e53f1fe8f369bd60d43e6f5",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/declared-ports.json": "642b7290d5441d7409fa6992732a97166907de8e69eafeb9e6df468aa7d73c4c"
+    },
+    "unchangedManifestSha256": "ac9ad362b840702b96db513f00195ccc4e53ad30f2c2495a1d0b30e6f4985d33",
+    "unchangedRegistrationPairs": 67,
+    "coverageInventory": "envelope-coverage.json",
+    "coverageInventoryScope": "All unchanged registrations in nine request-frame groups and fourteen envelope families. Static source occurrence is distinguished from executed protocol coverage; it is not mathematical or admission evidence.",
+    "publicSnapshotGaps": {
+      "missingOperationAddresses": 25,
+      "missingInputAddresses": 19,
+      "exactLists": "envelope-coverage.json:publicSnapshotAddressGaps",
+      "methodBoundary": "meth.two_subsets and its linked-functor declaration are absent from the current public snapshot. The existing historical reader is unchanged; no complete-method binding is guessed."
+    },
+    "readerCorrections": [
+      "Use actual callable point readers in existing finite-map/automorphism consumers; preserve original product components and returned direction readers.",
+      "Check complete graph outputs in the actual target codec while retaining the exact supplied output packets. Native finite indexing preserves exact keys before wrapper removal or point decoding.",
+      "Consume complete typed Core comparisons and actual owned construction images, check exact image category/receiver data, and retain the supplied target native context and original selected action/comparison.",
+      "Read complete owner-category requests for the three publicly linked cardinality/kernel methods, retaining explicit parameters and rejecting missing parameters or residual source actions.",
+      "Validate nested finite element targets and consume repeated outer valueData envelopes on complete cone receivers."
+    ],
+    "inputBoundary": "Only this leaf repository and its own engineering material, applicable instructions, and the published public contract documentation/reference helper/generated inventory were inspected. No kernel, external acceptance file/result, downstream runtime report, mathematical proof source or another agent's history was inspected. No Lean/compiler or remote publication was run.",
+    "engineVersion": "Sage/passagemath 10.8.13",
+    "engineeringChecks": {
+      "script": "envelope_smoke.py",
+      "primaryConnectionRequests": 64,
+      "foreignOwnerRequests": 3,
+      "result": "completed",
+      "regressions": [
+        {"script": "composability_smoke.py", "primaryConnectionRequests": 103, "foreignOwnerRequests": 2, "result": "completed"},
+        {"script": "ring_protocol_smoke.py", "primaryConnectionRequests": 103, "foreignOwnerRequests": 2, "result": "completed"},
+        {"script": "completion_smoke.py", "primaryConnectionRequests": 99, "foreignOwnerRequests": 1, "result": "completed"},
+        {"script": "smoke.py", "primaryConnectionRequests": 74, "result": "completed; two older construction-map inputs now retain the published typed Core frame"}
+      ],
+      "pythonSourcesAstParsed": 7,
+      "boundary": "Response shapes/statuses, actual selected records and fields, exact point framing, declared parameter consumption and supplier ownership only. No arithmetic answer, equality truth, cardinality answer, equation, law or mathematical acceptance outcome is asserted."
+    },
+    "independentSourceReview": "Bounded static review completed; final focused reinspection confirmed both the nested Core-map framing guard and exact-first Aut output indexing fixes. No remaining concrete finding was identified in the reviewed changes; the reviewer executed no code.",
+    "remainingCoverageLimits": [
+      "No positive constrainedPoint instance is supplied by the permitted concrete constructor/type data. Only malformed framing is exercised.",
+      "Existing native representations and README limitations remain; this inventory does not claim every envelope combination or every object in a registered category is implemented.",
+      "Registrations and the public contract remain unchanged; no algorithms, mathematical declarations or new semantic rows were added."
+    ]
   }
 }

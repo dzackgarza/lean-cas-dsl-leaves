@@ -1,0 +1,651 @@
+{
+  "baseLeafRevision": "0480ea755d82e16cc06ad5d148be89c524c5f073",
+  "publicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6",
+  "publicContractTree": "968ea95a5f8e7f76de95461999e8bafee74f2d39",
+  "manifest": "leaves.json",
+  "manifestSha256": "ac9ad362b840702b96db513f00195ccc4e53ad30f2c2495a1d0b30e6f4985d33",
+  "registrationPairs": 67,
+  "distinctOperations": 67,
+  "requestFrameGroups": [
+    {
+      "name": "ordinary underlying-ring object",
+      "operations": [
+        "fun.commutative_rings.ring"
+      ],
+      "publicRequestFrames": [
+        "ConstructionInvocation(method-or-operation-id, ordered parameters, receiver)"
+      ],
+      "scope": "Empty declaration parameters and actual commutative-ring receiver; no map registration."
+    },
+    {
+      "name": "owner-category methods with published links",
+      "operations": [
+        "meth.arrow_ker",
+        "meth.cardinality",
+        "meth.kernel"
+      ],
+      "publicRequestFrames": [
+        "ConstructionInvocation(method id, [complete linked functor descriptor], receiver)"
+      ],
+      "scope": "No residual action at these owner registrations. Cardinality has zero explicit parameters; both kernel methods require the explicit selected scalar ring. Only the zero-parameter cardinality reader keeps its legacy receiver alternative."
+    },
+    {
+      "name": "legacy method missing from this public declaration snapshot",
+      "operations": [
+        "meth.two_subsets"
+      ],
+      "publicRequestFrames": [
+        "historical raw receiver"
+      ],
+      "scope": "Existing source remains unchanged. The current public inventory omits this method and its linked functor metadata; no new complete method adapter is inferred."
+    },
+    {
+      "name": "existing direct object actions",
+      "operations": [
+        "con.automorphisms",
+        "fun.additive_groups.additive_monoid",
+        "fun.arrows_modules.kernel",
+        "fun.core_groups.automorphisms",
+        "fun.core_sets.automorphisms",
+        "fun.core_sets.two_subsets",
+        "fun.modules.reindex"
+      ],
+      "publicRequestFrames": [
+        "ConstructionInvocation(operation id, ordered parameters, receiver)"
+      ],
+      "scope": "Native scope remains the README scope. Existing historical unsuffixed functor-map handling is not a new map-address claim."
+    },
+    {
+      "name": "binary product construction",
+      "operations": [
+        "lim.sets.product"
+      ],
+      "publicRequestFrames": [
+        "pair(left, right)"
+      ],
+      "scope": "Returns the complete cone with its actual apex and both typed maps."
+    },
+    {
+      "name": "presentation comparisons",
+      "operations": [
+        "cmp.groups.cyclic_quotient_residue",
+        "cmp.rational_dual.translation",
+        "cmp.sets.fin_reversal"
+      ],
+      "publicRequestFrames": [
+        "presentationApply(parameters, inverse, source, target, argument)",
+        "apply(operation, parameters, arrow, domain, source, target, argument)"
+      ],
+      "scope": "The actual comparison, orientation and complete caller endpoints remain selected."
+    },
+    {
+      "name": "existing lift fields",
+      "operations": [
+        "lift.bilin_module.change_value_restriction#backward",
+        "lift.bilin_module.change_value_restriction#forward",
+        "lift.bilin_module.change_value_restriction#hom",
+        "lift.bilin_module.change_value_restriction#obj",
+        "lift.bilin_module.restrict#backward",
+        "lift.bilin_module.restrict#forward",
+        "lift.bilin_module.restrict#hom",
+        "lift.bilin_module.restrict#obj"
+      ],
+      "publicRequestFrames": [
+        "liftInput",
+        "monoLiftInput"
+      ],
+      "scope": "Complete selected parameters, action, source, base, prior outputs and admitted source/comparison image metadata."
+    },
+    {
+      "name": "existing lift factors",
+      "operations": [
+        "lift.bilin_module.change_value_restriction#factor",
+        "lift.bilin_module.restrict#factor"
+      ],
+      "publicRequestFrames": [
+        "liftFactorInput"
+      ],
+      "scope": "Both actual candidate maps and all preceding lift outputs remain retained."
+    },
+    {
+      "name": "existing callable registrations",
+      "operations": [
+        "bind.sets.power_series_sum",
+        "cell.additive_groups.carrier#component",
+        "con.automorphisms#map",
+        "fun.modules.reindex#cartesian",
+        "mor.bilin_module.degenerate_plane_cone",
+        "mor.bilin_module.degenerate_plane_map",
+        "mor.bilin_module.degenerate_plane_paired_cone",
+        "mor.bilin_module.pulled_back_backward",
+        "mor.bilin_module.pulled_back_forward",
+        "mor.commutative_rings.integer_coefficients",
+        "mor.groups.automorphism_backward",
+        "mor.groups.automorphism_forward",
+        "mor.groups.cyclic_quotient_aut_by_unit",
+        "mor.modules.rectangular_linear_map",
+        "mor.modules.row_linear_map",
+        "mor.sets.automorphism_backward",
+        "mor.sets.automorphism_evaluation",
+        "mor.sets.automorphism_forward",
+        "mor.sets.automorphism_inverse_evaluation",
+        "mor.sets.bilin_module_pairing",
+        "mor.sets.cyclic_quotient_map",
+        "mor.sets.direct_image",
+        "mor.sets.equality",
+        "mor.sets.fin_rev",
+        "mor.sets.power_series_coefficient",
+        "mor.sets.rational_dual_x_constants",
+        "mor.sets.rational_dual_y_constants",
+        "mor.sets.successor_power_series_terms",
+        "obj.sets.group_morphisms#application",
+        "obj.sets.module_morphisms#application",
+        "op.additive_monoids.add",
+        "op.groups.inverse",
+        "op.linear_orders.le",
+        "op.linear_orders.lt",
+        "op.modules.scalar_action",
+        "op.monoids.mul",
+        "op.monoids.one",
+        "op.rings.add",
+        "op.rings.mul",
+        "op.rings.neg",
+        "op.rings.pow"
+      ],
+      "publicRequestFrames": [
+        "apply(operation, parameters, arrow, domain, source, target, argument)"
+      ],
+      "scope": "Includes registered object applications, native operations, binders, the construction map, cartesian map and carrier component. Full selected parameters and actual callable/result data remain present."
+    }
+  ],
+  "publicSnapshotAddressGaps": {
+    "operations": [
+      "cmp.groups.cyclic_quotient_residue",
+      "cmp.sets.fin_reversal",
+      "fun.core_sets.two_subsets",
+      "lift.bilin_module.change_value_restriction#backward",
+      "lift.bilin_module.change_value_restriction#factor",
+      "lift.bilin_module.change_value_restriction#forward",
+      "lift.bilin_module.change_value_restriction#hom",
+      "lift.bilin_module.change_value_restriction#obj",
+      "meth.two_subsets",
+      "mor.bilin_module.degenerate_plane_cone",
+      "mor.bilin_module.degenerate_plane_map",
+      "mor.bilin_module.degenerate_plane_paired_cone",
+      "mor.bilin_module.pulled_back_backward",
+      "mor.bilin_module.pulled_back_forward",
+      "mor.groups.automorphism_backward",
+      "mor.groups.automorphism_forward",
+      "mor.groups.cyclic_quotient_aut_by_unit",
+      "mor.modules.rectangular_linear_map",
+      "mor.modules.row_linear_map",
+      "mor.sets.automorphism_backward",
+      "mor.sets.automorphism_evaluation",
+      "mor.sets.automorphism_forward",
+      "mor.sets.automorphism_inverse_evaluation",
+      "mor.sets.cyclic_quotient_map",
+      "mor.sets.successor_power_series_terms"
+    ],
+    "inputs": [
+      "cmp.groups.cyclic_quotient_residue",
+      "cmp.sets.fin_reversal",
+      "lift.bilin_module.change_value_restriction#input",
+      "mor.bilin_module.degenerate_plane_cone",
+      "mor.bilin_module.degenerate_plane_map",
+      "mor.bilin_module.degenerate_plane_paired_cone",
+      "mor.bilin_module.pulled_back_backward",
+      "mor.bilin_module.pulled_back_forward",
+      "mor.groups.automorphism_backward",
+      "mor.groups.automorphism_forward",
+      "mor.groups.cyclic_quotient_aut_by_unit",
+      "mor.modules.rectangular_linear_map",
+      "mor.modules.row_linear_map",
+      "mor.sets.automorphism_backward",
+      "mor.sets.automorphism_evaluation",
+      "mor.sets.automorphism_forward",
+      "mor.sets.automorphism_inverse_evaluation",
+      "mor.sets.cyclic_quotient_map",
+      "mor.sets.successor_power_series_terms"
+    ]
+  },
+  "envelopeFamilies": [
+    {
+      "family": "result and ownership",
+      "constructors": [
+        "valueData",
+        "opaqueData"
+      ],
+      "publicBasis": "wire-examples: Requests, replies and failures; Complete expression inputs and returned-data reuse",
+      "scope": "Nested returned data and all owned dependencies retain their original supplier.",
+      "explicitNodeOccurrences": {
+        "valueData": [
+          "additive_smoke.py",
+          "completion_smoke.py",
+          "composability_smoke.py",
+          "envelope_smoke.py",
+          "ring_image_smoke.py",
+          "ring_protocol_smoke.py"
+        ],
+        "opaqueData": [
+          "endpoint_smoke.py"
+        ]
+      }
+    },
+    {
+      "family": "callable frames",
+      "constructors": [
+        "typedMap",
+        "identity",
+        "compose",
+        "mediator",
+        "finiteGraph"
+      ],
+      "publicBasis": "wire-examples: Whole-domain callable requests; Complete results, projections and lifts",
+      "scope": "Actual endpoints, complete graph source inventory and constituent point readers stay attached.",
+      "explicitNodeOccurrences": {
+        "typedMap": [
+          "additive_smoke.py",
+          "completion_smoke.py",
+          "composability_smoke.py",
+          "envelope_smoke.py",
+          "generic_smoke.py",
+          "ring_protocol_smoke.py",
+          "smoke.py"
+        ],
+        "identity": [
+          "completion_smoke.py",
+          "smoke.py"
+        ],
+        "compose": [
+          "additive_smoke.py",
+          "callable_forms_smoke.py",
+          "completion_smoke.py",
+          "composability_smoke.py",
+          "endpoint_smoke.py",
+          "envelope_smoke.py",
+          "generic_smoke.py",
+          "lift_images_smoke.py",
+          "ring_protocol_smoke.py",
+          "smoke.py"
+        ],
+        "mediator": [
+          "callable_forms_smoke.py",
+          "completion_smoke.py",
+          "composability_smoke.py",
+          "endpoint_smoke.py",
+          "envelope_smoke.py",
+          "generic_smoke.py",
+          "ring_protocol_smoke.py"
+        ],
+        "finiteGraph": [
+          "additive_smoke.py",
+          "completion_smoke.py",
+          "composability_smoke.py",
+          "endpoint_smoke.py",
+          "envelope_smoke.py",
+          "generic_smoke.py",
+          "ring_protocol_smoke.py",
+          "smoke.py"
+        ]
+      }
+    },
+    {
+      "family": "object and endpoint frames",
+      "constructors": [
+        "finiteData",
+        "objectProduct",
+        "morphismEndpoint"
+      ],
+      "publicBasis": "wire-examples: Complete results, projections and lifts",
+      "scope": "An endpoint supplies no inventory. Object wrappers do not select new native structures.",
+      "explicitNodeOccurrences": {
+        "finiteData": [
+          "additive_smoke.py",
+          "callable_forms_smoke.py",
+          "completion_smoke.py",
+          "composability_smoke.py",
+          "endpoint_smoke.py",
+          "envelope_smoke.py",
+          "ring_image_smoke.py",
+          "ring_protocol_smoke.py"
+        ],
+        "objectProduct": [
+          "additive_smoke.py",
+          "callable_forms_smoke.py",
+          "completion_smoke.py",
+          "composability_smoke.py",
+          "endpoint_smoke.py",
+          "envelope_smoke.py",
+          "generic_smoke.py",
+          "ring_image_smoke.py",
+          "ring_protocol_smoke.py",
+          "smoke.py"
+        ],
+        "morphismEndpoint": [
+          "endpoint_smoke.py",
+          "ring_protocol_smoke.py",
+          "smoke.py"
+        ]
+      }
+    },
+    {
+      "family": "selected points",
+      "constructors": [
+        "element",
+        "point",
+        "pointView",
+        "operationExpression",
+        "operationPoint"
+      ],
+      "publicBasis": "wire-examples: Complete expression inputs and returned-data reuse; Terminal-point operation requests; Port.lean pointView description",
+      "scope": "Original domain, complete target, selected operation/parameters and actual operands remain fixed.",
+      "explicitNodeOccurrences": {
+        "element": [
+          "additive_smoke.py",
+          "callable_forms_smoke.py",
+          "composability_smoke.py",
+          "envelope_smoke.py",
+          "ring_image_smoke.py",
+          "ring_protocol_smoke.py",
+          "smoke.py"
+        ],
+        "point": [
+          "callable_forms_smoke.py",
+          "composability_smoke.py",
+          "envelope_smoke.py",
+          "generic_smoke.py",
+          "ring_protocol_smoke.py",
+          "smoke.py"
+        ],
+        "pointView": [
+          "ring_protocol_smoke.py"
+        ],
+        "operationExpression": [
+          "additive_smoke.py",
+          "composability_smoke.py"
+        ],
+        "operationPoint": [
+          "composability_smoke.py"
+        ]
+      }
+    },
+    {
+      "family": "scalar shorthand",
+      "constructors": [
+        "numeral",
+        "generator",
+        "add",
+        "mul",
+        "neg"
+      ],
+      "publicBasis": "wire-examples: Scalars and registered point expressions",
+      "scope": "Only the existing native scalar readers; no new scalar structures or arithmetic algorithms.",
+      "explicitNodeOccurrences": {
+        "numeral": [
+          "composability_smoke.py",
+          "envelope_smoke.py",
+          "ring_image_smoke.py",
+          "ring_protocol_smoke.py",
+          "smoke.py"
+        ],
+        "generator": [
+          "smoke.py"
+        ],
+        "add": [
+          "smoke.py"
+        ],
+        "mul": [],
+        "neg": []
+      }
+    },
+    {
+      "family": "admitted morphisms",
+      "constructors": [
+        "admittedPoint",
+        "objectField"
+      ],
+      "publicBasis": "wire-examples: Admitted group and module morphisms; Registered object fields",
+      "scope": "The original complete function and selected hom object remain retained; no law is wire data.",
+      "explicitNodeOccurrences": {
+        "admittedPoint": [
+          "completion_smoke.py",
+          "composability_smoke.py",
+          "endpoint_smoke.py",
+          "generic_smoke.py",
+          "smoke.py"
+        ],
+        "objectField": [
+          "generic_smoke.py"
+        ]
+      }
+    },
+    {
+      "family": "constrained points",
+      "constructors": [
+        "constrainedPoint"
+      ],
+      "publicBasis": "wire-examples: Constrained points",
+      "scope": "Malformed framing is exercised. A positive case remains pending an actual published/supplied constructor and data-field/target instance; no constructor name is guessed.",
+      "explicitNodeOccurrences": {
+        "constrainedPoint": [
+          "envelope_smoke.py"
+        ]
+      }
+    },
+    {
+      "family": "selected actions and dictionaries",
+      "constructors": [
+        "functorAction",
+        "map",
+        "classifierForget",
+        "constructorMap",
+        "category",
+        "functor",
+        "constructedCategory"
+      ],
+      "publicBasis": "wire-examples: Registered functor actions; Derived structural actions; Direct constructions",
+      "scope": "Only existing explicit native action readers; all ordered parameter packets remain selected.",
+      "explicitNodeOccurrences": {
+        "functorAction": [
+          "additive_smoke.py",
+          "callable_forms_smoke.py",
+          "completion_smoke.py",
+          "composability_smoke.py",
+          "endpoint_smoke.py",
+          "envelope_smoke.py",
+          "generic_smoke.py",
+          "lift_images_smoke.py",
+          "ring_protocol_smoke.py",
+          "smoke.py"
+        ],
+        "map": [
+          "additive_smoke.py",
+          "completion_smoke.py",
+          "endpoint_smoke.py",
+          "envelope_smoke.py",
+          "ring_image_smoke.py",
+          "ring_protocol_smoke.py",
+          "smoke.py"
+        ],
+        "classifierForget": [
+          "additive_smoke.py",
+          "completion_smoke.py",
+          "composability_smoke.py",
+          "ring_protocol_smoke.py"
+        ],
+        "constructorMap": [
+          "completion_smoke.py"
+        ],
+        "category": [
+          "completion_smoke.py",
+          "envelope_smoke.py",
+          "generic_smoke.py",
+          "smoke.py"
+        ],
+        "functor": [
+          "envelope_smoke.py",
+          "smoke.py"
+        ],
+        "constructedCategory": [
+          "completion_smoke.py"
+        ]
+      }
+    },
+    {
+      "family": "comparisons and family maps",
+      "constructors": [
+        "presentation",
+        "cartesianMap",
+        "cellComponent"
+      ],
+      "publicBasis": "wire-examples: Registered presentation comparisons; Family reindexing and cartesian arrows; Natural cell components",
+      "scope": "Directions, receiver and nested declaration parameter arrays remain exact.",
+      "explicitNodeOccurrences": {
+        "presentation": [
+          "endpoint_smoke.py",
+          "smoke.py"
+        ],
+        "cartesianMap": [
+          "completion_smoke.py",
+          "smoke.py"
+        ],
+        "cellComponent": [
+          "additive_smoke.py",
+          "endpoint_smoke.py"
+        ]
+      }
+    },
+    {
+      "family": "Core data",
+      "constructors": [
+        "coreObject",
+        "coreIso"
+      ],
+      "publicBasis": "wire-examples: Direct constructions",
+      "scope": "Construction maps retain the original typed Core source/target, both actual directions and actual construction image packets.",
+      "explicitNodeOccurrences": {
+        "coreObject": [
+          "completion_smoke.py",
+          "envelope_smoke.py",
+          "generic_smoke.py",
+          "smoke.py"
+        ],
+        "coreIso": [
+          "completion_smoke.py",
+          "envelope_smoke.py",
+          "smoke.py"
+        ]
+      }
+    },
+    {
+      "family": "complete Arrow records",
+      "constructors": [
+        "arrow",
+        "subobject",
+        "arrowHom",
+        "subobjectApex",
+        "subobjectInclusion"
+      ],
+      "publicBasis": "wire-examples: Complete results, projections and lifts; Port.lean Arrow/subobject descriptions",
+      "scope": "Plain Arrow and actual kernel-subobject contexts are kept distinct; each projection consumes the actual complete record.",
+      "explicitNodeOccurrences": {
+        "arrow": [
+          "composability_smoke.py",
+          "envelope_smoke.py",
+          "lift_images_smoke.py",
+          "smoke.py"
+        ],
+        "subobject": [
+          "lift_images_smoke.py",
+          "smoke.py"
+        ],
+        "arrowHom": [
+          "envelope_smoke.py"
+        ],
+        "subobjectApex": [
+          "envelope_smoke.py"
+        ],
+        "subobjectInclusion": [
+          "envelope_smoke.py"
+        ]
+      }
+    },
+    {
+      "family": "complete construction records",
+      "constructors": [
+        "cone",
+        "cocone",
+        "constructionApex",
+        "constructionLeg",
+        "constructionField"
+      ],
+      "publicBasis": "wire-examples: Complete results, projections and lifts",
+      "scope": "Product results and their actual owned projections are exercised. No unsupported limit/colimit algorithm is added.",
+      "explicitNodeOccurrences": {
+        "cone": [],
+        "cocone": [],
+        "constructionApex": [
+          "envelope_smoke.py"
+        ],
+        "constructionLeg": [
+          "composability_smoke.py"
+        ],
+        "constructionField": [
+          "completion_smoke.py",
+          "envelope_smoke.py",
+          "smoke.py"
+        ]
+      }
+    },
+    {
+      "family": "retained lift/result context",
+      "constructors": [
+        "objectPresentation",
+        "liftedSubobject",
+        "liftStep",
+        "createdCone"
+      ],
+      "publicBasis": "wire-examples: Complete results, projections and lifts; Port.lean lift/result descriptions",
+      "scope": "Existing parsing branches only. No new valid producing construction is invented merely to populate coverage.",
+      "explicitNodeOccurrences": {
+        "objectPresentation": [],
+        "liftedSubobject": [],
+        "liftStep": [],
+        "createdCone": []
+      }
+    },
+    {
+      "family": "power and finite subset data",
+      "constructors": [
+        "powerObjectMap",
+        "extent"
+      ],
+      "publicBasis": "wire-examples: Infinite subsets, spans and binders; public Port power-object field descriptions",
+      "scope": "Existing terminal/truth/member/image/transpose and complete finite-subset readers; no general infinite-set algorithm.",
+      "explicitNodeOccurrences": {
+        "powerObjectMap": [
+          "callable_forms_smoke.py",
+          "composability_smoke.py"
+        ],
+        "extent": [
+          "callable_forms_smoke.py"
+        ]
+      }
+    }
+  ],
+  "newSelectedCoverage": [
+    "Actual returned finite point envelopes in graph outputs and finite-map observations",
+    "Retained finite graph/native/mediator consumers and returned automorphism directions/evaluations",
+    "Typed Core construction maps using actual returned owned construction images",
+    "Complete owner-category cardinality and parameterized kernel method requests",
+    "Actual constructionApex/constructionField object port and arrowHom/subobjectInclusion/subobjectApex records",
+    "Exact target/parameter/Core framing and closed-session owner controls"
+  ],
+  "remainingCoverageLimits": [
+    "No positive constrainedPoint instance is justified by the permitted concrete constructor/type data.",
+    "meth.two_subsets and its linked functor are absent from the current public snapshot; the existing historical reader is not expanded.",
+    "The presence of a constructor name in a smoke source is a static inventory clue, not evidence that every combination or native object is supported.",
+    "Generic deferredData/resultRef/inputRef service control, new constructed component addresses, new creation algorithms and unsupported native representations are outside these registrations/cases."
+  ],
+  "evidenceBoundary": "This is an inventory of public framing and own-source coverage. It makes no arithmetic, mathematical correctness, proof, admission or downstream acceptance claim. Address omissions describe only the exact consumed public snapshot; the manifest and public contract are unchanged."
+}

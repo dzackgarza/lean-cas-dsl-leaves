@@ -205,7 +205,7 @@ def product_fields(selected, components=None):
     return object_product(selected)
 
 
-def graph_callable(data, source, target, finite_inventory=inventory):
+def graph_callable(data, source, target, finite_inventory=inventory, read_point=None):
     """Read a complete finite graph at its actual selected endpoints."""
     if isinstance(data, dict) and data.get("ctor") == "finiteGraph":
         points, graph = fields(data, "finiteGraph", 2)
@@ -240,8 +240,15 @@ def graph_callable(data, source, target, finite_inventory=inventory):
         pass
     else:
         target_keys = {key(point) for point in target_points}
-        if any(key(value) not in target_keys for value in entries.values()):
-            raise ValueError("a callable graph has an image outside the supplied codomain inventory")
+        for value in entries.values():
+            actual = value
+            while key(actual) not in target_keys and isinstance(actual, dict) and actual.get("ctor") == "valueData":
+                actual, = fields(actual, "valueData", 1)
+            if key(actual) not in target_keys and read_point is not None:
+                actual = read_point(value, target)
+            if key(actual) not in target_keys:
+                raise ValueError("a callable graph has an image outside the supplied codomain inventory")
+        # The private check above never replaces the retained output packets.
 
     def evaluate(point):
         encoded = key(point)
@@ -265,7 +272,7 @@ def graph_callable(data, source, target, finite_inventory=inventory):
 
 
 def framed_callable(data, source, target, session, interpret, finite_inventory=inventory,
-                    product_factors=product_fields):
+                    product_factors=product_fields, read_point=None):
     """Consume typed maps, total finite graphs and owned callable data.
 
     ``interpret`` is the implementation's explicit registered-arrow reader. This
@@ -273,12 +280,12 @@ def framed_callable(data, source, target, session, interpret, finite_inventory=i
     """
     if isinstance(data, dict) and data.get("ctor") == "valueData":
         return framed_callable(fields(data, "valueData", 1)[0], source, target,
-                               session, interpret, finite_inventory, product_factors)
+                               session, interpret, finite_inventory, product_factors, read_point)
     if isinstance(data, dict) and data.get("ctor") == "typedMap":
         actual_source, actual_target, body = typed_map(data)
         same(actual_source, source, "callable source")
         same(actual_target, target, "callable target")
-        return framed_callable(body, source, target, session, interpret, finite_inventory, product_factors)
+        return framed_callable(body, source, target, session, interpret, finite_inventory, product_factors, read_point)
     if isinstance(data, dict) and data.get("ctor") == "opaqueData":
         native = session.get(data)
         if not isinstance(native, Callable):
@@ -287,7 +294,7 @@ def framed_callable(data, source, target, session, interpret, finite_inventory=i
         same(native.target, target, "owned callable target")
         return native
     if isinstance(data, list) or isinstance(data, dict) and data.get("ctor") == "finiteGraph":
-        return graph_callable(data, source, target, finite_inventory)
+        return graph_callable(data, source, target, finite_inventory, read_point)
     if isinstance(data, dict) and data.get("ctor") == "identity":
         actual_source, actual_target = fields(data, "identity", 2)
         same(actual_source, source, "identity source")
@@ -298,8 +305,8 @@ def framed_callable(data, source, target, session, interpret, finite_inventory=i
     if isinstance(data, dict) and data.get("ctor") == "mediator":
         left, right = fields(data, "mediator", 2)
         left_target, right_target = product_factors(target, (left, right))
-        f = framed_callable(left, source, left_target, session, interpret, finite_inventory, product_factors)
-        g = framed_callable(right, source, right_target, session, interpret, finite_inventory, product_factors)
+        f = framed_callable(left, source, left_target, session, interpret, finite_inventory, product_factors, read_point)
+        g = framed_callable(right, source, right_target, session, interpret, finite_inventory, product_factors, read_point)
         native = NativeMediator(source, target, f.native, g.native) if f.native is not None and g.native is not None else None
         return Callable(source, target, lambda point: [f(point), g(point)], native,
                         point_action=lambda point, read: [f.at_point(point, read), g.at_point(point, read)])
@@ -315,8 +322,8 @@ def framed_callable(data, source, target, session, interpret, finite_inventory=i
             # Registered named arrows may have enough independently published
             # endpoint information for the implementation's reader to proceed.
             return interpret(data, source, target)
-        f = framed_callable(first, source, middle, session, interpret, finite_inventory, product_factors)
-        g = framed_callable(second, middle, target, session, interpret, finite_inventory, product_factors)
+        f = framed_callable(first, source, middle, session, interpret, finite_inventory, product_factors, read_point)
+        g = framed_callable(second, middle, target, session, interpret, finite_inventory, product_factors, read_point)
         native = NativeComposition(f.native, g.native) if f.native is not None and g.native is not None else None
         return Callable(source, target, lambda point: g(f(point)), native,
                         point_action=lambda point, read: g.at_point(f.at_point(point, read), read))

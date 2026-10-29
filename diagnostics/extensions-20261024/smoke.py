@@ -204,7 +204,8 @@ def main():
         aut_object = node("functorAction", aut_action, node("coreObject", finite))
         invoke("con.automorphisms", {"ctor": "con.automorphisms", "args": [sets], "receiver": node("coreObject", finite)})
         auto = [[[0, 1], [1, 2], [2, 3], [3, 0]], [[0, 3], [1, 0], [2, 1], [3, 2]]]
-        comparison = node("coreIso", finite, finite, node("mor.sets.fin_rev", 4), node("mor.sets.fin_rev", 4))
+        comparison = node("typedMap", node("coreObject", finite), node("coreObject", finite),
+                          node("coreIso", finite, finite, node("mor.sets.fin_rev", 4), node("mor.sets.fin_rev", 4)))
         mapped_auto = invoke("con.automorphisms#map", node("apply", "con.automorphisms#map", [sets],
                node("map", aut_action, comparison), one, aut_object, aut_object, auto))
         invoke("mor.sets.automorphism_evaluation", apply("mor.sets.automorphism_evaluation",
@@ -225,9 +226,10 @@ def main():
                           node("element", residue, node("numeral", 3)))
         group_auto = invoke("mor.groups.cyclic_quotient_aut_by_unit", apply(
                "mor.groups.cyclic_quotient_aut_by_unit", [7], one, units, quotient_aut, unit_point))
-        quotient_comparison = node("coreIso", quotient, cyclic,
+        quotient_comparison = node("typedMap", node("coreObject", quotient), node("coreObject", cyclic),
+            node("coreIso", quotient, cyclic,
                node("presentation", "cmp.groups.cyclic_quotient_residue", [7], False),
-               node("presentation", "cmp.groups.cyclic_quotient_residue", [7], True))
+               node("presentation", "cmp.groups.cyclic_quotient_residue", [7], True)))
         transported_auto = invoke("con.automorphisms#map", node("apply", "con.automorphisms#map", [groups],
                node("map", group_action, quotient_comparison), one, quotient_aut, cyclic_aut, group_auto))
         invoke("mor.groups.automorphism_forward", apply("mor.groups.automorphism_forward",

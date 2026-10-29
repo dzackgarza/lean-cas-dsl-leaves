@@ -566,7 +566,7 @@ class Engine(EndpointInterfaces):
             index = leg + 1
         else:
             limit, diagram, packet, index = construction_field(data)
-        if self.tag(packet) == "valueData":
+        while self.tag(packet) == "valueData":
             packet = fields(packet, "valueData", 1)[0]
         while self.tag(packet) == "createdCone":
             lift, actual_diagram, packet = fields(packet, "createdCone", 3)
@@ -701,7 +701,8 @@ class Engine(EndpointInterfaces):
     def function(self, data, source, target):
         public_data([data, source, target], self.session)
         return framed_callable(data, source, target, self.session, self.interpret_arrow,
-                               product_factors=self.product_factors)
+                               product_factors=self.product_factors,
+                               read_point=lambda value, selected: self.point(value, selected, None))
 
     def callable_endpoints(self, data):
         """Retain actual map fields, or the public endpoints of its whole arrow."""
