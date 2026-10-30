@@ -9,6 +9,7 @@ from dataclasses import dataclass, replace
 from sage.all import (QQ, ZZ, IntegerModRing, LazyPowerSeriesRing, Set, Subsets,
                       SymmetricGroup, identity_matrix, matrix, vector)
 from sage.libs.gap.libgap import libgap
+from sage.sets.finite_set_maps import FiniteSetMaps
 
 from cas_port import (admitted_point, cartesian_map, category_parameter, constructed_category,
                       construction_invocation, core_iso, core_object,
@@ -100,7 +101,8 @@ class ExtensionEngine(CarrierFunctorInterfaces, PowerObjectInterfaces, AdditiveI
     modular_ids = {"obj.sets.integers_mod", "obj.rings.integers_mod", "obj.commutative_rings.integers_mod"}
     quotient_ids = {"obj.sets.cyclic_quotient", "obj.groups.cyclic_quotient"}
     cyclic_ids = {"obj.groups.cyclic"}
-    comparisons = {Engine.comparison, "cmp.sets.fin_reversal", "cmp.groups.cyclic_quotient_residue"}
+    comparisons = {Engine.comparison, "cmp.sets.fin_reversal", "cmp.groups.cyclic_quotient_residue",
+                   "cmp.sets.singleton_terminal"}
     object_operations = {"con.automorphisms", "fun.core_sets.automorphisms", "fun.core_groups.automorphisms",
                          "fun.core_sets.two_subsets", "meth.two_subsets", "meth.cardinality",
                          "fun.modules.reindex", "lim.sets.product", "fun.arrows_modules.kernel",
@@ -221,6 +223,10 @@ class ExtensionEngine(CarrierFunctorInterfaces, PowerObjectInterfaces, AdditiveI
         tag = self.tag(selected)
         if tag == "valueData":
             return self.finite_object(fields(selected, tag, 1)[0])
+        if tag == "morphismEndpoint":
+            # Read an existing callable's native endpoint without changing the
+            # public descriptor. Graph inputs still need their own inventory.
+            return self.finite_object(self.endpoint_view(selected))
         if tag in {"constructionApex", "constructionField"}:
             return self.finite_object(self.project_field(selected))
         if tag == "opaqueData":
@@ -253,6 +259,11 @@ class ExtensionEngine(CarrierFunctorInterfaces, PowerObjectInterfaces, AdditiveI
         elif tag in {"obj.modules.regular", "obj.modules_r.restricted_regular",
                      "obj.modules.vectors", "obj.sets.vectors"}:
             return self.finite_module_object(selected, self.module(selected))
+        elif tag == "obj.sets.terminal":
+            fields(selected, tag, 0)
+            # The public exposed type is PUnit: its nullary record has no
+            # data fields. This is its codec, not a substituted Fin(1) point.
+            points = ([],)
         elif tag == "obj.sets.truth_values":
             fields(selected, tag, 0)
             points = (False, True)
@@ -987,6 +998,8 @@ class ExtensionEngine(CarrierFunctorInterfaces, PowerObjectInterfaces, AdditiveI
         return value
 
     def other_comparison(self, comparison, parameters, inverse, source, target):
+        if comparison == "cmp.sets.singleton_terminal":
+            return self.singleton_terminal_comparison(parameters, inverse, source, target)
         if type(inverse) is not bool or len(parameters) != 1:
             raise ValueError("the selected comparison requires its parameter and Boolean direction")
         if comparison == "cmp.sets.fin_reversal":
@@ -999,6 +1012,38 @@ class ExtensionEngine(CarrierFunctorInterfaces, PowerObjectInterfaces, AdditiveI
         if self.cyclic_context(source) != (modulus, not inverse) or self.cyclic_context(target) != (modulus, inverse):
             raise ValueError("the cyclic comparison changes a selected presentation or direction")
         return Callable(source, target, lambda value: self.encode_cyclic(self.cyclic_point(value, source), target))
+
+    def singleton_terminal_comparison(self, parameters, inverse, source, target):
+        if type(inverse) is not bool:
+            raise ValueError("the singleton comparison requires its Boolean direction")
+        same(parameters, [], "singleton comparison's complete declaration parameters")
+        endpoints = (node("obj.sets.fin", 1), node("obj.sets.terminal"))
+        expected_source, expected_target = endpoints[::-1] if inverse else endpoints
+        same(self.scalar_element_carrier(source), expected_source, "singleton comparison source")
+        same(self.scalar_element_carrier(target), expected_target, "singleton comparison target")
+        original, image = self.finite_object(source), self.finite_object(target)
+        for actual, selected, expected in ((original, source, expected_source),
+                                           (image, target, expected_target)):
+            if actual.native.cardinality() != 1:
+                raise ValueError("a singleton-comparison endpoint needs its single actual point")
+            for point in actual.points:
+                value = self.point(point, selected, None)
+                if self.tag(expected) == "obj.sets.fin":
+                    self.finite_ordinal(value, 1)
+                elif not isinstance(value, list) or value:
+                    raise ValueError("a terminal point requires its empty PUnit data-field array")
+        native = FiniteSetMaps(original.native, image.native).from_dict(
+            {original.native.an_element(): image.native.an_element()})
+        context = (parameters, inverse, source, target, original, image, native)
+
+        def evaluate(point, retained=context):
+            index = self.point_index(point, retained[4].points, retained[2])
+            return retained[5].points[int(retained[6](index))]
+
+        # Keep exact supplied keys available to the existing finite-point
+        # reader before it inspects result envelopes or selected point data.
+        return Callable(source, target, evaluate, native,
+                        point_action=lambda point, read: evaluate(point))
 
     def presentation_application(self, packet, comparison=None):
         if comparison is None or comparison == self.comparison:
@@ -1065,6 +1110,8 @@ class ExtensionEngine(CarrierFunctorInterfaces, PowerObjectInterfaces, AdditiveI
 
     def equal(self, left, right, selected):
         tag = self.tag(selected)
+        if tag == "valueData":
+            return self.equal(left, right, fields(selected, tag, 1)[0])
         if tag == "morphismEndpoint":
             try:
                 actual = self.endpoint_view(selected)
@@ -1121,7 +1168,7 @@ class ExtensionEngine(CarrierFunctorInterfaces, PowerObjectInterfaces, AdditiveI
             if type(left) is not int or type(right) is not int or abs(left) > radius or abs(right) > radius:
                 raise ValueError("a square-bound point is outside its complete selected carrier")
             return left == right
-        if tag in {"finiteData", "extent"}:
+        if tag in {"finiteData", "extent", "obj.sets.terminal"}:
             points = self.finite_object(selected).points
             return self.point_index(left, points, selected) == self.point_index(right, points, selected)
         if tag == "obj.sets.two_subsets":

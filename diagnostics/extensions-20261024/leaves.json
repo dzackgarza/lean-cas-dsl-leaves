@@ -330,6 +330,11 @@
       "backend": "independent-extensions-sage"
     },
     {
+      "operation": "cmp.sets.singleton_terminal",
+      "input": "cmp.sets.singleton_terminal",
+      "backend": "independent-extensions-sage"
+    },
+    {
       "operation": "cmp.sets.fin_reversal",
       "input": "cmp.sets.fin_reversal",
       "backend": "independent-extensions-sage"

@@ -225,6 +225,10 @@ class EndpointInterfaces:
                 same(parameters, [], "the comparison endpoint's declaration parameters")
                 use_y = (side == "source") == inverse
                 return node("obj.sets.rational_dual_y" if use_y else "obj.sets.rational_dual_x")
+            if comparison == "cmp.sets.singleton_terminal":
+                same(parameters, [], "the comparison endpoint's declaration parameters")
+                return (node("obj.sets.fin", 1) if (side == "source") != inverse
+                        else node("obj.sets.terminal"))
             if comparison in {"cmp.sets.fin_reversal", "cmp.groups.cyclic_quotient_residue"}:
                 if len(parameters) != 1:
                     raise ValueError("the comparison endpoint requires its selected size parameter")

@@ -1011,5 +1011,70 @@
       "remainingConcreteFindings": "None identified in the final focused review.",
       "boundary": "Engineering source review only; no mathematical correctness or acceptance evidence."
     }
+  },
+  "singletonTerminalComparison20261030": {
+    "baseLeafRevision": "7fec4bf690a368d250769397a7c8489ceedb0c9e",
+    "baseLeafTree": "0d3cea36e7adcbe7ba9675b6f8a984cba39c8589",
+    "publicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6",
+    "publicContractTree": "968ea95a5f8e7f76de95461999e8bafee74f2d39",
+    "publicContractFiles": {
+      "api/manifest.md": "18a61df15642a9963c643df784352de91e2809cabdb1ef6d11d2761acdf1177f",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/declared-ports.json": "642b7290d5441d7409fa6992732a97166907de8e69eafeb9e6df468aa7d73c4c",
+      "python/cas_port.py": "1a061bfbc3dc40dadc157deaeb11dbd838d7f2710e53f1fe8f369bd60d43e6f5",
+      "CasContract/Port.lean": "4082a8525f92ad945accd37935add2c31e8fda3e85d52328eb4b9a7b1339f777"
+    },
+    "operation": "cmp.sets.singleton_terminal",
+    "input": "cmp.sets.singleton_terminal",
+    "newRegistrationPairs": 1,
+    "totalRegistrationPairs": 94,
+    "scope": "The existing parameter-free comparison in both directions, with complete presentationApply/common-apply requests, exact actual endpoint and inventory data, and reusable whole/generalized callables.",
+    "publicTypeInputs": "The accepted comparison signature is an Iso from obj.sets.fin(1) to obj.sets.terminal. The exported terminal type alias is PUnit and its public datatype has one nullary constructor. CasContract/Port.lean supplies the existing empty data-field array codec for this record.",
+    "nativeCalls": "Sage FiniteSetMaps.from_dict, native finite-set cardinality/an_element, and the existing finite_object, point_index, Callable, comparison application and Invocation interfaces. No new mathematical algorithm or wire encoding.",
+    "inputBoundary": "Only the existing leaf repository, applicable instructions, published contract documentation/reference helper/generated catalogue and native engine interfaces were used. No kernel source, runtime-consumer report, acceptance question/result, expected-answer fixture, sibling workspace or external mathematical source was accessed. No Lean/compiler was run.",
+    "engineeringChecks": {
+      "script": "singleton_terminal_smoke.py",
+      "primaryConnectionRequests": 84,
+      "foreignOwnerRequests": 3,
+      "result": "completed",
+      "coverage": [
+        "Exact published operation/own-input pair and empty declaration parameters",
+        "Both comparison directions, raw/selected/wrapped point results and actual returned point reuse",
+        "Existing named Fin(1) global-point scalar convention without a synthesized replacement domain",
+        "Whole callables on supplied finiteData and ordinary Terminal domains through presentationApply and common apply",
+        "Retained wrapped keys, valueData endpoints, complete morphismEndpoint fields and actual callable composition",
+        "Finite and infinite generalized domains, actual returned callable reuse and a closed point consumer",
+        "Malformed field counts, parameters, direction, endpoint inventories/literals and retained callable endpoints",
+        "Closed returned callables, nested endpoint owners and infinite-family owners"
+      ],
+      "regressions": [
+        {
+          "script": "completion_smoke.py",
+          "primaryConnectionRequests": 99,
+          "engineeringGroupsCompleted": 14,
+          "engineeringGroupsRequested": 14,
+          "engineeringExceptions": []
+        },
+        {
+          "script": "endpoint_smoke.py",
+          "protocolBoundaryGroups": 13,
+          "primaryConnectionRequests": 33,
+          "foreignOwnerRequests": 2,
+          "result": "completed"
+        }
+      ],
+      "boundary": "Protocol statuses, representation shapes, full retained requests/endpoints/inventories, reusable actual callables and live ownership only. No computed arithmetic value, equality truth, inverse equation or mathematical acceptance outcome is asserted."
+    },
+    "resolvedEngineeringFindings": [
+      "The existing finite consumer now reads a valueData-wrapped selected endpoint while retaining its complete outer callable endpoints and point keys.",
+      "The native finite endpoint reader consumes an existing callable field; graph inputs at a bare endpoint still require their separately supplied inventory."
+    ],
+    "publicInterfaceGap": null,
+    "implementationLimits": "Only the published comparison and the existing supported native finite endpoint/point/callable readers are added. The comparison does not identify arbitrary singleton representations or replace a supplied comparison. All opaque dependencies retain their original live supplier.",
+    "independentSourceReview": {
+      "scope": "Bounded public-contract and leaf-only static review; no engine, compiler or acceptance process",
+      "remainingConcreteFindings": "None identified in the final focused review.",
+      "boundary": "Engineering interface review only; no mathematical correctness or acceptance evidence."
+    }
   }
 }

@@ -5,7 +5,7 @@ the public contract, declaration exports and authorized interface documentation
 recorded in `public-inputs.json`. No kernel implementation, acceptance assertion,
 expected-answer fixture or downstream execution report was consulted. Diagnostic
 work stayed in this subtree. It ships no Lean and changes no mathematical or
-protocol declaration. The manifest contains 93 public operation/input pairs.
+protocol declaration. The manifest contains 94 public operation/input pairs.
 
 Sage 10.8 supplies exact quotient-ring, modular, polynomial, matrix, module and lazy
 power-series computations. Sage's permutation groups and native GAP supply the
@@ -24,6 +24,7 @@ does not claim an implementation for every object of that category.
 | `fun.commutative_rings.ring` on `cat.commutative_rings` | Ordinary object action on the existing integer, rational, modular and rational dual-number native readers. The owned result retains the actual Sage ring, full source receiver and complete request; existing ring operations consume that image directly. |
 | `op.rings.add`, `mul`, `pow`, `neg`; dual-number coefficient maps | Integer, rational, modular, and the two published rational dual-number rings, including the explicitly supported carrier views. |
 | `cmp.rational_dual.translation` | The actual Sage homomorphisms between the selected dual-number presentations in both directions. |
+| `cmp.sets.singleton_terminal` | Both directions of the published parameter-free comparison between `Fin(1)` and the named terminal set, using Sage `FiniteSetMaps.from_dict`. Complete actual endpoint descriptors, inventories, original generalized domains and returned callable owners remain retained. |
 | `cmp.sets.fin_reversal`, `mor.sets.fin_rev`; finite order `le`, `lt` | The actual selected dimension and order, including the reversal family at dimension zero. |
 | `meth.two_subsets`, `fun.core_sets.two_subsets`, `meth.cardinality` | Full finite inventories; primitive finite ordinals, published integer-square bounds, finite products, two-subsets and supported finite cyclic carriers. Two-subset map action consumes the complete selected core comparison and takes direct images. |
 | `con.automorphisms`, `con.automorphisms#map`, the Sets/Groups core automorphism functors | Finite Sets use native permutation groups. Finite cyclic Groups use GAP's actual automorphism group of the selected cyclic group. Direct and named functor map actions consume both actual comparison directions. Complete native group enumeration supports whole-map comparison on finite automorphism carriers. The selected category stays explicit. |
@@ -99,6 +100,54 @@ The final focused run completed 179 primary-connection requests and five
 closed-owner controls. The affected existing module and structural-carrier
 checks completed 122 and 217 primary requests, respectively, with three
 closed-owner controls each. These are interface findings only.
+
+## Singleton-terminal presentation comparison
+
+The existing comparison `cmp.sets.singleton_terminal` is registered on its
+published own-address input `cmp.sets.singleton_terminal`. Its public declaration
+has no explicit parameters and compares `obj.sets.fin(1)` with
+`obj.sets.terminal`. The exposed terminal type is `PUnit`; the contract's
+single-constructor record codec represents its nullary point as the empty
+data-field array. This terminal representation remains separate from the
+finite-ordinal point representation.
+
+The handler consumes all five `presentationApply` fields, an explicit Boolean
+direction, and both actual endpoints. The common `apply` interface also consumes
+the complete `presentation` arrow and original generalized domain. Sage's
+`FiniteSetMaps.from_dict` supplies the native finite map in the requested
+direction. The existing finite-object and point readers translate the supplied
+inventories to and from that map; exact retained keys are checked before result
+envelopes are inspected. Invalid endpoint inventories or point encodings fail
+explicitly. No input is replaced by a different singleton or a new comparison.
+
+Named endpoints, `finiteData`, repeated `valueData`, supported carrier views and
+complete `morphismEndpoint` descriptors keep their original callable interfaces.
+The native endpoint reader and selected-value wrapper reader support subsequent
+finite-map consumers without changing a returned map's endpoints. A callable
+graph at a bare endpoint field still requires its own supplied inventory.
+Owned callables retain the complete direction, request and dependency records
+through the existing comparison application and `Invocation` interfaces.
+
+The existing scalar convention for the named global-point domain `Fin(1)` is
+unchanged. A caller-supplied `finiteData(Fin(1), inventory)` or the ordinary
+terminal domain can request an owned whole callable. The handler never changes
+the caller's domain to obtain that behavior. Other finite or infinite
+generalized domains remain attached to their actual returned callable.
+
+`singleton_terminal_smoke.py` checks both directions, point-result reuse, whole
+and generalized callable reuse, complete wrapped/endpoint data, malformed
+framing and closed nested owners. Its assertions concern status, shape,
+retention and consumption, never a computed equality truth or inverse law:
+
+```sh
+python3 singleton_terminal_smoke.py --contract /absolute/path/to/public-contract \
+  --engine /absolute/path/to/sage/python
+```
+
+The focused run completed 84 primary requests and three closed-owner controls.
+The existing comparison-completion checks completed all 14 groups and 99
+requests with no engineering exceptions. The existing endpoint checks completed
+13 protocol groups, 33 primary requests and two closed-owner controls.
 
 ## Module fibre-inclusion and underlying actions
 
