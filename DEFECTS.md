@@ -481,3 +481,204 @@ not evidence of anything, and is replaced as soon as the contract declares the f
 * **Closed points in morphism positions** (`compose` first argument, mediator components)
   are written as `element` envelopes; the contract gives "the pair of their data" only for
   mediators.
+
+## Public-interface conformance review, 2026-10-25
+
+This review is limited to the independent extension diagnostic at leaf base
+`fa0856dfc365c497a25e4a94019a1cb08b79c4d1`, public contract
+`90d7d3f1833cff39b77024dcee2dc43213e623ad`, and the supplied declaration export
+SHA256 `43392ae1c6636276519113d07c4cdc3ce8f8eeead1b4336db574c57269216079`.
+The older reports above describe their original checkpoints, not gaps asserted
+against this public contract. No kernel implementation, external mathematical
+test, expected answer or downstream execution record was used in this review.
+
+The following defects were implementation gaps in existing registrations:
+
+- A nullary unit with its actual terminal identity comparison returned a
+  callable at the global-point domain. Reusing that data as a point then failed.
+  The decoder now applies the retained comparison and returns ordinary global
+  point data; generalized requests still retain their complete callable domain.
+- Published `operationPoint` and nested selected monoid operation expressions
+  were absent from the existing operand readers. Their complete supplied data
+  now reach the existing native unit, multiplication and inverse routines.
+- Returned module/base-map envelopes and a returned Arrow record were not
+  accepted by every successive-operation reader. The existing object and map
+  readers now consume those actual data, including their original owners.
+- Some object and lift branches inspected only the fields their native routine
+  needed, allowing a nested foreign token in another retained field to be
+  overlooked. The framing boundary now visits every dependency before dispatch.
+- Finite graphs checked complete domain keys but omitted the check against an
+  actually supplied codomain inventory. The shared graph reader now checks it.
+- Supported mapped Core images and a declared cyclic-quotient automorphism target
+  lacked native endpoint views for subsequent operations. Their complete public
+  signatures now select the existing readers while the original descriptors and
+  actual returned points remain attached.
+
+Both manifests and all 66 extension registration pairs remain unchanged. The
+current precise native implementation limits are recorded in the extension
+README's existing table: arbitrary infinite functions/subsets, other selected
+categories and set-valued functors, unsupported ring/module/form representations,
+general-ring kernels, arbitrary summable families and arbitrary structured
+comparison/creation actions remain ordinary `unsupported` cases. This bounded
+review found no missing public wire type needed for the repairs. Its own framed
+engineering cases check shape, reuse and ownership only; they supply no
+mathematical correctness or acceptance evidence.
+
+## V1 public-interface conformance completion, 2026-10-25
+
+This bounded review covers only the existing nineteen registration pairs of
+`diagnostics/v1` at published leaf base
+`51e0e6ebd25a2f2a88097ae3081a3c34970cc29d`. Its public inputs are contract
+`90d7d3f1833cff39b77024dcee2dc43213e623ad`, the supplied declaration export
+SHA256 `43392ae1c6636276519113d07c4cdc3ce8f8eeead1b4336db574c57269216079`,
+their public provenance, and the existing specimen's engineering material.
+No kernel source, protected mathematical questions, expected answers, acceptance
+records, downstream execution report or other agent's work was used.
+
+The existing compact F9 comparison branch returned a bare `element`, omitting
+the required `valueData` envelope. Whole-callable requests were treated as
+point data or failed at a missing finite inventory. Owned projections retained
+their native parent without their complete public source, while some nested
+owner fields, endpoint changes and parameter changes were not checked. Common
+`morphismEndpoint` and `constructionField` object/map consumers were absent.
+Typed matrix and coefficient callables also confused a structured coefficient
+ring with its actual carrier endpoint. These were adapter gaps in already
+published interfaces.
+
+The specimen now retains actual callable dependencies and both endpoint fields,
+executes whole requests through the existing native routines, reads complete
+supplied object/map fields, distinguishes global scalar and other generalized
+domains, checks owners recursively before dispatch, and consumes the actual
+typed carrier endpoints. Explicit identity wiring preserves already decoded
+native records. Exact scalar and finite inventory/graph framing is checked
+without treating it as a mathematical result. The existing F9 constructors,
+native algorithms and all manifests remain unchanged. The extension diagnostic
+is unchanged.
+
+The V1 README records precise ordinary native limits: other selected parents and
+arbitrary functions, Units parents for product construction, unsupplied graph
+inventories or intermediate endpoints, the unstored pullback center, incomplete
+algebra records, other comparisons and unrelated operations. No new public wire
+type was required. The 143 independent engineering requests check framing,
+returned-data reuse, owner handling and error strata only. They assert no
+mathematical answers and carry no acceptance standing.
+
+## Separate extension public-interface sufficiency check, 2026-10-25
+
+This checkpoint covers the 66 existing pairs of
+`diagnostics/extensions-20261024` from published base
+`1c41aa80993cc4b799893bd3165ddb64d9f80939`. The only external inputs were public
+contract `90d7d3f1833cff39b77024dcee2dc43213e623ad`, the supplied declaration export
+SHA256 `43392ae1c6636276519113d07c4cdc3ce8f8eeead1b4336db574c57269216079`
+and its provenance, and the installed engine interfaces. Every registered
+operation/input pair occurs in that export. No downstream implementation,
+protected question, expected answer, acceptance material or execution finding
+was supplied or read.
+
+Independent public-packet engineering requests exposed shared reader defects:
+distinct singleton domains were collapsed to points, whereas an actual global
+identity could return a callable; complete finite elements and matrix point
+records were rejected; generalized point views and constrained families were
+absent; projected Arrow/cone maps could be consumed with changed endpoint
+fields; and nested ring/monoid expressions could change their complete selected
+structure. Product legs omitted the published shape constructors and unlabelled
+finite graph form. A carrier action could expose an implicit endpoint inventory.
+The cyclic adapters did not consume full unit records or retained finite object
+inventories. Invalid top-level request objects could interrupt framed processing.
+
+These are repaired through the existing public data readers and the same Sage/GAP
+routines. Actual finite cyclic point keys and both unit fields remain attached
+to their existing native conversions. All registration
+manifests remain unchanged; no new algorithm, operation, Lean code, proof or
+certificate was introduced. Two existing singleton engineering examples were
+updated to request the full-callable interface with a distinct singleton.
+
+A separate verbatim check of released `api/wire-examples.md` executed eight
+concrete requests at existing selected addresses. Its preserved baseline exposed
+two V1 scalar-reader mismatches: the complete selected ring inside an element
+was incorrectly compared directly to the common request's carrier endpoint.
+The bounded reader fix retains that ring and its parameters, reads the supplied
+carrier separately, and preserves the endpoints of actual callable payloads.
+The eight public examples and 29 directly affected independently selected
+controls close with their interface outcomes. Two literal illustrative opaque
+tokens from the guide remain unavailable owners, not native mathematical gaps.
+Schematic blocks, data/reply-only blocks and the unregistered square-root request
+have explicit documentation coverage dispositions rather than invented bindings.
+
+The kernel functor's complete morphism action remains an unsupported native
+routine; its rational object action and the two method aliases remain available.
+The extension README records that boundary and the remaining ordinary native
+input limits. No missing public wire type was found. The closed external receipt
+contains 1,305 per-pair requests, 69 focused data-form requests, 25 framing/error
+requests and 50 local example requests, plus the distinct eight public examples
+and 29 V1 reader controls. Failed baseline attempts are retained.
+Only interface framing, parameter/endpoint retention, returned-data reuse and
+owner/error behavior were asserted. These are engineering observations with no
+mathematical correctness or acceptance standing.
+
+## Bounded scalar composition closure, 2026-10-25
+
+From published leaf `4382c4c50e617c47ece8be4a745360b84c4a7e18`, a separate
+public-only check composes the released scalar examples with complete typed
+maps, mediators, actual returned product projections and generalized callable
+data. Its public sources are contract `90d7d3f`'s `api/wire-examples.md`, sections
+"Scalars and registered point expressions", "Whole-domain callable requests",
+"Complete expression inputs and returned-data reuse", and "Complete results,
+projections and lifts"; and `CasContract/Port.lean`'s element, mediator and
+complete typed-map interfaces. The external receipt records exact source lines,
+hashes and per-request citations, together with the supplied public declaration
+entries. No downstream finding or mathematical question was an input.
+
+The extension's element reader conflated the complete selected arithmetic owner
+with a callable's actual carrier endpoint. Direct released scalar requests could
+work while typed, composed, mediated and generalized forms were rejected. The
+point path also accepted a changed scalar modulus. Symbolic element selection
+was treated as an actual stored map field, obscuring the actual endpoints of
+returned callable payloads and product projections. V1 separately rejected a
+complete finite graph inside a global scalar element and a selected scalar at
+its complete declared endpoint.
+
+The repair keeps selected arithmetic owners and all parameters attached, checks
+the existing named scalar codec context, and reads complete callable fields from
+the actual payload or returned projection. Typed and owned endpoint fields remain
+exact; a matching native parent is not an endpoint comparison. Actual callable
+values keep their source and target through element wrappers and successive uses.
+Global scalar-valued graph data are evaluated at the supplied registered global
+domain; other singleton and finite domains keep their full callable interface.
+
+The two baseline runs are preserved outside source under
+`public-scalar-closure-checks`: 108 requests with 18 interface mismatches, then
+116 requests with 23 mismatches after the explicit global graph and endpoint
+forms were added. The repaired 116-request run closes across both specimens and
+their fresh owner connections. Assertions concern framing, retained fields,
+scalar/callable representation, actual result reuse and owner/error strata only.
+All seven manifests and existing native algorithms remain unchanged. The
+previously documented native routine limits, including the unimplemented kernel
+functor morphism action, remain. This bounded check asserts no mathematical
+answer or law and has no correctness or acceptance standing.
+
+## Actual lift-image metadata, 2026-10-28
+
+The independent extension adapter at `2f352448` still reconstructed
+`functorAction(action, object)` for every comparison endpoint. Public contract
+`34bb8abbdbb49699015f63840cf86ed67f438003` publishes actual `sourceImage` and
+`comparisonImage` data through `lift_images`, including a forward result that may
+supply its own complete image endpoint. Treating an actual image as the legacy
+recipe loses that data and is an adapter deficiency against the public contract.
+
+The two existing bilinear-module lift implementations now consume and retain
+those fields in their original field and factor requests. The existing native
+module and change-value adapters supply an owned image when forward has no
+preselected endpoint. Supplied images are preserved exactly, and symbolic action
+endpoints are used only for the explicitly admitted metadata-free legacy form.
+The same selected parameters, original source, base inclusion and earlier outputs
+remain attached. No mathematical algorithm or registration was added or changed.
+
+The leaf's own new conformance run completed 48 primary-connection requests and
+five requests on a separate connection: six full field/factor/reuse sequences,
+twelve malformed-metadata controls and three foreign-owner controls. The existing
+74-request extension smoke run also completed. These checks concern public shape,
+endpoint retention, reuse and owner handling only; they assert no computed
+mathematical answer and are not acceptance evidence. Only the existing independent
+leaf package, public contract and installed engine were read; no downstream
+implementation, expected answer, acceptance test or runtime report was consulted.
