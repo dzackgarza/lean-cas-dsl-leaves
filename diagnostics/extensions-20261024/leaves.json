@@ -110,6 +110,16 @@
       "backend": "independent-extensions-sage"
     },
     {
+      "operation": "fun.bilin_module.forget",
+      "input": "fun.bilin_module.forget#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "fun.bilin_module.forget#map",
+      "input": "fun.bilin_module.forget#input",
+      "backend": "independent-extensions-sage"
+    },
+    {
       "operation": "fun.modules.fibre_inclusion",
       "input": "fun.modules.fibre_inclusion#input",
       "backend": "independent-extensions-sage"

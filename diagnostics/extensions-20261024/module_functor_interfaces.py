@@ -1,4 +1,4 @@
-"""Public module fibre-inclusion and underlying object/map actions.
+"""Public bilinear forgetting, module fibre-inclusion and underlying actions.
 
 These adapters retain the existing native Module and Callable values. They do
 not recover a source object from a functor recipe, enumerate an infinite carrier,
@@ -8,12 +8,13 @@ or select a subsequent operation. Every returned image remains session-owned.
 from dataclasses import dataclass
 
 from cas_port import construction_invocation, functor_map_invocation, typed_map
-from engine import Module
+from engine import Form, Module
 from wire import Callable, Unsupported, fields, same
 
 
 FIBRE = "fun.modules.fibre_inclusion"
 UNDERLYING = "fun.modules.underlying"
+FORGET = "fun.bilin_module.forget"
 
 
 @dataclass(frozen=True)
@@ -32,8 +33,16 @@ class ModuleImage(Module):
         return self.original.scale(scalar, value)
 
 
+@dataclass(frozen=True)
+class BilinearModuleImage(ModuleImage):
+    """The original complete form and the selected native value module."""
+
+    formed: Form
+    value_module: Module
+
+
 class ModuleFunctorInterfaces:
-    module_functors = {FIBRE, UNDERLYING}
+    module_functors = {FIBRE, UNDERLYING, FORGET}
     module_action_operations = module_functors
 
     def module_action(self, action):
@@ -54,13 +63,28 @@ class ModuleFunctorInterfaces:
                            parameters, receiver, actual, scalar_ring, packet)
 
     def module_functor_parameters(self, operation, parameters):
-        count = 1 if operation == FIBRE else 0
+        count = {FIBRE: 1, FORGET: 2}.get(operation, 0)
         if len(parameters) != count:
             raise ValueError("the module functor requires all %d ordered parameters" % count)
 
     def module_functor_object(self, operation, packet):
         _, parameters, receiver = self.module_object_invocation(packet, operation)
         self.module_functor_parameters(operation, parameters)
+        if operation == FORGET:
+            scalar_ring = self.ring(parameters[0])
+            values = self.module(parameters[1])
+            formed = self.form(receiver)
+            actual = formed.module
+            if (self.module_scalar_ring(actual) is not scalar_ring
+                    or self.module_scalar_ring(values) is not scalar_ring):
+                raise ValueError("the formed carrier or value module differs from the selected scalar ring")
+            # The native Form reader supplies the actual module and pairing.
+            # Keep both complete selections even though this action returns
+            # only the module; no form is reconstructed from an image recipe.
+            image = BilinearModuleImage(actual.native, actual.read, actual.write,
+                                        operation, parameters, receiver, actual,
+                                        scalar_ring, packet, formed, values)
+            return self.session.keep(image)
         actual = self.module_action_native(operation, receiver)
         scalar_ring = self.module_scalar_ring(actual)
         if operation == FIBRE and self.ring(parameters[0]) is not scalar_ring:
@@ -95,6 +119,16 @@ class ModuleFunctorInterfaces:
                 # This is only the retained point codec. The public callable
                 # keeps its exact image endpoints and supplying owner.
                 return self.scalar_element_carrier(actual.source)
+        if self.tag(selected) == "morphismEndpoint":
+            try:
+                self.form(selected)
+            except Unsupported:
+                pass
+            else:
+                # The existing Form reader knows this complete endpoint's
+                # point codec. Keep its descriptor rather than asking the
+                # generic scalar endpoint reader to reconstruct that form.
+                return selected
         return super().scalar_element_carrier(selected)
 
     def polynomial_model(self, selected):

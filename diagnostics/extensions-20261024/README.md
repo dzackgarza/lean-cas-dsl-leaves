@@ -5,7 +5,7 @@ the public contract, declaration exports and authorized interface documentation
 recorded in `public-inputs.json`. No kernel implementation, acceptance assertion,
 expected-answer fixture or downstream execution report was consulted. Diagnostic
 work stayed in this subtree. It ships no Lean and changes no mathematical or
-protocol declaration. The manifest contains 91 public operation/input pairs.
+protocol declaration. The manifest contains 93 public operation/input pairs.
 
 Sage 10.8 supplies exact quotient-ring, modular, polynomial, matrix, module and lazy
 power-series computations. Sage's permutation groups and native GAP supply the
@@ -32,6 +32,7 @@ does not claim an implementation for every object of that category.
 | `cmp.groups.cyclic_quotient_residue`, `mor.sets.cyclic_quotient_map`, `mor.groups.cyclic_quotient_aut_by_unit` | Actual quotient/residue transport, integer quotient images and multiplication by the actual selected unit with its native inverse. Finite automorphism computation requires positive modulus. |
 | `mor.commutative_rings.integer_coefficients`, `fun.modules.reindex`, `fun.modules.reindex#cartesian`, `op.modules.scalar_action` | Supported native regular and vector modules over integers, rationals, integer-quotient rings and the two rational dual-number rings, together with the existing rational subspaces and formed carriers. Native scalar action applies the actual selected base map. The reindex declaration has one explicit parameter, that map. The named `obj.modules_r.restricted_regular` separately retains `R`, `S`, `q`. A cartesian invocation keeps the nested `[functorParameters,receiver]` array. Reindexed morphisms and cartesian maps retain the complete original map and selected modules. |
 | `fun.modules.fibre_inclusion`, `fun.modules.fibre_inclusion#map`, `fun.modules.underlying`, `fun.modules.underlying#map` | Object and map actions consume the existing native module and callable readers in this session, including actual returned subspaces and restrictions. The fibre action retains `[R]`; the underlying action retains `[]`. Object images and whole/generalized callables remain owned, with complete original and actual-image endpoints. |
+| `fun.bilin_module.forget`, `fun.bilin_module.forget#map` | Ordinary object and map actions consume the existing complete formed-object and callable readers, with both selected parameters `[R,W]`. The actual carrier module, original form, selected native value module, request and original/image callable endpoints remain retained and reusable. |
 | The eight named structural carrier functors and both classifier-forget actions listed below, with their paired map ports | Supported ring/module native carriers, their actual operation callbacks, exact action and original receiver, and complete source/image callable interfaces. Classifier forgetting retains the selected complete descriptor; it supplies no classification law. |
 | `mor.sets.successor_power_series_terms`, `bind.sets.power_series_sum`, `mor.sets.power_series_coefficient` | The supplied infinite successor family in the selected coefficient ring, a native lazy infinite sum and requested coefficient observations. The binder also consumes its actual owned whole-family result and identity compositions retaining that native family metadata. No finite truncation or replacement closed-form series is used. |
 | `mor.modules.rectangular_linear_map`, `row_linear_map` | Actual matrices read from complete nested finite callables, at all supplied dimensions including zero, over supported coefficient rings. Rational maps retain exact Sage matrix representations. |
@@ -46,6 +47,58 @@ does not claim an implementation for every object of that category.
 | `mor.sets.direct_image` | The image of the actual supplied finite subset under the complete selected function, including finite subsets of supported infinite carriers. Whole power-object maps retain that function. Complete finite power domains use Sage's full subset inventory. |
 | `obj.sets.group_morphisms#application`, `obj.sets.module_morphisms#application` | Application of the original complete admitted function at the supplied group pair or scalar ring/module pair. The inclusion keeps that same function. Generalized admitted families keep their original domain. No group or module law is inferred or manufactured. |
 | `mor.sets.equality` | Exact supported scalar, product, module and finite-object points; complete finite-domain maps, including native finite automorphism carriers; complete native rational linear maps; and native polynomial scalar actions as detailed below. |
+
+## Ordinary bilinear-module forgetting
+
+The two existing actions `fun.bilin_module.forget` and
+`fun.bilin_module.forget#map` use their published complete-request input
+`fun.bilin_module.forget#input`. Contract publication
+`5db631a34c9d4f65a535fad61b6f76af39fb56f6` publishes these addresses, the
+ordered explicit parameters `[R,W]`, and the common object/map request framing.
+No declaration, mathematical definition or protocol encoding changes here.
+
+The object action reads the actual `Form` through the existing backend reader,
+reads both selected parameters through the native ring/module readers, and keeps
+their native scalar interfaces consistent. Its owned `BilinearModuleImage`
+contains the actual carrier `Module` with its original point codecs and scalar
+action, the complete original `Form` including its callable pairing and context,
+the actual selected value module, and the entire original request. The formal
+caller owns the dependent source-family and parameter typing; the leaf does not
+infer a different value module from a carrier or certify a bilinear law.
+
+Supported source representations are those already read by this package: the
+four named forms, the supported portable change-value and morphism-endpoint
+descriptors, complete subobject-apex descriptors, repeated `valueData` wrappers,
+and actual owned forms returned by the existing lifts. The generic
+`obj.bilin_module.bilinear_form` constructor has no native form reader here and
+is not added by this registration. The public functor's domain is unchanged.
+
+The map action uses `functor_map_invocation`, the existing complete callable
+reader, and both actual returned module images. It checks the images' selected
+functor, complete ordered parameters and original source objects. It retains the
+original source-category callable and both original endpoints without replacing
+them by a named map or a sampled matrix. Selected image points keep the original
+callable's representation-specific reader; supported formed morphism endpoints
+retain their complete descriptor when the image's point codec is read.
+Whole maps and generalized replies preserve their exact domains and image
+targets through the existing `Callable` and `Invocation` records. Both images
+and returned maps can then enter the module fibre, underlying and scalar-action
+consumers; a map with native linear data can enter the existing kernel consumer.
+
+`bilinear_forget_smoke.py` checks these public interfaces, including an actual
+owned form and arrow returned by a lift, malformed selections and closed nested
+owners. It asserts no pairing value, arithmetic answer, equality truth, functor
+law or mathematical acceptance outcome. Run it with:
+
+```sh
+python3 bilinear_forget_smoke.py --contract /absolute/path/to/public-contract \
+  --engine /absolute/path/to/sage/python
+```
+
+The final focused run completed 179 primary-connection requests and five
+closed-owner controls. The affected existing module and structural-carrier
+checks completed 122 and 217 primary requests, respectively, with three
+closed-owner controls each. These are interface findings only.
 
 ## Module fibre-inclusion and underlying actions
 

@@ -716,9 +716,23 @@
       "foreignOwnerRequests": 2,
       "result": "completed",
       "regressions": [
-        {"script": "ring_protocol_smoke.py", "primaryConnectionRequests": 103, "foreignOwnerRequests": 2, "result": "completed"},
-        {"script": "generic_smoke.py", "primaryConnectionRequests": 36, "result": "completed"},
-        {"script": "additive_smoke.py", "primaryConnectionRequests": 66, "foreignOwnerRequests": 1, "result": "completed"}
+        {
+          "script": "ring_protocol_smoke.py",
+          "primaryConnectionRequests": 103,
+          "foreignOwnerRequests": 2,
+          "result": "completed"
+        },
+        {
+          "script": "generic_smoke.py",
+          "primaryConnectionRequests": 36,
+          "result": "completed"
+        },
+        {
+          "script": "additive_smoke.py",
+          "primaryConnectionRequests": 66,
+          "foreignOwnerRequests": 1,
+          "result": "completed"
+        }
       ],
       "pythonSourcesAstParsed": 9,
       "boundary": "Public packet framing, complete selected descriptors and parameters, result shapes, actual owned-result consumption, retained exact graph keys and ownership only. No expected arithmetic value, equality truth, cardinality, equation, law or mathematical acceptance outcome is asserted."
@@ -767,10 +781,29 @@
       "foreignOwnerRequests": 3,
       "result": "completed",
       "regressions": [
-        {"script": "composability_smoke.py", "primaryConnectionRequests": 103, "foreignOwnerRequests": 2, "result": "completed"},
-        {"script": "ring_protocol_smoke.py", "primaryConnectionRequests": 103, "foreignOwnerRequests": 2, "result": "completed"},
-        {"script": "completion_smoke.py", "primaryConnectionRequests": 99, "foreignOwnerRequests": 1, "result": "completed"},
-        {"script": "smoke.py", "primaryConnectionRequests": 74, "result": "completed; two older construction-map inputs now retain the published typed Core frame"}
+        {
+          "script": "composability_smoke.py",
+          "primaryConnectionRequests": 103,
+          "foreignOwnerRequests": 2,
+          "result": "completed"
+        },
+        {
+          "script": "ring_protocol_smoke.py",
+          "primaryConnectionRequests": 103,
+          "foreignOwnerRequests": 2,
+          "result": "completed"
+        },
+        {
+          "script": "completion_smoke.py",
+          "primaryConnectionRequests": 99,
+          "foreignOwnerRequests": 1,
+          "result": "completed"
+        },
+        {
+          "script": "smoke.py",
+          "primaryConnectionRequests": 74,
+          "result": "completed; two older construction-map inputs now retain the published typed Core frame"
+        }
       ],
       "pythonSourcesAstParsed": 7,
       "boundary": "Response shapes/statuses, actual selected records and fields, exact point framing, declared parameter consumption and supplier ownership only. No arithmetic answer, equality truth, cardinality answer, equation, law or mathematical acceptance outcome is asserted."
@@ -912,5 +945,71 @@
     },
     "publicInterfaceGap": null,
     "implementationLimits": "Ring/module-backed native carriers only, including supported existing symbolic carrier inputs and actual owned images. Arbitrary cyclic/automorphism-group/monoid/magma object-action readers are not added. Actual image records are required at the new map boundaries. Opaque dependencies retain their original live supplier."
+  },
+  "bilinearForgetActions20261030": {
+    "baseLeafRevision": "33cd4cd9d0deed5138c7b50dc8724c870f1e7174",
+    "baseLeafTree": "343b1c6b269d1053f4aa83f45d665417c0403a80",
+    "publicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6",
+    "publicContractTree": "968ea95a5f8e7f76de95461999e8bafee74f2d39",
+    "publicContractFiles": {
+      "api/manifest.md": "18a61df15642a9963c643df784352de91e2809cabdb1ef6d11d2761acdf1177f",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/declared-ports.json": "642b7290d5441d7409fa6992732a97166907de8e69eafeb9e6df468aa7d73c4c",
+      "python/cas_port.py": "1a061bfbc3dc40dadc157deaeb11dbd838d7f2710e53f1fe8f369bd60d43e6f5"
+    },
+    "operations": [
+      "fun.bilin_module.forget",
+      "fun.bilin_module.forget#map"
+    ],
+    "input": "fun.bilin_module.forget#input",
+    "newRegistrationPairs": 2,
+    "totalRegistrationPairs": 93,
+    "scope": "Ordinary object and morphism actions using the existing native Form, Module, ModuleImage and Callable readers. Complete [R,W], original source Form, actual native carrier and value module, original callable, actual returned image endpoints and owners remain retained.",
+    "inputBoundary": "Only this leaf repository, its instructions, the published contract documentation/reference helper/generated catalogue and the installed engine were used. No kernel source, acceptance question or outcome, expected-answer fixture, downstream runtime report or sibling workspace was inspected. No public mathematics source was fetched or changed; no Lean/compiler was run.",
+    "nativeCalls": "Existing native Form.module, Module read/write/scale callbacks and original Callable actions; Sage retains responsibility for scalar and matrix computations. No new mathematical algorithm or wire encoding.",
+    "engineeringChecks": {
+      "script": "bilinear_forget_smoke.py",
+      "primaryConnectionRequests": 179,
+      "foreignOwnerRequests": 5,
+      "result": "completed",
+      "coverage": [
+        "Both exact complete-request registration pairs present in the public inventories",
+        "All four existing named forms, portable change-value/morphism-endpoint/subobject-apex descriptors, repeated valueData and actual owned lifted Forms",
+        "Complete scalar and value-module parameters, including native owned value-module data",
+        "Whole and generalized callable reuse with the exact original domains and returned image endpoints",
+        "Actual returned module/map consumption by fibre inclusion, underlying, scalar_action and the existing native kernel consumer",
+        "Actual returned lift Form and hom callable mapped by the new ordinary action",
+        "Malformed arity, parameter copies, action identities, source/callable/image endpoints and unavailable nested owners"
+      ],
+      "regressions": [
+        {
+          "script": "module_functor_smoke.py",
+          "primaryConnectionRequests": 122,
+          "foreignOwnerRequests": 3,
+          "result": "completed"
+        },
+        {
+          "script": "carrier_functor_smoke.py",
+          "primaryConnectionRequests": 217,
+          "foreignOwnerRequests": 3,
+          "result": "completed"
+        }
+      ],
+      "boundary": "Protocol statuses, result shapes, complete selection retention, native result/callable reuse and live ownership only. No pairing value, arithmetic answer, equality truth, functor law or mathematical acceptance outcome is asserted."
+    },
+    "resolvedEngineeringFindings": [
+      "Selected points at a supported formed morphismEndpoint keep that complete endpoint as their native codec context, rather than relying on the generic scalar endpoint resolver.",
+      "The original callable at_point reader remains intact; no eager normalization can erase a wrapped finite-graph key."
+    ],
+    "publicInterfaceGap": null,
+    "implementationLimits": "Only the existing supported native Form readers are used. The generic obj.bilin_module.bilinear_form constructor has no native reader in this diagnostic and is not added. Full dependent source-family typing remains with the public formal caller. The map boundary requires actual returned image records; all opaque dependencies keep their supplying live connection.",
+    "independentSourceReview": {
+      "scope": "Public-contract and bounded leaf-only static review; no source edits, engine runs, acceptance inputs or outcomes",
+      "resolvedFindings": [
+        "Keep the retained original callable point reader intact; use the existing Form reader for supported complete morphism-endpoint codec descriptors."
+      ],
+      "remainingConcreteFindings": "None identified in the final focused review.",
+      "boundary": "Engineering source review only; no mathematical correctness or acceptance evidence."
+    }
   }
 }
