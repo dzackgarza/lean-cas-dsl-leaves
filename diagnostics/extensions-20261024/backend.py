@@ -32,7 +32,7 @@ def main():
     write_frame({"op": "ready", "protocol": 1,
                  "backend": "independent-extensions-sage",
                  "backend_version": sage.version.version,
-                 "adapter_version": "2026-10-30.2",
+                 "adapter_version": "2026-10-30.3",
                  "capabilities": sorted(operations)})
     while True:
         packet = read_frame()

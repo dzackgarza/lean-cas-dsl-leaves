@@ -25,6 +25,7 @@ from additive_interfaces import AdditiveInterfaces
 from power_interfaces import PowerObjectInterfaces
 from module_functor_interfaces import ModuleImage
 from carrier_functor_interfaces import CarrierFunctorInterfaces
+from tuple_interfaces import TupleInterfaces
 
 
 @dataclass(frozen=True)
@@ -97,7 +98,7 @@ class RestrictedModule(Module):
         return self.original.scale(native_scalar, value)
 
 
-class ExtensionEngine(CarrierFunctorInterfaces, PowerObjectInterfaces, AdditiveInterfaces, GenericInterfaces, Engine):
+class ExtensionEngine(TupleInterfaces, CarrierFunctorInterfaces, PowerObjectInterfaces, AdditiveInterfaces, GenericInterfaces, Engine):
     modular_ids = {"obj.sets.integers_mod", "obj.rings.integers_mod", "obj.commutative_rings.integers_mod"}
     quotient_ids = {"obj.sets.cyclic_quotient", "obj.groups.cyclic_quotient"}
     cyclic_ids = {"obj.groups.cyclic"}

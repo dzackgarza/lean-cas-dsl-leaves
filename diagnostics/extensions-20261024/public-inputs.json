@@ -1076,5 +1076,59 @@
       "remainingConcreteFindings": "None identified in the final focused review.",
       "boundary": "Engineering interface review only; no mathematical correctness or acceptance evidence."
     }
+  },
+  "publicTupleConstructors20261030": {
+    "baseLeafRevision": "5b43304b3dee60aa5c19c681dbf82dcab65fb1b2",
+    "baseLeafTree": "07927d72e2abc7bc7a655c8967aec59b745299b3",
+    "publicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6",
+    "publicContractTree": "968ea95a5f8e7f76de95461999e8bafee74f2d39",
+    "publicContractFiles": {
+      "AGENTS.md": "844f7c441354a6fbe0a626439e7253438371dab5f3cfcc6884ca5e7dc365131b",
+      "INTENT.md": "a92d8299a42d9d05158eac9fdfafc1f38b0959028f60ed88377ebc9eff605981",
+      "api/manifest.md": "18a61df15642a9963c643df784352de91e2809cabdb1ef6d11d2761acdf1177f",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/declared-ports.json": "642b7290d5441d7409fa6992732a97166907de8e69eafeb9e6df468aa7d73c4c",
+      "python/cas_port.py": "1a061bfbc3dc40dadc157deaeb11dbd838d7f2710e53f1fe8f369bd60d43e6f5"
+    },
+    "operationsAndInputs": [
+      "mor.sets.tuple_empty",
+      "mor.sets.tuple_cons"
+    ],
+    "newRegistrationPairs": 2,
+    "totalRegistrationPairs": 96,
+    "publicMeaning": "The exported declarations give the empty tuple in X^0 at parameters [X], and (x,v) mapped to (x,v_0,...) from X times X^n to X^(n+1) at parameters [X,n]. Both addresses are present independently in operations and inputForms.",
+    "nativeCalls": "Python tuple() and tuple concatenation; existing complete Callable.at_point, framed_callable, point, product_point, endpoint, Invocation and Session readers. No new arithmetic algorithm, private wire tag, native carrier identification or global inventory enumeration.",
+    "engineVersion": "Sage/passagemath 10.8.13; Python 3.12.14",
+    "engineDocumentation": {
+      "source": "Installed public Python built-in tuple.__doc__ and tuple.__add__.__doc__",
+      "reference": "https://docs.python.org/3/library/stdtypes.html#tuples",
+      "access": "The installed public built-in docstrings were read. External documentation retrieval was unavailable."
+    },
+    "scope": "Both ordinary public tuple constructors, their complete finite-coordinate point data, selected endpoint wrappers, whole/generalized callables and actual returned-value reuse. Complete head data are copied unchanged. Tail callables use the existing supported native/public readers on every Fin(n) coordinate.",
+    "inputBoundary": "Source reads were limited to this owned diagnostic subtree, repository instructions, the pinned public contract documentation/generated inventories/reference helper and public native-engine docstrings. No kernel implementation, mathematical question, acceptance test or outcome, expected-answer fixture, sibling leaf source/inventory or downstream execution report was inspected. No Lean/compiler was run. Source authorship remained in this isolated worktree.",
+    "engineeringChecks": {
+      "script": "tuple_protocol_smoke.py",
+      "primaryConnectionRequests": 87,
+      "stoppedOwnerRequests": 5,
+      "result": "completed",
+      "coverage": [
+        "Both exact operation/own-input registration pairs in the published inventories",
+        "Seven native/public entry models, nested tuples, empty base carriers and all finite-coordinate indices",
+        "Complete finite graphs, actual owned coordinate functions and typed/composed callable representations",
+        "Named, wrapped, declaration-endpoint and actual retained callable-endpoint descriptors",
+        "Original whole, empty, distinct-singleton, finite and infinite generalized domains and scalar/callable reply roles",
+        "Original wrapped inventory keys, actual returned scalar/coordinate/tuple/whole-map data and native owners",
+        "Malformed arity, ordered parameters, dimensions, endpoint selections and finite-coordinate graphs",
+        "Owned scalar/callable role mismatch and stopped owners nested in callable, coordinate, scalar and selected parameter data"
+      ],
+      "boundary": "Protocol statuses, framing, representation shapes, complete selected-data consumption, actual returned-data reuse and live ownership only. No tuple entry, arithmetic answer, equality truth, constructor equation or mathematical acceptance outcome is asserted."
+    },
+    "resolvedEngineeringFindings": [
+      "Treat complete Fin(n)-indexed callables as tuple points instead of generalized arrows from the invocation domain.",
+      "Read actual retained endpoint fields without changing the public endpoint wrapper or its opaque owner.",
+      "Copy the complete head packet directly; a generic point normalization could erase a supplied wrapped graph key, and the tuple constructor need not enumerate X."
+    ],
+    "publicInterfaceGap": null,
+    "implementationLimits": "Tail and generalized-argument callables must have one of the existing supported complete native/public representations. Unknown native/symbolic maps remain unsupported. No native linear/polynomial metadata for infinite whole-map equality or new global tuple-object inventory algorithm is added. Every opaque dependency retains its original live supplier."
   }
 }

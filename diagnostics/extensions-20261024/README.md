@@ -5,7 +5,7 @@ the public contract, declaration exports and authorized interface documentation
 recorded in `public-inputs.json`. No kernel implementation, acceptance assertion,
 expected-answer fixture or downstream execution report was consulted. Diagnostic
 work stayed in this subtree. It ships no Lean and changes no mathematical or
-protocol declaration. The manifest contains 94 public operation/input pairs.
+protocol declaration. The manifest contains 96 public operation/input pairs.
 
 Sage 10.8 supplies exact quotient-ring, modular, polynomial, matrix, module and lazy
 power-series computations. Sage's permutation groups and native GAP supply the
@@ -21,6 +21,7 @@ does not claim an implementation for every object of that category.
 
 | Family and public addresses | Supported native computation |
 | --- | --- |
+| `mor.sets.tuple_empty`, `mor.sets.tuple_cons` | The complete published `[X]` and `[X,n]` callable interfaces. Python native tuple construction and concatenation retain the actual `X`-valued data; existing complete finite-coordinate, symbolic and owned callable readers consume all tail coordinates. Whole/generalized results retain their actual domains and live owners. |
 | `fun.commutative_rings.ring` on `cat.commutative_rings` | Ordinary object action on the existing integer, rational, modular and rational dual-number native readers. The owned result retains the actual Sage ring, full source receiver and complete request; existing ring operations consume that image directly. |
 | `op.rings.add`, `mul`, `pow`, `neg`; dual-number coefficient maps | Integer, rational, modular, and the two published rational dual-number rings, including the explicitly supported carrier views. |
 | `cmp.rational_dual.translation` | The actual Sage homomorphisms between the selected dual-number presentations in both directions. |
@@ -48,6 +49,60 @@ does not claim an implementation for every object of that category.
 | `mor.sets.direct_image` | The image of the actual supplied finite subset under the complete selected function, including finite subsets of supported infinite carriers. Whole power-object maps retain that function. Complete finite power domains use Sage's full subset inventory. |
 | `obj.sets.group_morphisms#application`, `obj.sets.module_morphisms#application` | Application of the original complete admitted function at the supplied group pair or scalar ring/module pair. The inclusion keeps that same function. Generalized admitted families keep their original domain. No group or module law is inferred or manufactured. |
 | `mor.sets.equality` | Exact supported scalar, product, module and finite-object points; complete finite-domain maps, including native finite automorphism carriers; complete native rational linear maps; and native polynomial scalar actions as detailed below. |
+
+## Public tuple constructors
+
+Both tuple morphisms use their published own-address complete-request input.
+Contract publication `5db631a34c9d4f65a535fad61b6f76af39fb56f6` gives the
+parameter order and exact signatures: `tuple_empty` takes `[X]` and maps the
+declared `Fin(1)` source to `obj.sets.vectors(X,0)`; `tuple_cons` takes `[X,n]`
+and maps `objectProduct(X,obj.sets.vectors(X,n))` to
+`obj.sets.vectors(X,n+1)`. This implementation adds neither a new address nor
+a private tuple wire encoding.
+
+The private native representation is a Python tuple. Python's `tuple()` and
+tuple concatenation supply the two structural operations. The existing callable
+reader consumes the tail on its complete `Fin(n)` index object and its exact
+selected `X` target. Inline graphs require every coordinate exactly once;
+typed and owned callables retain both actual endpoints. Output uses the public
+complete finite-function graph codec. The head is already complete point data
+and is retained unchanged, including function-valued points, nested tuples,
+explicit wrapped inventory keys and native opaque values. The implementation
+does not enumerate `X` or coerce its entries to an arithmetic carrier.
+
+Common invocation framing, declaration-parameter checks, `Callable`,
+`Invocation`, original argument actions and the existing live `Session` provide
+whole and generalized maps. Only the existing registered global-point domain
+uses the scalar convention; a different supplied singleton retains its callable
+domain. Endpoint wrappers read the actual public declaration or retained
+callable fields for private codec context while preserving the original
+descriptors. Actual returned coordinates, tuple values and whole/generalized
+maps can be reused on their original connection.
+
+Supported tail and generalized-argument representations are those already
+implemented by the native callable readers. Unknown symbolic/native callables
+remain `unsupported`, and another or stopped supplier's tokens are never
+revived. These two constructors add no native linear/polynomial model for
+infinite whole-map equality and no new finite inventory algorithm for tuple
+objects. Existing consumers keep their existing native representation limits.
+There is no missing public meaning or wire-format requirement for this scope.
+
+The standalone protocol check is:
+
+```sh
+python3 tuple_protocol_smoke.py --contract /absolute/path/to/public-contract \
+  --engine /absolute/path/to/sage/python
+```
+
+The final run completed 87 primary-connection requests and five controls after
+the supplying process stopped. It checks published registration pairs, seven
+native/public entry models, all tail coordinates, ordinary and empty carriers,
+typed/owned/composed coordinate functions, selected endpoint fields, closed and
+generalized reply roles, exact wrapped keys, actual returned-data reuse,
+malformed parameters/graphs/endpoints and stopped nested owners. Its assertions
+concern protocol statuses, framing and representation shapes only. No tuple
+entry value, arithmetic result, equality truth, constructor equation or
+mathematical acceptance outcome is asserted.
 
 ## Ordinary bilinear-module forgetting
 

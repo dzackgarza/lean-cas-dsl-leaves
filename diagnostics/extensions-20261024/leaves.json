@@ -10,6 +10,16 @@
   ],
   "registrations": [
     {
+      "operation": "mor.sets.tuple_empty",
+      "input": "mor.sets.tuple_empty",
+      "backend": "independent-extensions-sage"
+    },
+    {
+      "operation": "mor.sets.tuple_cons",
+      "input": "mor.sets.tuple_cons",
+      "backend": "independent-extensions-sage"
+    },
+    {
       "operation": "fun.modules.additive_group",
       "input": "fun.modules.additive_group#input",
       "backend": "independent-extensions-sage"
