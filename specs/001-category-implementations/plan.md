@@ -37,7 +37,7 @@ category with `just test-category NAME`; `just test-commit` (manifest and compil
 | --- | --- |
 | LV1, FR-034 | Each program has one lowering table; lookups and duplicated data are deleted. |
 | LV2, LV14 | No document or test here holds an acceptance statement or expected answer; kernel tasks are named by ID. |
-| LV3 | Each milestone task implements the complete generated interface of its categories, less the ports that a later milestone moves. |
+| LV3 | Each milestone task implements the complete generated interface of its categories, less the ports that a subsequent milestone moves. |
 | LV4 | Tier 1 checks retention of supplied endpoints and earlier outputs in each reply. |
 | LV5–LV7 | Each milestone task starts with its survey record; the routine table names each port's routine. |
 | LV8 | Programs that need another category's operation suspend through the SDK and handle `NoImplementation`. |

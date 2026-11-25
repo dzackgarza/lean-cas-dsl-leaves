@@ -66,7 +66,7 @@ FR-042).
 
 **Independent Test**: for each milestone, the kernel task that consumes it (T200 to T224 of
 lean-cas-dsl) runs its attainment statements through `CasRuntime.KernelSession` with this
-repository's manifest. The kernel's acceptance suite decides the result; this repository does
+repository's manifest. The kernel's acceptance suite judges the result; this repository does
 not hold the statements (LV2).
 
 **Acceptance Scenarios**:
@@ -87,7 +87,7 @@ not hold the statements (LV2).
 An assessor removes the registrations of one category implementation of this repository and
 installs an independently written provider for the same operations and input forms. The
 questions, the kernel and the other implementations stay unchanged, and the acceptance suite
-still decides.
+still judges the answers.
 
 **Why this priority**: independent replacement is the evidence that the contract, not this
 repository's private layout, carries the interface (K:C12; LV15). The trials follow
@@ -128,7 +128,7 @@ milestones", lean-cas-dsl `4be2a02`). It names the categories, the engine and it
 the engine survey, the registrations of `leaves.json` that move into it, the computations that
 the kernel performs today and that move into it, the upstream tasks before it, and the kernel
 task that consumes it. Each milestone MUST implement the complete generated interface of its
-categories (LV3), less the registrations that a later requirement moves; the attainment
+categories (LV3), less the registrations that a subsequent requirement moves; the attainment
 statements of the consuming kernel task are the workload statements that it makes computable,
 assessed there (LV2, LV13). The plan gives the files, entry points and tests of each.
 
@@ -254,7 +254,7 @@ assessed there (LV2, LV13). The plan gives the files, entry points and tests of 
   `cat.definite_lattice`, `cat.indefinite_lattice`, `cat.even_lattice`, `cat.finite_free_lattice`,
   `cat.unimodular_lattice`. Engine: Sage `IntegralLattice`, `TorsionQuadraticModule`; Hecke
   through Oscar for genus and isometry; PARI `qfauto` for definite lattices. Moves in 0. Upstream:
-  the lattice structural functors. After FR-013, FR-017, FR-023, FR-024.
+  the lattice structural functors. After FR-013, FR-017, FR-023.
 
 ### Functional Requirements — the contract, the moves and the engineering defaults
 
