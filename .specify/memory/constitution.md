@@ -23,9 +23,13 @@ an inheritance, a value identity or a correctness criterion. All mathematics is 
 lean-categories (K:C1, K:C2; kernel FR-012, FR-013). A leaf ships no Lean code (K: policy
 "Mathematical and leaf-code separation"; `AGENTS.md`).
 
-- A leaf source MUST NOT hold a mathematical datum of a named object, such as a Gram matrix, a
-  rank or a defining polynomial. The request supplies those data: the kernel unfolds a
-  definition into the published constructors and literals that it is built from (K:C22).
+- A leaf MUST NOT answer by lookup: a rank, a cardinality or another result written in the
+  source in place of an engine computation.
+- A named object that arrives as its descriptor is lowered to the engine constructor that
+  builds it, in one lowering table of its category implementation. A leaf source MUST NOT
+  write a defining datum (a Gram matrix, a defining polynomial) that an engine constructor
+  builds, and MUST NOT write one datum in two places. Where the kernel unfolds a definition
+  into published constructors and literals, the leaf computes from those (K:C22).
 - A leaf that needs a declaration which lean-categories does not have has found an upstream
   gap. The gap is a lean-categories task (LV14); the leaf does not supply the mathematics.
 
@@ -156,8 +160,10 @@ A leaf reports each failure by its contract status (RC7; contract FR-011, FR-012
 - an absent engine: the backend exits before its ready frame, and the kernel reports
   `unavailable`.
 
-A leaf MUST NOT retry, fall back to another engine, substitute a default or declare semantic
-invalidity or ambiguity (K:C13; RC7).
+A leaf MUST NOT retry, switch to another engine after a failure, substitute a default or
+declare semantic invalidity or ambiguity (K:C13; RC7). A branch on an observable intermediate
+answer of an engine, for example an unevaluated integral that a second engine then computes,
+is control logic (LV8) and names both routines.
 
 ### LV12. Existing registrations move into category implementations
 
@@ -339,7 +345,7 @@ the task that needs it, and the work continues with the next task whose inputs a
 Work records, diagnostics and evidence go to the owning GitHub issue, not to a repository file
 (K: "Authority and scope"). The checklist of the computational milestones is lean-cas-dsl#93.
 
-**Version**: 1.0.0 | **Ratified**: 2026-11-25 | **Last Amended**: 2026-11-25
+**Version**: 1.1.0 | **Ratified**: 2026-11-25 | **Last Amended**: 2026-11-25
 
 [K]: https://github.com/dzackgarza/lean-cas-dsl/blob/main/.specify/memory/constitution.md
 [RC]: https://github.com/dzackgarza/lean-cas-dsl-leaf-contracts/blob/main/.specify/memory/constitution.md
