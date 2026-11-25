@@ -2,6 +2,11 @@
 
 These findings concern published input forms and engine wiring. No leaf result is correctness evidence.
 
+This file holds the findings recorded before the [constitution](.specify/memory/constitution.md)
+of 2026-11-25. New findings, work records and evidence go to the owning GitHub issue (constitution,
+Governance). The leaf-chosen encodings of the last section are findings against the contract; a
+leaf invents no wire encoding (LV14).
+
 ## Published input review, 2026-10-20
 
 The published contract reviewed is `lean-cas-dsl-leaf-contracts` main

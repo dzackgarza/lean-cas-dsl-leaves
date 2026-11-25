@@ -1,5 +1,9 @@
 # Ground everything in INTENT.md (read before anything else)
 
+The [constitution](.specify/memory/constitution.md) (articles LV1 to LV25) governs this
+repository under the kernel constitution of lean-cas-dsl. Where this file conflicts with it, this
+file is corrected. Work order is the task list of the active feature under `specs/`.
+
 Use the [shared math container](https://github.com/dzackgarza/ai-review-ci/blob/main/SAGE-CONTAINER.md#use-the-image)
 (`ghcr.io/dzackgarza/sage:develop`) for Lean/elan, Sage with mypy, GAP,
 Julia/Oscar, Macaulay2, and Singular. The guide covers image pull/run commands,
@@ -123,17 +127,19 @@ or another provider's private representation is required.
   and complete dependent results and subsequent uses. Retain every selected structure,
   parameter, defining map, comparison, callable field and permitted choice. Constructors
   of categories are distinct from constructors of objects within them.
-- **Leaf-owned computation.** The provider owns its algorithms, ordinary control flow,
-  private data and reuse. Prefer adequate mature engine routines such as GAP, Sage,
-  Singular, Macaulay2, Julia, SymPy or published research code, and identify the actual
-  invoked engine and routine where available. Private composition and caching are
-  permitted. Public composition uses the released deferred/suspended service and its
-  exact dependency and capture rules; a port-by-port forwarding list does not replace
-  the complete category implementation.
+- **Glue over mature engines.** The provider owns its control logic, private data and
+  reuse (kernel C22). It computes through mature engine routines such as GAP, Sage,
+  Singular, Macaulay2, Julia, SymPy or published research code, hand-rolls no algorithm
+  that an engine supplies, and names the engine and routine of each computation
+  (constitution LV5, LV6). A survey of engines precedes each category implementation
+  (LV7). Private composition and caching are permitted. Public composition uses the
+  released deferred/suspended service and its exact dependency and capture rules; a
+  port-by-port forwarding list does not replace the complete category implementation.
 - **Preserve the kernel boundary.** The generic kernel owns source interpretation,
-  mathematical domain and structure selection, cross-provider dispatch, admission and
-  scoped ownership. A provider may not recreate or bypass those decisions. Deficiencies
-  in the accepted mathematics, contract or generic kernel go to their responsible owner.
+  mathematical domain and structure selection, placement, propagation, refinement,
+  cross-provider dispatch, admission, retention and scoped ownership (LV10). A provider
+  may not recreate or bypass those decisions. Deficiencies in the accepted mathematics,
+  contract or generic kernel go to their responsible owner.
 - **Engine values stay private.** Engine objects and types live inside the leaf's program; only a
   value of the declared result form crosses the port.
 
@@ -141,15 +147,20 @@ This guides how leaves are written, and a separate engineering review checks it.
 no trust. Correctness is judged only by the acceptance suite (the evidence model above, 9), and the
 firewall holds even for a leaf that ignores all of it.
 
-* **Authors.** Only the leaf subagent writes here, against the contract and catalogue on `main`.
-  It is blind to the tests and never edits the contract, the kernel or `lean-categories`. The
-  orchestrator delegates leaves and never writes, ports or polishes one
-  (`lean-cas-dsl/specs/architecture.md`, "Authors: one role per agent"). The leaves present in
-  this repository were written or kept alive by the orchestrator (`b818e4c`). They are quarantined
-  and are to be rewritten under this workflow, not ported (`gov-leaf-rewrite`).
+* **Authors.** Only a public-only leaf author writes leaf code here, against the released contract
+  (release `v2.0.0` from kernel readiness F, `v2.0.1` on `main` at delivery) and the catalogue that
+  it publishes (constitution LV13, LV14). It is blind to the tests and never edits the contract,
+  the kernel or `lean-categories`. The documents of this repository contain only the inputs that
+  such an author may receive (LV14). The orchestrator delegates leaves and never writes, ports or
+  polishes one (`lean-cas-dsl/specs/architecture.md`, "Authors: one role per agent"). The leaves
+  present in this repository were written or kept alive by the orchestrator (`b818e4c`). A
+  public-only leaf author moves them into the category implementations of the computational
+  milestones; the survey of each category decides whether a routine stays (LV12).
 * **All leaves live here.** Probe leaves included; none belongs in `lean-cas-dsl`.
-* **Dependencies.** This package depends on the leaf contract (`lean-cas-dsl-leaf-contracts`) and
-  `lean-categories` only. Every operation a leaf names is a row of `lean-categories`' catalogue.
+* **Dependencies.** This package depends on the SDK of the released leaf contract
+  (`lean-cas-dsl-leaf-contracts`) and on the engines of the research container (constitution
+  LV16, LV21). Every operation a leaf names is a row of `lean-categories`' catalogue, as the
+  released contract publishes it.
 * **Nothing a leaf says is believed.** A leaf supplies no proof, denotation, identification of
   values, presentation or observation proof, decision evidence, status, trust level, certificate
   or checker, and nothing reads such a thing from it. A computation that can be carried out
@@ -157,16 +168,23 @@ firewall holds even for a leaf that ignores all of it.
 * **Blind to the tests.** The permanent acceptance suite lives in `lean-cas-dsl`, which depends on
   this package; nothing here depends on it, runs it or can reach it. A leaf is never written or
   changed to make a test pass: `lean-cas-dsl`'s harness measures the installed leaves and reports
-  gaps. A leaf may keep whatever internal tests it wants; they are its own business and are
-  evidence of nothing.
+  gaps. The tests of this repository drive a real backend process through the contract's protocol
+  peer and check protocol and data-retention behaviour (constitution LV17, LV18); they are
+  evidence of nothing about correctness.
 * **Missing mathematics goes upstream.** If a leaf seems to need a new category, method,
-  placement, forwarding or edge, the defect is upstream: formalize it in `lean-categories`,
-  merge it to `main`, and only then register an implementation here.
+  placement, forwarding or edge, the defect is upstream. It is a `lean-categories` task, named in
+  the task list before its consumer with its issue, and a formalization author does it; the leaf
+  author of the consumer does not formalize what its code implements (constitution LV14). Only
+  after it is merged to `main` is an implementation registered here.
 * **Litmus role.** These leaves also probe the kernel: change one when that exposes a deficiency
   of the contract, the kernel or `lean-categories`, and name the deficiency in the commit.
 * **Programs.** A leaf's implementation is a backend program in this repository, in whatever
   language its engine needs; it speaks the contract's port protocol (`cas_port`, put on its
-  `PYTHONPATH` by the kernel). Engines: `CAS_GAP_PYTHON`, `CAS_SAGE_PYTHON` (default
-  `.venv/bin/python` of the running workspace).
+  `PYTHONPATH` by the kernel). The one engine installation is the research container's: SageMath
+  under `/sage/.venv/bin/python3`, with GAP through `libgap` (constitution LV21). A backend does
+  not search for another interpreter; the variables `CAS_GAP_PYTHON`, `CAS_SAGE_PYTHON` and the
+  workspace `.venv/bin/python` search of `backends/engine_python.py` are removed by the feature's
+  task list.
 
-Every `require` tracks `main`. The commit and push tiers compile nothing.
+Delivery consumes the latest-main dependencies and records their revisions (kernel delivery-inputs
+policy). The commit and push tiers compile nothing.

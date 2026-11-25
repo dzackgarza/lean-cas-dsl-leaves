@@ -6,6 +6,10 @@ owns the separation of concerns. A leaf is a registration: a catalogue operation
 It contributes no mathematics and ships no Lean. Nothing it says is believed; only its answers are
 checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
 
+The [constitution](.specify/memory/constitution.md) governs this repository. The unit of work is
+the category implementation of the generated interface; a registration is one of its ports
+(constitution LV3).
+
 * **`leaves.json`** is the manifest the kernel reads (`CasContract/Registration.lean` of
   `lean-cas-dsl-leaf-contracts`): the backend programs, and for each registration its
   `operation`, `input` form and `backend`, plus optional C6 `preferredRoutes`.
@@ -18,10 +22,12 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
   parameters, defining maps, comparisons, callable fields and permitted choices.
   Category constructors are separate. Native datatype metadata supplies no wire codec.
 * **`backends/`** holds the programs. Each speaks the contract's port protocol (`cas_port`, put on
-  its `PYTHONPATH` by the kernel). Providers own their algorithms, ordinary control flow,
-  private engine values and private reuse; use adequate existing routines where available.
-  They decode the complete prescribed input and supply the full result interface, naming
-  the actual engine and routine they invoke. Public composition and retained results use
+  its `PYTHONPATH` by the kernel; constitution LV16 makes the SDK a declared dependency at
+  the contract release tag). Providers own their control logic, private engine values and
+  private reuse. They are glue over mature engine routines and hand-roll no algorithm that
+  an engine supplies (constitution LV5, LV6). They decode the complete prescribed input and
+  supply the full result interface, naming the actual engine and routine they invoke.
+  Public composition and retained results use
   the released service with its actual ownership and capture checks. Providers contribute
   no mathematical definitions, proofs, semantic authority or acceptance criteria.
   * `sage_backend.py`: Sage, under `CAS_SAGE_PYTHON`;
@@ -42,9 +48,10 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
     `lim` and `lim` at infinity, by Sage's symbolic ring, `AA`/`QQbar` and polynomial
     routines, under `CAS_SAGE_PYTHON` with full Sage (`sage.all`).
 
-  The adapters support modular passagemath entrypoints and the public `sage.all`
-  entrypoint of a full Sage installation. The selected interpreter must supply one
-  of these complete engine installations.
+  The one engine installation is the full SageMath of the research container, through
+  its public `sage.all` entrypoint under `/sage/.venv/bin/python3` (constitution LV21).
+  The modular passagemath entrypoints that the adapters still try are removed by the
+  feature's task list.
   Additional programs implement the published B0 routes:
   `gap_groups.py` uses GAP for symmetric/cyclic groups, selected units,
   subgroup kernels and abelianness; `sage_modules.py` supplies module rank
@@ -70,14 +77,16 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
   `api/declared-ports.json` supplies the exact field addresses and public types;
   its `Port.lean` fixes their wire encodings.
 
-  Both engine variables default to `.venv/bin/python` of the running workspace (`backends/engine_python.py`).
+  `backends/engine_python.py` still gives both engine variables a default of
+  `.venv/bin/python` of the running workspace; LV21 removes that search.
 * **`lakefile.toml`** only makes this directory a Lake package; it has no targets. `lean-cas-dsl`
   requires no leaf package: it reads a manifest at run time (`CAS_LEAVES`).
 
 * **Blind to the tests.** The permanent acceptance suite lives in `lean-cas-dsl`; nothing here
   depends on it, runs it or can reach it. A leaf is never written or changed to make a test pass:
   `lean-cas-dsl`'s harness measures the installed leaves and reports gaps. A leaf's own tests are
-  evidence of nothing.
+  evidence of nothing; they check protocol and data-retention behaviour of a real backend process
+  (constitution LV18).
 * **Litmus role.** These leaves also probe the kernel: change one when that exposes a deficiency of
   the contract, the kernel or `lean-categories`, and name the deficiency in the commit.
 
