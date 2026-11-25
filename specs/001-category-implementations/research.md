@@ -68,8 +68,11 @@ program would then carry the engine closure of the other (LV16).
 descriptors of its categories to engine constructors (for example `obj.sets.integers` to `ZZ`,
 `obj.bil_wform.root_lattice_a` at $n$ to Sage's root lattice of type $A_n$ with the sign of the
 catalogue row). The literal Gram matrices of $A_n$, the literal ranks of $A_n$ and $E_8$, the two
-tables from named sets to parents and the two countability tables are deleted (FR-034; kernel
-record `existing-leaves.md`, section 1.5).
+tables from named sets to parents and the two countability tables are deleted (FR-034). They are in `backends/` at `8b181d7`:
+`sage_discriminant.py:33`, `sage_modules.py:60-61`, `gap_groups.py:61-62` (Gram matrix of $A_n$);
+`sage_modules.py:50-52`, `gap_groups.py:55-57` (ranks); `sage_backend.py:36-46`,
+`sage_power_set.py:38-48`, `sage_set_limits.py:63-68` (parents); `sage_backend.py:51-52`,
+`sage_set_limits.py:75-83` (countability).
 
 **R9. Protocol peer for tests.** Decision: `just setup` checks that the contract checkout
 `/repos/lean-cas-dsl-leaf-contracts` is at the declared tag (`git describe --exact-match`) and

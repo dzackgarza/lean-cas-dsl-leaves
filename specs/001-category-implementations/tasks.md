@@ -15,12 +15,13 @@ it serves (**Kernel**). A kernel task ID is a reference, not an input of the lea
 
 Every implementation task follows the plan's "Tests of each program" and the contract
 [backend-program.md](contracts/backend-program.md); every survey task fills its section of
-[research.md](research.md), "Survey record", with the row format given there. A survey task lists
+[research.md](research.md), "Survey record", with the row format given there (FR-028). A survey task lists
 the parts of the generated interface with `cas_interfaces.load_interfaces(...).category(<id>)`
 for each category of its requirement. An implementation task implements every part of that list
 that no subsequent requirement moves (LV3), moves the registrations of its rows of the research
-table "Registrations that move", deletes the lookups and duplicated data that FR-034 names for
-those rows, and trashes each v1 program whose last registration it moves.
+table "Registrations that move", replaces the hand-rolled, partial and lookup answers that FR-027
+names for those rows by the routines of its survey record, deletes the duplicated data that
+FR-034 names for them, and trashes each v1 program whose last registration it moves.
 
 Format: `- [ ] ID [P?] [Story] description`.
 
@@ -248,7 +249,7 @@ Format: `- [ ] ID [P?] [Story] description`.
 - [ ] T044 Trash `backends/engine_python.py` and `backends/wire.py`, and remove the
   `CAS_SAGE_PYTHON`, `CAS_GAP_PYTHON` and modular-entrypoint paragraphs of `README.md` and
   `AGENTS.md` (FR-031). **Files**: `backends/engine_python.py`, `backends/wire.py`, `README.md`,
-  `AGENTS.md`. **Acceptance**: SC-003 holds; SC-002 holds. **After**: T034, T043.
+  `AGENTS.md`. **Acceptance**: SC-002, SC-003 and SC-005 hold. **After**: T034, T043.
   **Kernel**: T105.
 - [ ] T045 [US2] Survey FR-018 (set constructions), with crystals surveyed from their Sage
   source. **Files**: `research.md`. **Acceptance**: a row for each part of the fourteen

@@ -29,7 +29,7 @@ category with `just test-category NAME`; `just test-commit` (manifest and compil
 **Performance Goals**: tier 1 of one category under five minutes (SC-004).
 **Constraints**: permitted inputs only (LV14); no hand-rolled algorithm without a survey gap
 (LV6); no field computed that no request demands (LV25).
-**Scale/Scope**: 25 milestones, 115 moved registrations, 23 backend programs.
+**Scale/Scope**: 25 milestones, 115 moved registrations, 27 backend programs.
 
 ## Constitution Check
 

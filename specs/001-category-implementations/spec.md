@@ -267,8 +267,8 @@ assessed there (LV2, LV13). The plan gives the files, entry points and tests of 
   requests (T013, T015), the category view (T014, T015). The release `v2.0.0` (contract T019)
   is the input of FR-001; the release `v2.0.1` (contract T020) is the delivery dependency. No v1
   frame and no hand-written wire codec remain (`backends/wire.py` is deleted).
-- **FR-027 — Hand-rolled algorithms and lookups.** Each registration that the kernel's
-  research record classes as hand-rolled, partial or lookup MUST be replaced by an engine
+- **FR-027 — Hand-rolled algorithms and lookups.** Each registration whose answer is
+  hand-rolled, partly hand-rolled or a lookup in its v1 source MUST be replaced by an engine
   routine, or justified under LV6: `lim.sets.pullback` (Catlab.jl `pullback`),
   `lift.bilin_module.restrict#obj` (Sage `submodule` and `gram_matrix`), `lim.sets.product`
   (Sage `cartesian_product` with `cartesian_projection`), `meth.cardinality` at `cat.sets` (Sage
