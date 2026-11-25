@@ -8,7 +8,11 @@ checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
 
 The [constitution](.specify/memory/constitution.md) governs this repository. The unit of work is
 the category implementation of the generated interface; a registration is one of its ports
-(constitution LV3).
+(constitution LV3). Each category implementation has its own Spec Kit feature,
+`specs/002-cardinals/` to `specs/034-ideals-r/`, with versioned milestones V1, V2 and V3; the
+shared feature `specs/001-category-implementations/` holds what they share, the
+[list of the category specs](specs/001-category-implementations/plan.md#category-specs) and the
+[feature order](specs/001-category-implementations/tasks.md#feature-order).
 
 * **`leaves.json`** is the manifest the kernel reads (`CasContract/Registration.lean` of
   `lean-cas-dsl-leaf-contracts`): the backend programs, and for each registration its
@@ -51,7 +55,7 @@ the category implementation of the generated interface; a registration is one of
   The one engine installation is the full SageMath of the research container, through
   its public `sage.all` entrypoint under `/sage/.venv/bin/python3` (constitution LV21).
   The modular passagemath entrypoints that the adapters still try are removed by the
-  feature's task list.
+  move tasks of the category specs and task T044 of `specs/001-category-implementations/`.
   Additional programs implement the published B0 routes:
   `gap_groups.py` uses GAP for symmetric/cyclic groups, selected units,
   subgroup kernels and abelianness; `sage_modules.py` supplies module rank

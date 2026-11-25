@@ -2,7 +2,10 @@
 
 The [constitution](.specify/memory/constitution.md) (articles LV1 to LV25) governs this
 repository under the kernel constitution of lean-cas-dsl. Where this file conflicts with it, this
-file is corrected. Work order is the task list of the active feature under `specs/`.
+file is corrected. Work order is the [feature order](specs/001-category-implementations/tasks.md#feature-order)
+of the shared feature `specs/001-category-implementations/`; each category implementation has its
+own spec, `specs/002-cardinals/` to `specs/034-ideals-r/`, listed in the
+[plan of 001](specs/001-category-implementations/plan.md#category-specs).
 
 Use the [shared math container](https://github.com/dzackgarza/ai-review-ci/blob/main/SAGE-CONTAINER.md#use-the-image)
 (`ghcr.io/dzackgarza/sage:develop`) for Lean/elan, Sage with mypy, GAP,
@@ -183,8 +186,8 @@ firewall holds even for a leaf that ignores all of it.
   `PYTHONPATH` by the kernel). The one engine installation is the research container's: SageMath
   under `/sage/.venv/bin/python3`, with GAP through `libgap` (constitution LV21). A backend does
   not search for another interpreter; the variables `CAS_GAP_PYTHON`, `CAS_SAGE_PYTHON` and the
-  workspace `.venv/bin/python` search of `backends/engine_python.py` are removed by the feature's
-  task list.
+  workspace `.venv/bin/python` search of `backends/engine_python.py` are removed by task T044 of
+  `specs/001-category-implementations/`.
 
 Delivery consumes the latest-main dependencies and records their revisions (kernel delivery-inputs
 policy). The commit and push tiers compile nothing.
