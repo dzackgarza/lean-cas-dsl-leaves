@@ -91,8 +91,8 @@ Each row is one registration of `leaves.json` at `8b181d7`. Its version is the l
 
 | Operation | Input | v1 backend | Version | v1 routine | Decision |
 | --- | --- | --- | --- | --- | --- |
-| `meth.cardinality` | `obj.rings.integers_mod` | `gap` | V1 | Size(ZmodnZ(n), or Integers at n = 0) | Replace the GAP routine by the Sage routine on the value of this module's lowering table (one lowering table, LV1); Delete the leaf-held datum (`ZMod 0` is $\mathbb{Z}$ by a rule of the leaf (gap_backend.py:33); GAP `infinity` is answered as `aleph0` (gap_backend.py:55-57)); the routine runs on the engine value of this module's lowering table or of the request's data (LV1). |
-| `prop.is_finite` | `obj.rings.integers_mod` | `gap` | V1 | IsFinite(ZmodnZ(n), or Integers at n = 0) | Replace the GAP routine by the Sage routine on the value of this module's lowering table (one lowering table, LV1); Delete the leaf-held datum (`ZMod 0` is $\mathbb{Z}$ by a rule of the leaf (gap_backend.py:33)); the routine runs on the engine value of this module's lowering table or of the request's data (LV1). |
+| `meth.cardinality` | `obj.rings.integers_mod` | `gap` | V1 | Size(ZmodnZ(n), or Integers at n = 0) | Replace the GAP routine by the Sage routine on the value of this module's lowering table (one lowering table, LV1); delete the leaf-held datum (`ZMod 0` is $\mathbb{Z}$ by a rule of the leaf (gap_backend.py:33); GAP `infinity` is answered as `aleph0` (gap_backend.py:55-57)): the routine runs on the engine value of this module's lowering table or on the data of the request (LV1). |
+| `prop.is_finite` | `obj.rings.integers_mod` | `gap` | V1 | IsFinite(ZmodnZ(n), or Integers at n = 0) | Replace the GAP routine by the Sage routine on the value of this module's lowering table (one lowering table, LV1); delete the leaf-held datum (`ZMod 0` is $\mathbb{Z}$ by a rule of the leaf (gap_backend.py:33)): the routine runs on the engine value of this module's lowering table or on the data of the request (LV1). |
 
 | Version | Registrations |
 | --- | ---: |

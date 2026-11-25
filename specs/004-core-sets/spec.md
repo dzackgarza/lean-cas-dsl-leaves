@@ -25,6 +25,8 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 
 **V3.** The classified Sage coverage of lean-cas-dsl #20, #21 and #23 adds rows to V3 by the same membership rule: a row joins the first version of a computed statement that needs it, and it belongs to the latest category, in the structural order, among its catalogue owners and the categories of its declared parameters. When kernel tasks T140 to T147 produce the classified statements, the rows whose home is `cat.core_sets` join V3 of this spec. This spec plans nothing more for V3.
 
+**V2 of the kernel.** Kernel T254 ("Implement Core of sets Spec V2") assesses the V2 statements whose last route category is `cat.core_sets`. No row of `cat.core_sets` is in V2, so this spec has no V2: the earlier versions of this spec serve that kernel task.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 — V1: the computations of the spike and of kernel V1 (Priority: P1)
@@ -33,7 +35,7 @@ A researcher asks the size of a set: of a finite set, of a number set, of $\math
 
 **Why this priority**: the categories that follow this one in the structural order consume it, and the kernel's computational milestone of this version needs a computed result through it (LV13; K:C23).
 
-**Independent Test**: `just test-category core_sets` starts `backends/core_sets.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.core_sets` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel task "Implement Core Sets Spec V1" (`cat.core_sets`); this repository does not hold it (LV2).
+**Independent Test**: `just test-category core_sets` starts `backends/core_sets.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.core_sets` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel T203 ("Implement Core of sets Spec V1"); this repository does not hold it (LV2).
 
 **Acceptance Scenarios**:
 
@@ -96,7 +98,7 @@ The edge cases of 001 apply. This category adds:
 - **SC-001** (V1): each of the 6 requirements FR-001 to FR-006 is met: each row has a registered port whose tier 1 scenario passes, or an LV7 gap record of mathematically new work with its searches.
 - **SC-002** (V1): the 13 registrations of FR-007 are served by `backends/core_sets.py` on protocol 2, and no v1 program serves any of them.
 - **SC-003** (V1): tier 1 of `core_sets` runs in under five minutes in the research container and writes one log and one timing record per test.
-- **SC-004** (V1): kernel task "Implement Core Sets Spec V1" (`cat.core_sets`) consumes the version with no kernel-side evaluation of a row of this version.
+- **SC-004** (V1): kernel T203 ("Implement Core of sets Spec V1") consumes the version with no kernel-side evaluation of a row of this version.
 
 ## Assumptions
 

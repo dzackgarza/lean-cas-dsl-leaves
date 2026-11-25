@@ -32,7 +32,7 @@ A researcher reads the ring of a module, its additive group and its underlying s
 
 **Why this priority**: the categories that follow this one in the structural order consume it, and the kernel's computational milestone of this version needs a computed result through it (LV13; K:C23).
 
-**Independent Test**: `just test-category modules_total` starts `backends/modules_total.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.modules_total` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel task "Implement Total Modules Spec V1" (`cat.modules_total`); this repository does not hold it (LV2).
+**Independent Test**: `just test-category modules_total` starts `backends/modules_total.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.modules_total` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel T223 ("Implement Modules (total) Spec V1"); this repository does not hold it (LV2).
 
 **Acceptance Scenarios**:
 
@@ -70,7 +70,7 @@ The edge cases of 001 apply. This category adds:
 
 - **SC-001** (V1): each of the 3 requirements FR-001 to FR-003 is met: each row has a registered port whose tier 1 scenario passes, or an LV7 gap record of mathematically new work with its searches.
 - **SC-002** (V1): tier 1 of `modules_total` runs in under five minutes in the research container and writes one log and one timing record per test.
-- **SC-003** (V1): kernel task "Implement Total Modules Spec V1" (`cat.modules_total`) consumes the version with no kernel-side evaluation of a row of this version.
+- **SC-003** (V1): kernel T223 ("Implement Modules (total) Spec V1") consumes the version with no kernel-side evaluation of a row of this version.
 
 ## Assumptions
 

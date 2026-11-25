@@ -33,7 +33,7 @@ A researcher refines a finite set of integers, such as $\{n \in \mathbb{Z} \mid 
 
 **Why this priority**: the categories that follow this one in the structural order consume it, and the kernel's computational milestone of this version needs a computed result through it (LV13; K:C23).
 
-**Independent Test**: `just test-category finite_sets` starts `backends/finite_sets.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.finite_sets` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel task "Implement Finite Sets Spec V1" (`cat.finite_sets`); this repository does not hold it (LV2).
+**Independent Test**: `just test-category finite_sets` starts `backends/finite_sets.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.finite_sets` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel T204 ("Implement Finite sets Spec V1"); this repository does not hold it (LV2).
 
 **Acceptance Scenarios**:
 
@@ -50,7 +50,7 @@ A researcher builds $\mathrm{Fin}\,n$ as a finite set, composes maps of finite s
 
 **Why this priority**: the full-B0 statements of lean-cas-dsl #19 that pass through this category need these rows (LV13).
 
-**Independent Test**: `just test-category finite_sets` starts `backends/finite_sets.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.finite_sets` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel task "Implement Finite Sets Spec V2" (`cat.finite_sets`); this repository does not hold it (LV2).
+**Independent Test**: `just test-category finite_sets` starts `backends/finite_sets.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.finite_sets` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel T255 ("Implement Finite sets Spec V2"); this repository does not hold it (LV2).
 
 **Acceptance Scenarios**:
 
@@ -99,11 +99,11 @@ The edge cases of 001 apply. This category adds:
 
 - **SC-001** (V1): each of the 3 requirements FR-001 to FR-003 is met: each row has a registered port whose tier 1 scenario passes, or an LV7 gap record of mathematically new work with its searches.
 - **SC-002** (V1): tier 1 of `finite_sets` runs in under five minutes in the research container and writes one log and one timing record per test.
-- **SC-003** (V1): kernel task "Implement Finite Sets Spec V1" (`cat.finite_sets`) consumes the version with no kernel-side evaluation of a row of this version.
+- **SC-003** (V1): kernel T204 ("Implement Finite sets Spec V1") consumes the version with no kernel-side evaluation of a row of this version.
 - **SC-004** (V2): each of the 2 requirements FR-004 and FR-005 is met: each row has a registered port whose tier 1 scenario passes, or an LV7 gap record of mathematically new work with its searches.
 - **SC-005** (V2): the 2 registrations of FR-006 are served by `backends/finite_sets.py` on protocol 2, and no v1 program serves any of them.
 - **SC-006** (V2): tier 1 of `finite_sets` runs in under five minutes in the research container and writes one log and one timing record per test.
-- **SC-007** (V2): kernel task "Implement Finite Sets Spec V2" (`cat.finite_sets`) consumes the version with no kernel-side evaluation of a row of this version.
+- **SC-007** (V2): kernel T255 ("Implement Finite sets Spec V2") consumes the version with no kernel-side evaluation of a row of this version.
 
 ## Assumptions
 

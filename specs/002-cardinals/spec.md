@@ -32,7 +32,7 @@ A researcher reads the size of a finite set as a natural number and the size of 
 
 **Why this priority**: the categories that follow this one in the structural order consume it, and the kernel's computational milestone of this version needs a computed result through it (LV13; K:C23).
 
-**Independent Test**: `just test-category cardinals` starts `backends/cardinals.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.cardinals` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel task "Implement Cardinals Spec V1" (`cat.cardinals`); this repository does not hold it (LV2).
+**Independent Test**: `just test-category cardinals` starts `backends/cardinals.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.cardinals` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel T201 ("Implement Cardinals Spec V1"); this repository does not hold it (LV2).
 
 **Acceptance Scenarios**:
 
@@ -69,7 +69,7 @@ The edge cases of 001 apply. This category adds:
 
 - **SC-001** (V1): each of the 3 requirements FR-001 to FR-003 is met: each row has a registered port whose tier 1 scenario passes, or an LV7 gap record of mathematically new work with its searches. A code requirement is met when the implementation that it names calls it.
 - **SC-002** (V1): tier 1 of `cardinals` runs in under five minutes in the research container and writes one log and one timing record per test.
-- **SC-003** (V1): kernel task "Implement Cardinals Spec V1" (`cat.cardinals`) consumes the version with no kernel-side evaluation of a row of this version.
+- **SC-003** (V1): kernel T201 ("Implement Cardinals Spec V1") consumes the version with no kernel-side evaluation of a row of this version.
 
 ## Assumptions
 

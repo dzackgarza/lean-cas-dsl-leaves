@@ -33,7 +33,8 @@ lists the 33 specs and the categories that have no spec. Each spec has versioned
 A row joins the first version of a computed statement that needs it. It belongs to the latest
 category, in the structural order, among its catalogue owners and the categories of its declared
 parameters; a structural functor or classifier forget belongs to its source (research R16). The
-kernel task that consumes a version reads "Implement <Category> Spec V<n>".
+kernel task that consumes a version reads "Implement <Category> Spec V<n>" (kernel tasks T200 to
+T265; the plan's table names the ID of each version).
 
 ## User Scenarios & Testing *(mandatory)*
 

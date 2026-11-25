@@ -33,7 +33,7 @@ A researcher works with polynomials over $\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{R}
 
 **Why this priority**: the categories that follow this one in the structural order consume it, and the kernel's computational milestone of this version needs a computed result through it (LV13; K:C23).
 
-**Independent Test**: `just test-category commutative_rings` starts `backends/commutative_rings.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.commutative_rings` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel task "Implement Commutative Rings Spec V1" (`cat.commutative_rings`); this repository does not hold it (LV2).
+**Independent Test**: `just test-category commutative_rings` starts `backends/commutative_rings.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.commutative_rings` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel T221 ("Implement Commutative rings Spec V1"); this repository does not hold it (LV2).
 
 **Acceptance Scenarios**:
 
@@ -51,7 +51,7 @@ A researcher builds a polynomial ring in several variables and reads the total d
 
 **Why this priority**: the full-B0 statements of lean-cas-dsl #19 that pass through this category need these rows (LV13).
 
-**Independent Test**: `just test-category commutative_rings` starts `backends/commutative_rings.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.commutative_rings` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel task "Implement Commutative Rings Spec V2" (`cat.commutative_rings`); this repository does not hold it (LV2).
+**Independent Test**: `just test-category commutative_rings` starts `backends/commutative_rings.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.commutative_rings` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel T258 ("Implement Commutative rings Spec V2"); this repository does not hold it (LV2).
 
 **Acceptance Scenarios**:
 
@@ -165,11 +165,11 @@ The edge cases of 001 apply. This category adds:
 - **SC-001** (V1): each of the 50 requirements FR-001 to FR-050 is met: each row has a registered port whose tier 1 scenario passes, or an LV7 gap record of mathematically new work with its searches.
 - **SC-002** (V1): the 13 registrations of FR-051 are served by `backends/commutative_rings.py` on protocol 2, and no v1 program serves any of them.
 - **SC-003** (V1): tier 1 of `commutative_rings` runs in under five minutes in the research container and writes one log and one timing record per test.
-- **SC-004** (V1): kernel task "Implement Commutative Rings Spec V1" (`cat.commutative_rings`) consumes the version with no kernel-side evaluation of a row of this version.
+- **SC-004** (V1): kernel T221 ("Implement Commutative rings Spec V1") consumes the version with no kernel-side evaluation of a row of this version.
 - **SC-005** (V2): each of the 2 requirements FR-052 and FR-053 is met: each row has a registered port whose tier 1 scenario passes, or an LV7 gap record of mathematically new work with its searches.
 - **SC-006** (V2): the 1 registrations of FR-054 are served by `backends/commutative_rings.py` on protocol 2, and no v1 program serves any of them.
 - **SC-007** (V2): tier 1 of `commutative_rings` runs in under five minutes in the research container and writes one log and one timing record per test.
-- **SC-008** (V2): kernel task "Implement Commutative Rings Spec V2" (`cat.commutative_rings`) consumes the version with no kernel-side evaluation of a row of this version.
+- **SC-008** (V2): kernel T258 ("Implement Commutative rings Spec V2") consumes the version with no kernel-side evaluation of a row of this version.
 
 ## Assumptions
 

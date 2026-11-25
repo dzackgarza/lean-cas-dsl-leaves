@@ -110,39 +110,39 @@ of research R15.
 
 | Directory | Category | V1 rows | of which the catalogue lacks | V2 rows | Registrations V1 | Registrations V2 | Kernel tasks |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| [`002-cardinals`](../002-cardinals/spec.md) | `cat.cardinals` | 2 | 1 | 0 | 0 | 0 | "Implement Cardinals Spec V1" (`cat.cardinals`) |
-| [`003-sets`](../003-sets/spec.md) | `cat.sets` | 74 | 2 | 0 | 31 | 0 | "Implement Sets Spec V1" (`cat.sets`) |
-| [`004-core-sets`](../004-core-sets/spec.md) | `cat.core_sets` | 6 | 0 | 0 | 13 | 0 | "Implement Core Sets Spec V1" (`cat.core_sets`) |
-| [`005-finite-sets`](../005-finite-sets/spec.md) | `cat.finite_sets` | 3 | 0 | 2 | 0 | 2 | "Implement Finite Sets Spec V1" (`cat.finite_sets`); "Implement Finite Sets Spec V2" (`cat.finite_sets`) |
-| [`006-linear-orders`](../006-linear-orders/spec.md) | `cat.linear_orders` | 9 | 0 | 0 | 0 | 0 | "Implement Linear Orders Spec V1" (`cat.linear_orders`) |
-| [`007-additive-monoids`](../007-additive-monoids/spec.md) | `cat.additive_monoids` | 4 | 0 | 0 | 0 | 0 | "Implement Additive Monoids Spec V1" (`cat.additive_monoids`) |
-| [`008-magmas`](../008-magmas/spec.md) | `cat.magmas` | 3 | 0 | 0 | 0 | 0 | "Implement Magmas Spec V1" (`cat.magmas`) |
-| [`009-additive-commutative-monoids`](../009-additive-commutative-monoids/spec.md) | `cat.additive_commutative_monoids` | 1 | 0 | 0 | 0 | 0 | "Implement Additive Commutative Monoids Spec V1" (`cat.additive_commutative_monoids`) |
-| [`010-semigroups`](../010-semigroups/spec.md) | `cat.semigroups` | 2 | 0 | 0 | 0 | 0 | "Implement Semigroups Spec V1" (`cat.semigroups`) |
-| [`011-monoids`](../011-monoids/spec.md) | `cat.monoids` | 7 | 0 | 0 | 2 | 0 | "Implement Monoids Spec V1" (`cat.monoids`) |
-| [`012-groups`](../012-groups/spec.md) | `cat.groups` | 10 | 0 | 8 | 6 | 6 | "Implement Groups Spec V1" (`cat.groups`); "Implement Groups Spec V2" (`cat.groups`) |
-| [`013-semirings`](../013-semirings/spec.md) | `cat.semirings` | 7 | 0 | 0 | 0 | 0 | "Implement Semirings Spec V1" (`cat.semirings`) |
-| [`014-additive-groups`](../014-additive-groups/spec.md) | `cat.additive_groups` | 2 | 0 | 0 | 0 | 0 | "Implement Additive Groups Spec V1" (`cat.additive_groups`) |
-| [`015-rings`](../015-rings/spec.md) | `cat.rings` | 16 | 0 | 0 | 2 | 0 | "Implement Rings Spec V1" (`cat.rings`) |
-| [`016-commutative-rings`](../016-commutative-rings/spec.md) | `cat.commutative_rings` | 50 | 6 | 2 | 13 | 1 | "Implement Commutative Rings Spec V1" (`cat.commutative_rings`); "Implement Commutative Rings Spec V2" (`cat.commutative_rings`) |
-| [`017-hausdorff-topological-commutative-monoids`](../017-hausdorff-topological-commutative-monoids/spec.md) | `cat.hausdorff_topological_commutative_monoids` | 4 | 0 | 0 | 0 | 0 | "Implement Hausdorff Topological Commutative Monoids Spec V1" (`cat.hausdorff_topological_commutative_monoids`) |
-| [`018-modules-total`](../018-modules-total/spec.md) | `cat.modules_total` | 3 | 0 | 0 | 0 | 0 | "Implement Total Modules Spec V1" (`cat.modules_total`) |
-| [`019-modules-r`](../019-modules-r/spec.md) | `cat.modules_r` | 11 | 3 | 1 | 2 | 0 | "Implement Modules Spec V1" (`cat.modules_r`); "Implement Modules Spec V2" (`cat.modules_r`) |
-| [`020-bil-wform`](../020-bil-wform/spec.md) | `cat.bil_wform` | 3 | 0 | 3 | 5 | 5 | "Implement Bilinear Forms Spec V1" (`cat.bil_wform`); "Implement Bilinear Forms Spec V2" (`cat.bil_wform`) |
-| [`021-fields`](../021-fields/spec.md) | `cat.fields` | 5 | 0 | 0 | 1 | 0 | "Implement Fields Spec V1" (`cat.fields`) |
-| [`022-core-modules-r`](../022-core-modules-r/spec.md) | `cat.core_modules_r` | 1 | 0 | 2 | 0 | 5 | "Implement Core Modules Spec V1" (`cat.core_modules_r`); "Implement Core Modules Spec V2" (`cat.core_modules_r`) |
-| [`023-subobjects-sets`](../023-subobjects-sets/spec.md) | `cat.subobjects_sets` | 1 | 0 | 0 | 0 | 0 | "Implement Subobjects of Sets Spec V1" (`cat.subobjects_sets`) |
-| [`024-arrows-modules-r`](../024-arrows-modules-r/spec.md) | `cat.arrows_modules_r` | 3 | 0 | 0 | 0 | 0 | "Implement Arrows of Modules Spec V1" (`cat.arrows_modules_r`) |
-| [`025-core-subobjects-modules-r`](../025-core-subobjects-modules-r/spec.md) | `cat.core_subobjects_modules_r` | 1 | 0 | 0 | 0 | 0 | "Implement Core Subobjects of Modules Spec V1" (`cat.core_subobjects_modules_r`) |
-| [`026-bilin-module`](../026-bilin-module/spec.md) | `cat.bilin_module` | 15 | 0 | 1 | 0 | 0 | "Implement Formed Modules Spec V1" (`cat.bilin_module`); "Implement Formed Modules Spec V2" (`cat.bilin_module`) |
-| [`027-arrows-bilin-module`](../027-arrows-bilin-module/spec.md) | `cat.arrows_bilin_module` | 2 | 0 | 0 | 4 | 0 | "Implement Arrows of Formed Modules Spec V1" (`cat.arrows_bilin_module`) |
-| [`028-subobjects-groups`](../028-subobjects-groups/spec.md) | `cat.subobjects_groups` | 0 | 0 | 2 | 0 | 11 | "Implement Subobjects of Groups Spec V2" (`cat.subobjects_groups`) |
-| [`029-arrows-groups`](../029-arrows-groups/spec.md) | `cat.arrows_groups` | 0 | 0 | 2 | 0 | 2 | "Implement Arrows of Groups Spec V2" (`cat.arrows_groups`) |
-| [`030-boolean-algebras`](../030-boolean-algebras/spec.md) | `cat.boolean_algebras` | 7 | 0 | 0 | 0 | 0 | "Implement Boolean Algebras Spec V1" (`cat.boolean_algebras`) |
-| [`031-integral-lattice`](../031-integral-lattice/spec.md) | `cat.integral_lattice` | 0 | 0 | 2 | 0 | 4 | "Implement Integral Lattices Spec V2" (`cat.integral_lattice`) |
-| [`032-enumerated-sets`](../032-enumerated-sets/spec.md) | `cat.enumerated_sets` | 2 | 1 | 0 | 0 | 0 | "Implement Enumerated Sets Spec V1" (`cat.enumerated_sets`) |
-| [`033-subsets-subset-predicates`](../033-subsets-subset-predicates/spec.md) | `cat.subsets.subset_predicates` | 1 | 0 | 0 | 0 | 0 | "Implement Subset Predicates Spec V1" (`cat.subsets.subset_predicates`) |
-| [`034-ideals-r`](../034-ideals-r/spec.md) | `cat.ideals_r` | 2 | 1 | 0 | 0 | 0 | "Implement Ideals Spec V1" (`cat.ideals_r`) |
+| [`002-cardinals`](../002-cardinals/spec.md) | `cat.cardinals` | 2 | 1 | 0 | 0 | 0 | T201 (V1) |
+| [`003-sets`](../003-sets/spec.md) | `cat.sets` | 74 | 2 | 0 | 31 | 0 | T202 (V1), T253 (V2, served by the earlier version) |
+| [`004-core-sets`](../004-core-sets/spec.md) | `cat.core_sets` | 6 | 0 | 0 | 13 | 0 | T203 (V1), T254 (V2, served by the earlier version) |
+| [`005-finite-sets`](../005-finite-sets/spec.md) | `cat.finite_sets` | 3 | 0 | 2 | 0 | 2 | T204 (V1), T255 (V2) |
+| [`006-linear-orders`](../006-linear-orders/spec.md) | `cat.linear_orders` | 9 | 0 | 0 | 0 | 0 | T207 (V1) |
+| [`007-additive-monoids`](../007-additive-monoids/spec.md) | `cat.additive_monoids` | 4 | 0 | 0 | 0 | 0 | T210 (V1) |
+| [`008-magmas`](../008-magmas/spec.md) | `cat.magmas` | 3 | 0 | 0 | 0 | 0 | T211 (V1) |
+| [`009-additive-commutative-monoids`](../009-additive-commutative-monoids/spec.md) | `cat.additive_commutative_monoids` | 1 | 0 | 0 | 0 | 0 | T212 (V1) |
+| [`010-semigroups`](../010-semigroups/spec.md) | `cat.semigroups` | 2 | 0 | 0 | 0 | 0 | T213 (V1) |
+| [`011-monoids`](../011-monoids/spec.md) | `cat.monoids` | 7 | 0 | 0 | 2 | 0 | T214 (V1) |
+| [`012-groups`](../012-groups/spec.md) | `cat.groups` | 10 | 0 | 8 | 6 | 6 | T215 (V1), T256 (V2) |
+| [`013-semirings`](../013-semirings/spec.md) | `cat.semirings` | 7 | 0 | 0 | 0 | 0 | T216 (V1) |
+| [`014-additive-groups`](../014-additive-groups/spec.md) | `cat.additive_groups` | 2 | 0 | 0 | 0 | 0 | T217 (V1) |
+| [`015-rings`](../015-rings/spec.md) | `cat.rings` | 16 | 0 | 0 | 2 | 0 | T218 (V1), T257 (V2, served by the earlier version) |
+| [`016-commutative-rings`](../016-commutative-rings/spec.md) | `cat.commutative_rings` | 50 | 6 | 2 | 13 | 1 | T221 (V1), T258 (V2) |
+| [`017-hausdorff-topological-commutative-monoids`](../017-hausdorff-topological-commutative-monoids/spec.md) | `cat.hausdorff_topological_commutative_monoids` | 4 | 0 | 0 | 0 | 0 | T222 (V1) |
+| [`018-modules-total`](../018-modules-total/spec.md) | `cat.modules_total` | 3 | 0 | 0 | 0 | 0 | T223 (V1) |
+| [`019-modules-r`](../019-modules-r/spec.md) | `cat.modules_r` | 11 | 3 | 1 | 2 | 0 | T224 (V1), T259 (V2) |
+| [`020-bil-wform`](../020-bil-wform/spec.md) | `cat.bil_wform` | 3 | 0 | 3 | 5 | 5 | T235 (V1), T260 (V2) |
+| [`021-fields`](../021-fields/spec.md) | `cat.fields` | 5 | 0 | 0 | 1 | 0 | T236 (V1) |
+| [`022-core-modules-r`](../022-core-modules-r/spec.md) | `cat.core_modules_r` | 1 | 0 | 2 | 0 | 5 | T237 (V1), T261 (V2) |
+| [`023-subobjects-sets`](../023-subobjects-sets/spec.md) | `cat.subobjects_sets` | 1 | 0 | 0 | 0 | 0 | T238 (V1) |
+| [`024-arrows-modules-r`](../024-arrows-modules-r/spec.md) | `cat.arrows_modules_r` | 3 | 0 | 0 | 0 | 0 | T241 (V1) |
+| [`025-core-subobjects-modules-r`](../025-core-subobjects-modules-r/spec.md) | `cat.core_subobjects_modules_r` | 1 | 0 | 0 | 0 | 0 | T242 (V1) |
+| [`026-bilin-module`](../026-bilin-module/spec.md) | `cat.bilin_module` | 15 | 0 | 1 | 0 | 0 | T243 (V1), T262 (V2) |
+| [`027-arrows-bilin-module`](../027-arrows-bilin-module/spec.md) | `cat.arrows_bilin_module` | 2 | 0 | 0 | 4 | 0 | T244 (V1) |
+| [`028-subobjects-groups`](../028-subobjects-groups/spec.md) | `cat.subobjects_groups` | 0 | 0 | 2 | 0 | 11 | T263 (V2) |
+| [`029-arrows-groups`](../029-arrows-groups/spec.md) | `cat.arrows_groups` | 0 | 0 | 2 | 0 | 2 | T264 (V2) |
+| [`030-boolean-algebras`](../030-boolean-algebras/spec.md) | `cat.boolean_algebras` | 7 | 0 | 0 | 0 | 0 | T249 (V1) |
+| [`031-integral-lattice`](../031-integral-lattice/spec.md) | `cat.integral_lattice` | 0 | 0 | 2 | 0 | 4 | T265 (V2) |
+| [`032-enumerated-sets`](../032-enumerated-sets/spec.md) | `cat.enumerated_sets` | 2 | 1 | 0 | 0 | 0 | T250 (V1) |
+| [`033-subsets-subset-predicates`](../033-subsets-subset-predicates/spec.md) | `cat.subsets.subset_predicates` | 1 | 0 | 0 | 0 | 0 | T251 (V1) |
+| [`034-ideals-r`](../034-ideals-r/spec.md) | `cat.ideals_r` | 2 | 1 | 0 | 0 | 0 | T252 (V1) |
 | Total | 33 categories | 257 | 14 | 25 | 79 | 36 | |
 
 ## Categories with no spec
@@ -153,23 +153,23 @@ when kernel tasks T140 to T147 produce rows for it. The engine and the upstream 
 that the former milestone of the kernel plan named; the survey of the future spec starts from
 them.
 
-| Former milestone | Categories | Engine of the former milestone | Notes |
-| --- | --- | --- | --- |
-| Sets | `cat.cardinalities` | Sage | — |
-| Orders | `cat.preorders`, `cat.partial_orders` | Sage posets (`Poset`, `is_lequal`, `is_less_than`, `is_chain`); GAP Digraphs `IsPreorderDigraph` through `libgap` for preorders, because Sage has no preorder category in the survey's index | lean-categories T041 (#195) registers the order categories |
-| Rings | `cat.additive_magmas`, `cat.additive_semigroups` | GAP and Sage | not structural steps at catalogue `3f8aedf`; lean-categories T005 (#193) registers the additive chain |
-| Group automorphisms | `cat.core_groups` | GAP `AutomorphismGroup`, `ConjugatorAutomorphism`, `InverseGeneralMapping` | on the routes of V1 statements as the core named by rows whose home is `cat.groups` (spec 012) |
-| Commutative rings | `cat.commutative_monoids` | Sage | — |
-| Module kernels | `cat.subobjects_modules_r` | Sage module `hom`, `kernel()`, `submodule` | owner of rows whose homes are specs 024 and 025 |
-| Boolean algebras | `cat.join_semilattices`, `cat.meet_semilattices`, `cat.order_lattices`, `cat.bounded_order_lattices` | Sage `posets.BooleanLattice`, `LatticePoset` `meet`, `join`, `complements` | not structural steps at catalogue `3f8aedf`; lean-categories T041 (#195) |
-| Set constructions | `cat.arrows_sets`, `cat.slice_sets`, `cat.coslice_sets`, `cat.endofunctors_sets`, `cat.walking_pair`, `cat.sets.pair_diagrams`, `cat.pointed_sets`, `cat.core_pointed_sets`, `cat.countable_sets`, `cat.core_subobjects_sets`, `cat.subsets.point_predicates`, `cat.crystals` | Sage sets with a stored base point, `EnumeratedSets`, `crystals`; Catlab.jl slices, coslices and diagrams | crystals are not in the engine survey and are surveyed from their Sage source first; lean-categories T043, T044 (#201) give crystals their structural functor; `cat.core_subobjects_sets` owns `meth.set_eq`, whose home is spec 033 |
-| Well orders | `cat.well_ordered_sets`, `cat.core_well_ordered_sets`, `cat.enumerated_monotone_sets`, `cat.ordinals` | SymPy `sympy.sets.ordinals` (`Ordinal`, `OmegaPower`); Sage posets for finite well orders | lean-categories T041 (#195) |
-| Algebraic structures | `cat.magmaswithtwooperations`, `cat.division_rings` | Sage `QuaternionAlgebra`; GAP `MagmaByMultiplicationTable` | lean-categories T005 (#193) |
-| Algebras | `cat.algebras` | Sage `Algebras(R)`, `FreeAlgebra`, `GroupAlgebra` | read only by typing judgements at catalogue `3f8aedf` |
-| Schemes | `cat.schemes`, `cat.schemes_over`, `cat.schemes_over_ring` | Sage `sage.schemes` (`Spec`, `AffineSpace`, `ProjectiveSpace`) | not in the engine survey; surveyed from its Sage source first; lean-categories T023 (#198) and T045, T046 (#202); `cat.schemes_over_ring` is read only by typing judgements |
-| Module constructions | `cat.module_points`, `cat.based_module`, `cat.based_module_indexed`, `cat.coord`, `cat.coord_indexed`, `cat.finite_projective_lattice`, `cat.finitelygeneratedmodules`, `cat.finiterankmodules`, `cat.free_cover`, `cat.free_cover_indexed`, `cat.freemodules`, `cat.quotients_modules_r`, `cat.torsion_free_modules` | Sage `fg_pid` modules and quotient modules; Macaulay2 1.24.11 through `sage.interfaces.macaulay2`, a separate process, for modules over polynomial rings (Oscar inside the Sage process is rejected: Oscar loads its own GAP, Singular and FLINT, untested beside Sage's copies) | lean-categories T047, T048 (#203); `cat.ideals_r` has spec 034 |
-| Forms over rings | `cat.modules_over_rings_ext`, `cat.bilin_forms_over_rings`, `cat.quad_forms_over_rings`, `cat.integral_forms`, `cat.lattices_over_rings`, `cat.finite_projective_lattices_over_rings`, `cat.finite_free_lattices_over_rings`, `cat.unimodular_lattices_over_rings`, `cat.integral_lattices`, `cat.even_integral_lattices`, `cat.cusps` | Sage `QuadraticForm`; Hecke 0.39.22 through Oscar 1.8.2 in a program that loads Oscar through `juliacall` and imports no Sage module | the cusps of `sage.modular` are surveyed from their Sage source first; lean-categories T049 to T058 (#204 to #208) |
-| Lattices and quadratic modules | `cat.quad_module`, `cat.quad_wform`, `cat.alternating_forms`, `cat.lattice`, `cat.subobjects_bilin_module`, `cat.coord_lattice`, `cat.fraction_field_perfect_finite_projective_lattice`, `cat.definite_lattice`, `cat.indefinite_lattice`, `cat.even_lattice`, `cat.finite_free_lattice`, `cat.unimodular_lattice` | Sage `IntegralLattice`, `TorsionQuadraticModule`; Hecke through Oscar for genus and isometry, in a program with no Sage import; PARI `qfauto` for definite lattices | the gap of generators of $O(L)$ for an indefinite $L$ of rank at least 3 keeps the survey's searches; lean-categories T059 to T062 (#209, #210) |
+| Former milestone | Categories | Engine of the former milestone | Notes | Kernel task |
+| --- | --- | --- | --- | --- |
+| Sets | `cat.cardinalities` | Sage | — | T200 (`cat.cardinalities`) |
+| Orders | `cat.preorders`, `cat.partial_orders` | Sage posets (`Poset`, `is_lequal`, `is_less_than`, `is_chain`); GAP Digraphs `IsPreorderDigraph` through `libgap` for preorders, because Sage has no preorder category in the survey's index | lean-categories T041 (#195) registers the order categories | T205 (`cat.preorders`), T206 (`cat.partial_orders`) |
+| Rings | `cat.additive_magmas`, `cat.additive_semigroups` | GAP and Sage | not structural steps at catalogue `3f8aedf`; lean-categories T005 (#193) registers the additive chain | T208 (`cat.additive_magmas`), T209 (`cat.additive_semigroups`) |
+| Group automorphisms | `cat.core_groups` | GAP `AutomorphismGroup`, `ConjugatorAutomorphism`, `InverseGeneralMapping` | on the routes of V1 statements as the core named by rows whose home is `cat.groups` (spec 012) | T219 (`cat.core_groups`) |
+| Commutative rings | `cat.commutative_monoids` | Sage | — | T220 (`cat.commutative_monoids`) |
+| Module kernels | `cat.subobjects_modules_r` | Sage module `hom`, `kernel()`, `submodule` | owner of rows whose homes are specs 024 and 025 | T240 (`cat.subobjects_modules_r`) |
+| Boolean algebras | `cat.join_semilattices`, `cat.meet_semilattices`, `cat.order_lattices`, `cat.bounded_order_lattices` | Sage `posets.BooleanLattice`, `LatticePoset` `meet`, `join`, `complements` | not structural steps at catalogue `3f8aedf`; lean-categories T041 (#195) | T245 (`cat.join_semilattices`), T246 (`cat.meet_semilattices`), T247 (`cat.order_lattices`), T248 (`cat.bounded_order_lattices`) |
+| Set constructions | `cat.arrows_sets`, `cat.slice_sets`, `cat.coslice_sets`, `cat.endofunctors_sets`, `cat.walking_pair`, `cat.sets.pair_diagrams`, `cat.pointed_sets`, `cat.core_pointed_sets`, `cat.countable_sets`, `cat.core_subobjects_sets`, `cat.subsets.point_predicates`, `cat.crystals` | Sage sets with a stored base point, `EnumeratedSets`, `crystals`; Catlab.jl slices, coslices and diagrams | crystals are not in the engine survey and are surveyed from their Sage source first; lean-categories T043, T044 (#201) give crystals their structural functor; `cat.core_subobjects_sets` owns `meth.set_eq`, whose home is spec 033 | T239 (`cat.core_subobjects_sets`) |
+| Well orders | `cat.well_ordered_sets`, `cat.core_well_ordered_sets`, `cat.enumerated_monotone_sets`, `cat.ordinals` | SymPy `sympy.sets.ordinals` (`Ordinal`, `OmegaPower`); Sage posets for finite well orders | lean-categories T041 (#195) | — |
+| Algebraic structures | `cat.magmaswithtwooperations`, `cat.division_rings` | Sage `QuaternionAlgebra`; GAP `MagmaByMultiplicationTable` | lean-categories T005 (#193) | — |
+| Algebras | `cat.algebras` | Sage `Algebras(R)`, `FreeAlgebra`, `GroupAlgebra` | read only by typing judgements at catalogue `3f8aedf` | — |
+| Schemes | `cat.schemes`, `cat.schemes_over`, `cat.schemes_over_ring` | Sage `sage.schemes` (`Spec`, `AffineSpace`, `ProjectiveSpace`) | not in the engine survey; surveyed from its Sage source first; lean-categories T023 (#198) and T045, T046 (#202); `cat.schemes_over_ring` is read only by typing judgements | — |
+| Module constructions | `cat.module_points`, `cat.based_module`, `cat.based_module_indexed`, `cat.coord`, `cat.coord_indexed`, `cat.finite_projective_lattice`, `cat.finitelygeneratedmodules`, `cat.finiterankmodules`, `cat.free_cover`, `cat.free_cover_indexed`, `cat.freemodules`, `cat.quotients_modules_r`, `cat.torsion_free_modules` | Sage `fg_pid` modules and quotient modules; Macaulay2 1.24.11 through `sage.interfaces.macaulay2`, a separate process, for modules over polynomial rings (Oscar inside the Sage process is rejected: Oscar loads its own GAP, Singular and FLINT, untested beside Sage's copies) | lean-categories T047, T048 (#203); `cat.ideals_r` has spec 034 | — |
+| Forms over rings | `cat.modules_over_rings_ext`, `cat.bilin_forms_over_rings`, `cat.quad_forms_over_rings`, `cat.integral_forms`, `cat.lattices_over_rings`, `cat.finite_projective_lattices_over_rings`, `cat.finite_free_lattices_over_rings`, `cat.unimodular_lattices_over_rings`, `cat.integral_lattices`, `cat.even_integral_lattices`, `cat.cusps` | Sage `QuadraticForm`; Hecke 0.39.22 through Oscar 1.8.2 in a program that loads Oscar through `juliacall` and imports no Sage module | the cusps of `sage.modular` are surveyed from their Sage source first; lean-categories T049 to T058 (#204 to #208) | — |
+| Lattices and quadratic modules | `cat.quad_module`, `cat.quad_wform`, `cat.alternating_forms`, `cat.lattice`, `cat.subobjects_bilin_module`, `cat.coord_lattice`, `cat.fraction_field_perfect_finite_projective_lattice`, `cat.definite_lattice`, `cat.indefinite_lattice`, `cat.even_lattice`, `cat.finite_free_lattice`, `cat.unimodular_lattice` | Sage `IntegralLattice`, `TorsionQuadraticModule`; Hecke through Oscar for genus and isometry, in a program with no Sage import; PARI `qfauto` for definite lattices | the gap of generators of $O(L)$ for an indefinite $L$ of rank at least 3 keeps the survey's searches; lean-categories T059 to T062 (#209, #210) | — |
 
 | Quantity | Count |
 | --- | ---: |

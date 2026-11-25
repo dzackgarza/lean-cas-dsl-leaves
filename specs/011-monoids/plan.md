@@ -79,8 +79,8 @@ Each row is one registration of `leaves.json` at `8b181d7`. Its version is the l
 
 | Operation | Input | v1 backend | Version | v1 routine | Decision |
 | --- | --- | --- | --- | --- | --- |
-| `meth.cardinality` | `obj.sets.units` | `gap-groups` | V1 | Size(Units(R) for R = Integers, Rationals, ZmodnZ(n); Units(G) for a group) | Replace the GAP routine by the Sage routine on the value of this module's lowering table (one lowering table, LV1); Placed here, not in `cat.core_sets`: its input row has its home in this category (001 research R15). |
-| `prop.is_finite` | `obj.sets.units` | `gap-groups` | V1 | IsFinite(Units(R) for R = Integers, Rationals, ZmodnZ(n); Units(G) for a group) | Replace the GAP routine by the Sage routine on the value of this module's lowering table (one lowering table, LV1); Placed here, not in `cat.sets`: its input row has its home in this category (001 research R15). |
+| `meth.cardinality` | `obj.sets.units` | `gap-groups` | V1 | Size(Units(R) for R = Integers, Rationals, ZmodnZ(n); Units(G) for a group) | Replace the GAP routine by the Sage routine on the value of this module's lowering table (one lowering table, LV1); placed here, not in `cat.core_sets`: its input row has its home in this category (001 research R15). |
+| `prop.is_finite` | `obj.sets.units` | `gap-groups` | V1 | IsFinite(Units(R) for R = Integers, Rationals, ZmodnZ(n); Units(G) for a group) | Replace the GAP routine by the Sage routine on the value of this module's lowering table (one lowering table, LV1); placed here, not in `cat.sets`: its input row has its home in this category (001 research R15). |
 
 | Version | Registrations |
 | --- | ---: |

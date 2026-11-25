@@ -32,7 +32,7 @@ A researcher reads the $k$-th element of $\mathbb{Z}$ or $\mathbb{Q}$ in the ado
 
 **Why this priority**: the categories that follow this one in the structural order consume it, and the kernel's computational milestone of this version needs a computed result through it (LV13; K:C23).
 
-**Independent Test**: `just test-category enumerated_sets` starts `backends/enumerated_sets.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.enumerated_sets` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel task "Implement Enumerated Sets Spec V1" (`cat.enumerated_sets`); this repository does not hold it (LV2).
+**Independent Test**: `just test-category enumerated_sets` starts `backends/enumerated_sets.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.enumerated_sets` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel T250 ("Implement Enumerated sets Spec V1"); this repository does not hold it (LV2).
 
 **Acceptance Scenarios**:
 
@@ -69,7 +69,7 @@ The edge cases of 001 apply. This category adds:
 
 - **SC-001** (V1): each of the 2 requirements FR-001 and FR-002 is met: each row has a registered port whose tier 1 scenario passes, or an LV7 gap record of mathematically new work with its searches.
 - **SC-002** (V1): tier 1 of `enumerated_sets` runs in under five minutes in the research container and writes one log and one timing record per test.
-- **SC-003** (V1): kernel task "Implement Enumerated Sets Spec V1" (`cat.enumerated_sets`) consumes the version with no kernel-side evaluation of a row of this version.
+- **SC-003** (V1): kernel T250 ("Implement Enumerated sets Spec V1") consumes the version with no kernel-side evaluation of a row of this version.
 
 ## Assumptions
 

@@ -12,12 +12,12 @@ Format: `- [ ] ID [Story] description`.
 
 ## Phase 1: User Story 1 — V1
 
-**Kernel**: kernel task "Implement Cardinals Spec V1" (`cat.cardinals`).
+**Kernel**: kernel T201 ("Implement Cardinals Spec V1").
 
 - [ ] T001 [US1] Survey record of V1 (FR-028 of 001; LV7). List the parts of the generated interface of `cat.cardinals` with `cas_interfaces.load_interfaces(...).category("cat.cardinals")`. Write one row for each requirement FR-001 to FR-003 and for the routine of each registration of this version: the engine and routine of the plan's routine table, verified in the research container, its version, the decision and the reasons; one row for each gap with its searches. **Files**: `specs/002-cardinals/research.md`. **Acceptance**: `research.md` "Survey record" has a row for each requirement of V1 and each moved registration of V1, each routine marked as verified in the container; each part of the generated interface that V1 needs is covered. **After**: 001 T006.
 - [ ] T002 [US1] Implement Cardinal literals (G1: FR-001, FR-002) in `backends/cardinals.py` with the routines of the plan's routine table, register each port in `leaves.json` with `preferredRoutes: []`, and add the scenarios of these ports. **Files**: `backends/cardinals.py`, `leaves.json`, `tests/test_cardinals.py`, `tests/scenarios/cardinals-g1-*.json`, `tests/logs/`, `tests/timing/records.jsonl`. **Acceptance**: `just test-category cardinals` passes the six checks of 001 plan "Tests of each program" for the ports of FR-001, FR-002; each reply names the routine of the routine table; the run writes its log and one timing record per test and per handled request. **After**: T001.
 - [ ] T003 [US1] Implement `missing.cardinal_power` (FR-003) in `backends/cardinals.py` at the row that lean-categories declares, with the routine of the plan, and register its port. **Files**: `backends/cardinals.py`, `leaves.json`, `tests/test_cardinals.py`, `tests/scenarios/cardinals-cardinal_power-*.json`. **Acceptance**: `just test-category cardinals` passes the six checks for the port of `missing.cardinal_power` under its declared catalogue ID. **After**: T001, the lean-categories task that declares `missing.cardinal_power` (none at lean-categories `fc549baa`).
-- [ ] T004 [US1] Spec V1 complete. Check that every task of V1 above is checked, that each requirement of V1 has a registered port or an LV7 gap record of mathematically new work, and run `just test-category cardinals`. **Files**: `tests/logs/`, `tests/timing/records.jsonl`. **Acceptance**: `just test-category cardinals` passes in under five minutes and its log and timing records are committed; kernel task "Implement Cardinals Spec V1" (`cat.cardinals`) consumes this version. **After**: T002, T003.
+- [ ] T004 [US1] Spec V1 complete. Check that every task of V1 above is checked, that each requirement of V1 has a registered port or an LV7 gap record of mathematically new work, and run `just test-category cardinals`. **Files**: `tests/logs/`, `tests/timing/records.jsonl`. **Acceptance**: `just test-category cardinals` passes in under five minutes and its log and timing records are committed; kernel T201 ("Implement Cardinals Spec V1") consumes this version. **After**: T002, T003.
 
 ## Dependencies
 
@@ -32,4 +32,4 @@ Format: `- [ ] ID [Story] description`.
 
 | Kernel task | Tasks here |
 | --- | --- |
-| kernel task "Implement Cardinals Spec V1" (`cat.cardinals`) | T001–T004 |
+| kernel T201 ("Implement Cardinals Spec V1") | T001–T004 |

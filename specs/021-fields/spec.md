@@ -32,7 +32,7 @@ A researcher builds $\mathbb{Q}$ and $\mathbb{Z}/p$ as fields, spans a subspace 
 
 **Why this priority**: the categories that follow this one in the structural order consume it, and the kernel's computational milestone of this version needs a computed result through it (LV13; K:C23).
 
-**Independent Test**: `just test-category fields` starts `backends/fields.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.fields` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel task "Implement Fields Spec V1" (`cat.fields`); this repository does not hold it (LV2).
+**Independent Test**: `just test-category fields` starts `backends/fields.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.fields` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel T236 ("Implement Fields Spec V1"); this repository does not hold it (LV2).
 
 **Acceptance Scenarios**:
 
@@ -79,7 +79,7 @@ The edge cases of 001 apply. This category adds:
 - **SC-001** (V1): each of the 5 requirements FR-001 to FR-005 is met: each row has a registered port whose tier 1 scenario passes, or an LV7 gap record of mathematically new work with its searches.
 - **SC-002** (V1): the 1 registrations of FR-006 are served by `backends/fields.py` on protocol 2, and no v1 program serves any of them.
 - **SC-003** (V1): tier 1 of `fields` runs in under five minutes in the research container and writes one log and one timing record per test.
-- **SC-004** (V1): kernel task "Implement Fields Spec V1" (`cat.fields`) consumes the version with no kernel-side evaluation of a row of this version.
+- **SC-004** (V1): kernel T236 ("Implement Fields Spec V1") consumes the version with no kernel-side evaluation of a row of this version.
 
 ## Assumptions
 

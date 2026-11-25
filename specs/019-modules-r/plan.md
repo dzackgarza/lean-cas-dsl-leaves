@@ -88,8 +88,8 @@ Each row is one registration of `leaves.json` at `8b181d7`. Its version is the l
 
 | Operation | Input | v1 backend | Version | v1 routine | Decision |
 | --- | --- | --- | --- | --- | --- |
-| `meth.cardinality` | `obj.modules.regular` | `sage-modules` | V1 | FreeModule(R, 1).cardinality() | Delete the leaf-held datum (Sage `+Infinity` is answered as `aleph0` (sage_modules.py:87)); the routine runs on the engine value of this module's lowering table or of the request's data (LV1). |
-| `meth.cardinality` | `obj.modules.vectors` | `sage-modules` | V1 | FreeModule(R, n).cardinality() | Delete the leaf-held datum (Sage `+Infinity` is answered as `aleph0` (sage_modules.py:87)); the routine runs on the engine value of this module's lowering table or of the request's data (LV1). |
+| `meth.cardinality` | `obj.modules.regular` | `sage-modules` | V1 | FreeModule(R, 1).cardinality() | Delete the leaf-held datum (Sage `+Infinity` is answered as `aleph0` (sage_modules.py:87)): the routine runs on the engine value of this module's lowering table or on the data of the request (LV1). |
+| `meth.cardinality` | `obj.modules.vectors` | `sage-modules` | V1 | FreeModule(R, n).cardinality() | Delete the leaf-held datum (Sage `+Infinity` is answered as `aleph0` (sage_modules.py:87)): the routine runs on the engine value of this module's lowering table or on the data of the request (LV1). |
 
 | Version | Registrations |
 | --- | ---: |

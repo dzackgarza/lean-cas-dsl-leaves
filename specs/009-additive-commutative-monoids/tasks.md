@@ -12,11 +12,11 @@ Format: `- [ ] ID [Story] description`.
 
 ## Phase 1: User Story 1 — V1
 
-**Kernel**: kernel task "Implement Additive Commutative Monoids Spec V1" (`cat.additive_commutative_monoids`).
+**Kernel**: kernel T212 ("Implement Additive commutative monoids Spec V1").
 
 - [ ] T001 [US1] Survey record of V1 (FR-028 of 001; LV7). List the parts of the generated interface of `cat.additive_commutative_monoids` with `cas_interfaces.load_interfaces(...).category("cat.additive_commutative_monoids")`. Write one row for each requirement FR-001 and for the routine of each registration of this version: the engine and routine of the plan's routine table, verified in the research container, its version, the decision and the reasons; one row for each gap with its searches. **Files**: `specs/009-additive-commutative-monoids/research.md`. **Acceptance**: `research.md` "Survey record" has a row for each requirement of V1 and each moved registration of V1, each routine marked as verified in the container; each part of the generated interface that V1 needs is covered. **After**: 001 T006, 007 "Spec V1 complete".
 - [ ] T002 [US1] Implement Forget to additive monoids (G1: FR-001) in `backends/additive_commutative_monoids.py` with the routines of the plan's routine table, register each port in `leaves.json` with `preferredRoutes: []`, and add the scenarios of these ports. **Files**: `backends/additive_commutative_monoids.py`, `leaves.json`, `tests/test_additive_commutative_monoids.py`, `tests/scenarios/additive_commutative_monoids-g1-*.json`, `tests/logs/`, `tests/timing/records.jsonl`. **Acceptance**: `just test-category additive_commutative_monoids` passes the six checks of 001 plan "Tests of each program" for the ports of FR-001; each reply names the routine of the routine table; the run writes its log and one timing record per test and per handled request. **After**: T001.
-- [ ] T003 [US1] Spec V1 complete. Check that every task of V1 above is checked, that each requirement of V1 has a registered port or an LV7 gap record of mathematically new work, and run `just test-category additive_commutative_monoids`. **Files**: `tests/logs/`, `tests/timing/records.jsonl`. **Acceptance**: `just test-category additive_commutative_monoids` passes in under five minutes and its log and timing records are committed; kernel task "Implement Additive Commutative Monoids Spec V1" (`cat.additive_commutative_monoids`) consumes this version. **After**: T002.
+- [ ] T003 [US1] Spec V1 complete. Check that every task of V1 above is checked, that each requirement of V1 has a registered port or an LV7 gap record of mathematically new work, and run `just test-category additive_commutative_monoids`. **Files**: `tests/logs/`, `tests/timing/records.jsonl`. **Acceptance**: `just test-category additive_commutative_monoids` passes in under five minutes and its log and timing records are committed; kernel T212 ("Implement Additive commutative monoids Spec V1") consumes this version. **After**: T002.
 
 ## Dependencies
 
@@ -30,4 +30,4 @@ Format: `- [ ] ID [Story] description`.
 
 | Kernel task | Tasks here |
 | --- | --- |
-| kernel task "Implement Additive Commutative Monoids Spec V1" (`cat.additive_commutative_monoids`) | T001–T003 |
+| kernel T212 ("Implement Additive commutative monoids Spec V1") | T001–T003 |

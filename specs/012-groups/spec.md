@@ -33,7 +33,7 @@ A researcher builds the cyclic group $\mathbb{Z}/n$ and the quotient $\mathbb{Z}
 
 **Why this priority**: the categories that follow this one in the structural order consume it, and the kernel's computational milestone of this version needs a computed result through it (LV13; K:C23).
 
-**Independent Test**: `just test-category groups` starts `backends/groups.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.groups` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel task "Implement Groups Spec V1" (`cat.groups`); this repository does not hold it (LV2).
+**Independent Test**: `just test-category groups` starts `backends/groups.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.groups` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel T215 ("Implement Groups Spec V1"); this repository does not hold it (LV2).
 
 **Acceptance Scenarios**:
 
@@ -51,7 +51,7 @@ A researcher builds the symmetric group, the identity, sign and trivial homomorp
 
 **Why this priority**: the full-B0 statements of lean-cas-dsl #19 that pass through this category need these rows (LV13).
 
-**Independent Test**: `just test-category groups` starts `backends/groups.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.groups` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel task "Implement Groups Spec V2" (`cat.groups`); this repository does not hold it (LV2).
+**Independent Test**: `just test-category groups` starts `backends/groups.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.groups` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel T256 ("Implement Groups Spec V2"); this repository does not hold it (LV2).
 
 **Acceptance Scenarios**:
 
@@ -130,11 +130,11 @@ The edge cases of 001 apply. This category adds:
 - **SC-001** (V1): each of the 10 requirements FR-001 to FR-010 is met: each row has a registered port whose tier 1 scenario passes, or an LV7 gap record of mathematically new work with its searches.
 - **SC-002** (V1): the 6 registrations of FR-011 are served by `backends/groups.py` on protocol 2, and no v1 program serves any of them.
 - **SC-003** (V1): tier 1 of `groups` runs in under five minutes in the research container and writes one log and one timing record per test.
-- **SC-004** (V1): kernel task "Implement Groups Spec V1" (`cat.groups`) consumes the version with no kernel-side evaluation of a row of this version.
+- **SC-004** (V1): kernel T215 ("Implement Groups Spec V1") consumes the version with no kernel-side evaluation of a row of this version.
 - **SC-005** (V2): each of the 8 requirements FR-012 to FR-019 is met: each row has a registered port whose tier 1 scenario passes, or an LV7 gap record of mathematically new work with its searches.
 - **SC-006** (V2): the 6 registrations of FR-020 are served by `backends/groups.py` on protocol 2, and no v1 program serves any of them.
 - **SC-007** (V2): tier 1 of `groups` runs in under five minutes in the research container and writes one log and one timing record per test.
-- **SC-008** (V2): kernel task "Implement Groups Spec V2" (`cat.groups`) consumes the version with no kernel-side evaluation of a row of this version.
+- **SC-008** (V2): kernel T256 ("Implement Groups Spec V2") consumes the version with no kernel-side evaluation of a row of this version.
 
 ## Assumptions
 

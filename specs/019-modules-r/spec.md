@@ -34,7 +34,7 @@ A researcher builds $R$, $R^n$ and $\mathbb{Z}/n$ as $R$-modules, acts by scalar
 
 **Why this priority**: the categories that follow this one in the structural order consume it, and the kernel's computational milestone of this version needs a computed result through it (LV13; K:C23).
 
-**Independent Test**: `just test-category modules_r` starts `backends/modules_r.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.modules_r` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel task "Implement Modules Spec V1" (`cat.modules_r`); this repository does not hold it (LV2).
+**Independent Test**: `just test-category modules_r` starts `backends/modules_r.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.modules_r` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel T224 ("Implement Modules Spec V1"); this repository does not hold it (LV2).
 
 **Acceptance Scenarios**:
 
@@ -52,7 +52,7 @@ A researcher forms the set of bilinear maps on a module.
 
 **Why this priority**: the full-B0 statements of lean-cas-dsl #19 that pass through this category need these rows (LV13).
 
-**Independent Test**: `just test-category modules_r` starts `backends/modules_r.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.modules_r` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel task "Implement Modules Spec V2" (`cat.modules_r`); this repository does not hold it (LV2).
+**Independent Test**: `just test-category modules_r` starts `backends/modules_r.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.modules_r` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel T259 ("Implement Modules Spec V2"); this repository does not hold it (LV2).
 
 **Acceptance Scenarios**:
 
@@ -108,10 +108,10 @@ The edge cases of 001 apply. This category adds:
 - **SC-001** (V1): each of the 11 requirements FR-001 to FR-011 is met: each row has a registered port whose tier 1 scenario passes, or an LV7 gap record of mathematically new work with its searches.
 - **SC-002** (V1): the 2 registrations of FR-012 are served by `backends/modules_r.py` on protocol 2, and no v1 program serves any of them.
 - **SC-003** (V1): tier 1 of `modules_r` runs in under five minutes in the research container and writes one log and one timing record per test.
-- **SC-004** (V1): kernel task "Implement Modules Spec V1" (`cat.modules_r`) consumes the version with no kernel-side evaluation of a row of this version.
+- **SC-004** (V1): kernel T224 ("Implement Modules Spec V1") consumes the version with no kernel-side evaluation of a row of this version.
 - **SC-005** (V2): each of the 1 requirements FR-013 is met: each row has a registered port whose tier 1 scenario passes, or an LV7 gap record of mathematically new work with its searches.
 - **SC-006** (V2): tier 1 of `modules_r` runs in under five minutes in the research container and writes one log and one timing record per test.
-- **SC-007** (V2): kernel task "Implement Modules Spec V2" (`cat.modules_r`) consumes the version with no kernel-side evaluation of a row of this version.
+- **SC-007** (V2): kernel T259 ("Implement Modules Spec V2") consumes the version with no kernel-side evaluation of a row of this version.
 
 ## Assumptions
 

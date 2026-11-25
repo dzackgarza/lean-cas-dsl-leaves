@@ -33,7 +33,7 @@ A researcher builds the lattice $E_8$, forgets its integrality to a formed modul
 
 **Why this priority**: the full-B0 statements of lean-cas-dsl #19 that pass through this category need these rows (LV13).
 
-**Independent Test**: `just test-category integral_lattice` starts `backends/integral_lattice.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.integral_lattice` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel task "Implement Integral Lattices Spec V2" (`cat.integral_lattice`); this repository does not hold it (LV2).
+**Independent Test**: `just test-category integral_lattice` starts `backends/integral_lattice.py` under `/sage/.venv/bin/python3` and drives it with `cas-peer` scenarios that the generated interface of `cat.integral_lattice` builds (001 plan, "Tests of each program"). The acceptance suite of lean-cas-dsl judges the computed results in kernel T265 ("Implement Integral lattices Spec V2"); this repository does not hold it (LV2).
 
 **Acceptance Scenarios**:
 
@@ -80,7 +80,7 @@ The edge cases of 001 apply. This category adds:
 - **SC-001** (V2): each of the 2 requirements FR-001 and FR-002 is met: each row has a registered port whose tier 1 scenario passes, or an LV7 gap record of mathematically new work with its searches.
 - **SC-002** (V2): the 4 registrations of FR-003 are served by `backends/integral_lattice.py` on protocol 2, and no v1 program serves any of them.
 - **SC-003** (V2): tier 1 of `integral_lattice` runs in under five minutes in the research container and writes one log and one timing record per test.
-- **SC-004** (V2): kernel task "Implement Integral Lattices Spec V2" (`cat.integral_lattice`) consumes the version with no kernel-side evaluation of a row of this version.
+- **SC-004** (V2): kernel T265 ("Implement Integral lattices Spec V2") consumes the version with no kernel-side evaluation of a row of this version.
 
 ## Assumptions
 
