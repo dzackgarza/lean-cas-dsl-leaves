@@ -14,7 +14,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 - **Catalogue ID**: `cat.commutative_rings`.
 - **Object**: a commutative ring.
 - **Morphism**: a ring homomorphism.
-- **Engine**: Sage polynomial, power-series, quotient and matrix rings (`PolynomialRing`, `LazyPowerSeriesRing`, `quotient`, `MatrixSpace`), with Singular inside Sage for several variables and PARI through Sage for factorization (engine survey, "Rings and commutative rings", "Polynomial rings", "Linear algebra").
+- **Engine**: the engines of the [plan](plan.md#technical-context), with the routine of each row in its routine table.
 
 ## Versions
 
@@ -23,7 +23,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 | V1 | every computation of the spike and every statement that the kernel V1 definition requires computed | 50 | 13 |
 | V2 | the remaining full-B0 statements of lean-cas-dsl #19 | 2 | 1 |
 
-**V3.** The classified Sage coverage of lean-cas-dsl #20, #21 and #23 adds rows to V3 by the same membership rule: a row joins the first version of a computed statement that needs it, and it belongs to the latest category, in the structural order, among its catalogue owners and the categories of its declared parameters. When kernel tasks T140 to T147 produce the classified statements, the rows whose home is `cat.commutative_rings` join V3 of this spec. This spec plans nothing more for V3.
+**V3.** The rows whose home is `cat.commutative_rings` join V3 by the membership rule of [001](../001-category-implementations/spec.md#the-category-specs) when kernel tasks T140 to T147 produce the classified statements of lean-cas-dsl #20, #21 and #23.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -119,39 +119,19 @@ The edge cases of 001 apply. This category adds:
 - **FR-042 — `mor.sets.power_series_of_coefficients`** (operation, V1). Catalogue: `Σ c(n) tⁿ`, the series with the coefficient sequence `c : ℕ → R`. The implementation MUST compute the operation at its actual domain and reply at the generated result layout.
 - **FR-043 — `mor.sets.successor_power_series_terms`** (operation, V1). Catalogue: For the selected commutative ring `R`, the set map `ℕ → PowerSeries R` sending every index `n` to `PowerSeries.C (n + 1 : R) * PowerSeries.X ^ n`. The implementation MUST compute the operation at its actual domain and reply at the generated result layout.
 - **FR-044 — `obj.sets.mv_polynomials`** (object constructor, V1). Catalogue: `R[x₀, …, xₙ₋₁]`. The implementation MUST construct the object from the request at the generated layout, with the complete interface that its category declares. Inputs before it: lean-categories T021 (#189).
-- **FR-045 — `missing.ufd_factorization`** (row that the catalogue lacks, V1): the factorization of a nonzero integer into a unit and irreducible factors with multiplicities. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T068 (#213), which declares `missing.ufd_factorization` as `mor.sets.ufd_factorization` (kernel T329).
-- **FR-046 — `missing.ufd_prime`** (row that the catalogue lacks, V1): primality of an element of a commutative ring ($x$ prime when $(x)$ is a nonzero prime ideal), for $\mathbb{Z}$. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T069 (#214), which declares `missing.ufd_prime` as `mor.sets.is_prime` (kernel T330).
-- **FR-047 — `missing.root_multiset`** (row that the catalogue lacks, V1): the multiset of roots of a nonzero polynomial over a domain (Mathlib `Polynomial.roots`). The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T070 (#218), which declares `missing.root_multiset` as `mor.sets.polynomial_root_multiset` (kernel T334).
-- **FR-048 — `missing.series_truncation`** (row that the catalogue lacks, V1): the truncation $R[[t]] \to R[[t]]/(t^{n})$ with its display $\sum_{k<n} a_k t^k + O(t^{n})$. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T071 (#219), which declares `missing.series_truncation` as `mor.sets.power_series_truncation` (kernel T335).
-- **FR-049 — `missing.power_series_inclusion`** (row that the catalogue lacks, V1): the inclusion $\mathbb{Q}[[t]] \subseteq \mathbb{R}[[t]]$ induced by $\mathbb{Q} \subseteq \mathbb{R}$. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T072 (#220), which declares `missing.power_series_inclusion` as `incl.sets.power_series_map` (kernel T336).
-- **FR-050 — `missing.matrix_inverse_domain`** (row that the catalogue lacks, V1): membership in the unit group $\mathrm{Mat}_n(K)^{\times}$ as a decided predicate. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T073 (#221), which declares `missing.matrix_inverse_domain` as `mor.sets.matrix_is_unit` (kernel T337).
-- **FR-051 — Existing registrations of V1** (13). The implementation MUST move these registrations of `leaves.json` at `8b181d7` into `backends/commutative_rings.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in the plan: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
-
-  | Operation | Input | v1 backend |
-  | --- | --- | --- |
-  | `cmp.f9.translation` | `obj.commutative_rings.f9_x` | `sage-presentations` |
-  | `cmp.f9.translation` | `obj.commutative_rings.f9_y` | `sage-presentations` |
-  | `meth.cardinality` | `obj.commutative_rings.f9_x` | `sage-presentations` |
-  | `meth.cardinality` | `obj.commutative_rings.f9_y` | `sage-presentations` |
-  | `mor.sets.companion_matrix` | `obj.sets.monics` | `sage-symbolic` |
-  | `mor.sets.polynomial_degree` | `obj.sets.polynomials` | `sage-symbolic` |
-  | `mor.sets.polynomial_derivative` | `obj.sets.polynomials` | `sage-symbolic` |
-  | `mor.sets.polynomial_differential` | `obj.sets.polynomials` | `sage-symbolic` |
-  | `mor.sets.polynomial_factors` | `obj.sets.nonzero_polynomials` | `sage-symbolic` |
-  | `mor.sets.polynomial_map` | `obj.sets.polynomials` | `sage-symbolic` |
-  | `mor.sets.polynomial_roots` | `obj.sets.nonzero_polynomials` | `sage-symbolic` |
-  | `prop.is_finite` | `obj.commutative_rings.f9_x` | `sage-presentations` |
-  | `prop.is_finite` | `obj.commutative_rings.f9_y` | `sage-presentations` |
+- **FR-045 — `mor.sets.ufd_factorization`** (operation that lean-categories T068 declares, V1): the factorization of a nonzero integer into a unit and irreducible factors with multiplicities. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T068 (#213), which declares `mor.sets.ufd_factorization` (kernel T329).
+- **FR-046 — `mor.sets.is_prime`** (operation that lean-categories T069 declares, V1): primality of an element of a commutative ring ($x$ prime when $(x)$ is a nonzero prime ideal), for $\mathbb{Z}$. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T069 (#214), which declares `mor.sets.is_prime` (kernel T330).
+- **FR-047 — `mor.sets.polynomial_root_multiset`** (operation that lean-categories T070 declares, V1): the multiset of roots of a nonzero polynomial over a domain (Mathlib `Polynomial.roots`). The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T070 (#218), which declares `mor.sets.polynomial_root_multiset` (kernel T334).
+- **FR-048 — `mor.sets.power_series_truncation`** (operation that lean-categories T071 declares, V1): the truncation $R[[t]] \to R[[t]]/(t^{n})$ with its display $\sum_{k<n} a_k t^k + O(t^{n})$. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T071 (#219), which declares `mor.sets.power_series_truncation` (kernel T335).
+- **FR-049 — `incl.sets.power_series_map`** (operation that lean-categories T072 declares, V1): the inclusion $\mathbb{Q}[[t]] \subseteq \mathbb{R}[[t]]$ induced by $\mathbb{Q} \subseteq \mathbb{R}$. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T072 (#220), which declares `incl.sets.power_series_map` (kernel T336).
+- **FR-050 — `mor.sets.matrix_is_unit`** (operation that lean-categories T073 declares, V1): membership in the unit group $\mathrm{Mat}_n(K)^{\times}$ as a decided predicate. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T073 (#221), which declares `mor.sets.matrix_is_unit` (kernel T337).
+- **FR-051 — Existing registrations of V1** (13). The implementation MUST move the 13 registrations of `leaves.json` at `8b181d7` that the plan's table "Registrations that move" lists for V1 into `backends/commutative_rings.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in that table: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
 
 ### Functional Requirements — V2
 
 - **FR-052 — `obj.rings.mv_polynomials`** (object constructor, V2). Catalogue: `R[x₀, …, xₙ₋₁]` as a ring. The implementation MUST construct the object from the request at the generated layout, with the complete interface that its category declares. Inputs before it: lean-categories T021 (#189).
 - **FR-053 — `mor.sets.mv_total_degree`** (operation, V2). Catalogue: The total degree. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. Inputs before it: lean-categories T021 (#189), contract T021.
-- **FR-054 — Existing registrations of V2** (1). The implementation MUST move these registrations of `leaves.json` at `8b181d7` into `backends/commutative_rings.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in the plan: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
-
-  | Operation | Input | v1 backend |
-  | --- | --- | --- |
-  | `mor.sets.mv_total_degree` | `obj.sets.mv_polynomials` | `sage-symbolic` |
+- **FR-054 — Existing registrations of V2** (1). The implementation MUST move the 1 registrations of `leaves.json` at `8b181d7` that the plan's table "Registrations that move" lists for V2 into `backends/commutative_rings.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in that table: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
 
 ### Key Entities
 

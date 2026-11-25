@@ -6,7 +6,7 @@ Decisions of this feature, and the survey record of its versions. The shared dec
 
 **R1. The unit-group functor.** The actions of `fun.monoids.units` return the complete group result: its carrier, its group operations and the defining inclusion of the units into the monoid, for the later group and map operations (kernel T155). The GAP session of `libgap` in this program supplies `Units` and the group operations; the leaf that hosts `libgap` stays an out-of-process Python program (lean-cas-dsl#3). The functor is not structural, so its home is `cat.groups`, the later of its two ends (001 research R16).
 
-**R2. Integers mod zero.** The v1 rule that $\mathbb{Z}/0$ is the free group of rank $1$ (`gap_groups.py:46` at `8b181d7`) is a datum of the leaf. The lowering of `obj.groups.cyclic` at $n = 0$ is the survey decision of T001: an engine constructor that builds the group of the catalogue row, or `unsupported` (LV1).
+**R2. Integers mod zero.** The v1 rule that $\mathbb{Z}/0$ is the free group of rank $1$ (`gap_groups.py:46` at `8b181d7`) is a datum of the leaf. The lowering of `obj.groups.cyclic` at $n = 0$ is GAP `CyclicGroup(infinity)`, which builds the group of the catalogue row from the request (plan, "Cyclic groups"; LV1).
 
 ## Survey record
 

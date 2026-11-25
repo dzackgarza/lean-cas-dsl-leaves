@@ -50,20 +50,20 @@ tests/scenarios/enumerated_sets-*.json
 
 ## Routine table
 
-The starting choice of each row. The survey record of its version confirms it in the research container or replaces it with its reasons (LV7).
+Each row names its engine routine. The survey record of its version verifies the routine in the research container before the implementation task of the row (LV7). A routine that the survey shows to be wrong for its operation is replaced in this table, with its reasons, in the commit of the survey record (LV12).
 
 ### V1
 
 | FR | Row | Kind | Engine and routine | Dependent inputs (C22) | Inputs before it |
 | --- | --- | --- | --- | --- | --- |
 | FR-001 | `forget[clf.sets.enumerated]` | classifier forget | object action: the carrier to the public constructor of `cat.sets`; morphism action: the map of sets at the two image endpoints | the source arrow and both image endpoints (contract FR-018); descriptors lowered by the lowering table of `backends/sets.py` (LV8, second option) | — |
-| FR-002 | `missing.denumerable_enumeration` | row that the catalogue lacks | the known method: the `Denumerable` instances of $\mathbb{Z}$ and $\mathbb{Q}$ in Mathlib (`Mathlib.Logic.Denumerable`, `Mathlib.Data.Rat.Denumerable`) as the cited reference, with Sage integer and rational arithmetic for each step | the set and the index | lean-categories T077 (#224), which declares `missing.denumerable_enumeration` as `obj.enumerated_sets.naturals`, `obj.enumerated_sets.integers`, `obj.enumerated_sets.rationals` and `mor.sets.enumeration_at` (kernel T340), lean-categories T039 (#199) |
+| FR-002 | `obj.enumerated_sets.naturals`, `obj.enumerated_sets.integers`, `obj.enumerated_sets.rationals` and `mor.sets.enumeration_at` | object constructors and operation that lean-categories T077 declares | the known method: the `Denumerable` instances of $\mathbb{Z}$ and $\mathbb{Q}$ in Mathlib (`Mathlib.Logic.Denumerable`, `Mathlib.Data.Rat.Denumerable`) as the cited reference, with Sage integer and rational arithmetic for each step | the set and the index | lean-categories T077 (#224), which declares `obj.enumerated_sets.naturals`, `obj.enumerated_sets.integers`, `obj.enumerated_sets.rationals` and `mor.sets.enumeration_at` (kernel T340), lean-categories T039 (#199) |
 
 ## Hand-rolled code
 
 These computations have no engine routine in the survey and are known mathematics; the implementation computes them by the known method and cites its reference (LV6):
 
-- `missing.denumerable_enumeration`: the known method: the `Denumerable` instances of $\mathbb{Z}$ and $\mathbb{Q}$ in Mathlib (`Mathlib.Logic.Denumerable`, `Mathlib.Data.Rat.Denumerable`) as the cited reference, with Sage integer and rational arithmetic for each step.
+- `obj.enumerated_sets.naturals`, `obj.enumerated_sets.integers`, `obj.enumerated_sets.rationals` and `mor.sets.enumeration_at`: the known method: the `Denumerable` instances of $\mathbb{Z}$ and $\mathbb{Q}$ in Mathlib (`Mathlib.Logic.Denumerable`, `Mathlib.Data.Rat.Denumerable`) as the cited reference, with Sage integer and rational arithmetic for each step.
 
 ## Engine survey
 

@@ -50,7 +50,7 @@ tests/scenarios/sets-*.json
 
 ## Routine table
 
-The starting choice of each row. The survey record of its version confirms it in the research container or replaces it with its reasons (LV7).
+Each row names its engine routine. The survey record of its version verifies the routine in the research container before the implementation task of the row (LV7). A routine that the survey shows to be wrong for its operation is replaced in this table, with its reasons, in the commit of the survey record (LV12).
 
 ### V1
 
@@ -65,7 +65,7 @@ The starting choice of each row. The survey record of its version confirms it in
 | FR-007 | `obj.sets.integers` | object constructor | Sage `ZZ` | request operands at the generated layout | — |
 | FR-008 | `obj.sets.rationals` | object constructor | Sage `QQ`; a non-integral point in the form of contract T021 (`mor.sets.divide`) | request operands at the generated layout | contract T021 |
 | FR-009 | `obj.sets.reals` | object constructor | Sage `RealSet.real_line()` as the set; points are exact values in `AA` or `SR` in the forms of contract T021 | request operands at the generated layout | contract T021 |
-| FR-010 | `obj.sets.complexes` | object constructor | no single Sage parent (plan, "The set $\mathbb{C}$"): a point is an exact value of Sage `QQbar` or a closed expression of `SR` with a value `CC(x)`, in the forms of contract T021; membership by `x in QQbar`, else by `CC(SR(x))`; `prop.is_finite` is `false` by `QQbar.is_finite()`; the cardinality is `unsupported` | request operands at the generated layout | contract T021 |
+| FR-010 | `obj.sets.complexes` | object constructor | no single Sage parent (plan, "The set $\mathbb{C}$"): a point is an exact value of Sage `QQbar` or a closed expression of `SR` with a value `CC(x)`, in the forms of contract T021; membership by `x in QQbar`, else by `CC(SR(x))`; `prop.is_finite` by `QQbar.is_finite()`; the cardinality is `unsupported` | request operands at the generated layout | contract T021 |
 | FR-011 | `obj.sets.fin` | object constructor | Sage `IntegerRange(0, n)` | request operands at the generated layout | — |
 | FR-012 | `obj.sets.integers_mod` | object constructor | Sage `Zmod(n)` (Sage gives `ZZ` at $n = 0$) | request operands at the generated layout | — |
 | FR-013 | `obj.sets.integers_mod_power` | object constructor | Sage `cartesian_product([Zmod(n)] * k)` | request operands at the generated layout | — |
@@ -128,8 +128,8 @@ The starting choice of each row. The survey record of its version confirms it in
 | FR-070 | `bind.sets.integral` | operation | SymPy `integrate(f, (t, a, b))`; Sage `integrate(f, t, a, b)` (Maxima) where SymPy returns an unevaluated `Integral` | the bound map in the binder form of contract T021, lowered to SymPy | lean-categories T027 (#190), contract T021 |
 | FR-071 | `mor.sets.taylor_expansion` | operation | a lazy Sage `LazyPowerSeriesRing(SR, 't')` element whose coefficient $k$ is SymPy `series(f, t, x0, k + 1).coeff(t, k)`, computed when a request demands it (LV25) | the bound map in the binder form of contract T021, lowered to SymPy | lean-categories T027 (#190), contract T021 |
 | FR-072 | `bind.sets.power_series_sum` | operation | Sage `LazyPowerSeriesRing(R, 't')` element from the coefficient function of the bound map | the bound map in the binder form of contract T021 | lean-categories T027 (#190), contract T021 |
-| FR-073 | `missing.real_approximation` | row that the catalogue lacks | Sage `RealBallField(prec)` evaluation of the exact real at the precision that the tolerance requires; the midpoint by `exact_rational()` | the exact real and the tolerance | lean-categories T066 (#212), which declares `missing.real_approximation` as `mor.sets.real_approximation` (kernel T328) |
-| FR-074 | `missing.complex_sqrt` | row that the catalogue lacks | Sage `QQbar(x).sqrt()`, the principal value (lean-categories research D21; in the research container `QQbar(-4).sqrt()` is `2*I`) | the rational operand | lean-categories T067 (#215), which declares `missing.complex_sqrt` as `mor.sets.complex_sqrt` (kernel T331) |
+| FR-073 | `mor.sets.real_approximation` | operation that lean-categories T066 declares | Sage `RealBallField(prec)` evaluation of the exact real at the precision that the tolerance requires; the midpoint by `exact_rational()` | the exact real and the tolerance | lean-categories T066 (#212), which declares `mor.sets.real_approximation` (kernel T328) |
+| FR-074 | `mor.sets.complex_sqrt` | operation that lean-categories T067 declares | Sage `QQbar(x).sqrt()`, the principal value (lean-categories research D21) | the rational operand | lean-categories T067 (#215), which declares `mor.sets.complex_sqrt` (kernel T331) |
 
 ## Computations that move in from the kernel
 
@@ -169,7 +169,7 @@ Each row is one registration of `leaves.json` at `8b181d7`. Its version is the l
 | `mor.sets.fin_rev` | `mor.sets.fin_rev` | `sage-fin-rev` | V1 | Permutation([n, ..., 1])  [sage.combinat.permutation]; composition by right_action_product; application by Permutation.__call__ | Delete the leaf-held datum (the definition of the reversal is the image list written in the leaf (sage_fin_rev.py:22 `Permutation(list(range(n, 0, -1)))`)): the routine runs on the engine value of this module's lowering table or on the data of the request (LV1). |
 | `mor.sets.nat_prime_factors` | `obj.sets.positive_naturals` | `sage-symbolic` | V1 | Integer.prime_divisors() | Keep the engine routine (LV12). |
 | `mor.sets.real_sqrt` | `obj.sets.reals` | `sage-symbolic` | V1 | sqrt(SR(x)) | Delete the leaf-held datum (points of $\mathbb{R}$ and $\mathbb{C}$ are values of Sage's symbolic ring `SR` (sage_symbolic.py:56)): the routine runs on the engine value of this module's lowering table or on the data of the request (LV1). |
-| `prop.is_finite` | `obj.sets.complexes` | `sage` | V1 | CC.is_finite()  [Parent.is_finite] | Delete the leaf-held datum (the leaf models the set by the 53-bit floating-point field `CC` (sage_backend.py:44-45)): the routine is `QQbar.is_finite()` on the infinite subset `QQbar` of the lowering table (plan, "The set $\mathbb{C}$") (LV1). |
+| `prop.is_finite` | `obj.sets.complexes` | `sage` | V1 | CC.is_finite()  [Parent.is_finite] | Delete the leaf-held datum (the leaf models the set by the 53-bit floating-point field `CC` (sage_backend.py:44-45)): the routine is `QQbar.is_finite()` on the subset `QQbar` of the lowering table (plan, "The set $\mathbb{C}$") (LV1). |
 | `prop.is_finite` | `obj.sets.f9_x` | `sage-presentations` | V1 | PolynomialRing(GF(3), 't').quotient(modulus).is_finite() | Delete the leaf-held datum (the two defining polynomials $t^2 + 1$ and $t^2 + t + 2$ over $\mathbb{F}_3$ are literals of the leaf (sage_presentations.py:75)): the routine runs on the engine value of this module's lowering table or on the data of the request (LV1). |
 | `prop.is_finite` | `obj.sets.f9_y` | `sage-presentations` | V1 | PolynomialRing(GF(3), 't').quotient(modulus).is_finite() | Delete the leaf-held datum (the two defining polynomials $t^2 + 1$ and $t^2 + t + 2$ over $\mathbb{F}_3$ are literals of the leaf (sage_presentations.py:75)): the routine runs on the engine value of this module's lowering table or on the data of the request (LV1). |
 | `prop.is_finite` | `obj.sets.fin` | `sage` | V1 | IntegerRange(0, n).is_finite()  [Parent.is_finite] | Keep the engine routine (LV12). |
@@ -207,21 +207,16 @@ The survey record of each version starts from these sections of the kernel engin
 Decision: `obj.sets.complexes` lowers to the two point parents Sage `QQbar` and `SR`, and to no
 single parent. A point is an exact algebraic number of `QQbar` or a closed `SR` expression whose
 numerical value `CC(x)` exists (the values of `mor.sets.real_pi` and `mor.sets.real_exp`).
-Membership of a value is `x in QQbar`, else the conversion `CC(SR(x))`. `prop.is_finite` answers
-`false` from `QQbar.is_finite()`: $\mathbb{C}$ contains the infinite set $\overline{\mathbb{Q}}$.
-The cardinality of $\mathbb{C}$ is `unsupported` (LV11): no surveyed engine has $2^{\aleph_0}$
-(kernel engine survey, "Gaps", infinite cardinals), and `QQbar` has the cardinality
-$\aleph_0$, not that of $\mathbb{C}$.
+Membership of a value is `x in QQbar`, else the conversion `CC(SR(x))`. `prop.is_finite` runs
+`QQbar.is_finite()` on the subset `QQbar` of $\mathbb{C}$: a set with an infinite subset is
+infinite. The cardinality of $\mathbb{C}$ is `unsupported` (LV11): no surveyed engine has
+$2^{\aleph_0}$ (kernel engine survey, "Gaps", infinite cardinals), and the cardinality of `QQbar`
+is not that of $\mathbb{C}$.
 
-Sources: lean-cas-dsl commits `027eaa3` (the first spike represents $\sqrt{2}$, $i$ and
-$2 + 2i$ as exact values $a + b\sqrt{d}$, with $i$ a constant) and `05e8950` (it factors and
-finds the roots of $\mathbb{C}[x]$ in `QQbar` and decides membership in $\mathbb{C} -
-\mathbb{Q}$ pointwise by the membership tests of the two domains); the Sage reference manual,
-`sage.rings.qqbar` (the field of algebraic numbers, with exact equality) and
-`sage.rings.complex_mpfr` (`ComplexField(prec)` and `CC = ComplexField(53)`, floating-point
-approximations); in the research container on 2026-11-25: `CC.is_exact()` is `False`,
-`QQbar.is_finite()` is `False`, `QQbar in EnumeratedSets()` is `False`, `QQbar(-4).sqrt()` is
-`2*I`.
+Sources: the Sage reference manual, `sage.rings.qqbar` (the field of algebraic numbers, with exact
+equality) and `sage.rings.complex_mpfr` (`ComplexField(prec)` and `CC = ComplexField(53)`,
+floating-point approximations); in the research container on 2026-11-25, `CC.is_exact()` is
+`False` and `QQbar` is not in `EnumeratedSets()`.
 
 Reasons: every point of $\mathbb{C}$ that a V1 row computes is algebraic or a closed expression;
 `QQbar` decides equality and membership exactly (LV4). Rejected: `CC` and `ComplexField(prec)`,

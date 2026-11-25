@@ -14,7 +14,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 - **Catalogue ID**: `cat.enumerated_sets`.
 - **Object**: a set with a selected partial-inverse enumeration (catalogue: "The category of sets with a selected partial-inverse enumeration").
 - **Morphism**: a map of the sets that is compatible with the selected enumerations.
-- **Engine**: Sage `EnumeratedSets()` membership; the adopted `Denumerable.ofNat` order of $\mathbb{Z}$ and $\mathbb{Q}$ by the known method with Mathlib as reference (engine survey, "Finite sets, countable sets, enumerated sets").
+- **Engine**: the engines of the [plan](plan.md#technical-context), with the routine of each row in its routine table.
 
 ## Versions
 
@@ -22,7 +22,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 | --- | --- | ---: | ---: |
 | V1 | every computation of the spike and every statement that the kernel V1 definition requires computed | 2 | 0 |
 
-**V3.** The classified Sage coverage of lean-cas-dsl #20, #21 and #23 adds rows to V3 by the same membership rule: a row joins the first version of a computed statement that needs it, and it belongs to the latest category, in the structural order, among its catalogue owners and the categories of its declared parameters. When kernel tasks T140 to T147 produce the classified statements, the rows whose home is `cat.enumerated_sets` join V3 of this spec. This spec plans nothing more for V3.
+**V3.** The rows whose home is `cat.enumerated_sets` join V3 by the membership rule of [001](../001-category-implementations/spec.md#the-category-specs) when kernel tasks T140 to T147 produce the classified statements of lean-cas-dsl #20, #21 and #23.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -56,7 +56,7 @@ The edge cases of 001 apply. This category adds:
 ### Functional Requirements — V1
 
 - **FR-001 — `forget[clf.sets.enumerated]`** (classifier forget, V1). The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018).
-- **FR-002 — `missing.denumerable_enumeration`** (row that the catalogue lacks, V1): the enumeration $\mathbb{N} \to X$ of a denumerable set in the adopted `Denumerable.ofNat` order, its evaluation $X[k]$, and the objects of `cat.enumerated_sets` for $\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$ and the progressions. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T077 (#224), which declares `missing.denumerable_enumeration` as `obj.enumerated_sets.naturals`, `obj.enumerated_sets.integers`, `obj.enumerated_sets.rationals` and `mor.sets.enumeration_at` (kernel T340), lean-categories T039 (#199).
+- **FR-002 — `obj.enumerated_sets.naturals`, `obj.enumerated_sets.integers`, `obj.enumerated_sets.rationals` and `mor.sets.enumeration_at`** (object constructors and operation that lean-categories T077 declares, V1): the enumeration $\mathbb{N} \to X$ of a denumerable set in the adopted `Denumerable.ofNat` order, its evaluation $X[k]$, and the objects of `cat.enumerated_sets` for $\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$ and the progressions. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T077 (#224), which declares `obj.enumerated_sets.naturals`, `obj.enumerated_sets.integers`, `obj.enumerated_sets.rationals` and `mor.sets.enumeration_at` (kernel T340), lean-categories T039 (#199).
 
 ### Key Entities
 

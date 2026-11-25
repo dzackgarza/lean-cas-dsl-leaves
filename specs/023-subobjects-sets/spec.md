@@ -15,7 +15,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 - **Object**: a subset $S \subseteq X$ (an object of $\mathrm{Subobjects}(\mathbf{Set})$).
 - **Morphism**: a map of the ambient sets that carries one subset into the other.
 - **Built from**: `cat.sets` (structural functors and classifier forgets of the catalogue).
-- **Engine**: Sage `Set` and the power-object values of the sets implementation (engine survey, "Sets").
+- **Engine**: the engines of the [plan](plan.md#technical-context), with the routine of each row in its routine table.
 
 ## Versions
 
@@ -23,7 +23,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 | --- | --- | ---: | ---: |
 | V1 | every computation of the spike and every statement that the kernel V1 definition requires computed | 1 | 0 |
 
-**V3.** The classified Sage coverage of lean-cas-dsl #20, #21 and #23 adds rows to V3 by the same membership rule: a row joins the first version of a computed statement that needs it, and it belongs to the latest category, in the structural order, among its catalogue owners and the categories of its declared parameters. When kernel tasks T140 to T147 produce the classified statements, the rows whose home is `cat.subobjects_sets` join V3 of this spec. This spec plans nothing more for V3.
+**V3.** The rows whose home is `cat.subobjects_sets` join V3 by the membership rule of [001](../001-category-implementations/spec.md#the-category-specs) when kernel tasks T140 to T147 produce the classified statements of lean-cas-dsl #20, #21 and #23.
 
 ## User Scenarios & Testing *(mandatory)*
 

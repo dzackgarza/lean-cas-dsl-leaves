@@ -14,7 +14,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 - **Catalogue ID**: `cat.monoids`.
 - **Object**: a monoid (written multiplicatively).
 - **Morphism**: a monoid homomorphism.
-- **Engine**: Sage multiplicative parents (`ZZ`, `QQ`, `Zmod(n)`, matrix spaces) and GAP through `libgap` (`Units`) (engine survey, "Magmas, semigroups, monoids", "Groups").
+- **Engine**: the engines of the [plan](plan.md#technical-context), with the routine of each row in its routine table.
 
 ## Versions
 
@@ -22,7 +22,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 | --- | --- | ---: | ---: |
 | V1 | every computation of the spike and every statement that the kernel V1 definition requires computed | 7 | 2 |
 
-**V3.** The classified Sage coverage of lean-cas-dsl #20, #21 and #23 adds rows to V3 by the same membership rule: a row joins the first version of a computed statement that needs it, and it belongs to the latest category, in the structural order, among its catalogue owners and the categories of its declared parameters. When kernel tasks T140 to T147 produce the classified statements, the rows whose home is `cat.monoids` join V3 of this spec. This spec plans nothing more for V3.
+**V3.** The rows whose home is `cat.monoids` join V3 by the membership rule of [001](../001-category-implementations/spec.md#the-category-specs) when kernel tasks T140 to T147 produce the classified statements of lean-cas-dsl #20, #21 and #23.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -63,12 +63,7 @@ The edge cases of 001 apply. This category adds:
 - **FR-005 — `fun.monoids.semigroup`** (functor, V1). The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018).
 - **FR-006 — `obj.sets.units`** (object constructor, V1). Catalogue: `Mˣ`. The implementation MUST construct the object from the request at the generated layout, with the complete interface that its category declares.
 - **FR-007 — `mor.sets.divide`** (operation, V1). Catalogue: `(a, u) ↦ a u⁻¹`. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. Inputs before it: contract T021.
-- **FR-008 — Existing registrations of V1** (2). The implementation MUST move these registrations of `leaves.json` at `8b181d7` into `backends/monoids.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in the plan: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
-
-  | Operation | Input | v1 backend |
-  | --- | --- | --- |
-  | `prop.is_finite` | `obj.sets.units` | `gap-groups` |
-  | `meth.cardinality` | `obj.sets.units` | `gap-groups` |
+- **FR-008 — Existing registrations of V1** (2). The implementation MUST move the 2 registrations of `leaves.json` at `8b181d7` that the plan's table "Registrations that move" lists for V1 into `backends/monoids.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in that table: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
 
 ### Key Entities
 

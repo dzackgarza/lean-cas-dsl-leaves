@@ -21,11 +21,6 @@ The shape is the contract's (contract FR-004): exactly the root arrays `backends
 | Survey record | The section "Survey record" of its spec's `research.md`, in the row format of [research.md](research.md) (LV7) |
 | Gaps | Parts with no engine routine and no admissible hand-rolled algorithm, with their searches |
 
-## Survey record row
-
-`part`, `engine and routine`, `version or revision`, `decision` (`use`, `fallback`, `reject`),
-`reasons`, `gap searches`. A gap row has the engine column empty and names each search.
-
 ## Run log
 
 `tests/logs/<UTC>-<revision>.log`: the pytest report and the standard error of each backend that

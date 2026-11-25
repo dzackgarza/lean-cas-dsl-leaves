@@ -50,7 +50,7 @@ tests/scenarios/groups-*.json
 
 ## Routine table
 
-The starting choice of each row. The survey record of its version confirms it in the research container or replaces it with its reasons (LV7).
+Each row names its engine routine. The survey record of its version verifies the routine in the research container before the implementation task of the row (LV7). A routine that the survey shows to be wrong for its operation is replaced in this table, with its reasons, in the commit of the survey record (LV12).
 
 ### V1
 
@@ -134,7 +134,6 @@ catalogue declarations `cyclic n := GrpCat.of (Multiplicative (ZMod n))` (lean-c
 `LeanCategories/Catalogue/Semantics/Algebra/FiniteGroups.lean:46` at `fc549baa`) and
 `obj.groups.cyclic_quotient`, the group on $\mathbb{Z}/n\mathbb{Z}$ (`CyclicQuotients.lean:196`),
 with Mathlib's definition `ZMod 0 = ℤ`; in the research container on 2026-11-25,
-`libgap.CyclicGroup(libgap.eval('infinity'))` has `Size` `infinity` and `IsAbelian` `true`, and
 `CyclicGroup(0)` raises "no method found".
 
 Reasons: the case $n = 0$ is the declaration's own value $\mathbb{Z}$, so the lowering reads it

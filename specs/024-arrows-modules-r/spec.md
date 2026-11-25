@@ -15,7 +15,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 - **Object**: an $R$-linear map $f : M \to N$ (an object of the arrow category of $\mathbf{Mod}_R$).
 - **Morphism**: a commutative square of linear maps.
 - **Built from**: `cat.modules_r` (structural functors and classifier forgets of the catalogue).
-- **Engine**: Sage module homomorphisms (`kernel()`, `image()`, inclusion maps) (engine survey, "Modules", "Linear algebra").
+- **Engine**: the engines of the [plan](plan.md#technical-context), with the routine of each row in its routine table.
 
 ## Versions
 
@@ -23,7 +23,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 | --- | --- | ---: | ---: |
 | V1 | every computation of the spike and every statement that the kernel V1 definition requires computed | 3 | 0 |
 
-**V3.** The classified Sage coverage of lean-cas-dsl #20, #21 and #23 adds rows to V3 by the same membership rule: a row joins the first version of a computed statement that needs it, and it belongs to the latest category, in the structural order, among its catalogue owners and the categories of its declared parameters. When kernel tasks T140 to T147 produce the classified statements, the rows whose home is `cat.arrows_modules_r` join V3 of this spec. This spec plans nothing more for V3.
+**V3.** The rows whose home is `cat.arrows_modules_r` join V3 by the membership rule of [001](../001-category-implementations/spec.md#the-category-specs) when kernel tasks T140 to T147 produce the classified statements of lean-cas-dsl #20, #21 and #23.
 
 ## User Scenarios & Testing *(mandatory)*
 

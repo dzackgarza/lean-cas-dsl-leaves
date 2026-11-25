@@ -21,8 +21,9 @@ the tasks that consume the work. It holds no acceptance statement and no expecte
 ## The category specs
 
 Each category whose rows a computation needs has its own Spec Kit feature, `specs/<NNN>-<slug>/`,
-numbered from 002 in the structural order (constitution LV13). The [plan](plan.md#category-specs)
-lists the 33 specs and the categories that have no spec. Each spec has versioned milestones:
+numbered from 002. The [feature order](tasks.md#feature-order) of the task list, not the number,
+is the sequence: it follows the structural order and starts with Sets (constitution LV13). The
+[plan](plan.md#category-specs) lists the 33 specs and the categories that have no spec. Each spec has versioned milestones:
 
 | Version | Rows of the spec |
 | --- | --- |
@@ -119,7 +120,7 @@ package in their place is admitted, and each specimen's failure reaches its dist
 ### Functional Requirements — the category specs
 
 - **FR-038 — One spec for each needed category.** Each category with a row in V1 or V2 MUST have
-  its Spec Kit feature, numbered in the structural order: its spec states the category, the user
+  its Spec Kit feature, at its step of the feature order: its spec states the category, the user
   stories of each version and one requirement for each row with its catalogue ID and its version;
   its plan names, for each row, the engine and routine, the module of this repository, the
   dependent inputs and the inputs before it; its task list has, for each version, the survey
@@ -206,7 +207,7 @@ package in their place is admitted, and each specimen's failure reaches its dist
 ### Measurable Outcomes
 
 - **SC-001**: For each version of each category spec, its kernel task "Implement <Category> Spec
-  V<n>" observes its attainment through `CasRuntime.KernelSession` with this repository's
+  V<n>" observes its attainment through the public session of lean-cas-dsl with this repository's
   manifest, with no kernel-side evaluation in any part.
 - **SC-002**: All 115 registrations of `leaves.json` at `8b181d7` are in a category
   implementation on protocol 2, and no registration of a v1 backend remains.

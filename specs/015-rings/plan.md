@@ -50,7 +50,7 @@ tests/scenarios/rings-*.json
 
 ## Routine table
 
-The starting choice of each row. The survey record of its version confirms it in the research container or replaces it with its reasons (LV7).
+Each row names its engine routine. The survey record of its version verifies the routine in the research container before the implementation task of the row (LV7). A routine that the survey shows to be wrong for its operation is replaced in this table, with its reasons, in the commit of the survey record (LV12).
 
 ### V1
 
@@ -59,14 +59,14 @@ The starting choice of each row. The survey record of its version confirms it in
 | FR-001 | `cat.rings` | category structure | Sage ring homomorphisms (`R.hom(...)`, coercion maps); identity and composition | the selected data that the request carries (LV4) | — |
 | FR-002 | `obj.rings.integers` | object constructor | Sage `ZZ` | request operands at the generated layout | — |
 | FR-003 | `obj.rings.rationals` | object constructor | Sage `QQ` | request operands at the generated layout | — |
-| FR-004 | `obj.rings.reals` | object constructor | Sage `AA` for algebraic values and `SR` for transcendental values, as the exact real ring of the requests; the survey record of T001 confirms the parent | request operands at the generated layout | — |
-| FR-005 | `obj.rings.complexes` | object constructor | Sage `QQbar` for algebraic values and `SR` for transcendental values; the survey record of T001 confirms the parent | request operands at the generated layout | — |
+| FR-004 | `obj.rings.reals` | object constructor | Sage `AA` for algebraic values and `SR` for transcendental values, as the exact real ring of the requests (the lowering of spec 003, plan "The set $\mathbb{C}$", at its real points) | request operands at the generated layout | — |
+| FR-005 | `obj.rings.complexes` | object constructor | Sage `QQbar` for algebraic values and `SR` for transcendental values (spec 003, plan "The set $\mathbb{C}$") | request operands at the generated layout | — |
 | FR-006 | `obj.rings.integers_mod` | object constructor | Sage `Zmod(n)` | request operands at the generated layout | — |
 | FR-007 | `num.rings` | operation | the element `R(k)` for the numeral `k` (Sage coercion from `ZZ`) | request operands at the generated layout | lean-categories T017 (#194) |
-| FR-008 | `op.rings.add` | operation | Sage element `+` | request operands at the generated layout | lean-categories T005 (#193), lean-categories T064 (#211), contract T021 |
-| FR-009 | `op.rings.mul` | operation | Sage element `*` | request operands at the generated layout | lean-categories T005 (#193), lean-categories T064 (#211), contract T021 |
-| FR-010 | `op.rings.neg` | operation | Sage element unary `-` | request operands at the generated layout | lean-categories T005 (#193), lean-categories T064 (#211), contract T021 |
-| FR-011 | `op.rings.pow` | operation | Sage element `**` with a natural exponent | request operands at the generated layout | lean-categories T064 (#211), contract T021 |
+| FR-008 | `op.rings.add` | operation | Sage element `+` | request operands at the generated layout | lean-categories T005 (#193), contract T021 |
+| FR-009 | `op.rings.mul` | operation | Sage element `*` | request operands at the generated layout | lean-categories T005 (#193), contract T021 |
+| FR-010 | `op.rings.neg` | operation | Sage element unary `-` | request operands at the generated layout | lean-categories T005 (#193), contract T021 |
+| FR-011 | `op.rings.pow` | operation | Sage element `**` with a natural exponent | request operands at the generated layout | contract T021 |
 | FR-012 | `fun.rings.additive_group` | functor | object action: the additive parent to the public constructor of `cat.additive_groups`; morphism action: the homomorphism at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | — |
 | FR-013 | `fun.rings.multiplicative_monoid` | functor | object action: the multiplicative parent to the public constructor of `cat.monoids`; morphism action: the homomorphism at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | — |
 | FR-014 | `fun.rings.semiring` | functor | object action: the ring as a semiring to the public constructor of `cat.semirings`; morphism action: the homomorphism at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | — |

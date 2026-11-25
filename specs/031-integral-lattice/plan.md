@@ -13,7 +13,7 @@ The technical context of 001 applies: Python 3.14 of the research container's Sa
 
 **Engine**: Sage integral lattices (`IntegralLattice`, `rank`, `cardinality`) (engine survey, "Lattices (quadratic forms)").
 **Module**: `backends/integral_lattice.py`, run as `/sage/.venv/bin/python3 -m backends.integral_lattice` (001 research R3).
-**Code dependencies** (LV8, second option; LV16): `backends/bilin_module.py` (spec 026). The module imports their lowering tables or functions; it imports no other category module.
+**Code dependencies** (LV8, second option; LV16): `backends/bilin_module.py` (spec 026), `backends/cardinals.py` (spec 002). The module imports their lowering tables or functions; it imports no other category module.
 **Tests**: `tests/test_integral_lattice.py`, `tests/scenarios/integral_lattice-*.json`.
 
 ## Constitution Check
@@ -50,7 +50,7 @@ tests/scenarios/integral_lattice-*.json
 
 ## Routine table
 
-The starting choice of each row. The survey record of its version confirms it in the research container or replaces it with its reasons (LV7).
+Each row names its engine routine. The survey record of its version verifies the routine in the research container before the implementation task of the row (LV7). A routine that the survey shows to be wrong for its operation is replaced in this table, with its reasons, in the commit of the survey record (LV12).
 
 ### V2
 
@@ -65,10 +65,10 @@ Each row is one registration of `leaves.json` at `8b181d7`. Its version is the l
 
 | Operation | Input | v1 backend | Version | v1 routine | Decision |
 | --- | --- | --- | --- | --- | --- |
-| `meth.cardinality` | `obj.integral_lattice.e8` | `sage-modules` | V2 | FreeModule(ZZ, 8).cardinality() | Delete the leaf-held datum (the rank $8$ of $E_8$ is a literal of the leaf (sage_modules.py:52); Sage `+Infinity` is answered as `aleph0` (sage_modules.py:87)): the routine runs on the engine value of this module's lowering table or on the data of the request (LV1). |
-| `meth.rank` | `obj.integral_lattice.e8` | `sage-modules` | V2 | FreeModule(ZZ, 8).rank() | Replace a lookup by the routine of the routine table (LV6, LV12); delete the leaf-held datum (the rank $8$ of $E_8$ is a literal of the leaf (sage_modules.py:52)): the routine runs on the engine value of this module's lowering table or on the data of the request (LV1). |
-| `prop.is_abelian` | `obj.integral_lattice.e8` | `gap-groups` | V2 | IsAbelian(AbelianGroup([0]*8)) | Replace the GAP group built from a literal by a kernel request for the residual actions and the property of the image group (LV8, third option); the v1 datum goes with the v1 routine (the rank $8$ of $E_8$ is a literal of the leaf (gap_groups.py:57)). |
-| `prop.is_commutative` | `obj.integral_lattice.e8` | `gap-groups` | V2 | IsAbelian(AbelianGroup([0]*8)) | Replace the GAP group built from a literal by a kernel request for the residual actions and the property of the image group (LV8, third option); the v1 datum goes with the v1 routine (the rank $8$ of $E_8$ is a literal of the leaf (gap_groups.py:57)). |
+| `meth.cardinality` | `obj.integral_lattice.e8` | `sage-modules` | V2 | FreeModule(ZZ, n).cardinality() with a literal $n$ | Delete the leaf-held datum (the rank of $E_8$ is a literal of the leaf (sage_modules.py:52); Sage `+Infinity` is answered as `aleph0` (sage_modules.py:87)): the cardinality is the finite power $\lvert \mathbb{Z} \rvert^{n}$ of spec 002, with $n$ the Sage `rank()` of the lowered lattice (LV1; LV8, second option). |
+| `meth.rank` | `obj.integral_lattice.e8` | `sage-modules` | V2 | FreeModule(ZZ, n).rank() with a literal $n$ | Replace a lookup by the routine of the routine table (LV6, LV12); delete the leaf-held datum (the rank of $E_8$ is a literal of the leaf (sage_modules.py:52)): the routine runs on the engine value of this module's lowering table or on the data of the request (LV1). |
+| `prop.is_abelian` | `obj.integral_lattice.e8` | `gap-groups` | V2 | IsAbelian(AbelianGroup([0]*n)) with a literal $n$ | Replace the GAP group built from a literal by a kernel request for the residual actions and the property of the image group (LV8, third option); the v1 datum goes with the v1 routine (the rank of $E_8$ is a literal of the leaf (gap_groups.py:57)). |
+| `prop.is_commutative` | `obj.integral_lattice.e8` | `gap-groups` | V2 | IsAbelian(AbelianGroup([0]*n)) with a literal $n$ | Replace the GAP group built from a literal by a kernel request for the residual actions and the property of the image group (LV8, third option); the v1 datum goes with the v1 routine (the rank of $E_8$ is a literal of the leaf (gap_groups.py:57)). |
 
 | Version | Registrations |
 | --- | ---: |

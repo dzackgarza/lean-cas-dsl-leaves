@@ -14,7 +14,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 - **Catalogue ID**: `cat.ideals_r`.
 - **Object**: an ideal of $R$ (catalogue: "The ideals of `R`, as a discrete category").
 - **Morphism**: an identity: the category is discrete.
-- **Engine**: Sage ideals and module annihilators (`ZZ.ideal(n)`, `annihilator()`) (engine survey, "Modules").
+- **Engine**: the engines of the [plan](plan.md#technical-context), with the routine of each row in its routine table.
 
 ## Versions
 
@@ -22,13 +22,13 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 | --- | --- | ---: | ---: |
 | V1 | every computation of the spike and every statement that the kernel V1 definition requires computed | 2 | 0 |
 
-**V3.** The classified Sage coverage of lean-cas-dsl #20, #21 and #23 adds rows to V3 by the same membership rule: a row joins the first version of a computed statement that needs it, and it belongs to the latest category, in the structural order, among its catalogue owners and the categories of its declared parameters. When kernel tasks T140 to T147 produce the classified statements, the rows whose home is `cat.ideals_r` join V3 of this spec. This spec plans nothing more for V3.
+**V3.** The rows whose home is `cat.ideals_r` join V3 by the membership rule of [001](../001-category-implementations/spec.md#the-category-specs) when kernel tasks T140 to T147 produce the classified statements of lean-cas-dsl #20, #21 and #23.
 
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 — V1: the computations of the spike and of kernel V1 (Priority: P1)
 
-A researcher reads the annihilator of a module, such as $\mathbb{Z}/4$ or $\mathbb{Z}/12$ over $\mathbb{Z}$, as an ideal.
+A researcher reads the annihilator of a finitely generated module over $\mathbb{Z}$ as an ideal.
 
 **Why this priority**: the categories that follow this one in the structural order consume it, and the kernel's computational milestone of this version needs a computed result through it (LV13; K:C23).
 
@@ -56,7 +56,7 @@ The edge cases of 001 apply. This category adds:
 ### Functional Requirements — V1
 
 - **FR-001 — `meth.annihilator`** (operation, V1). The implementation MUST answer the method at its actual domain; an inherited request carries the receiver, one descriptor for each residual action and the method functor, and the implementation realizes that composite (contract FR-017).
-- **FR-002 — `missing.module_annihilator_value`** (row that the catalogue lacks, V1): objects of `cat.ideals_r`, such as the principal ideal $(4) \subseteq \mathbb{Z}$. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T078 (#225), which declares `missing.module_annihilator_value` as `obj.ideals.principal` (kernel T341).
+- **FR-002 — `obj.ideals.principal`** (object constructor that lean-categories T078 declares, V1): the principal ideals of $\mathbb{Z}$ as objects of `cat.ideals_r`. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T078 (#225), which declares `obj.ideals.principal` (kernel T341).
 
 ### Key Entities
 

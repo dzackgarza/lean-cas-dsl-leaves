@@ -14,8 +14,8 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 - **Catalogue ID**: `cat.subsets.subset_predicates`.
 - **Object**: a subset with a predicate on the subsets of its ambient set (the category of elements of `fun.subsets.subset_predicates` on $\mathrm{Core}(\mathrm{Subobjects}(\mathbf{Set}))$).
 - **Morphism**: a morphism of the category of elements: an isomorphism of subsets that carries one predicate to the other.
-- **Built from**: `cat.core_subobjects_sets`, `cat.core_subobjects_sets`, `cat.sets` (structural functors and classifier forgets of the catalogue).
-- **Engine**: Sage `Set` equality and the power-object values of the sets implementation (engine survey, "Sets").
+- **Built from**: `cat.core_subobjects_sets`, `cat.sets` (structural functors and classifier forgets of the catalogue).
+- **Engine**: the engines of the [plan](plan.md#technical-context), with the routine of each row in its routine table.
 
 ## Versions
 
@@ -23,13 +23,13 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 | --- | --- | ---: | ---: |
 | V1 | every computation of the spike and every statement that the kernel V1 definition requires computed | 1 | 0 |
 
-**V3.** The classified Sage coverage of lean-cas-dsl #20, #21 and #23 adds rows to V3 by the same membership rule: a row joins the first version of a computed statement that needs it, and it belongs to the latest category, in the structural order, among its catalogue owners and the categories of its declared parameters. When kernel tasks T140 to T147 produce the classified statements, the rows whose home is `cat.subsets.subset_predicates` join V3 of this spec. This spec plans nothing more for V3.
+**V3.** The rows whose home is `cat.subsets.subset_predicates` join V3 by the membership rule of [001](../001-category-implementations/spec.md#the-category-specs) when kernel tasks T140 to T147 produce the classified statements of lean-cas-dsl #20, #21 and #23.
 
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 — V1: the computations of the spike and of kernel V1 (Priority: P1)
 
-A researcher compares the underlying set of a structure, such as the module $\mathbb{Z}/4$, with a set given by its elements.
+A researcher compares the underlying set of a structure with a set given by its elements.
 
 **Why this priority**: the categories that follow this one in the structural order consume it, and the kernel's computational milestone of this version needs a computed result through it (LV13; K:C23).
 

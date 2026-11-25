@@ -14,7 +14,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 - **Catalogue ID**: `cat.finite_sets`.
 - **Object**: a finite type (catalogue: "Finite types").
 - **Morphism**: a function between finite types.
-- **Engine**: Sage (`FiniteEnumeratedSet`, `IntegerRange`, `FiniteSetMaps`) (engine survey, "Finite sets, countable sets, enumerated sets").
+- **Engine**: the engines of the [plan](plan.md#technical-context), with the routine of each row in its routine table.
 
 ## Versions
 
@@ -23,7 +23,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 | V1 | every computation of the spike and every statement that the kernel V1 definition requires computed | 3 | 0 |
 | V2 | the remaining full-B0 statements of lean-cas-dsl #19 | 2 | 2 |
 
-**V3.** The classified Sage coverage of lean-cas-dsl #20, #21 and #23 adds rows to V3 by the same membership rule: a row joins the first version of a computed statement that needs it, and it belongs to the latest category, in the structural order, among its catalogue owners and the categories of its declared parameters. When kernel tasks T140 to T147 produce the classified statements, the rows whose home is `cat.finite_sets` join V3 of this spec. This spec plans nothing more for V3.
+**V3.** The rows whose home is `cat.finite_sets` join V3 by the membership rule of [001](../001-category-implementations/spec.md#the-category-specs) when kernel tasks T140 to T147 produce the classified statements of lean-cas-dsl #20, #21 and #23.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -81,12 +81,7 @@ The edge cases of 001 apply. This category adds:
 
 - **FR-004 — `cat.finite_sets`** (category structure, V2). Catalogue: Finite types. The implementation MUST realize the identities, the composition and the application of the morphisms of the category at the generated layout.
 - **FR-005 — `obj.finite_sets.fin`** (object constructor, V2). Catalogue: `Fin n` as a finite set. The implementation MUST construct the object from the request at the generated layout, with the complete interface that its category declares.
-- **FR-006 — Existing registrations of V2** (2). The implementation MUST move these registrations of `leaves.json` at `8b181d7` into `backends/finite_sets.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in the plan: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
-
-  | Operation | Input | v1 backend |
-  | --- | --- | --- |
-  | `meth.cardinality` | `obj.finite_sets.fin` | `sage` |
-  | `prop.is_finite` | `obj.finite_sets.fin` | `sage` |
+- **FR-006 — Existing registrations of V2** (2). The implementation MUST move the 2 registrations of `leaves.json` at `8b181d7` that the plan's table "Registrations that move" lists for V2 into `backends/finite_sets.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in that table: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
 
 ### Key Entities
 

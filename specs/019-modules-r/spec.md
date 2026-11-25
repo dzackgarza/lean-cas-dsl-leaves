@@ -15,7 +15,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 - **Object**: an $R$-module (the fibre of the module family at a ring $R$).
 - **Morphism**: an $R$-linear map.
 - **Built from**: `cat.rings` (structural functors and classifier forgets of the catalogue).
-- **Engine**: Sage modules (`FreeModule`, `VectorSpace`, module homomorphisms, finitely generated modules over a PID) (engine survey, "Modules", "Linear algebra").
+- **Engine**: the engines of the [plan](plan.md#technical-context), with the routine of each row in its routine table.
 
 ## Versions
 
@@ -24,7 +24,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 | V1 | every computation of the spike and every statement that the kernel V1 definition requires computed | 11 | 2 |
 | V2 | the remaining full-B0 statements of lean-cas-dsl #19 | 1 | 0 |
 
-**V3.** The classified Sage coverage of lean-cas-dsl #20, #21 and #23 adds rows to V3 by the same membership rule: a row joins the first version of a computed statement that needs it, and it belongs to the latest category, in the structural order, among its catalogue owners and the categories of its declared parameters. When kernel tasks T140 to T147 produce the classified statements, the rows whose home is `cat.modules_r` join V3 of this spec. This spec plans nothing more for V3.
+**V3.** The rows whose home is `cat.modules_r` join V3 by the membership rule of [001](../001-category-implementations/spec.md#the-category-specs) when kernel tasks T140 to T147 produce the classified statements of lean-cas-dsl #20, #21 and #23.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -77,20 +77,15 @@ The edge cases of 001 apply. This category adds:
 - **FR-001 — `cat.modules_r`** (category structure, V1). Catalogue: Fibre of the parameterized family at an arbitrary ring object. The implementation MUST realize the identities, the composition and the application of the morphisms of the category at the generated layout.
 - **FR-002 — `obj.modules.regular`** (object constructor, V1). Catalogue: The left regular module of the selected scalar ring: its additive group is the ring's own additive group, and scalar action is its multiplication. The implementation MUST construct the object from the request at the generated layout, with the complete interface that its category declares.
 - **FR-003 — `obj.modules.vectors`** (object constructor, V1). Catalogue: The product module over the selected scalar ring, with pointwise addition and scalar action; no basis or coordinates are chosen beyond the index `Fin n`. The implementation MUST construct the object from the request at the generated layout, with the complete interface that its category declares.
-- **FR-004 — `op.modules.scalar_action`** (operation, V1). Catalogue: The selected module's actual scalar action, uncurried as a map of sets. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. It takes over from the kernel: the scalar action of an instance. Inputs before it: lean-categories T064 (#211).
+- **FR-004 — `op.modules.scalar_action`** (operation, V1). Catalogue: The selected module's actual scalar action, uncurried as a map of sets. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. It takes over from the kernel: the scalar action of an instance.
 - **FR-005 — `mor.modules.row_linear_map`** (operation, V1). Catalogue: Given `columns : ℕ`, a selected commutative ring `R`, and a row matrix `M : Fin 1 → Fin columns → R`, the `R`-linear map from `R^columns` to the regular module with carrier `R`, sending `x` to `∑ j, M 0 j * x j`. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. Inputs before it: contract T021.
 - **FR-006 — `fun.modules.fibre_inclusion`** (functor, V1). The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018).
 - **FR-007 — `fun.modules.reindex`** (functor, V1). The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018).
 - **FR-008 — `obj.modules_r.restricted_regular`** (object constructor, V1). Catalogue: Given selected rings `R`, `S` and a selected ring morphism `q : R ⟶ S`, the `R`-module obtained by restricting the regular left `S`-module along `q`. The implementation MUST construct the object from the request at the generated layout, with the complete interface that its category declares.
-- **FR-009 — `missing.linear_map_from_formula`** (row that the catalogue lacks, V1): a linear map $\mathbb{Q}^n \to \mathbb{Q}^m$ given by a formula linear in its binders, as a morphism of `cat.modules_r` with its kernel and image. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T074 (#217), which declares `missing.linear_map_from_formula` as `mor.modules.formula_linear_map` (kernel T333).
-- **FR-010 — `missing.cyclic_module_object`** (row that the catalogue lacks, V1): the $\mathbb{Z}$-module $\mathbb{Z}/n$ as an object of `cat.modules_r`. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T075 (#222), which declares `missing.cyclic_module_object` as `obj.modules.integers_mod` (kernel T338).
-- **FR-011 — `missing.derivative_linear`** (row that the catalogue lacks, V1): the derivation $d/dx : \mathbb{Q}[x] \to \mathbb{Q}[x]$ as a morphism of $\mathbb{Q}$-modules. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T076 (#223), which declares `missing.derivative_linear` as `mor.modules.polynomial_derivative` (kernel T339).
-- **FR-012 — Existing registrations of V1** (2). The implementation MUST move these registrations of `leaves.json` at `8b181d7` into `backends/modules_r.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in the plan: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
-
-  | Operation | Input | v1 backend |
-  | --- | --- | --- |
-  | `meth.cardinality` | `obj.modules.regular` | `sage-modules` |
-  | `meth.cardinality` | `obj.modules.vectors` | `sage-modules` |
+- **FR-009 — `mor.modules.formula_linear_map`** (operation that lean-categories T074 declares, V1): a linear map $\mathbb{Q}^n \to \mathbb{Q}^m$ given by a formula linear in its binders, as a morphism of `cat.modules_r` with its kernel and image. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T074 (#217), which declares `mor.modules.formula_linear_map` (kernel T333).
+- **FR-010 — `obj.modules.integers_mod`** (object constructor that lean-categories T075 declares, V1): the $\mathbb{Z}$-module $\mathbb{Z}/n$ as an object of `cat.modules_r`. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T075 (#222), which declares `obj.modules.integers_mod` (kernel T338).
+- **FR-011 — `mor.modules.polynomial_derivative`** (operation that lean-categories T076 declares, V1): the derivation $d/dx : \mathbb{Q}[x] \to \mathbb{Q}[x]$ as a morphism of $\mathbb{Q}$-modules. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T076 (#223), which declares `mor.modules.polynomial_derivative` (kernel T339).
+- **FR-012 — Existing registrations of V1** (2). The implementation MUST move the 2 registrations of `leaves.json` at `8b181d7` that the plan's table "Registrations that move" lists for V1 into `backends/modules_r.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in that table: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
 
 ### Functional Requirements — V2
 

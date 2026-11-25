@@ -14,7 +14,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 - **Catalogue ID**: `cat.cardinals`.
 - **Object**: a cardinal number (Mathlib `Cardinal`).
 - **Morphism**: an identity: the catalogue declares the cardinals as a discrete category.
-- **Engine**: Sage `Integer` for finite cardinals. No surveyed engine supplies $\aleph_0$ or its arithmetic; this implementation computes them by the known method, with Mathlib's cardinal arithmetic (`Mathlib.SetTheory.Cardinal.Arithmetic`) as its cited reference (LV6).
+- **Engine**: the engines of the [plan](plan.md#technical-context), with the routine of each row in its routine table.
 
 ## Versions
 
@@ -22,7 +22,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 | --- | --- | ---: | ---: |
 | V1 | every computation of the spike and every statement that the kernel V1 definition requires computed | 2 | 0 |
 
-**V3.** The classified Sage coverage of lean-cas-dsl #20, #21 and #23 adds rows to V3 by the same membership rule: a row joins the first version of a computed statement that needs it, and it belongs to the latest category, in the structural order, among its catalogue owners and the categories of its declared parameters. When kernel tasks T140 to T147 produce the classified statements, the rows whose home is `cat.cardinals` join V3 of this spec. This spec plans nothing more for V3.
+**V3.** The rows whose home is `cat.cardinals` join V3 by the membership rule of [001](../001-category-implementations/spec.md#the-category-specs) when kernel tasks T140 to T147 produce the classified statements of lean-cas-dsl #20, #21 and #23.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -56,7 +56,7 @@ The edge cases of 001 apply. This category adds:
 
 - **FR-001 — `lit.cardinals`** (operation, V1). Catalogue: A cardinal as the language writes it: a numeral or `ℵ₀`. The implementation MUST return the value of the literal or numeral descriptor at the generated layout.
 - **FR-002 — Arithmetic of finite cardinals and $\aleph_0$** (V1). The module MUST supply the sum, the product and the finite power of finite cardinals and $\aleph_0$ as code that the cardinality implementation of `cat.core_sets` (spec 004) calls (LV8, second option). It is the known method, with Mathlib `Mathlib.SetTheory.Cardinal.Arithmetic` as its cited reference (LV6). It is not a port: the catalogue declares no operation of `cat.cardinals` other than `lit.cardinals`. A reply whose computation uses it names this implementation and its reference in its routine observations (contract FR-013).
-- **FR-003 — `missing.cardinal_power`** (row that the catalogue lacks, V1): exponentiation of cardinals $2^{\kappa}$ (Mathlib `Cardinal.power`). The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T065 (#216), which declares `missing.cardinal_power` as `op.cardinals.power` (kernel T332).
+- **FR-003 — `op.cardinals.power`** (operation that lean-categories T065 declares, V1): exponentiation of cardinals $2^{\kappa}$ (Mathlib `Cardinal.power`). The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T065 (#216), which declares `op.cardinals.power` (kernel T332).
 
 ### Key Entities
 

@@ -50,13 +50,13 @@ tests/scenarios/core_sets-*.json
 
 ## Routine table
 
-The starting choice of each row. The survey record of its version confirms it in the research container or replaces it with its reasons (LV7).
+Each row names its engine routine. The survey record of its version verifies the routine in the research container before the implementation task of the row (LV7). A routine that the survey shows to be wrong for its operation is replaced in this table, with its reasons, in the commit of the survey record (LV12).
 
 ### V1
 
 | FR | Row | Kind | Engine and routine | Dependent inputs (C22) | Inputs before it |
 | --- | --- | --- | --- | --- | --- |
-| FR-001 | `meth.cardinality` | operation | Sage `cardinality()` of the engine value: an `Integer` for a finite set; $\aleph_0$ for an infinite set in `EnumeratedSets()`; the arithmetic of spec 002 for products, sums and finite powers | the receiver with one descriptor for each residual action and the method functor (contract FR-017); descriptors lowered by the lowering table of `backends/sets.py` (LV8, second option); asks the kernel for the residual actions that no imported lowering supplies (LV8, third option); receives the result or `NoImplementation` | — |
+| FR-001 | `meth.cardinality` | operation | Sage `cardinality()` of the engine value: an `Integer` for a finite set; $\aleph_0$ for an infinite set in `EnumeratedSets()`; the arithmetic of spec 002 for products, sums and finite powers; for a free module of finite rank $n$ over a ring $R$ (Sage `rank()`, `base_ring()`), the finite power $\lvert R \rvert^{n}$ of spec 002 | the receiver with one descriptor for each residual action and the method functor (contract FR-017); descriptors lowered by the lowering table of `backends/sets.py` (LV8, second option); asks the kernel for the residual actions that no imported lowering supplies (LV8, third option); receives the result or `NoImplementation` | — |
 | FR-002 | `fun.sets.cardinality` | functor | object action: the cardinal of `meth.cardinality` to the public constructor `lit.cardinals`; morphism action: the identity of the image cardinal at the two image endpoints (contract FR-018) | the source bijection and both image endpoints (contract FR-018) | — |
 | FR-003 | `obj.sets.two_subsets` | object constructor | Sage `Subsets(X, 2)` | descriptors lowered by the lowering table of `backends/sets.py` (LV8, second option) | — |
 | FR-004 | `meth.two_subsets` | operation | Sage `Subsets(X, 2)` of the receiver | the receiver and the method functor (contract FR-017); descriptors lowered by the lowering table of `backends/sets.py` (LV8, second option) | — |

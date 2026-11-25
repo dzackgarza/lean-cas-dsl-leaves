@@ -39,7 +39,7 @@ Format: `- [ ] ID [P?] [Story] description`.
   (patch amendment). **Files**: `DEFECTS.md`, `AGENTS.md`, `README.md`, `CONTRIBUTING.md`,
   `.specify/memory/constitution.md`. **Acceptance**: the issue holds every finding;
   `git ls-files DEFECTS.md` and `git grep -n DEFECTS.md -- ':!specs'` return nothing.
-  **After**: T001. **Kernel**: T201 ("Implement Cardinals Spec V1"), the first version of the feature order.
+  **After**: T001. **Kernel**: T202 ("Implement Sets Spec V1"), the first version of the feature order.
 
 ## Phase 2: Foundation at kernel readiness F
 
@@ -52,14 +52,14 @@ Format: `- [ ] ID [P?] [Story] description`.
   `justfile`, `.gitignore`, `lakefile.toml`, `README.md`. **Acceptance**: in the research
   container `just setup` exits 0, and `just check-engine` imports `cas_session`,
   `cas_interfaces`, `sage.all` and `juliacall` with Catlab under the backend command.
-  **After**: kernel F; contract T019. **Kernel**: T201 ("Implement Cardinals Spec V1"), the first version of the feature order.
+  **After**: kernel F; contract T019. **Kernel**: T202 ("Implement Sets Spec V1"), the first version of the feature order.
 - [ ] T004 Write `backends/engine.py` (FR-026, FR-029, FR-031; contract backend-program): engine
   import once before the ready frame and exit before it when an engine is absent; the ready
   features with `routine-observations/1`; the handler table of a program; the per-request log
   line and timing of [data-model.md](data-model.md); the routine-observation helper; the
   suspension helper that returns `NoImplementation` to the handler; the `juliacall` variables of
   R2. **Files**: `backends/engine.py`. **Acceptance**: T005's engine tests pass. **After**: T003.
-  **Kernel**: T201 ("Implement Cardinals Spec V1"), the first version of the feature order.
+  **Kernel**: T202 ("Implement Sets Spec V1"), the first version of the feature order.
 - [ ] T005 Write the tier 1 harness (FR-029, FR-030; LV17, LV18; research R10, R11):
   `tests/conftest.py` (run log, timing records), `tests/harness.py` (starts a program under
   `/sage/.venv/bin/python3` with `.deps` on `PYTHONPATH`, runs `cas-peer run`), the recipes
@@ -71,11 +71,11 @@ Format: `- [ ] ID [P?] [Story] description`.
   **Acceptance**: `just test-category engine` shows a negotiation with the five features and an
   exit before the ready frame for the absent engine; the run writes one log and one timing record
   per test; it finishes in under five minutes (SC-004). **After**: T004; contract T003.
-  **Kernel**: T201 ("Implement Cardinals Spec V1"), the first version of the feature order.
+  **Kernel**: T202 ("Implement Sets Spec V1"), the first version of the feature order.
 - [ ] T006 Rewrite `leaves.json` in the protocol-2 form with no v1 backend (research R4;
   FR-026), and make `test-commit` decode it with `cas-peer manifest`. **Files**: `leaves.json`,
   `justfile`. **Acceptance**: `cas-peer manifest leaves.json` accepts it; `git grep -n
-  '"python3"' leaves.json` returns nothing. **After**: T005; contract T005. **Kernel**: T201 ("Implement Cardinals Spec V1"), the first version of the feature order.
+  '"python3"' leaves.json` returns nothing. **After**: T005; contract T005. **Kernel**: T202 ("Implement Sets Spec V1"), the first version of the feature order.
 
 ## Feature order
 
@@ -88,9 +88,9 @@ and their tasks "Spec V<n> complete" close SC-001 for each version.
 | Step | Task or feature | Content | Kernel task |
 | ---: | --- | --- | --- |
 | 1 | 001 T001–T006 | findings, dependencies, engine bridge, harness, protocol-2 manifest | see each task |
-| 2 | [002-cardinals](../002-cardinals/tasks.md) V1 | `cat.cardinals` V1 | T201 ("Implement Cardinals Spec V1") |
-| 3 | [003-sets](../003-sets/tasks.md) V1 | `cat.sets` V1 | T202 ("Implement Sets Spec V1"), which also accepts the V2 statements whose rows are V1 rows of this spec |
-| 4 | 001 T009 | public-only check on the Sets implementation (SC-007) | T202 |
+| 2 | [003-sets](../003-sets/tasks.md) V1 | `cat.sets` V1 | T202 ("Implement Sets Spec V1"), which also accepts the V2 statements whose rows are V1 rows of this spec |
+| 3 | 001 T009 | public-only check on the Sets implementation (SC-007) | T202 |
+| 4 | [002-cardinals](../002-cardinals/tasks.md) V1 | `cat.cardinals` V1 | T201 ("Implement Cardinals Spec V1") |
 | 5 | [004-core-sets](../004-core-sets/tasks.md) V1 | `cat.core_sets` V1 | T203 ("Implement Core of sets Spec V1"), which also accepts the V2 statements whose rows are V1 rows of this spec |
 | 6 | [005-finite-sets](../005-finite-sets/tasks.md) V1 | `cat.finite_sets` V1 | T204 ("Implement Finite sets Spec V1") |
 | 7 | [006-linear-orders](../006-linear-orders/tasks.md) V1 | `cat.linear_orders` V1 | T207 ("Implement Linear orders Spec V1") |
@@ -153,7 +153,8 @@ and their tasks "Spec V<n> complete" close SC-001 for each version.
   `CAS_SAGE_PYTHON`, `CAS_GAP_PYTHON` and modular-entrypoint paragraphs of `README.md` and
   `AGENTS.md` (FR-031). **Files**: `backends/engine_python.py`, `backends/wire.py`, `README.md`,
   `AGENTS.md`. **Acceptance**: SC-002, SC-003 and SC-005 hold. **After**: 031 "Spec V2 complete"
-  (its move task moves the last registrations of the v1 programs). **Kernel**: T105.
+  (its move task moves the last registrations of the v1 programs). **Kernel**: T093, which
+  republishes the delivery tuple of T105 after the V2 versions.
 - [ ] T061 [US2] Move the four specimen packages to protocol 2 (FR-035), keeping their bad
   behaviour, and test them through `cas-peer`. **Files**: `specimens/*/backend.py`,
   `specimens/*/leaves.json`, `specimens/README.md`, `tests/test_specimens.py`,
@@ -185,10 +186,10 @@ and their tasks "Spec V<n> complete" close SC-001 for each version.
 
 | Kernel task | Tasks here |
 | --- | --- |
-| T201 | T002–T006 |
-| T202 | T009 |
+| T202 | T002–T006, T009 |
 | T202, T214, T221, T236 | T001 |
-| T105 | T035, T044 |
+| T105 | T035 |
+| T093 | T044 |
 | T108 | T061 |
 | T103 | T062 |
 | T201 to T265, each "Implement <Category> Spec V<n>" | the tasks of that version in its spec (plan, "Category specs") |

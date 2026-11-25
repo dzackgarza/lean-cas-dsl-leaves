@@ -27,9 +27,8 @@ enters the project with the first row whose routine needs it (Oscar.jl with Heck
 categories of forms and lattices; plan, "Categories with no spec"); `just setup` runs
 `julia --project=. -e 'using Pkg; Pkg.instantiate()'`. `backends/engine.py` sets
 `PYTHON_JULIACALL_EXE=/usr/local/bin/julia` and `PYTHON_JULIACALL_PROJECT` to the repository
-root in its own process before it imports `juliacall`. Sources: kernel plan at `4be2a02`, row of the Sets milestone (Catlab.jl
-"declared in the Julia project of the leaf repository"); survey: `juliacall` 0.9.36 and Julia
-1.12.7 [C], Catlab source in the depot but not in the default project [C], `juliacall` can use an
+root in its own process before it imports `juliacall`. Sources: the kernel engine survey: Catlab.jl 0.17.7 with the category of finite sets and its
+limits [W S57], `juliacall` 0.9.36 and Julia 1.12.7 [C], Catlab source in the depot but not in the default project [C], `juliacall` can use an
 existing Julia through those two variables [W S44].
 
 **R3. One module and program per category implementation.** Decision: the category
@@ -127,10 +126,13 @@ extend; their assignment is a reading of their descriptions, since the catalogue
 them yet.
 
 **R17. Feature order.** Decision: the feature order of [tasks.md](tasks.md#feature-order) runs the
-V1 versions of the specs 002 to 034 in their structural order, then the move to the release
-`v2.0.1`, then the V2 versions in their structural order. Reasons: V2 holds the full-B0 statements,
-which follow kernel T105 as the full-B0 milestone did; each V1 version follows the V1 versions of
-the categories that its rows reach (LV13). A leaf task names a lean-categories task only where a
+V1 versions in the structural order, starting with Sets (spec 003); Cardinals (spec 002), which has
+no structural chain to `cat.sets` and no input category, enters directly before Core of sets (spec
+004), the first version that consumes it. Then comes the move to the release `v2.0.1`, then the V2
+versions in the structural order. Reasons: the work starts with `cat.sets` (LV13; K:C23); a
+category with no inputs enters with the first milestone that needs it; V2 holds the full-B0
+statements, which follow kernel T105 as the full-B0 milestone did; each V1 version follows the V1
+versions of the categories that its rows reach (LV13). The directory number is not the order. A leaf task names a lean-categories task only where a
 row of the task consumes a declaration that the lean-categories task adds or changes; the other
 upstream tasks of the kernel's milestones are inputs of the kernel tasks, not of the leaf tasks.
 
@@ -140,34 +142,21 @@ LV7 fixes the content. Each version of each category spec completes the survey r
 spec's `research.md` before its implementation tasks: one row for each part of the generated
 interface that its rows need, with the routine, the engine version or revision, the decision
 (use, fallback, reject) and the reasons, and one row for each gap with its searches. The starting
-facts of each family are those of the kernel survey, cited by section in the plan of the spec;
-they are not repeated.
+facts of each family are those of the kernel engine survey, cited by section in the plan of the
+spec. That survey (lean-cas-dsl `specs/001-categorical-research-language/research/engine-survey.md`)
+holds engine and container facts only, with no workload statement, expected answer or kernel
+source, so it is a backend resource of the leaf author (LV14); the kernel category tasks name it as
+the planning survey from which each survey record starts.
 
 Row format:
 
 | Part (generated interface) | Engine and routine | Version or revision | Decision | Reasons | Gap searches |
 | --- | --- | --- | --- | --- | --- |
 
+A gap row has the engine column empty and names each search.
+
 ## Registrations that move
 
-The 115 registrations of `leaves.json` at `8b181d7` move into the category specs by R15. The plan
-of each spec lists its registrations with their versions and decisions.
-
-| Spec | Category | V1 | V2 |
-| --- | --- | ---: | ---: |
-| 003-sets | `cat.sets` | 31 | 0 |
-| 004-core-sets | `cat.core_sets` | 13 | 0 |
-| 005-finite-sets | `cat.finite_sets` | 0 | 2 |
-| 011-monoids | `cat.monoids` | 2 | 0 |
-| 012-groups | `cat.groups` | 6 | 6 |
-| 015-rings | `cat.rings` | 2 | 0 |
-| 016-commutative-rings | `cat.commutative_rings` | 13 | 1 |
-| 019-modules-r | `cat.modules_r` | 2 | 0 |
-| 020-bil-wform | `cat.bil_wform` | 5 | 5 |
-| 021-fields | `cat.fields` | 1 | 0 |
-| 022-core-modules-r | `cat.core_modules_r` | 0 | 5 |
-| 027-arrows-bilin-module | `cat.arrows_bilin_module` | 4 | 0 |
-| 028-subobjects-groups | `cat.subobjects_groups` | 0 | 11 |
-| 029-arrows-groups | `cat.arrows_groups` | 0 | 2 |
-| 031-integral-lattice | `cat.integral_lattice` | 0 | 4 |
-| Total | | 79 | 36 |
+The 115 registrations of `leaves.json` at `8b181d7` move into the category specs by R15. The
+[plan](plan.md#category-specs) gives the count of each spec and version, and the plan of each spec
+lists its registrations with their versions and decisions.

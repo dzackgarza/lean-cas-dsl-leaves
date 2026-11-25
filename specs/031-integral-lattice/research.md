@@ -4,7 +4,7 @@ Decisions of this feature, and the survey record of its versions. The shared dec
 
 ## Decisions
 
-**R1. No literal rank.** The v1 rank $8$ of $E_8$ is a literal of the leaf (`sage_modules.py:52`, `gap_groups.py:57` at `8b181d7`). The rank and the size come from the Sage lattice that the lowering builds; abelianness is asked of the kernel through the residual actions (LV1, LV8).
+**R1. No literal rank.** The v1 rank of $E_8$ is a literal of the leaf (`sage_modules.py:52`, `gap_groups.py:57` at `8b181d7`). The rank and the size come from the Sage lattice that the lowering builds; abelianness is asked of the kernel through the residual actions (LV1, LV8).
 
 ## Survey record
 

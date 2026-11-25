@@ -14,7 +14,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 - **Catalogue ID**: `cat.groups`.
 - **Object**: a group.
 - **Morphism**: a group homomorphism.
-- **Engine**: GAP through Sage `libgap` (`CyclicGroup`, `SymmetricGroup`, `Units`, `AutomorphismGroup`, `GroupHomomorphismByImages`, `Size`, `IsAbelian`, `Inverse`) (engine survey, "Groups", "Group-valued constructions").
+- **Engine**: the engines of the [plan](plan.md#technical-context), with the routine of each row in its routine table.
 
 ## Versions
 
@@ -23,7 +23,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 | V1 | every computation of the spike and every statement that the kernel V1 definition requires computed | 10 | 6 |
 | V2 | the remaining full-B0 statements of lean-cas-dsl #19 | 8 | 6 |
 
-**V3.** The classified Sage coverage of lean-cas-dsl #20, #21 and #23 adds rows to V3 by the same membership rule: a row joins the first version of a computed statement that needs it, and it belongs to the latest category, in the structural order, among its catalogue owners and the categories of its declared parameters. When kernel tasks T140 to T147 produce the classified statements, the rows whose home is `cat.groups` join V3 of this spec. This spec plans nothing more for V3.
+**V3.** The rows whose home is `cat.groups` join V3 by the membership rule of [001](../001-category-implementations/spec.md#the-category-specs) when kernel tasks T140 to T147 produce the classified statements of lean-cas-dsl #20, #21 and #23.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -86,16 +86,7 @@ The edge cases of 001 apply. This category adds:
 - **FR-008 — `mor.groups.cyclic_quotient_aut_by_unit`** (operation, V1). Catalogue: For `n : ℕ`, the group morphism from the unit group `(ZMod n)ˣ` to the categorical automorphism group of the integer quotient `ℤ / nℤ` with its additive group law, represented as `cyclicQuotient n`. The implementation MUST compute the operation at its actual domain and reply at the generated result layout.
 - **FR-009 — `mor.groups.automorphism_forward`** (operation, V1). Catalogue: The forward group homomorphism of an element of `Aut(G)` in `Groups`. The implementation MUST compute the operation at its actual domain and reply at the generated result layout.
 - **FR-010 — `mor.groups.automorphism_backward`** (operation, V1). Catalogue: The inverse group homomorphism of the same `Aut(G)` element. The implementation MUST compute the operation at its actual domain and reply at the generated result layout.
-- **FR-011 — Existing registrations of V1** (6). The implementation MUST move these registrations of `leaves.json` at `8b181d7` into `backends/groups.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in the plan: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
-
-  | Operation | Input | v1 backend |
-  | --- | --- | --- |
-  | `meth.cardinality` | `obj.groups.cyclic` | `gap-groups` |
-  | `meth.cardinality` | `obj.groups.units` | `gap-groups` |
-  | `prop.is_commutative` | `obj.groups.cyclic` | `gap-groups` |
-  | `prop.is_commutative` | `obj.groups.units` | `gap-groups` |
-  | `prop.is_finite` | `obj.groups.cyclic` | `gap-groups` |
-  | `prop.is_finite` | `obj.groups.units` | `gap-groups` |
+- **FR-011 — Existing registrations of V1** (6). The implementation MUST move the 6 registrations of `leaves.json` at `8b181d7` that the plan's table "Registrations that move" lists for V1 into `backends/groups.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in that table: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
 
 ### Functional Requirements — V2
 
@@ -107,16 +98,7 @@ The edge cases of 001 apply. This category adds:
 - **FR-017 — `prop.is_abelian`** (property, V2). The implementation MUST answer the property with the decision packet of contract FR-012 (`none` when the engine cannot establish it).
 - **FR-018 — `meth.units`** (operation, V2). The implementation MUST answer the method at its actual domain; an inherited request carries the receiver, one descriptor for each residual action and the method functor, and the implementation realizes that composite (contract FR-017).
 - **FR-019 — `fun.monoids.units`** (functor, V2). Catalogue: The canonical units functor, right adjoint to forgetting a group's inverses. The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018). The object reply carries the group with its operations and the defining inclusion of the units at the request's monoid, for the later group and map operations that consume them; this row also serves kernel T155.
-- **FR-020 — Existing registrations of V2** (6). The implementation MUST move these registrations of `leaves.json` at `8b181d7` into `backends/groups.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in the plan: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
-
-  | Operation | Input | v1 backend |
-  | --- | --- | --- |
-  | `meth.cardinality` | `obj.groups.symmetric` | `gap-groups` |
-  | `prop.is_abelian` | `obj.groups.cyclic` | `gap-groups` |
-  | `prop.is_abelian` | `obj.groups.symmetric` | `gap-groups` |
-  | `prop.is_abelian` | `obj.groups.units` | `gap-groups` |
-  | `prop.is_commutative` | `obj.groups.symmetric` | `gap-groups` |
-  | `prop.is_finite` | `obj.groups.symmetric` | `gap-groups` |
+- **FR-020 — Existing registrations of V2** (6). The implementation MUST move the 6 registrations of `leaves.json` at `8b181d7` that the plan's table "Registrations that move" lists for V2 into `backends/groups.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in that table: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
 
 ### Key Entities
 

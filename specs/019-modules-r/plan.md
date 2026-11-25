@@ -50,7 +50,7 @@ tests/scenarios/modules_r-*.json
 
 ## Routine table
 
-The starting choice of each row. The survey record of its version confirms it in the research container or replaces it with its reasons (LV7).
+Each row names its engine routine. The survey record of its version verifies the routine in the research container before the implementation task of the row (LV7). A routine that the survey shows to be wrong for its operation is replaced in this table, with its reasons, in the commit of the survey record (LV12).
 
 ### V1
 
@@ -59,14 +59,14 @@ The starting choice of each row. The survey record of its version confirms it in
 | FR-001 | `cat.modules_r` | category structure | Sage module homomorphisms `M.hom(A, N)`; identity and composition | the selected data that the request carries (LV4) | — |
 | FR-002 | `obj.modules.regular` | object constructor | Sage `FreeModule(R, 1)` | the parameter ring at the generated layout; descriptors lowered by the lowering table of `backends/rings.py` (LV8, second option) | — |
 | FR-003 | `obj.modules.vectors` | object constructor | Sage `FreeModule(R, n)` | the parameter ring at the generated layout; descriptors lowered by the lowering table of `backends/rings.py` (LV8, second option) | — |
-| FR-004 | `op.modules.scalar_action` | operation | Sage `r * m` | request operands at the generated layout | lean-categories T064 (#211) |
+| FR-004 | `op.modules.scalar_action` | operation | Sage `r * m` | request operands at the generated layout | — |
 | FR-005 | `mor.modules.row_linear_map` | operation | Sage `FreeModule(R, n).hom(matrix(R, n, 1, row), FreeModule(R, 1))` | the parameter commutative ring and the row at the generated layout | contract T021 |
 | FR-006 | `fun.modules.fibre_inclusion` | functor | object action: $(R, M)$ to the public constructor of `cat.modules_total`; morphism action: $(\mathrm{id}_R, f)$ at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | — |
 | FR-007 | `fun.modules.reindex` | functor | object action: for $\varphi : R \to S$ with $R$ a principal ideal domain and $\varphi$ surjective, the Sage finitely generated module over a PID `V.quotient(W)`, $V = R^k$, of the $S$-module $S^k / W_S$, to the public constructor of the target fibre; otherwise the known method of "Hand-rolled code"; morphism action: the same linear map, `Q.hom(images)`, at the two image endpoints (plan, "Restriction of scalars") | the source arrow and both image endpoints (contract FR-018) | — |
 | FR-008 | `obj.modules_r.restricted_regular` | object constructor | Sage `FreeModule(R, 1)` with the scalar action through the selected ring homomorphism | the parameter ring and the selected homomorphism | — |
-| FR-009 | `missing.linear_map_from_formula` | row that the catalogue lacks | Sage `linear_transformation` of the matrix whose columns are the images of the basis vectors, computed through the published rows of the formula | the formula in the binder form of contract T021; returns a deferred program of the published operations of the formula at the basis vectors calls (contract FR-009); the kernel routes each call | lean-categories T074 (#217), which declares `missing.linear_map_from_formula` as `mor.modules.formula_linear_map` (kernel T333) |
-| FR-010 | `missing.cyclic_module_object` | row that the catalogue lacks | Sage `FreeModule(ZZ, 1) / FreeModule(ZZ, 1).span([[n]])` (finitely generated module over a PID) | the modulus | lean-categories T075 (#222), which declares `missing.cyclic_module_object` as `obj.modules.integers_mod` (kernel T338) |
-| FR-011 | `missing.derivative_linear` | row that the catalogue lacks | Sage `Polynomial.derivative()` as a `SetMorphism` in `Modules(QQ)` | the polynomial ring; descriptors lowered by the lowering table of `backends/commutative_rings.py` (LV8, second option) | lean-categories T076 (#223), which declares `missing.derivative_linear` as `mor.modules.polynomial_derivative` (kernel T339) |
+| FR-009 | `mor.modules.formula_linear_map` | operation that lean-categories T074 declares | Sage `linear_transformation` of the matrix whose columns are the images of the basis vectors, computed through the published rows of the formula | the formula in the binder form of contract T021; returns a deferred program of the published operations of the formula at the basis vectors calls (contract FR-009); the kernel routes each call | lean-categories T074 (#217), which declares `mor.modules.formula_linear_map` (kernel T333) |
+| FR-010 | `obj.modules.integers_mod` | object constructor that lean-categories T075 declares | Sage `FreeModule(ZZ, 1) / FreeModule(ZZ, 1).span([[n]])` (finitely generated module over a PID) | the modulus | lean-categories T075 (#222), which declares `obj.modules.integers_mod` (kernel T338) |
+| FR-011 | `mor.modules.polynomial_derivative` | operation that lean-categories T076 declares | Sage `Polynomial.derivative()` as a `SetMorphism` in `Modules(QQ)` | the polynomial ring; descriptors lowered by the lowering table of `backends/commutative_rings.py` (LV8, second option) | lean-categories T076 (#223), which declares `mor.modules.polynomial_derivative` (kernel T339) |
 
 ### V2
 
@@ -118,8 +118,8 @@ Sources: the catalogue declaration `modulesReindexDeclaration φ := reindexFunct
 `LeanCategories/Catalogue/Semantics/Modules/CatalogueRegistration.lean:90-91` at `fc549baa`; the
 row at `:565-570`, from the modules at $S$ to the modules at $R$); the Sage reference
 `sage.modules.fg_pid.fgp_module` (finitely generated modules over a principal ideal domain); in the
-research container on 2026-11-25, `(ZZ^1).quotient(5*ZZ^1)` is an `FGP_Module_class` with
-invariants $(5)$, cardinality $5$ and base ring `ZZ`, and `hom` gives its module maps.
+research container on 2026-11-25, `(ZZ^1).quotient(5*ZZ^1)` is an `FGP_Module_class` with base
+ring `ZZ`, and `hom` gives its module maps.
 
 Reasons: Sage has no general restriction of scalars along a ring map; for a surjection from a PID
 the restricted module is a quotient of $R^k$, which `FGP_Module` represents exactly with its

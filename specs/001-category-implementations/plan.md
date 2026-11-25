@@ -103,7 +103,7 @@ category spec version that moves their last registration (research R4); `engine_
 
 ## Category specs
 
-One feature for each category with a row in V1 or V2, in the structural order (research R16).
+One feature for each category with a row in V1 or V2 (research R16); the [feature order](tasks.md#feature-order) is the sequence (research R17).
 A row count includes the rows that the catalogue lacks; each of those waits for the lean-categories
 task that declares it: lean-categories T065 to T078 (#212 to #225, the kernel upstream tasks T328 to
 T341), whose plan gives each row its catalogue ID. The registrations are those of research R15. A
@@ -201,8 +201,8 @@ No test asserts a mathematical value (LV18).
 1. Before F: FR-033 (contract findings) and FR-036 (findings to an issue). They need no release.
 2. At contract `v2.0.0` (kernel F): setup, harness, shared engine module, manifest in v2 form
    (FR-026, FR-029–FR-032, FR-034 at the shared level).
-3. The V1 versions of the category specs 002 to 034 in the structural order, each starting with
-   its survey record (FR-028); the public-only check (SC-007) after Sets V1.
+3. The V1 versions of the category specs in the feature order, Sets first, each starting with its
+   survey record (FR-028); the public-only check (SC-007) after Sets V1.
 4. At kernel T105: the dependency moves to `v2.0.1`.
 5. The V2 versions of the specs that have one, in the structural order; then the removal of the
    engine fallbacks (FR-031) and the specimens (FR-035).

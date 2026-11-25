@@ -14,7 +14,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 - **Catalogue ID**: `cat.sets`.
 - **Object**: a set (a type `X : Type u`, Mathlib `Type u`).
 - **Morphism**: a function $f : X \to Y$.
-- **Engine**: Sage (`sage.sets`, maps and homsets in `Sets()`), Catlab.jl through `juliacall` for the pullback of finite sets, SymPy for the calculus rows with the Sage symbolic ring (Maxima) where SymPy returns an unevaluated form (engine survey, "Sets", "Cross-cutting layer", "Calculus").
+- **Engine**: the engines of the [plan](plan.md#technical-context), with the routine of each row in its routine table.
 
 ## Versions
 
@@ -22,7 +22,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 | --- | --- | ---: | ---: |
 | V1 | every computation of the spike and every statement that the kernel V1 definition requires computed | 74 | 31 |
 
-**V3.** The classified Sage coverage of lean-cas-dsl #20, #21 and #23 adds rows to V3 by the same membership rule: a row joins the first version of a computed statement that needs it, and it belongs to the latest category, in the structural order, among its catalogue owners and the categories of its declared parameters. When kernel tasks T140 to T147 produce the classified statements, the rows whose home is `cat.sets` join V3 of this spec. This spec plans nothing more for V3.
+**V3.** The rows whose home is `cat.sets` join V3 by the membership rule of [001](../001-category-implementations/spec.md#the-category-specs) when kernel tasks T140 to T147 produce the classified statements of lean-cas-dsl #20, #21 and #23.
 
 **V2 statements.** No row of `cat.sets` is in V2, so this spec has no V2. The full-B0 statements of lean-cas-dsl #19 whose rows have their latest home in `cat.sets` need only V1 rows; kernel T202 ("Implement Sets Spec V1") accepts them with the V1 statements.
 
@@ -133,43 +133,9 @@ The edge cases of 001 apply. This category adds:
 - **FR-070 — `bind.sets.integral`** (operation, V1). Catalogue: `f ↦ ∫_a^b f(t) dt`, `C(ℝ) → ℝ`, at the bounds `a b ∈ ℝ`: the binder `∫_{a}^{b} e dt`, its arguments the two bounds. The implementation MUST compute the binder from the bound map and the bounds that the request carries. Inputs before it: lean-categories T027 (#190), contract T021.
 - **FR-071 — `mor.sets.taylor_expansion`** (operation, V1). Catalogue: `(f, a) ↦ Σ f⁽ᵏ⁾(a)/k! tᵏ`, the division by `k! ∈ ℝˣ` being division by a unit. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. Inputs before it: lean-categories T027 (#190), contract T021.
 - **FR-072 — `bind.sets.power_series_sum`** (operation, V1). Catalogue: The sum of series in `R[[t]]`: `f ↦ ∑_{n ∈ N} f(n)`, the series sum `seriesSum` at the object `powerSeriesTAdic R` (`powerSeriesSum_eq`). The implementation MUST compute the binder from the bound map and the bounds that the request carries. Inputs before it: lean-categories T027 (#190), contract T021.
-- **FR-073 — `missing.real_approximation`** (row that the catalogue lacks, V1): a rational approximation $a \in \mathbb{Q}$ of $x \in \mathbb{R}$ within a positive rational tolerance, with the exact source and both tolerances retained. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T066 (#212), which declares `missing.real_approximation` as `mor.sets.real_approximation` (kernel T328).
-- **FR-074 — `missing.complex_sqrt`** (row that the catalogue lacks, V1): the principal square root in $\mathbb{C}$ of a negative rational, $z^{1/2}$ with $\arg z \in (-\pi, \pi]$ (lean-categories research D21). The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T067 (#215), which declares `missing.complex_sqrt` as `mor.sets.complex_sqrt` (kernel T331).
-- **FR-075 — Existing registrations of V1** (31). The implementation MUST move these registrations of `leaves.json` at `8b181d7` into `backends/sets.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in the plan: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
-
-  | Operation | Input | v1 backend |
-  | --- | --- | --- |
-  | `bind.sets.integral` | `cat.sets` | `sage-symbolic` |
-  | `bind.sets.limit` | `cat.sets` | `sage-symbolic` |
-  | `bind.sets.limit_at_infinity` | `cat.sets` | `sage-symbolic` |
-  | `colim.sets.coproduct` | `cat.sets` | `sage-set-limits` |
-  | `lim.sets.product` | `cat.sets` | `sage-set-limits` |
-  | `lim.sets.pullback` | `cat.sets` | `sage-set-limits` |
-  | `mor.sets.complex_abs` | `obj.sets.complexes` | `sage-symbolic` |
-  | `mor.sets.complex_bar` | `obj.sets.complexes` | `sage-symbolic` |
-  | `mor.sets.complex_im` | `obj.sets.complexes` | `sage-symbolic` |
-  | `mor.sets.complex_re` | `obj.sets.complexes` | `sage-symbolic` |
-  | `mor.sets.equality` | `mor.sets.equality` | `sage-symbolic` |
-  | `mor.sets.f9_x_constants` | `mor.sets.f9_x_constants` | `sage-presentations` |
-  | `mor.sets.f9_x_constants` | `obj.sets.integers_mod` | `sage-presentations` |
-  | `mor.sets.f9_y_constants` | `mor.sets.f9_y_constants` | `sage-presentations` |
-  | `mor.sets.f9_y_constants` | `obj.sets.integers_mod` | `sage-presentations` |
-  | `mor.sets.fin_rev` | `mor.sets.fin_rev` | `sage-fin-rev` |
-  | `mor.sets.nat_prime_factors` | `obj.sets.positive_naturals` | `sage-symbolic` |
-  | `mor.sets.real_sqrt` | `obj.sets.reals` | `sage-symbolic` |
-  | `prop.is_finite` | `obj.sets.complexes` | `sage` |
-  | `prop.is_finite` | `obj.sets.f9_x` | `sage-presentations` |
-  | `prop.is_finite` | `obj.sets.f9_y` | `sage-presentations` |
-  | `prop.is_finite` | `obj.sets.fin` | `sage` |
-  | `prop.is_finite` | `obj.sets.integers` | `sage` |
-  | `prop.is_finite` | `obj.sets.integers_mod` | `gap` |
-  | `prop.is_finite` | `obj.sets.integers_mod_power` | `gap` |
-  | `prop.is_finite` | `obj.sets.naturals` | `sage` |
-  | `prop.is_finite` | `obj.sets.permutations` | `gap-groups` |
-  | `prop.is_finite` | `obj.sets.positive_naturals` | `sage` |
-  | `prop.is_finite` | `obj.sets.primes` | `sage` |
-  | `prop.is_finite` | `obj.sets.rationals` | `sage` |
-  | `prop.is_finite` | `obj.sets.reals` | `sage` |
+- **FR-073 — `mor.sets.real_approximation`** (operation that lean-categories T066 declares, V1): a rational approximation $a \in \mathbb{Q}$ of $x \in \mathbb{R}$ within a positive rational tolerance, with the exact source and both tolerances retained. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T066 (#212), which declares `mor.sets.real_approximation` (kernel T328).
+- **FR-074 — `mor.sets.complex_sqrt`** (operation that lean-categories T067 declares, V1): the principal square root in $\mathbb{C}$ of a negative rational, $z^{1/2}$ with $\arg z \in (-\pi, \pi]$ (lean-categories research D21). The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T067 (#215), which declares `mor.sets.complex_sqrt` (kernel T331).
+- **FR-075 — Existing registrations of V1** (31). The implementation MUST move the 31 registrations of `leaves.json` at `8b181d7` that the plan's table "Registrations that move" lists for V1 into `backends/sets.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in that table: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
 
 ### Key Entities
 
@@ -190,4 +156,3 @@ The edge cases of 001 apply. This category adds:
 - Kernel readiness F and contract release `v2.0.0` precede V1; contract release `v2.0.1` (kernel T105) precedes V2 (001 FR-026).
 - The catalogue is the one that the contract release publishes (mathematics revision `3f8aedf` at the roadmap reading); the rows and their versions are those of 001 research R16.
 - Engine versions are those of the research container on 2026-11-25; the survey record of each version records the versions that it uses.
-- The survey names no exact engine parent for the set $\mathbb{C}$; the survey record of T001 settles the lowering of `obj.sets.complexes`.

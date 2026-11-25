@@ -15,7 +15,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 - **Object**: a set.
 - **Morphism**: a bijection: the catalogue builds the category as the core $\mathrm{Core}(\mathbf{Set})$ (`ctor.core` of `cat.sets`).
 - **Built from**: `cat.sets` (structural functors and classifier forgets of the catalogue).
-- **Engine**: Sage (`cardinality()`, `Subsets(X, 2)`, `Permutations`), with the cardinal arithmetic of spec 002 (engine survey, "Sets", "Cardinals").
+- **Engine**: the engines of the [plan](plan.md#technical-context), with the routine of each row in its routine table.
 
 ## Versions
 
@@ -23,7 +23,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 | --- | --- | ---: | ---: |
 | V1 | every computation of the spike and every statement that the kernel V1 definition requires computed | 6 | 13 |
 
-**V3.** The classified Sage coverage of lean-cas-dsl #20, #21 and #23 adds rows to V3 by the same membership rule: a row joins the first version of a computed statement that needs it, and it belongs to the latest category, in the structural order, among its catalogue owners and the categories of its declared parameters. When kernel tasks T140 to T147 produce the classified statements, the rows whose home is `cat.core_sets` join V3 of this spec. This spec plans nothing more for V3.
+**V3.** The rows whose home is `cat.core_sets` join V3 by the membership rule of [001](../001-category-implementations/spec.md#the-category-specs) when kernel tasks T140 to T147 produce the classified statements of lean-cas-dsl #20, #21 and #23.
 
 **V2 statements.** No row of `cat.core_sets` is in V2, so this spec has no V2. The full-B0 statements of lean-cas-dsl #19 whose rows have their latest home in `cat.core_sets` need only V1 rows; kernel T203 ("Implement Core of sets Spec V1") accepts them with the V1 statements.
 
@@ -55,7 +55,7 @@ The edge cases of 001 apply. This category adds:
 
 | Situation | Required behaviour | Source |
 | --- | --- | --- |
-| A set that the engine presents as infinite and not as an enumerated set | `status:"unsupported"`: the implementation computes finite cardinals and $\aleph_0$ and their arithmetic, and this presentation determines neither | LV6, LV11 |
+| A set that the engine presents as infinite, not as an enumerated set and not as a free module of finite rank | `status:"unsupported"`: the implementation computes finite cardinals and $\aleph_0$ and their arithmetic, and this presentation determines neither | LV6, LV11 |
 | A cardinality is asked of a set whose rows are not lowered here | The request receiver and its residual actions arrive at the generated layout; the implementation asks the kernel for the residual actions | LV8; contract FR-017 |
 
 ## Requirements *(mandatory)*
@@ -68,23 +68,7 @@ The edge cases of 001 apply. This category adds:
 - **FR-004 — `meth.two_subsets`** (operation, V1). The implementation MUST answer the method at its actual domain; an inherited request carries the receiver, one descriptor for each residual action and the method functor, and the implementation realizes that composite (contract FR-017).
 - **FR-005 — `fun.core_sets.two_subsets`** (functor, V1). Catalogue: The functor `Core (Type u) ⥤ Type u` sending a selected set `X` to its unordered two-element subsets. The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018).
 - **FR-006 — `mor.core_sets.fin_rev`** (operation, V1). Catalogue: The specified reversal of `Fin n`, now as an arrow of `Core(Sets)`. The implementation MUST compute the operation at its actual domain and reply at the generated result layout.
-- **FR-007 — Existing registrations of V1** (13). The implementation MUST move these registrations of `leaves.json` at `8b181d7` into `backends/core_sets.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in the plan: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
-
-  | Operation | Input | v1 backend |
-  | --- | --- | --- |
-  | `meth.cardinality` | `cat.sets` | `sage-set-limits` |
-  | `meth.cardinality` | `obj.sets.f9_x` | `sage-presentations` |
-  | `meth.cardinality` | `obj.sets.f9_y` | `sage-presentations` |
-  | `meth.cardinality` | `obj.sets.fin` | `sage` |
-  | `meth.cardinality` | `obj.sets.integers` | `sage` |
-  | `meth.cardinality` | `obj.sets.integers_mod` | `gap` |
-  | `meth.cardinality` | `obj.sets.integers_mod_power` | `gap` |
-  | `meth.cardinality` | `obj.sets.naturals` | `sage` |
-  | `meth.cardinality` | `obj.sets.permutations` | `gap-groups` |
-  | `meth.cardinality` | `obj.sets.positive_naturals` | `sage` |
-  | `meth.cardinality` | `obj.sets.power_set` | `sage-power-set` |
-  | `meth.cardinality` | `obj.sets.primes` | `sage` |
-  | `meth.cardinality` | `obj.sets.rationals` | `sage` |
+- **FR-007 — Existing registrations of V1** (13). The implementation MUST move the 13 registrations of `leaves.json` at `8b181d7` that the plan's table "Registrations that move" lists for V1 into `backends/core_sets.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in that table: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
 
 ### Key Entities
 

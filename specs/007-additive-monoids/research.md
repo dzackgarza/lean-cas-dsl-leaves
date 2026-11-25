@@ -4,7 +4,7 @@ Decisions of this feature, and the survey record of its versions. The shared dec
 
 ## Decisions
 
-**R1. Survey choice for vectors.** The family engine is GAP. The additive monoids that the V1 rows build are vectors over Sage parents that `cat.sets` lowers; the survey record of T001 confirms Sage `cartesian_product` or replaces it with GAP `FullRowModule`.
+**R1. Sage parents for vectors.** The family engine of the survey is GAP. The additive monoids that the V1 rows build are vectors over the Sage parents that `backends/sets.py` lowers, so the routine is Sage `cartesian_product([M] * n)` of that parent (one lowering table, LV1). Rejected: GAP `FullRowModule`, which needs a second representation of the parent and a conversion between Sage and GAP for each request.
 
 ## Survey record
 

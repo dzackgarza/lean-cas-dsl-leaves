@@ -14,7 +14,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 - **Catalogue ID**: `cat.rings`.
 - **Object**: a ring.
 - **Morphism**: a ring homomorphism.
-- **Engine**: Sage (`ZZ`, `QQ`, `Zmod(n)`, `AA`, `QQbar`, element arithmetic, coercion) (engine survey, "Rings and commutative rings").
+- **Engine**: the engines of the [plan](plan.md#technical-context), with the routine of each row in its routine table.
 
 ## Versions
 
@@ -22,7 +22,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 | --- | --- | ---: | ---: |
 | V1 | every computation of the spike and every statement that the kernel V1 definition requires computed | 16 | 2 |
 
-**V3.** The classified Sage coverage of lean-cas-dsl #20, #21 and #23 adds rows to V3 by the same membership rule: a row joins the first version of a computed statement that needs it, and it belongs to the latest category, in the structural order, among its catalogue owners and the categories of its declared parameters. When kernel tasks T140 to T147 produce the classified statements, the rows whose home is `cat.rings` join V3 of this spec. This spec plans nothing more for V3.
+**V3.** The rows whose home is `cat.rings` join V3 by the membership rule of [001](../001-category-implementations/spec.md#the-category-specs) when kernel tasks T140 to T147 produce the classified statements of lean-cas-dsl #20, #21 and #23.
 
 **V2 statements.** No row of `cat.rings` is in V2, so this spec has no V2. The full-B0 statements of lean-cas-dsl #19 whose rows have their latest home in `cat.rings` need only V1 rows; kernel T218 ("Implement Rings Spec V1") accepts them with the V1 statements.
 
@@ -30,7 +30,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 
 ### User Story 1 — V1: the computations of the spike and of kernel V1 (Priority: P1)
 
-A researcher computes in $\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{R}$, $\mathbb{C}$ and $\mathbb{Z}/n$: numerals, sums, products, negatives and powers, exact values such as $1 + 1/2$ and $(1 + \sqrt{2})(1 - \sqrt{2})$; a researcher asks the size and the finiteness of $\mathbb{Z}/n$ as a ring and forgets a ring to its additive group, its multiplicative monoid, its semiring and its underlying set.
+A researcher computes in $\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{R}$, $\mathbb{C}$ and $\mathbb{Z}/n$: numerals, sums, products, negatives and powers, exact values in $\mathbb{Q}$ and in the real and complex algebraic numbers; a researcher asks the size and the finiteness of $\mathbb{Z}/n$ as a ring and forgets a ring to its additive group, its multiplicative monoid, its semiring and its underlying set.
 
 **Why this priority**: the categories that follow this one in the structural order consume it, and the kernel's computational milestone of this version needs a computed result through it (LV13; K:C23).
 
@@ -65,21 +65,16 @@ The edge cases of 001 apply. This category adds:
 - **FR-005 — `obj.rings.complexes`** (object constructor, V1). Catalogue: `ℂ` as a ring. The implementation MUST construct the object from the request at the generated layout, with the complete interface that its category declares.
 - **FR-006 — `obj.rings.integers_mod`** (object constructor, V1). Catalogue: `ℤ/n` as a ring. The implementation MUST construct the object from the request at the generated layout, with the complete interface that its category declares.
 - **FR-007 — `num.rings`** (operation, V1). Catalogue: The numeral `k` of a ring `R`: the image of `k ∈ ℕ ⊆ ℤ` under the unique ring map `ℤ → R` out of the initial ring (Mathlib `Int.castRingHom`), LC-15. The implementation MUST return the value of the literal or numeral descriptor at the generated layout. It takes over from the kernel: arithmetic of $\mathbb{Z}$ and $\mathbb{Z}/n$. Inputs before it: lean-categories T017 (#194).
-- **FR-008 — `op.rings.add`** (operation, V1). Catalogue: Addition, `R × R → R`. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. It takes over from the kernel: arithmetic of $\mathbb{Z}$ and $\mathbb{Z}/n$. Inputs before it: lean-categories T005 (#193), lean-categories T064 (#211), contract T021.
-- **FR-009 — `op.rings.mul`** (operation, V1). Catalogue: Multiplication, `R × R → R`. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. It takes over from the kernel: arithmetic of $\mathbb{Z}$ and $\mathbb{Z}/n$. Inputs before it: lean-categories T005 (#193), lean-categories T064 (#211), contract T021.
-- **FR-010 — `op.rings.neg`** (operation, V1). Catalogue: Negation, `R → R`. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. It takes over from the kernel: arithmetic of $\mathbb{Z}$ and $\mathbb{Z}/n$. Inputs before it: lean-categories T005 (#193), lean-categories T064 (#211), contract T021.
-- **FR-011 — `op.rings.pow`** (operation, V1). Catalogue: The power `x ↦ x^k`, `R → R`. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. It takes over from the kernel: arithmetic of $\mathbb{Z}$ and $\mathbb{Z}/n$. Inputs before it: lean-categories T064 (#211), contract T021.
+- **FR-008 — `op.rings.add`** (operation, V1). Catalogue: Addition, `R × R → R`. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. It takes over from the kernel: arithmetic of $\mathbb{Z}$ and $\mathbb{Z}/n$. Inputs before it: lean-categories T005 (#193), contract T021.
+- **FR-009 — `op.rings.mul`** (operation, V1). Catalogue: Multiplication, `R × R → R`. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. It takes over from the kernel: arithmetic of $\mathbb{Z}$ and $\mathbb{Z}/n$. Inputs before it: lean-categories T005 (#193), contract T021.
+- **FR-010 — `op.rings.neg`** (operation, V1). Catalogue: Negation, `R → R`. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. It takes over from the kernel: arithmetic of $\mathbb{Z}$ and $\mathbb{Z}/n$. Inputs before it: lean-categories T005 (#193), contract T021.
+- **FR-011 — `op.rings.pow`** (operation, V1). Catalogue: The power `x ↦ x^k`, `R → R`. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. It takes over from the kernel: arithmetic of $\mathbb{Z}$ and $\mathbb{Z}/n$. Inputs before it: contract T021.
 - **FR-012 — `fun.rings.additive_group`** (functor, V1). Catalogue: The additive group of a ring. The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018).
 - **FR-013 — `fun.rings.multiplicative_monoid`** (functor, V1). Catalogue: The multiplicative monoid of a ring. The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018).
 - **FR-014 — `fun.rings.semiring`** (functor, V1). Catalogue: The first factor already used by `Ports.ringsMultiplicative`. The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018).
 - **FR-015 — `fun.rings.additive_commutative_monoid`** (functor, V1). Catalogue: The additive commutative monoid of a ring. The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018).
 - **FR-016 — `cmp.rings.carrier`** (comparison, V1). Catalogue: The two underlying sets of a ring are identified by the identity natural isomorphism. The implementation MUST return the components of the selected comparison in both directions, at the endpoints that the request selects.
-- **FR-017 — Existing registrations of V1** (2). The implementation MUST move these registrations of `leaves.json` at `8b181d7` into `backends/rings.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in the plan: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
-
-  | Operation | Input | v1 backend |
-  | --- | --- | --- |
-  | `meth.cardinality` | `obj.rings.integers_mod` | `gap` |
-  | `prop.is_finite` | `obj.rings.integers_mod` | `gap` |
+- **FR-017 — Existing registrations of V1** (2). The implementation MUST move the 2 registrations of `leaves.json` at `8b181d7` that the plan's table "Registrations that move" lists for V1 into `backends/rings.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in that table: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
 
 ### Key Entities
 

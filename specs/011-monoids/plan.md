@@ -50,7 +50,7 @@ tests/scenarios/monoids-*.json
 
 ## Routine table
 
-The starting choice of each row. The survey record of its version confirms it in the research container or replaces it with its reasons (LV7).
+Each row names its engine routine. The survey record of its version verifies the routine in the research container before the implementation task of the row (LV7). A routine that the survey shows to be wrong for its operation is replaced in this table, with its reasons, in the commit of the survey record (LV12).
 
 ### V1
 
@@ -61,7 +61,7 @@ The starting choice of each row. The survey record of its version confirms it in
 | FR-003 | `op.monoids.one` | operation | Sage `M.one()` | request operands at the generated layout | lean-categories T005 (#193) |
 | FR-004 | `mor.sets.monoid_power` | operation | Sage element `**` with a natural exponent | the parameter monoid at the generated layout | — |
 | FR-005 | `fun.monoids.semigroup` | functor | object action: the same engine parent to the public constructor of `cat.semigroups`; morphism action: the homomorphism at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | — |
-| FR-006 | `obj.sets.units` | object constructor | Sage `M.unit_group()` where Sage supplies it; GAP `Units(M)` through `libgap` for $\mathbb{Z}$, $\mathbb{Q}$ and $\mathbb{Z}/n$; the carrier of the unit group as a set | the parameter monoid at the generated layout | — |
+| FR-006 | `obj.sets.units` | object constructor | GAP `Units(R)` through `libgap` of the monoid that the lowering table gives ($\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{Z}/n$ and their matrix monoids); the carrier of the unit group as a set | the parameter monoid at the generated layout | — |
 | FR-007 | `mor.sets.divide` | operation | Sage element `/` with the divisor admitted to the units; the result in the form of contract T021 | the parameter monoid and the admitted unit | contract T021 |
 
 ## Computations that move in from the kernel
@@ -79,8 +79,8 @@ Each row is one registration of `leaves.json` at `8b181d7`. Its version is the l
 
 | Operation | Input | v1 backend | Version | v1 routine | Decision |
 | --- | --- | --- | --- | --- | --- |
-| `meth.cardinality` | `obj.sets.units` | `gap-groups` | V1 | Size(Units(R) for R = Integers, Rationals, ZmodnZ(n); Units(G) for a group) | Replace the GAP routine by the Sage routine on the value of this module's lowering table (one lowering table, LV1); placed here, not in `cat.core_sets`: its input row has its home in this category (001 research R15). |
-| `prop.is_finite` | `obj.sets.units` | `gap-groups` | V1 | IsFinite(Units(R) for R = Integers, Rationals, ZmodnZ(n); Units(G) for a group) | Replace the GAP routine by the Sage routine on the value of this module's lowering table (one lowering table, LV1); placed here, not in `cat.sets`: its input row has its home in this category (001 research R15). |
+| `meth.cardinality` | `obj.sets.units` | `gap-groups` | V1 | Size(Units(R) for R = Integers, Rationals, ZmodnZ(n); Units(G) for a group) | Keep the GAP routine `Size` on the unit group of FR-006 (LV12); the v1 lowering of `R` in `gap_groups.py` is deleted (one lowering table, LV1); placed here, not in `cat.core_sets`: its input row has its home in this category (001 research R15). |
+| `prop.is_finite` | `obj.sets.units` | `gap-groups` | V1 | IsFinite(Units(R) for R = Integers, Rationals, ZmodnZ(n); Units(G) for a group) | Keep the GAP routine `IsFinite` on the unit group of FR-006 (LV12); the v1 lowering of `R` in `gap_groups.py` is deleted (one lowering table, LV1); placed here, not in `cat.sets`: its input row has its home in this category (001 research R15). |
 
 | Version | Registrations |
 | --- | ---: |
