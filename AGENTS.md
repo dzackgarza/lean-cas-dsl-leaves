@@ -115,21 +115,25 @@ goes that meets the type of its contract: the system runs it and believes nothin
 its answers cross, and they are checked against the formal side, `lean-cas-dsl`'s acceptance suite,
 never believed.
 
-**A leaf is glue over existing backends.** This is what a leaf is for, following the precedent of
-`sage-categories` (`specs/leaves.md`, "Computation-engine boundary"; `AGENTS.md`, "Leaf categories
-and hand-rolled mathematics"):
-- **Wire, don't write.** A leaf wires a registered operation to a mature system that already
-  computes it: GAP, Sage, Singular, Macaulay2, Julia, SymPy or published research code. Its shape
-  is: declared input form, then engine input, then the engine's routine, then the engine result,
-  then the declared result form. The leaf owns that translation and the choice of routine, and
-  nothing else.
-- **No hand-rolled algorithms.** A leaf does not reimplement what an engine provides, and each
-  computation names the engine and routine it calls. New algorithmic code is written only when no
-  existing system supplies the computation, and the leaf says so with the evidence.
-- **No kernel machinery.** Dispatch, placement, propagation, composition, refinement and caching
-  are the kernel's, done generically. A leaf that finds itself doing any of them has found a gap in
-  the kernel or the contract, and reports it upstream (the litmus role below). It is never absorbed
-  into the leaf.
+**A leaf implements a prescribed category interface.** Obtain its complete interface
+from the released declared API and `cas_port.load_interfaces`; no kernel internals
+or another provider's private representation is required.
+- **Complete category implementations.** Supply the prescribed object and morphism
+  constructor families, operations at their actual domains, immediate functor actions,
+  and complete dependent results and subsequent uses. Retain every selected structure,
+  parameter, defining map, comparison, callable field and permitted choice. Constructors
+  of categories are distinct from constructors of objects within them.
+- **Leaf-owned computation.** The provider owns its algorithms, ordinary control flow,
+  private data and reuse. Prefer adequate mature engine routines such as GAP, Sage,
+  Singular, Macaulay2, Julia, SymPy or published research code, and identify the actual
+  invoked engine and routine where available. Private composition and caching are
+  permitted. Public composition uses the released deferred/suspended service and its
+  exact dependency and capture rules; a port-by-port forwarding list does not replace
+  the complete category implementation.
+- **Preserve the kernel boundary.** The generic kernel owns source interpretation,
+  mathematical domain and structure selection, cross-provider dispatch, admission and
+  scoped ownership. A provider may not recreate or bypass those decisions. Deficiencies
+  in the accepted mathematics, contract or generic kernel go to their responsible owner.
 - **Engine values stay private.** Engine objects and types live inside the leaf's program; only a
   value of the declared result form crosses the port.
 
@@ -166,4 +170,3 @@ firewall holds even for a leaf that ignores all of it.
   `.venv/bin/python` of the running workspace).
 
 Every `require` tracks `main`. The commit and push tiers compile nothing.
-

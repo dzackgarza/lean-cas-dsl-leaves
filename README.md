@@ -7,13 +7,23 @@ It contributes no mathematics and ships no Lean. Nothing it says is believed; on
 checked, by `lean-cas-dsl`'s acceptance suite, which this package never sees.
 
 * **`leaves.json`** is the manifest the kernel reads (`CasContract/Registration.lean` of
-  `lean-cas-dsl-leaf-contracts`): the backend programs, and for each registration exactly its
-  `operation`, `input` form and `backend`. Which registrations are admitted is the kernel's
-  decision, against the catalogue.
+  `lean-cas-dsl-leaf-contracts`): the backend programs, and for each registration its
+  `operation`, `input` form and `backend`, plus optional C6 `preferredRoutes`.
+  A preference selects a surviving admitted source route, including an explicit
+  identity route `[]`; it asserts no equality. Admission belongs to the kernel.
+* **Category interfaces** are generated from the independently accepted declarations.
+  The released `cas_port.load_interfaces` SDK exposes complete category signatures,
+  object/morphism constructors, operations and immediate functor actions, with
+  dependent result and scoped-reference helpers. Supply all selected structures,
+  parameters, defining maps, comparisons, callable fields and permitted choices.
+  Category constructors are separate. Native datatype metadata supplies no wire codec.
 * **`backends/`** holds the programs. Each speaks the contract's port protocol (`cas_port`, put on
-  its `PYTHONPATH` by the kernel) and is glue over an existing engine: it decodes the kernel's
-  encoding of the input, calls the engine's routine, and encodes the engine's answer in the result
-  form. Each names the engine and routine it calls.
+  its `PYTHONPATH` by the kernel). Providers own their algorithms, ordinary control flow,
+  private engine values and private reuse; use adequate existing routines where available.
+  They decode the complete prescribed input and supply the full result interface, naming
+  the actual engine and routine they invoke. Public composition and retained results use
+  the released service with its actual ownership and capture checks. Providers contribute
+  no mathematical definitions, proofs, semantic authority or acceptance criteria.
   * `sage_backend.py`: Sage, under `CAS_SAGE_PYTHON`;
   * `gap_backend.py`: GAP through Sage's libgap, under `CAS_GAP_PYTHON`;
   * `sage_power_set.py`: `meth.cardinality` on `obj.sets.power_set` by Sage's
