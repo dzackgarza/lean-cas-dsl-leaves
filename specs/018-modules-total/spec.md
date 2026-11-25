@@ -74,6 +74,4 @@ The edge cases of 001 apply. This category adds:
 
 ## Assumptions
 
-- Kernel readiness F and contract release `v2.0.0` precede V1; contract release `v2.0.1` (kernel T105) precedes V2 (001 FR-026).
-- The catalogue is the one that the contract release publishes (mathematics revision `3f8aedf` at the roadmap reading); the rows and their versions are those of 001 research R16.
-- Engine versions are those of the research container on 2026-11-25; the survey record of each version records the versions that it uses.
+- The assumptions of the shared feature [001](../001-category-implementations/spec.md#assumptions) apply.
