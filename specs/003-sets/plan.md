@@ -128,8 +128,8 @@ The starting choice of each row. The survey record of its version confirms it in
 | FR-070 | `bind.sets.integral` | operation | SymPy `integrate(f, (t, a, b))`; Sage `integrate(f, t, a, b)` (Maxima) where SymPy returns an unevaluated `Integral` | the bound map in the binder form of contract T021, lowered to SymPy | lean-categories T027 (#190), contract T021 |
 | FR-071 | `mor.sets.taylor_expansion` | operation | a lazy Sage `LazyPowerSeriesRing(SR, 't')` element whose coefficient $k$ is SymPy `series(f, t, x0, k + 1).coeff(t, k)`, computed when a request demands it (LV25) | the bound map in the binder form of contract T021, lowered to SymPy | lean-categories T027 (#190), contract T021 |
 | FR-072 | `bind.sets.power_series_sum` | operation | Sage `LazyPowerSeriesRing(R, 't')` element from the coefficient function of the bound map | the bound map in the binder form of contract T021 | lean-categories T027 (#190), contract T021 |
-| FR-073 | `missing.real_approximation` | row that the catalogue lacks | Sage `RealBallField(prec)` evaluation of the exact real at the precision that the tolerance requires; the midpoint by `exact_rational()` | the exact real and the tolerance | the lean-categories task that declares `missing.real_approximation` (none at lean-categories `fc549baa`) |
-| FR-074 | `missing.complex_sqrt` | row that the catalogue lacks | Sage `QQbar(x).sqrt()` | the rational operand | the lean-categories task that declares `missing.complex_sqrt` (none at lean-categories `fc549baa`) |
+| FR-073 | `missing.real_approximation` | row that the catalogue lacks | Sage `RealBallField(prec)` evaluation of the exact real at the precision that the tolerance requires; the midpoint by `exact_rational()` | the exact real and the tolerance | kernel T328, the lean-categories task that declares `missing.real_approximation` (issue not yet filed) |
+| FR-074 | `missing.complex_sqrt` | row that the catalogue lacks | Sage `QQbar(x).sqrt()` | the rational operand | kernel T331, the lean-categories task that declares `missing.complex_sqrt` (issue not yet filed) |
 
 ## Computations that move in from the kernel
 

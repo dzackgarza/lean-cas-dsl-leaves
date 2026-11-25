@@ -57,7 +57,7 @@ The starting choice of each row. The survey record of its version confirms it in
 | FR | Row | Kind | Engine and routine | Dependent inputs (C22) | Inputs before it |
 | --- | --- | --- | --- | --- | --- |
 | FR-001 | `meth.annihilator` | operation | Sage `annihilator()` of the finitely generated module over a PID, as the ideal `ZZ.ideal(n)` | the receiver module and the method functor (contract FR-017); descriptors lowered by the lowering table of `backends/modules_r.py` (LV8, second option) | — |
-| FR-002 | `missing.module_annihilator_value` | row that the catalogue lacks | Sage `ZZ.ideal(n)` | the generator | the lean-categories task that declares `missing.module_annihilator_value` (none at lean-categories `fc549baa`) |
+| FR-002 | `missing.module_annihilator_value` | row that the catalogue lacks | Sage `ZZ.ideal(n)` | the generator | kernel T341, the lean-categories task that declares `missing.module_annihilator_value` (issue not yet filed) |
 
 ## Hand-rolled code
 

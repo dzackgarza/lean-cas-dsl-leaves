@@ -104,9 +104,9 @@ category spec version that moves their last registration (research R4); `engine_
 ## Category specs
 
 One feature for each category with a row in V1 or V2, in the structural order (research R16).
-A row count includes the rows that the catalogue lacks; each of those waits for a lean-categories
-task that declares it, and none exists at lean-categories `fc549baa`. The registrations are those
-of research R15.
+A row count includes the rows that the catalogue lacks; each of those waits for the lean-categories
+task that declares it, which kernel tasks T328 to T341 assign (their issues are not yet filed, and
+lean-categories `fc549baa` has no task for them). The registrations are those of research R15.
 
 | Directory | Category | V1 rows | of which the catalogue lacks | V2 rows | Registrations V1 | Registrations V2 | Kernel tasks |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |

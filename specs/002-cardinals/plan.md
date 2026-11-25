@@ -58,7 +58,7 @@ The starting choice of each row. The survey record of its version confirms it in
 | --- | --- | --- | --- | --- | --- |
 | FR-001 | `lit.cardinals` | operation | Sage `Integer(k)` for a finite literal; the literal packet of $\aleph_0$ at the generated layout for the countable cardinal (known method; Mathlib `Cardinal.aleph0`) | the literal descriptor of the request | — |
 | FR-002 | Arithmetic of finite cardinals and $\aleph_0$ | code used by other implementations | known method with its Mathlib reference; Sage `Integer` arithmetic for the finite part | the operand cardinals | — |
-| FR-003 | `missing.cardinal_power` | row that the catalogue lacks | Sage `Integer` power for finite cardinals; a finite power of $\aleph_0$ by the known method of FR-002; $2^{\aleph_0}$ is `unsupported` | the two cardinal operands | the lean-categories task that declares `missing.cardinal_power` (none at lean-categories `fc549baa`) |
+| FR-003 | `missing.cardinal_power` | row that the catalogue lacks | Sage `Integer` power for finite cardinals; a finite power of $\aleph_0$ by the known method of FR-002; $2^{\aleph_0}$ is `unsupported` | the two cardinal operands | kernel T332, the lean-categories task that declares `missing.cardinal_power` (issue not yet filed) |
 
 ## Hand-rolled code
 
