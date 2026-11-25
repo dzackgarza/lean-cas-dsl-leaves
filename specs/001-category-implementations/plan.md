@@ -27,8 +27,8 @@ category with `just test-category NAME`; `just test-commit` (manifest and compil
 **Target Platform**: the research container `ghcr.io/dzackgarza/sage:develop` (LV21).
 **Project Type**: provider package: a manifest and backend programs.
 **Performance Goals**: tier 1 of one category under five minutes (SC-004).
-**Constraints**: permitted inputs only (LV14); no hand-rolled algorithm without a survey gap
-(LV6); no field computed that no request demands (LV25).
+**Constraints**: permitted inputs only (LV14); a computation that no engine provides is the known
+method with its cited reference (LV6); no field computed that no request demands (LV25).
 **Scale/Scope**: 25 milestones, 115 moved registrations, 27 backend programs.
 
 ## Constitution Check
@@ -39,11 +39,11 @@ category with `just test-category NAME`; `just test-commit` (manifest and compil
 | LV2, LV14 | No document or test here holds an acceptance statement or expected answer; kernel tasks are named by ID. |
 | LV3 | Each milestone task implements the complete generated interface of its categories, less the ports that a subsequent milestone moves. |
 | LV4 | Tier 1 checks retention of supplied endpoints and earlier outputs in each reply. |
-| LV5–LV7 | Each milestone task starts with its survey record; the routine table names each port's routine. |
+| LV5–LV7 | Each milestone task starts with its survey record; the routine table names each port's routine; the arithmetic of finite cardinals and $\aleph_0$ is the known method with its Mathlib reference (research R13). |
 | LV8 | Programs that need another category's operation suspend through the SDK and handle `NoImplementation`. |
 | LV10, LV11 | `leaves.json` holds no priority; replies use the contract statuses. |
 | LV12 | Each moved registration keeps its routine unless the survey records it as wrong (FR-027). |
-| LV13 | Tasks follow the kernel order T200–T224, after F. |
+| LV13 | Tasks follow the kernel order T200–T224, then T155, after F. |
 | LV16, LV21 | One interpreter; `pyproject.toml`, `uv.lock`, `Project.toml`, `Manifest.toml`; `lakefile.toml` deleted. |
 | LV17–LV23 | `tests/conftest.py` writes logs and timing records; scenarios drive real processes. |
 
@@ -124,6 +124,7 @@ record ([research.md](research.md), "Survey record").
 | FR-023 | `module_constructions.py` (Sage; Macaulay2 by `sage.interfaces.macaulay2`) | — | `test_module_constructions.py` | T222 |
 | FR-024 | `forms_over_rings.py` (Sage); `forms_over_rings_hecke.py` (Oscar/Hecke, no Sage import) | — | `test_forms_over_rings.py` | T223 |
 | FR-025 | `lattices.py` (Sage, PARI); `lattices_hecke.py` (Oscar/Hecke, no Sage import) | — | `test_lattices.py` | T224 |
+| FR-037 | `rings.py` (GAP `Units` through `libgap`) | — | `test_rings.py` (unit-group scenarios) | T155 |
 
 Every program imports `backends/engine.py` and the SDK, and no other program. A program that
 needs an operation of another category asks the kernel (LV8); research R7 gives the rule.
@@ -153,7 +154,7 @@ No test asserts a mathematical value (LV18).
 3. FR-001 to FR-013 in the kernel order T200–T212; each starts with its survey record (FR-028).
 4. At kernel T105: the dependency moves to `v2.0.1`; the public-only check (SC-007) and the
    specimens (FR-035).
-5. FR-014 to FR-025 in the kernel order T213–T224.
+5. FR-014 to FR-025 in the kernel order T213–T224, then FR-037 at the position of kernel T155.
 6. Timing triage (LV24) after all functionality.
 
 ## Complexity Tracking

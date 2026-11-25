@@ -27,13 +27,14 @@ Format: `- [ ] ID [P?] [Story] description`.
 
 ## Phase 1: Findings that need no release
 
-- [ ] T001 [P] Report the undeclared wire forms and missing inputs of FR-033 to
-  lean-cas-dsl-leaf-contracts as one issue: for each form, the registration that needs it, the
-  leaf-chosen encoding of `DEFECTS.md` and the contract rule that leaves it undeclared (RC8;
-  `api/declared-ports.json`). Write the issue URL into research R12. **Files**:
-  `specs/001-category-implementations/research.md`. **Acceptance**: the issue exists on the
-  contract repository with the `enhancement` label and names all ten items of FR-033; R12 links
-  it. **After**: none. **Kernel**: T203, T205, T209.
+- [x] T001 [P] Record the undeclared wire forms and missing inputs of FR-033: they are the ten
+  items of lean-cas-dsl-leaf-contracts issue
+  [#14](https://github.com/dzackgarza/lean-cas-dsl-leaf-contracts/issues/14), each with the
+  registration that needs it, the leaf-chosen encoding of `DEFECTS.md` and the contract rule that
+  leaves it undeclared; contract task T021 declares them. Research R12 links the issue.
+  **Files**: `specs/001-category-implementations/research.md`. **Acceptance**: the issue exists on
+  the contract repository with the `enhancement` label and names all ten items of FR-033; R12
+  links it. **After**: none. **Kernel**: T203, T205, T209.
 - [ ] T002 Record the findings of `DEFECTS.md` in an issue of this repository (FR-036): one
   section per finding, each with its commit references, and the open items as a checklist.
   Compare the issue with the file paragraph by paragraph, then trash `DEFECTS.md` and remove its
@@ -83,9 +84,10 @@ Format: `- [ ] ID [P?] [Story] description`.
 
 - [ ] T007 [US1] Survey FR-001 (sets, core sets, cardinals, cardinalities). **Files**:
   `specs/001-category-implementations/research.md`. **Acceptance**: a row for each part of the
-  four category interfaces; the pullback row names Catlab.jl `pullback`; the cardinal row names
-  the `EnumeratedSets` rule and the gap of infinite cardinals other than $\aleph_0$ with the
-  survey's searches. **After**: T006; kernel T119, T120, T121, T123, T129, T134. **Kernel**: T200.
+  four category interfaces; the pullback row names Catlab.jl `pullback`; the cardinal rows name
+  Sage `cardinality()` with the `EnumeratedSets` rule, the known method of finite and $\aleph_0$
+  arithmetic with its Mathlib reference, and the presentations that the implementation answers
+  `unsupported` (research R13). **After**: T006; kernel T119, T120, T121, T123, T129, T134. **Kernel**: T200.
 - [ ] T008 [US1] Implement FR-001 in `backends/sets.py` with the 31 registrations of FR-001 (the
   infinite-factor product of R12 excepted), and the computations that move in from the kernel:
   equality of elements, application and composition of maps, the projections of a product, the
@@ -195,17 +197,18 @@ Format: `- [ ] ID [P?] [Story] description`.
   `backends/sage_bilinear_lift.py`. **Acceptance**: `just test-category formed_modules` passes;
   each field reply carries the outputs of the preceding fields that the request supplied.
   **After**: T032. **Kernel**: T212.
-- [ ] T034 [US2] Register the parts of R12 with the forms that the contract task answering T001 declares: the
+- [ ] T034 [US2] Register the parts of R12 with the forms that contract task T021 declares (contract issue #14): the
   infinite-factor product (sets), the four complex maps, `mor.sets.real_sqrt` and the three
   binders (rings, calculus), `mor.sets.polynomial_degree`, `mor.sets.polynomial_differential`,
   `mor.sets.companion_matrix`, `mor.sets.polynomial_roots` (commutative rings) and
-  `mor.sets.span` (fields), with the forms of that contract release; trash `sage_symbolic.py` and
+  `mor.sets.span` (fields), with the forms of the release `v2.0.0` (contract T019, which contains
+  T021); trash `sage_symbolic.py` and
   `sage_set_limits.py`. **Files**: `backends/sets.py`, `backends/rings.py`,
   `backends/calculus.py`, `backends/commutative_rings.py`, `backends/fields.py`, `leaves.json`,
   their tests and scenarios, `backends/sage_symbolic.py`, `backends/sage_set_limits.py`.
   **Acceptance**: the tier 1 tests of the five programs pass; `git ls-files backends/sage_symbolic.py
-  backends/sage_set_limits.py` returns nothing. **After**: T008, T015, T019, T027; the contract
-  task that answers T001's issue. **Kernel**: T200, T203, T205, T209.
+  backends/sage_set_limits.py` returns nothing. **After**: T008, T015, T019, T027; contract T021.
+  **Kernel**: T200, T203, T205, T209.
 - [ ] T035 Move the SDK dependency to `v2.0.1` (FR-026; contract FR-022): `pyproject.toml`,
   `uv.lock`, the tag check of `just setup`; run `just test`. **Files**: `pyproject.toml`,
   `uv.lock`, `justfile`, `tests/logs/`, `tests/timing/records.jsonl`. **Acceptance**: tier 1 of
@@ -219,10 +222,13 @@ Format: `- [ ] ID [P?] [Story] description`.
   T033 recorded as a gap or left to FR-014. **After**: T035; kernel T124, T125, T128, T136, T137.
   **Kernel**: T213.
 - [ ] T037 [US2] Implement FR-014 in the programs of FR-001 to FR-013 and in
-  `backends/calculus.py`; the product $\aleph_0 \cdot \aleph_0$ follows the answer to kernel owner
-  question Q1. **Files**: those programs, `leaves.json`, their tests and scenarios.
-  **Acceptance**: the tier 1 tests of the changed programs pass. **After**: T036; kernel owner
-  question Q1 for the cardinal part. **Kernel**: T213.
+  `backends/calculus.py`, and the arithmetic of finite cardinals and $\aleph_0$ (sums, products,
+  finite powers) in the cardinal implementation of `backends/sets.py`, by the known method with
+  Mathlib's cardinal arithmetic as its cited reference (research R13; LV6). **Files**: those
+  programs, `leaves.json`, their tests and scenarios. **Acceptance**: the tier 1 tests of the
+  changed programs pass; the reply to a product of two $\aleph_0$ factors carries a routine
+  observation that names the implementation and its reference. **After**: T036. **Kernel**:
+  T213.
 - [ ] T038 [US2] Survey FR-015 (arrows and subobjects of groups). **Files**: `research.md`.
   **Acceptance**: a row for each part of the two interfaces. **After**: T035; kernel T134.
   **Kernel**: T214.
@@ -307,14 +313,26 @@ Format: `- [ ] ID [P?] [Story] description`.
   `tests/scenarios/lattices-*.json`. **Acceptance**: `just test-category lattices` passes; the
   Hecke program imports no `sage` module. **After**: T059. **Kernel**: T224.
 
-## Phase 5: User Story 3 and final performance
+## Phase 5: Unit groups (kernel T155)
+
+- [ ] T063 [US2] Survey FR-037 (the actions of `fun.monoids.units` and the group result).
+  **Files**: `research.md`. **Acceptance**: a row for the object action, the morphism action and
+  each part of the `cat.groups` result layout that the actions return, with GAP `Units` and the
+  group operations of `libgap` named (R14). **After**: T060; T015, T035. **Kernel**: T155.
+- [ ] T064 [US2] Implement FR-037 in `backends/rings.py`. **Files**: `backends/rings.py`,
+  `leaves.json`, `tests/test_rings.py`, `tests/scenarios/rings-units-*.json`. **Acceptance**:
+  `just test-category rings` passes; the object reply carries the group with its operations and
+  the defining inclusion of the units at the request's monoid; the morphism reply has exactly the
+  two image endpoints of the request (contract FR-018). **After**: T063. **Kernel**: T155.
+
+## Phase 6: User Story 3 and final performance
 
 - [ ] T061 [US3] Move the four specimen packages to protocol 2 (FR-035), keeping their bad
   behaviour, and test them through `cas-peer`. **Files**: `specimens/*/backend.py`,
   `specimens/*/leaves.json`, `specimens/README.md`, `tests/test_specimens.py`,
   `tests/scenarios/specimens-*.json`. **Acceptance**: `just test-category specimens` shows no
   implementation for `missing`, a well-framed reply for `wrong`, `malformed` for `malformed` and
-  `unavailable` for `unavailable`. **After**: T060. **Kernel**: T108.
+  `unavailable` for `unavailable`. **After**: T064. **Kernel**: T108.
 - [ ] T062 Write the timing triage table of LV24 from `tests/timing/records.jsonl` into
   [research.md](research.md), and do the optimization that it selects. **Files**: `research.md`
   and the programs that the table selects. **Acceptance**: the table has every LV24 column and
@@ -332,10 +350,12 @@ Format: `- [ ] ID [P?] [Story] description`.
 | T009 | T008 |
 | survey T010–T032 (even IDs) | the implementation tasks of its requirement's predecessors, and its upstream kernel tasks |
 | implementation T011–T033 (odd IDs) | its survey task |
-| T034 | T008, T015, T019, T027; the contract task that answers T001 |
+| T034 | T008, T015, T019, T027; contract T021 |
 | T035 | T033, T034; contract T020 |
 | T036–T060 | T035 and the predecessors named in each task |
-| T061 | T060 |
+| T063 | T060, T015, T035 |
+| T064 | T063 |
+| T061 | T064 |
 | T062 | T061 |
 
 ## Kernel consumers
@@ -368,5 +388,6 @@ Format: `- [ ] ID [P?] [Story] description`.
 | T222 | T055, T056 |
 | T223 | T057, T058 |
 | T224 | T059, T060 |
+| T155 | T063, T064 |
 | T108 | T061 |
 | T103 | T062 |

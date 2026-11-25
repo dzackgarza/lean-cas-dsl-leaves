@@ -29,8 +29,8 @@ contract's `cas-computation/2` ([protocol-2][P]); this file adds no frame and no
 - Each successful, deferred or suspended reply carries a routine observation naming the engine
   and the routine of the routine table (contract FR-013; LV5).
 - An unsupported presentation: `status:"unsupported"` with the exact `op`. An engine failure:
-  `status:"error"` with `kind` and `message`. A predicate that the engine cannot establish:
-  `status:"unknown"` (contract FR-011, FR-012; LV11).
+  `status:"error"` with `kind` and `message`. A decision that the engine cannot establish:
+  the decision packet `none` (contract FR-011, FR-012; LV11).
 - A lazy field is an export token with its captures (contract FR-007; LV25).
 
 ## Asking the kernel

@@ -99,7 +99,31 @@ Affected moves: `mor.sets.complex_abs`, `mor.sets.complex_bar`, `mor.sets.comple
 `bind.sets.limit_at_infinity` (FR-004); `mor.sets.polynomial_degree`,
 `mor.sets.polynomial_differential`, `mor.sets.companion_matrix`, `mor.sets.polynomial_roots`
 (FR-006); `mor.sets.span` (FR-010); `lim.sets.product` with an infinite factor (FR-001).
-Source: `DEFECTS.md`, section of 2026-10-21; LV14; RC8.
+Source: `DEFECTS.md`, section of 2026-10-21; LV14; RC8. The forms are the ten items of
+[lean-cas-dsl-leaf-contracts#14](https://github.com/dzackgarza/lean-cas-dsl-leaf-contracts/issues/14);
+contract task T021 declares them before the release `v2.0.0`, and T034 registers these moves with
+those forms.
+
+**R13. Cardinals.** Decision: the cardinal implementation of FR-001 reads a cardinality from the
+engine: a finite set gives Sage `cardinality()`, an integer; a set for which Sage gives
+`cardinality()` $= +\infty$ and which is in `EnumeratedSets` gives $\aleph_0$. It computes the
+arithmetic of finite cardinals and $\aleph_0$ (sums, products and finite powers, for example
+$|\mathbb{Z}^2| = \aleph_0 \cdot \aleph_0 = \aleph_0$) by the known method, with Mathlib's
+cardinal arithmetic (`Mathlib.SetTheory.Cardinal.Arithmetic`) as its cited reference. A set that
+Sage presents as infinite and not as an enumerated set determines no cardinal from which the
+implementation computes; its request is `status:"unsupported"`. Sources: kernel plan,
+"Engines" (no surveyed engine has infinite cardinal arithmetic; the workloads use finite cardinals
+and $\aleph_0$; Sage does not put $\mathbb{Z}^2$ in `EnumeratedSets`); kernel constitution
+4.0.1, policy "Established computational implementations"; LV6.
+
+**R14. Unit groups.** Decision: FR-037 implements the actions of `fun.monoids.units` in
+`backends/rings.py`, the program of FR-004, with GAP `Units` through Sage `libgap` in that
+process. Reasons: the functor's source is `cat.monoids`, whose category implementation is FR-004,
+and a functor action belongs to the implementation of its source category (K:C23, "functor
+actions construct their targets"; R3); the program already holds the libgap session of the ring
+chain; `gap_groups.py` is trashed by T043 when its last registration moves (R4). This keeps the
+out-of-process Python leaf that hosts libgap (lean-cas-dsl#3). Sources: kernel T155 (after kernel
+T203 and T105); LV16 (one engine session per program).
 
 ## Survey record
 

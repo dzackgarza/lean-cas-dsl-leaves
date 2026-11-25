@@ -4,7 +4,7 @@
 **Created**: 2026-11-25
 **Status**: Planned
 **Governing text**: [constitution](../../.specify/memory/constitution.md) (LV1–LV25); the
-[kernel constitution][KC] v4.0.0; the [contract constitution][RC] and the released contract
+[kernel constitution][KC] v4.0.1; the [contract constitution][RC] and the released contract
 feature [`001-released-contract-v2`][CS].
 
 **Input**: the category implementations that the computational milestones of lean-cas-dsl
@@ -110,11 +110,11 @@ package in their place is admitted, and each specimen's failure reaches its dist
 
 | Situation | Required behaviour | Source |
 | --- | --- | --- |
-| An operation of the generated interface has no engine routine | The survey record names the gap and the searches; a hand-rolled algorithm exists only with a cited mature reference | LV6, LV7 |
-| A result needs a wire form that the contract does not declare | No registration answers it; the finding goes to the contract owner (FR-033) | LV14; RC8 |
+| An operation of the generated interface has no engine routine | The leaf implements the known method and cites its reference; only mathematically new work is a gap of the survey record, with its searches, and needs a separately authorized research assignment | LV6, LV7 |
+| A result needs a wire form that the contract does not declare | No registration answers it until contract T021 declares the form (contract issue #14; FR-033) | LV14; RC8 |
 | A named object arrives as its descriptor | One lowering table of the category implementation maps it to the engine constructor | LV1 |
 | An engine returns an unevaluated form | A branch to the second engine that the routine table names, as control logic | LV8, LV11 |
-| A request asks for an infinite cardinal other than $\aleph_0$ | `status:"unsupported"`; no engine computes it (survey record, "Cardinals") | LV11 |
+| A request asks for the cardinal of a set that the engine presents as infinite and not as an enumerated set | `status:"unsupported"`: the implementation computes finite cardinals and $\aleph_0$ from the engine's presentation and their arithmetic by the known method, and this presentation determines neither (research R13) | LV6, LV11 |
 | The SDK reports a reserved constructor in a reply | The SDK raises before writing; the backend sends no frame | contract FR-010 |
 | Two backends realize one operation at one input form | The manifest holds one; implementation ambiguity is the kernel's outcome | LV10; RC5 |
 | A suspended child has no implementation | The backend receives `NoImplementation(op, input)` and continues | LV8; contract FR-010 |
@@ -162,7 +162,9 @@ assessed there (LV2, LV13). The plan gives the files, entry points and tests of 
   `mor.sets.complex_re`, `mor.sets.nat_prime_factors`, `mor.sets.real_sqrt`, `prop.is_abelian` ×3,
   `prop.is_commutative` ×3, `prop.is_finite` ×5. From the kernel: arithmetic of $\mathbb{N}$,
   $\mathbb{Z}$ and $\mathbb{Z}/n$; gcd and primality; multiplication, unit and inverse of an
-  instance. Upstream: T122, T131, T132. After FR-001.
+  instance. Upstream: T122, T131, T132. After FR-001. The object and morphism actions of the
+  unit-group functor `fun.monoids.units` of `cat.monoids` are the part of this interface that
+  FR-037 implements.
 - **FR-005 — Group automorphisms** (kernel T204). Category `cat.core_groups`. Engine: GAP
   `AutomorphismGroup`, `ConjugatorAutomorphism`, `InverseGeneralMapping`. Moves in 0. Upstream:
   T134. After FR-004.
@@ -201,7 +203,11 @@ assessed there (LV2, LV13). The plan gives the files, entry points and tests of 
 - **FR-014 — Full B0 in the V1 categories** (kernel T213). Extends FR-001 to FR-013. Engine:
   SymPy 1.14.0 `limit`, `series`, `integrate`, with the Sage symbolic ring (Maxima 5.49.0) where
   SymPy returns an unevaluated form. Moves in 0. Upstream: T124, T125, T128, T136, T137. After
-  kernel T105. The cardinal $\aleph_0 \cdot \aleph_0$ waits on kernel owner question Q1.
+  kernel T105. The cardinal implementation of FR-001 computes the arithmetic of finite cardinals
+  and $\aleph_0$ (sums, products and finite powers, for example $\aleph_0 \cdot \aleph_0 =
+  \aleph_0$) itself, with Mathlib's cardinal arithmetic (`Mathlib.SetTheory.Cardinal.Arithmetic`)
+  as its cited reference: no surveyed engine provides it, and it is known mathematics (LV6;
+  kernel plan, "Engines"; research R13).
 - **FR-015 — Group kernels** (kernel T214). Categories `cat.arrows_groups`,
   `cat.subobjects_groups`. Engine: GAP `GroupHomomorphismByImages`, `Kernel`,
   `AlternatingGroup`, `SignPerm`, `Size`, `IsAbelian`. Moves in 13: `fun.arrows_groups.kernel`,
@@ -297,9 +303,10 @@ assessed there (LV2, LV13). The plan gives the files, entry points and tests of 
   Kähler differential, a matrix, an infinite subset given by `span`, the request of a binder,
   the apex of a product with an infinite factor, a closed point in a morphism position) and the
   missing inputs that it lists (the intermediate group of an unlabelled composite, a
-  representation of `op.rings.*` in `apply`) MUST go to lean-cas-dsl-leaf-contracts as a
-  finding. A registration that needs such a form is not answered with a leaf-chosen encoding;
-  it waits for the contract form (LV14).
+  representation of `op.rings.*` in `apply`) are the ten items of lean-cas-dsl-leaf-contracts
+  issue #14, which contract task T021 declares before the release `v2.0.0`. A registration that
+  needs such a form is not answered with a leaf-chosen encoding; it is registered with the form of
+  T021 (LV14).
 - **FR-034 — No mathematics in the source.** No backend answers by lookup, writes a defining
   datum that an engine constructor builds, or writes one datum twice (LV1). This removes the
   three Gram matrices of $A_n$, the literal ranks of $A_n$ and $E_8$, the two tables from named
@@ -309,6 +316,12 @@ assessed there (LV2, LV13). The plan gives the files, entry points and tests of 
 - **FR-036 — Findings in issues.** The findings of `DEFECTS.md` MUST be recorded in an issue of
   this repository, and `DEFECTS.md` trashed after a semantic comparison (constitution,
   Governance).
+- **FR-037 — Unit groups** (kernel T155). The object and morphism actions of the unit-group
+  functor `fun.monoids.units` from `cat.monoids` to `cat.groups`, with the complete group result
+  at the generated result layout: its carrier, its group operations and the defining inclusion of
+  the units into the monoid, for the later group and map operations that consume them. Engine: GAP
+  `Units` and the group operations through Sage `libgap`, in the program of FR-004 (research R14).
+  Moves in 0. After FR-004 and kernel T105.
 
 ### Key Entities
 

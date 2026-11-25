@@ -6,7 +6,7 @@ deliberately bad replacement packages under `specimens/` (`README.md`). A catego
 implementation computes the operations that the formal mathematics of lean-categories
 specifies, through the released contract of lean-cas-dsl-leaf-contracts.
 
-The [kernel constitution][K] (lean-cas-dsl, v4.0.0) governs the whole programme. The
+The [kernel constitution][K] (lean-cas-dsl, v4.0.1) governs the whole programme. The
 [contract constitution][RC] governs the released interface that a leaf implements. This file
 states the obligations of those two constitutions that bind a leaf, and the rules of this
 repository's own governing documents (`AGENTS.md`, `README.md`, `INTENT.md`). Article
@@ -58,8 +58,10 @@ for its category, with complete dependent results and their later uses (K:C23; R
   implementation (K:C23; RC2).
 - Constructors of objects are distinct from constructors of categories (contract FR-014).
 - Each operation that the required workload assigns MUST execute (K:C23; kernel FR-033). An
-  operation of the interface with no engine routine and no admissible hand-rolled algorithm
-  (LV6) is a gap of the survey record (LV7). It is not omitted without that record.
+  operation of the interface for which no engine routine and no known method exists is
+  mathematically new work (LV6). The survey record names it as a gap with its searches (LV7); it
+  is not implemented here without a separately authorized research assignment, and it is not
+  omitted without that record.
 - A category implementation is complete when each part of its generated interface is
   implemented or recorded as such a gap.
 
@@ -92,15 +94,22 @@ at the generated result layout.
 - Each computation MUST name the engine and the routine that it calls, in the routine table of
   the feature specification and in the routine observations of its replies (contract FR-013;
   K:C15).
-- A leaf MUST NOT rewrite an engine (kernel T104).
+- A leaf MUST NOT rewrite an engine (kernel tasks T200 to T224, common definition).
 
-### LV6. A hand-rolled algorithm needs a survey gap and a mature reference
+### LV6. Known mathematics with no engine is implemented with its reference
 
-A hand-rolled algorithm exists only where the survey record (LV7) shows that no engine supplies
-the computation. It MUST implement a cited mature reference: a published algorithm or a reference
-implementation. The feature specification names the survey row, the reference and the
-requirement that assigns the computation (K: policy "Established computational implementations";
-K:C17).
+A leaf computes an operation itself only where the survey record (LV7) shows that no surveyed
+engine or research implementation provides it. Where the computation is known mathematics, the
+leaf implements the known method and cites its reference: a published algorithm, a reference
+implementation or a formalization (for example Mathlib's cardinal arithmetic,
+`Mathlib.SetTheory.Cardinal.Arithmetic`, for the arithmetic of finite cardinals and $\aleph_0$).
+This is ordinary leaf work. The feature specification names the survey row, the reference and the
+requirement that assigns the computation (K: policy "Established computational implementations",
+v4.0.1; K:C17).
+
+- New algorithm work is mathematically new work: nontrivial mathematics for which no method
+  exists anywhere. Only it needs a separately authorized research assignment, and no task of this
+  repository supplies that authorization (K: same policy).
 
 - A hand-rolled algorithm of an existing registration is removed when an engine supplies the
   computation, or justified by this rule (LV12).
@@ -156,7 +165,8 @@ A leaf reports each failure by its contract status (RC7; contract FR-011, FR-012
 
 - an input presentation outside the implementation: `status:"unsupported"` with the exact `op`;
 - an engine failure: `status:"error"` with `kind` and `message`;
-- a predicate that the engine cannot establish: `status:"unknown"`;
+- a decision (a predicate or a property) that the engine cannot establish: the decision packet
+  `none` (contract FR-012);
 - an absent engine: the backend exits before its ready frame, and the kernel reports
   `unavailable`.
 
@@ -345,7 +355,7 @@ the task that needs it, and the work continues with the next task whose inputs a
 Work records, diagnostics and evidence go to the owning GitHub issue, not to a repository file
 (K: "Authority and scope"). The checklist of the computational milestones is lean-cas-dsl#93.
 
-**Version**: 1.1.0 | **Ratified**: 2026-11-25 | **Last Amended**: 2026-11-25
+**Version**: 2.0.0 | **Ratified**: 2026-11-25 | **Last Amended**: 2026-11-25
 
 [K]: https://github.com/dzackgarza/lean-cas-dsl/blob/main/.specify/memory/constitution.md
 [RC]: https://github.com/dzackgarza/lean-cas-dsl-leaf-contracts/blob/main/.specify/memory/constitution.md
