@@ -1,4 +1,4 @@
-# Specification Quality Checklist: Category implementations for the computational milestones
+# Specification Quality Checklist: Category implementations — the shared foundation and the spec list
 
 **Purpose**: Validate specification completeness and quality before planning
 **Created**: 2026-11-25
@@ -18,7 +18,8 @@
 - [x] Success criteria are measurable
 - [x] All acceptance scenarios are defined
 - [x] Edge cases are identified
-- [x] Scope is bounded: the 25 kernel milestones, the 115 registrations, FR-026 to FR-036
+- [x] Scope is bounded: the shared foundation (FR-026 to FR-036), the spec list (FR-038) and the
+  placement of the 115 registrations (FR-039)
 - [x] Dependencies and assumptions identified
 
 ## Feature Readiness

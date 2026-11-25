@@ -5,8 +5,8 @@ contract's `cas-computation/2` ([protocol-2][P]); this file adds no frame and no
 
 ## Start
 
-- Command: `/sage/.venv/bin/python3 -m backends.<program>` in the repository root, with the SDK
-  on `PYTHONPATH` (research R1).
+- Command: `/sage/.venv/bin/python3 -m backends.<slug>` in the repository root, with the SDK
+  on `PYTHONPATH` (research R1, R3). One program serves one category implementation.
 - `backends/engine.py` imports the program's engines once, before the ready frame. When an
   engine is absent, the program writes the import error to standard error and exits with a
   nonzero status before the ready frame (LV11, LV21).

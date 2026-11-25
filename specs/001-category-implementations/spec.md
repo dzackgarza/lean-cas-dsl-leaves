@@ -1,4 +1,4 @@
-# Feature Specification: Category implementations for the computational milestones
+# Feature Specification: Category implementations — the shared foundation and the spec list
 
 **Feature Branch**: `001-category-implementations` (work is committed on `main`)
 **Created**: 2026-11-25
@@ -7,13 +7,33 @@
 [kernel constitution][KC] v4.0.1; the [contract constitution][RC] and the released contract
 feature [`001-released-contract-v2`][CS].
 
-**Input**: the category implementations that the computational milestones of lean-cas-dsl
-(kernel tasks T200 to T224) need from this repository, written against the released contract
-`cas-computation/2`, with the move of the 115 existing registrations of `leaves.json` into them.
+**Input**: what every category implementation of this repository shares — the move to protocol 2
+and the generated interface of the released contract `cas-computation/2`, the common engine
+bridge and the container interpreter, the survey record format, the logs and timing records, the
+public-only test through a protocol peer, the removal or justification of hand-rolled code — and
+the list of category specs 002 to 034, one for each category that a computation needs, which
+together move the 115 existing registrations of `leaves.json`.
 
 This document is an input of a leaf author (LV14). It names categories and operations of the
 catalogue that the contract publishes, engines, this repository's registrations and the IDs of
 the tasks that consume the work. It holds no acceptance statement and no expected answer.
+
+## The category specs
+
+Each category whose rows a computation needs has its own Spec Kit feature, `specs/<NNN>-<slug>/`,
+numbered from 002 in the structural order (constitution LV13). The [plan](plan.md#category-specs)
+lists the 33 specs and the categories that have no spec. Each spec has versioned milestones:
+
+| Version | Rows of the spec |
+| --- | --- |
+| V1 | the rows that every computation of the spike and every statement of the kernel V1 definition need |
+| V2 | the rows that the remaining full-B0 statements of lean-cas-dsl #19 need |
+| V3 | the rows that the classified Sage coverage of lean-cas-dsl #20, #21 and #23 adds by the same membership rule, when kernel tasks T140 to T147 produce the classified statements; no spec plans more for V3 |
+
+A row joins the first version of a computed statement that needs it. It belongs to the latest
+category, in the structural order, among its catalogue owners and the categories of its declared
+parameters; a structural functor or classifier forget belongs to its source (research R16). The
+kernel task that consumes a version reads "Implement <Category> Spec V<n>".
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -52,37 +72,11 @@ this repository, the contract release or the research image.
 
 ---
 
-### User Story 2 — A researcher computes a statement of a milestone and gets the engine's result (Priority: P1)
+The researcher's stories are those of the category specs: each version of each spec states the
+computations that it makes possible, and its acceptance scenarios state the reply at the
+generated layout, the named routine, the retained selected data and the functor endpoints.
 
-A researcher writes a statement in lean-cas-dsl whose selected route stays within the
-categories implemented through one milestone. The kernel resolves each computation to a
-registration of this repository. The backend computes it with the engine routine that the
-survey chose and returns the engine's result at the generated result layout, with every
-selected datum that the request carried.
-
-**Why this priority**: this is the product. A milestone is vertical: its attainment holds as a
-computed result through the public interface of each category on its route (LV13; kernel
-FR-042).
-
-**Independent Test**: for each milestone, the kernel task that consumes it (T200 to T224 of
-lean-cas-dsl) runs its attainment statements through `CasRuntime.KernelSession` with this
-repository's manifest. The kernel's acceptance suite judges the result; this repository does
-not hold the statements (LV2).
-
-**Acceptance Scenarios**:
-
-1. **Given** the implementations through a milestone, **When** the kernel sends a request at a
-   registered port, **Then** the backend calls the routine that the routine table names, reports
-   it in its routine observations, and replies at the generated result layout.
-2. **Given** a request that carries selected endpoints, cones, comparisons or earlier outputs,
-   **When** the backend replies, **Then** the reply contains those data unchanged where the
-   result layout retains them, and no recomputed canonical substitute (LV4).
-3. **Given** a functor morphism request with two image endpoints, **When** the backend replies,
-   **Then** the arrow has exactly those endpoints (contract FR-018).
-
----
-
-### User Story 3 — An assessor replaces this provider with an independent one (Priority: P2)
+### User Story 2 — An assessor replaces this provider with an independent one (Priority: P2)
 
 An assessor removes the registrations of one category implementation of this repository and
 installs an independently written provider for the same operations and input forms. The
@@ -113,154 +107,29 @@ package in their place is admitted, and each specimen's failure reaches its dist
 | An operation of the generated interface has no engine routine | The leaf implements the known method and cites its reference; only mathematically new work is a gap of the survey record, with its searches, and needs a separately authorized research assignment | LV6, LV7 |
 | A result needs a wire form that the contract does not declare | No registration answers it until contract T021 declares the form (contract issue #14; FR-033) | LV14; RC8 |
 | A named object arrives as its descriptor | One lowering table of the category implementation maps it to the engine constructor | LV1 |
+| A named object has defining data that no engine constructor builds (a defining polynomial, a Gram matrix) | The implementation reads the data from the unfolded definition that the request carries (K:C22); a request that carries only the name is `status:"unsupported"` and a finding against the contract | LV1; CONTRIBUTING MTH001 |
 | An engine returns an unevaluated form | A branch to the second engine that the routine table names, as control logic | LV8, LV11 |
-| A request asks for the cardinal of a set that the engine presents as infinite and not as an enumerated set | `status:"unsupported"`: the implementation computes finite cardinals and $\aleph_0$ from the engine's presentation and their arithmetic by the known method, and this presentation determines neither (research R13) | LV6, LV11 |
 | The SDK reports a reserved constructor in a reply | The SDK raises before writing; the backend sends no frame | contract FR-010 |
 | Two backends realize one operation at one input form | The manifest holds one; implementation ambiguity is the kernel's outcome | LV10; RC5 |
 | A suspended child has no implementation | The backend receives `NoImplementation(op, input)` and continues | LV8; contract FR-010 |
 
 ## Requirements *(mandatory)*
 
-### Functional Requirements — the computational milestones
+### Functional Requirements — the category specs
 
-Each requirement FR-001 to FR-025 is one milestone of the kernel plan ("Computational
-milestones", lean-cas-dsl `4be2a02`). It names the categories, the engine and its routines from
-the engine survey, the registrations of `leaves.json` that move into it, the computations that
-the kernel performs today and that move into it, the upstream tasks before it, and the kernel
-task that consumes it. Each milestone MUST implement the complete generated interface of its
-categories (LV3), less the registrations that a subsequent requirement moves; the attainment
-statements of the consuming kernel task are the workload statements that it makes computable,
-assessed there (LV2, LV13). The plan gives the files, entry points and tests of each.
-
-- **FR-001 — Sets** (kernel T200). Categories `cat.sets`, `cat.core_sets`, `cat.cardinals`,
-  `cat.cardinalities`. Engine: Sage `sage.sets` parents, `Hom` in `Sets()`, `FiniteSetMaps`,
-  `cartesian_product` with `cartesian_projection`, `DisjointUnionEnumeratedSets`, `Subsets`,
-  `cardinality()`, `is_finite()`, membership in `EnumeratedSets` for $\aleph_0$; Catlab.jl
-  `pullback` of `FinFunction`s through juliacall. Moves in 31 registrations: `colim.sets.coproduct`,
-  `lim.sets.pullback`, `lim.sets.product` (its projections move in here), `meth.cardinality` ×13,
-  `mor.sets.equality`, `mor.sets.fin_rev`, `prop.is_finite` ×13. Moves in from the kernel:
-  equality of elements, application and composition of maps, the projections of a product, the
-  graph of a map. Upstream: kernel T119, T120, T121, T123, T129, T134. Kernel readiness F and
-  contract release `v2.0.0` precede it.
-- **FR-002 — Finite sets** (kernel T201). Category `cat.finite_sets`. Engine: Sage
-  `FiniteEnumeratedSet`, `Sets().Finite()`, `FiniteSetMaps`, `list()`. Moves in 2:
-  `meth.cardinality`, `prop.is_finite` at `obj.finite_sets.fin`. From the kernel: the list of the
-  elements of a finite carrier. Upstream: T119, T135. After FR-001.
-- **FR-003 — Orders** (kernel T202). Categories `cat.preorders`, `cat.partial_orders`,
-  `cat.linear_orders`. Engine: Sage `Poset`, `is_lequal`, `is_less_than`, `is_chain`; GAP
-  Digraphs `IsPreorderDigraph` through `libgap` for preorders. An order-preserving map is a set
-  map with Sage's comparison. Moves in 0. From the kernel: $<$ and $\le$ on $\mathbb{N}$.
-  Upstream: T133. After FR-001.
-- **FR-004 — Rings** (kernel T203). Categories `cat.magmas`, `cat.semigroups`, `cat.monoids`,
-  `cat.groups`, `cat.additive_magmas`, `cat.additive_semigroups`, `cat.additive_monoids`,
-  `cat.additive_commutative_monoids`, `cat.semirings`, `cat.additive_groups`, `cat.rings`.
-  Engine: Sage `ZZ`, `QQ`, `Zmod`, ring arithmetic, `gcd`, `is_prime`, `factor`; GAP 4.16.1
-  through `libgap`: `SymmetricGroup`, `CyclicGroup`, `Units`, `Size`, `IsAbelian`, `IsFinite`;
-  SymPy `integrate` and `limit`, with the Sage symbolic ring where SymPy returns an unevaluated
-  form. Moves in 25: `bind.sets.integral`, `bind.sets.limit`, `bind.sets.limit_at_infinity`,
-  `meth.cardinality` ×5, `mor.sets.complex_abs`, `mor.sets.complex_bar`, `mor.sets.complex_im`,
-  `mor.sets.complex_re`, `mor.sets.nat_prime_factors`, `mor.sets.real_sqrt`, `prop.is_abelian` ×3,
-  `prop.is_commutative` ×3, `prop.is_finite` ×5. From the kernel: arithmetic of $\mathbb{N}$,
-  $\mathbb{Z}$ and $\mathbb{Z}/n$; gcd and primality; multiplication, unit and inverse of an
-  instance. Upstream: T122, T131, T132. After FR-001. The object and morphism actions of the
-  unit-group functor `fun.monoids.units` of `cat.monoids` are the part of this interface that
-  FR-037 implements.
-- **FR-005 — Group automorphisms** (kernel T204). Category `cat.core_groups`. Engine: GAP
-  `AutomorphismGroup`, `ConjugatorAutomorphism`, `InverseGeneralMapping`. Moves in 0. Upstream:
-  T134. After FR-004.
-- **FR-006 — Commutative rings** (kernel T205). Categories `cat.commutative_monoids`,
-  `cat.commutative_rings`. Engine: Sage `PolynomialRing`, `quo`, ring `hom`, `degree`,
-  `derivative`, `factor`, `roots`, `companion_matrix`, `change_ring`, `det`, `trace`, `charpoly`;
-  Singular 4.4.1 inside Sage for several variables. Moves in 18: `cmp.f9.translation` ×2,
-  `meth.cardinality` ×2, `mor.sets.companion_matrix`, `mor.sets.f9_x_constants` ×2,
-  `mor.sets.f9_y_constants` ×2, `mor.sets.mv_total_degree`, `mor.sets.polynomial_degree`,
-  `mor.sets.polynomial_derivative`, `mor.sets.polynomial_differential`,
-  `mor.sets.polynomial_factors`, `mor.sets.polynomial_map`, `mor.sets.polynomial_roots`,
-  `prop.is_finite` ×2. After FR-004.
-- **FR-007 — Topological monoids** (kernel T206). Category
-  `cat.hausdorff_topological_commutative_monoids`. Engine: Sage `LazyPowerSeriesRing`,
-  `coefficient`. Moves in 0. Upstream: T128. After FR-006.
-- **FR-008 — Modules** (kernel T207). Categories `cat.modules_r`, `cat.modules_total`. Engine:
-  Sage `FreeModule`, `VectorSpace`, scalar action, `cardinality()`. Moves in 2:
-  `meth.cardinality` at `obj.modules.regular` and `obj.modules.vectors` (`lim.sets.product` moves
-  in FR-001). From the kernel: the scalar action of an instance. After FR-006.
-- **FR-009 — Bilinear forms** (kernel T208). Category `cat.bil_wform`. Engine: Sage
-  `IntegralLattice`, `dual_lattice`, `discriminant_group`, `invariants`; PARI 2.17.4 `matsnf`
-  through `cypari2`. Moves in 10: `colim.bil_w_form.cokernel`, `meth.cardinality` ×3,
-  `prop.is_abelian` ×3, `prop.is_commutative` ×3. After FR-008.
-- **FR-010 — Fields** (kernel T209). Category `cat.fields`. Engine: Sage `QQ`, `GF`,
-  `VectorSpace`, `span`, `right_kernel`, `dimension`. Moves in 1: `mor.sets.span`. After FR-006.
-- **FR-011 — Module rank** (kernel T210). Category `cat.core_modules_r`. Engine: Sage `rank()`.
-  Moves in 5: `meth.rank` ×5. After FR-008.
-- **FR-012 — Module kernels** (kernel T211). Categories `cat.subobjects_sets`,
-  `cat.subobjects_modules_r`, `cat.arrows_modules_r`, `cat.core_subobjects_modules_r`. Engine: Sage
-  module `hom`, `kernel()`, `submodule`, `dimension`, `__contains__`. Moves in 0. From the kernel:
-  membership in a subset. Upstream: T134, T138. After FR-008.
-- **FR-013 — Formed modules** (kernel T212). Categories `cat.bilin_module`,
-  `cat.arrows_bilin_module`. Engine: Sage `FreeModule(QQ, n, inner_product_matrix=G)`,
-  `submodule`, `gram_matrix()`, inclusion `hom`. Moves in 4: `lift.bilin_module.restrict#obj`,
-  `#hom`, `#forward`, `#backward`. Upstream: T130, T134. After FR-009.
-- **FR-014 — Full B0 in the V1 categories** (kernel T213). Extends FR-001 to FR-013. Engine:
-  SymPy 1.14.0 `limit`, `series`, `integrate`, with the Sage symbolic ring (Maxima 5.49.0) where
-  SymPy returns an unevaluated form. Moves in 0. Upstream: T124, T125, T128, T136, T137. After
-  kernel T105. The cardinal implementation of FR-001 computes the arithmetic of finite cardinals
-  and $\aleph_0$ (sums, products and finite powers, for example $\aleph_0 \cdot \aleph_0 =
-  \aleph_0$) itself, with Mathlib's cardinal arithmetic (`Mathlib.SetTheory.Cardinal.Arithmetic`)
-  as its cited reference: no surveyed engine provides it, and it is known mathematics (LV6;
-  kernel plan, "Engines"; research R13).
-- **FR-015 — Group kernels** (kernel T214). Categories `cat.arrows_groups`,
-  `cat.subobjects_groups`. Engine: GAP `GroupHomomorphismByImages`, `Kernel`,
-  `AlternatingGroup`, `SignPerm`, `Size`, `IsAbelian`. Moves in 13: `fun.arrows_groups.kernel`,
-  `meth.cardinality` ×3, `meth.group_arrow_kernel`, `prop.is_abelian` ×2, `prop.is_commutative`
-  ×3, `prop.is_finite` ×3. Upstream: T134. After kernel T105 and FR-004.
-- **FR-016 — Boolean algebras** (kernel T215). Categories `cat.join_semilattices`,
-  `cat.meet_semilattices`, `cat.order_lattices`, `cat.bounded_order_lattices`,
-  `cat.boolean_algebras`. Engine: Sage `Subsets`, `posets.BooleanLattice`, `LatticePoset` `meet`,
-  `join`, `complements`. Moves in 0. Upstream: T133, T136. After FR-003, FR-004.
-- **FR-017 — Integral lattices** (kernel T216). Category `cat.integral_lattice`. Engine: Sage
-  `IntegralLattice`, `rank`, `cardinality`. Moves in 4: `meth.cardinality`, `meth.rank`,
-  `prop.is_abelian`, `prop.is_commutative` at `obj.integral_lattice.e8`. After FR-011, FR-013.
-- **FR-018 — Set constructions** (kernel T217). Categories `cat.arrows_sets`, `cat.slice_sets`,
-  `cat.coslice_sets`, `cat.endofunctors_sets`, `cat.walking_pair`, `cat.sets.pair_diagrams`,
-  `cat.pointed_sets`, `cat.core_pointed_sets`, `cat.countable_sets`, `cat.enumerated_sets`,
-  `cat.core_subobjects_sets`, `cat.subsets.point_predicates`, `cat.subsets.subset_predicates`,
-  `cat.crystals`. Engine: Sage sets with a base point, `EnumeratedSets`, `crystals`; Catlab.jl
-  slices, coslices and diagrams. Moves in 0. Upstream: T134; the crystal structural functor.
-  After FR-001, FR-012.
-- **FR-019 — Well orders** (kernel T218). Categories `cat.well_ordered_sets`,
-  `cat.core_well_ordered_sets`, `cat.enumerated_monotone_sets`, `cat.ordinals`. Engine: SymPy
-  `sympy.sets.ordinals` (`Ordinal`, `OmegaPower`); Sage posets for finite well orders. Moves in
-  0. Upstream: T133. After FR-003, FR-018.
-- **FR-020 — Algebraic structures** (kernel T219). Categories `cat.magmaswithtwooperations`,
-  `cat.division_rings`. Engine: Sage `QuaternionAlgebra`; GAP `MagmaByMultiplicationTable`. Moves
-  in 0. Upstream: T131. After FR-004.
-- **FR-021 — Algebras** (kernel T220). Category `cat.algebras`. Engine: Sage `Algebras(R)`,
-  `FreeAlgebra`, `GroupAlgebra`. Moves in 0. After FR-006.
-- **FR-022 — Schemes** (kernel T221). Categories `cat.schemes`, `cat.schemes_over`,
-  `cat.schemes_over_ring`. Engine: Sage `sage.schemes` (`Spec`, `AffineSpace`,
-  `ProjectiveSpace`). Moves in 0. Upstream: T136; the scheme structural functor. After FR-001,
-  FR-006.
-- **FR-023 — Module constructions** (kernel T222). Categories `cat.module_points`,
-  `cat.based_module`, `cat.based_module_indexed`, `cat.coord`, `cat.coord_indexed`,
-  `cat.finite_projective_lattice`, `cat.finitelygeneratedmodules`, `cat.finiterankmodules`,
-  `cat.free_cover`, `cat.free_cover_indexed`, `cat.freemodules`, `cat.quotients_modules_r`,
-  `cat.torsion_free_modules`, `cat.ideals_r`. Engine: Sage `fg_pid` modules and quotient modules;
-  Macaulay2 1.24.11 through `sage.interfaces.macaulay2` for modules over polynomial rings. Moves
-  in 0. Upstream: T118; the ideal structural functor. After FR-006, FR-008, FR-012.
-- **FR-024 — Forms over rings** (kernel T223). Categories `cat.modules_over_rings_ext`,
-  `cat.bilin_forms_over_rings`, `cat.quad_forms_over_rings`, `cat.integral_forms`,
-  `cat.lattices_over_rings`, `cat.finite_projective_lattices_over_rings`,
-  `cat.finite_free_lattices_over_rings`, `cat.unimodular_lattices_over_rings`,
-  `cat.integral_lattices`, `cat.even_integral_lattices`, `cat.cusps`. Engine: Sage
-  `QuadraticForm`; Hecke 0.39.22 through Oscar 1.8.2 for forms over number fields. Moves in 0.
-  Upstream: the refinement, form, module and cusp structural functors. After FR-006, FR-008.
-- **FR-025 — Lattices and quadratic modules** (kernel T224). Categories `cat.quad_module`,
-  `cat.quad_wform`, `cat.alternating_forms`, `cat.lattice`, `cat.subobjects_bilin_module`,
-  `cat.coord_lattice`, `cat.fraction_field_perfect_finite_projective_lattice`,
-  `cat.definite_lattice`, `cat.indefinite_lattice`, `cat.even_lattice`, `cat.finite_free_lattice`,
-  `cat.unimodular_lattice`. Engine: Sage `IntegralLattice`, `TorsionQuadraticModule`; Hecke
-  through Oscar for genus and isometry; PARI `qfauto` for definite lattices. Moves in 0. Upstream:
-  the lattice structural functors. After FR-013, FR-017, FR-023.
+- **FR-038 — One spec for each needed category.** Each category with a row in V1 or V2 MUST have
+  its Spec Kit feature, numbered in the structural order: its spec states the category, the user
+  stories of each version and one requirement for each row with its catalogue ID and its version;
+  its plan names, for each row, the engine and routine, the module of this repository, the
+  dependent inputs and the inputs before it; its task list has, for each version, the survey
+  record, the implementation tasks of its rows, the move of its registrations and the task
+  "Spec V<n> complete", which names the kernel task that consumes the version. The
+  [plan](plan.md#category-specs) lists the specs; a category with no row in V1 or V2 has no spec
+  and is listed there with its reason.
+- **FR-039 — Placement of the existing registrations.** Each of the 115 registrations of
+  `leaves.json` at `8b181d7` MUST belong to exactly one category spec and one version of it, by
+  the rule of research R15, and MUST move there (LV12). The move task of a version trashes each
+  v1 program whose last registration it moves (research R4).
 
 ### Functional Requirements — the contract, the moves and the engineering defaults
 
@@ -271,19 +140,18 @@ assessed there (LV2, LV13). The plan gives the files, entry points and tests of 
   failure strata (T008), deferred programs (T009), suspension with the `noImplementation` slot
   (T010), decision replies (T011), routine observations and SDK logs (T012), method and map
   requests (T013, T015), the category view (T014, T015). The release `v2.0.0` (contract T019)
-  is the input of FR-001; the release `v2.0.1` (contract T020) is the delivery dependency. No v1
+  is the input of the V1 versions of the category specs; the release `v2.0.1` (contract T020) is
+  the delivery dependency and the input of their V2 versions. No v1
   frame and no hand-written wire codec remain (`backends/wire.py` is deleted).
 - **FR-027 — Hand-rolled algorithms and lookups.** Each registration whose answer is
   hand-rolled, partly hand-rolled or a lookup in its v1 source MUST be replaced by an engine
-  routine, or justified under LV6: `lim.sets.pullback` (Catlab.jl `pullback`),
-  `lift.bilin_module.restrict#obj` (Sage `submodule` and `gram_matrix`), `lim.sets.product`
-  (Sage `cartesian_product` with `cartesian_projection`), `meth.cardinality` at `cat.sets` (Sage
-  `cardinality()` with the `EnumeratedSets` rule), `colim.bil_w_form.cokernel` and
-  `meth.cardinality` at the discriminant (Sage `discriminant_group`), `meth.rank` at the root
-  lattices and `obj.integral_lattice.e8` (Sage `rank()`), `lift.bilin_module.restrict#hom`,
-  `#forward`, `#backward` (Sage inclusion `hom` and its section), `mor.sets.span` (Sage `span`).
-- **FR-028 — Survey record.** Before each of FR-001 to FR-025, the survey record of its
-  categories MUST exist in [research.md](research.md), with the content that LV7 prescribes, and
+  routine, or justified under LV6. The plan of each category spec gives the decision of each of
+  its registrations in its table "Registrations that move", and its section "Hand-rolled code"
+  names each computation of known mathematics that no surveyed engine provides, with its cited
+  reference.
+- **FR-028 — Survey record.** Before the implementation tasks of each version of each category
+  spec, the survey record of that version MUST exist in the spec's `research.md`, in the row
+  format of [research.md](research.md), "Survey record", with the content that LV7 prescribes;
   the commit of the implementation cites it.
 - **FR-029 — Logs.** Each backend MUST log to standard error each request (id, operation,
   input form), each engine routine with its elapsed time, each request to the kernel and each
@@ -308,27 +176,22 @@ assessed there (LV2, LV13). The plan gives the files, entry points and tests of 
   needs such a form is not answered with a leaf-chosen encoding; it is registered with the form of
   T021 (LV14).
 - **FR-034 — No mathematics in the source.** No backend answers by lookup, writes a defining
-  datum that an engine constructor builds, or writes one datum twice (LV1). This removes the
-  three Gram matrices of $A_n$, the literal ranks of $A_n$ and $E_8$, the two tables from named
-  sets to engine parents and the two countability tables.
+  datum that an engine constructor builds, or writes one datum twice (LV1). Each category spec
+  names the v1 data that its moves delete, with their source lines at `8b181d7`.
 - **FR-035 — Specimens on protocol 2.** The four packages under `specimens/` MUST speak
   protocol 2 and keep their deliberately bad behaviour (LV15).
 - **FR-036 — Findings in issues.** The findings of `DEFECTS.md` MUST be recorded in an issue of
   this repository, and `DEFECTS.md` trashed after a semantic comparison (constitution,
   Governance).
-- **FR-037 — Unit groups** (kernel T155). The object and morphism actions of the unit-group
-  functor `fun.monoids.units` from `cat.monoids` to `cat.groups`, with the complete group result
-  at the generated result layout: its carrier, its group operations and the defining inclusion of
-  the units into the monoid, for the later group and map operations that consume them. Engine: GAP
-  `Units` and the group operations through Sage `libgap`, in the program of FR-004 (research R14).
-  Moves in 0. After FR-004 and kernel T105.
 
 ### Key Entities
 
 - **Category implementation**: the code of one category against its generated interface; the
   unit of responsibility (LV3).
-- **Backend program**: one process that speaks protocol 2 and registers ports of one milestone's
-  category implementations.
+- **Backend program**: one process that speaks protocol 2 and registers the ports of one category
+  implementation (research R3).
+- **Category spec**: the Spec Kit feature of one category, with its versions V1, V2 and V3
+  (FR-038).
 - **Registration**: one `(operation, input, backend)` row of `leaves.json`; a port.
 - **Survey record**: the per-category record of engines, decisions and gaps (LV7).
 - **Lowering table**: the map from named-object descriptors to engine constructors of one
@@ -341,17 +204,17 @@ assessed there (LV2, LV13). The plan gives the files, entry points and tests of 
 
 ### Measurable Outcomes
 
-- **SC-001**: For each of FR-001 to FR-025, the consuming kernel task observes its attainment
-  through `CasRuntime.KernelSession` with this repository's manifest, with no kernel-side
-  evaluation in any part.
+- **SC-001**: For each version of each category spec, its kernel task "Implement <Category> Spec
+  V<n>" observes its attainment through `CasRuntime.KernelSession` with this repository's
+  manifest, with no kernel-side evaluation in any part.
 - **SC-002**: All 115 registrations of `leaves.json` at `8b181d7` are in a category
   implementation on protocol 2, and no registration of a v1 backend remains.
 - **SC-003**: `git grep -n "engine_python\|CAS_SAGE_PYTHON\|CAS_GAP_PYTHON\|all__sagemath"`
   over `backends/` and `leaves.json` returns nothing.
 - **SC-004**: Tier 1 of one category implementation runs in under five minutes in the research
   container after `just setup`, and writes one log and one timing record per test.
-- **SC-005**: The registrations classed hand-rolled, partial or lookup in FR-027 are zero, or
-  each has an LV6 justification in the plan.
+- **SC-005**: The registrations classed hand-rolled, partial or lookup in the category plans are
+  zero, or each has an LV6 justification in its plan.
 - **SC-006**: Each port has a row in the routine table, and each reply of a tier 1 test carries
   a routine observation that names that routine.
 - **SC-007**: The tier 1 tests of User Story 1 pass in a container where no lean-cas-dsl
@@ -359,14 +222,14 @@ assessed there (LV2, LV13). The plan gives the files, entry points and tests of 
 
 ## Assumptions
 
-- Kernel readiness F and contract `v2.0.0` precede FR-001 (kernel specification, clarification
-  of 2026-11-25; contract FR-022). Before F, only FR-033 and FR-036 run, because they need no
-  contract release.
-- The milestone membership, order and moved registrations are those of the kernel plan at
-  `4be2a02`, except `lim.sets.product`, which moves with FR-001 because the projections of a
-  product move into FR-001.
+- Kernel readiness F and contract `v2.0.0` precede the V1 versions of the category specs (kernel
+  specification, clarification of 2026-11-25; contract FR-022). Before F, only FR-033 and FR-036
+  run, because they need no contract release.
+- The categories, rows, versions and structural order are those of the roadmap record of
+  lean-cas-dsl at `0e6ccbd` (research R16); the placement of the registrations follows research
+  R15.
 - Engine versions are those of the research container on 2026-11-25 (kernel research record
-  `engine-survey.md`); the survey record of each milestone records the versions it uses.
+  `engine-survey.md`); the survey record of each version records the versions that it uses.
 
 [KC]: https://github.com/dzackgarza/lean-cas-dsl/blob/main/.specify/memory/constitution.md
 [RC]: https://github.com/dzackgarza/lean-cas-dsl-leaf-contracts/blob/main/.specify/memory/constitution.md

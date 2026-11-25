@@ -1,4 +1,4 @@
-# Implementation Plan: Category implementations for the computational milestones
+# Implementation Plan: Category implementations — the shared foundation and the spec list
 
 **Branch**: `001-category-implementations` (on `main`) | **Date**: 2026-11-25 | **Spec**: [spec.md](spec.md)
 **Input**: [spec.md](spec.md); [research.md](research.md); [data-model.md](data-model.md);
@@ -6,21 +6,26 @@
 
 ## Summary
 
-Write one backend program for each computational milestone, as glue over the engines of the
-research container, against the released contract `cas-computation/2` and its generated
-category interface. Move the 115 existing registrations into those programs, replace their
-hand-rolled and lookup answers by engine routines, remove the engine fallbacks, declare the
-SDK and Julia dependencies, and add a tier 1 test harness that drives each real backend through
-the contract's protocol peer with durable logs and timing records.
+Build what every category implementation shares: the declared SDK and Julia dependencies, the
+engine bridge `backends/engine.py` under the one interpreter of the research container, the tier 1
+harness that drives each real backend through the contract's protocol peer with durable logs and
+timing records, and the protocol-2 manifest. Then the 33 category specs (002 to 034) implement
+their categories, one module and program for each, as glue over the engines of the research
+container, against the released contract `cas-computation/2` and its generated category
+interface; they move the 115 existing registrations, replace their hand-rolled and lookup answers
+by engine routines and delete the data held in the source. This feature closes with the move to
+the release `v2.0.1`, the removal of the engine fallbacks, the specimens on protocol 2 and the
+timing triage.
 
 ## Technical Context
 
 **Language/Version**: Python 3.14 of the research container's SageMath (`/sage/.venv/bin/python3`)
-for the backends; Julia 1.12.7 through `juliacall` 0.9.36 for Catlab.jl and Oscar.jl.
+for the backends; Julia 1.12.7 through `juliacall` 0.9.36 for Catlab.jl.
 **Primary Dependencies**: contract SDK `lean-cas-dsl-leaf-contracts` at tag `v2.0.0`, then
 `v2.0.1` (contract FR-022); SageMath 11.0.beta5 with GAP 4.16.1 (`libgap`), PARI 2.17.4
-(`cypari2`), Singular 4.4.1, Maxima 5.49.0; SymPy 1.14.0; Macaulay2 1.24.11; Catlab.jl 0.17.7;
-Oscar.jl 1.8.2 with Hecke 0.39.22.
+(`cypari2`), Singular 4.4.1, Maxima 5.49.0; SymPy 1.14.0; Catlab.jl 0.17.7. Macaulay2 and
+Oscar.jl with Hecke enter with the first V3 row that needs them (table "Categories with no
+spec").
 **Storage**: committed files only: `leaves.json`, `tests/logs/`, `tests/timing/records.jsonl`.
 **Testing**: `just test` (tier 1, `uv run --frozen pytest tests`) after `just setup`; one
 category with `just test-category NAME`; `just test-commit` (manifest and compilation) at commit.
@@ -29,7 +34,8 @@ category with `just test-category NAME`; `just test-commit` (manifest and compil
 **Performance Goals**: tier 1 of one category under five minutes (SC-004).
 **Constraints**: permitted inputs only (LV14); a computation that no engine provides is the known
 method with its cited reference (LV6); no field computed that no request demands (LV25).
-**Scale/Scope**: 25 milestones, 115 moved registrations, 27 backend programs.
+**Scale/Scope**: 33 category specs (257 V1 rows, of which 14 wait for a catalogue declaration;
+25 V2 rows), 115 moved registrations, one backend program for each category implementation.
 
 ## Constitution Check
 
@@ -37,14 +43,14 @@ method with its cited reference (LV6); no field computed that no request demands
 | --- | --- |
 | LV1, FR-034 | Each program has one lowering table; lookups and duplicated data are deleted. |
 | LV2, LV14 | No document or test here holds an acceptance statement or expected answer; kernel tasks are named by ID. |
-| LV3 | Each milestone task implements the complete generated interface of its categories, less the ports that a subsequent milestone moves. |
+| LV3 | Each category spec implements, version by version, the rows of its category's generated interface that its versions need; V3 adds rows by the membership rule. |
 | LV4 | Tier 1 checks retention of supplied endpoints and earlier outputs in each reply. |
-| LV5–LV7 | Each milestone task starts with its survey record; the routine table names each port's routine; the arithmetic of finite cardinals and $\aleph_0$ is the known method with its Mathlib reference (research R13). |
+| LV5–LV7 | Each version of each category spec starts with its survey record; the routine table of its plan names each port's routine; known mathematics with no engine is listed in its section "Hand-rolled code" with its reference. |
 | LV8 | Programs that need another category's operation suspend through the SDK and handle `NoImplementation`. |
 | LV10, LV11 | `leaves.json` holds no priority; replies use the contract statuses. |
-| LV12 | Each moved registration keeps its routine unless the survey records it as wrong (FR-027). |
-| LV13 | Tasks follow the kernel order T200–T224, then T155, after F. |
-| LV16, LV21 | One interpreter; `pyproject.toml`, `uv.lock`, `Project.toml`, `Manifest.toml`; `lakefile.toml` deleted. |
+| LV12 | Each moved registration has a decision in the plan of its category spec (FR-027, FR-039). |
+| LV13 | The feature order of [tasks.md](tasks.md#feature-order) follows the structural order, after F; each version names its kernel task. |
+| LV16, LV21 | One interpreter; `pyproject.toml`, `uv.lock`, `Project.toml`, `Manifest.toml`; `lakefile.toml` deleted; each category module imports only the engines and the category modules that its plan declares. |
 | LV17–LV23 | `tests/conftest.py` writes logs and timing records; scenarios drive real processes. |
 
 Gate result: pass. No violation needs a justification.
@@ -63,6 +69,9 @@ specs/001-category-implementations/
 ├── contracts/backend-program.md
 ├── checklists/requirements.md
 └── tasks.md
+specs/002-cardinals/ … specs/034-ideals-r/   one feature for each category spec (table below)
+├── spec.md, plan.md, research.md, tasks.md
+└── checklists/requirements.md
 ```
 
 ### Source Code (repository root)
@@ -70,70 +79,108 @@ specs/001-category-implementations/
 ```text
 leaves.json                    manifest: v2 backends only (contract FR-004)
 pyproject.toml, uv.lock        contract SDK at its release tag; pytest (dev)
-Project.toml, Manifest.toml    Julia project: Catlab.jl 0.17.7, Oscar.jl 1.8.2
+Project.toml, Manifest.toml    Julia project: Catlab.jl 0.17.7
 justfile                       setup, test-commit, test, test-category, test-push
 backends/engine.py             shared start-up, logging, timing, routine observations, serve()
-backends/<program>.py          one backend program per row of the milestone table below
+backends/<slug>.py             one category implementation and its program (table "Category specs")
 tests/conftest.py              run log and timing records (LV22, LV23)
 tests/harness.py               starts a backend under /sage/.venv/bin/python3 and runs cas-peer
-tests/test_<program>.py        tier 1 of one program
-tests/scenarios/<program>-*.json
+tests/test_<slug>.py           tier 1 of one category implementation
+tests/scenarios/<slug>-*.json
 tests/logs/, tests/timing/records.jsonl
 specimens/{missing,wrong,malformed,unavailable}/   deliberately bad v2 packages
 ```
 
-**Structure Decision**: one backend program for each milestone (research R3): a milestone is
-the unit that the kernel consumes, one process keeps one engine session, and a test of one
-milestone starts no other program (LV16). The v1 programs (`sage_backend.py`, `gap_backend.py`,
+**Structure Decision**: one module and backend program for each category implementation
+(research R3): the category is the unit of responsibility (LV3), a test of one category starts
+no other program (LV16), and a category module imports another category module only where its
+plan declares the code dependency (LV8). The v1 programs (`sage_backend.py`, `gap_backend.py`,
 `sage_power_set.py`, `sage_set_limits.py`, `sage_fin_rev.py`, `gap_groups.py`,
 `sage_presentations.py`, `sage_symbolic.py`, `sage_modules.py`, `sage_discriminant.py`,
-`sage_bilinear_lift.py`), `engine_python.py` and `wire.py` leave the manifest at T003 and are
-trashed by the task that moves their last registration (research R4).
+`sage_bilinear_lift.py`) leave the manifest at T006 and are trashed by the move task of the
+category spec version that moves their last registration (research R4); `engine_python.py` and
+`wire.py` are trashed by T044.
 
-## Milestone map
+## Category specs
 
-Each row is one requirement of the spec, its backend program, the v1 programs whose
-registrations move in, the tests, and the kernel task that consumes it. The engine entry points
-are the routines of the spec row; the routine table of each program is written in its survey
-record ([research.md](research.md), "Survey record").
+One feature for each category with a row in V1 or V2, in the structural order (research R16).
+A row count includes the rows that the catalogue lacks; each of those waits for a lean-categories
+task that declares it, and none exists at lean-categories `fc549baa`. The registrations are those
+of research R15.
 
-| FR | Program (`backends/`) | Moves from | Tests (`tests/`) | Kernel task |
-| --- | --- | --- | --- | --- |
-| FR-001 | `sets.py` (Sage; Catlab.jl by `juliacall` for `lim.sets.pullback`) | `sage_backend.py`, `gap_backend.py`, `gap_groups.py`, `sage_power_set.py`, `sage_set_limits.py`, `sage_fin_rev.py`, `sage_presentations.py`, `sage_symbolic.py` | `test_sets.py` | T200 |
-| FR-002 | `finite_sets.py` | `sage_backend.py` | `test_finite_sets.py` | T201 |
-| FR-003 | `orders.py` (Sage posets; GAP Digraphs) | — | `test_orders.py` | T202 |
-| FR-004 | `rings.py` (Sage, GAP); `calculus.py` (SymPy, Sage symbolic ring) | `gap_backend.py`, `gap_groups.py`, `sage_symbolic.py` | `test_rings.py`, `test_calculus.py` | T203 |
-| FR-005 | `core_groups.py` (GAP) | — | `test_core_groups.py` | T204 |
-| FR-006 | `commutative_rings.py` (Sage, Singular) | `sage_presentations.py`, `sage_symbolic.py` | `test_commutative_rings.py` | T205 |
-| FR-007 | `topological_monoids.py` | — | `test_topological_monoids.py` | T206 |
-| FR-008 | `modules.py` | `sage_modules.py` | `test_modules.py` | T207 |
-| FR-009 | `bilinear_forms.py` (Sage, PARI) | `gap_groups.py`, `sage_discriminant.py`, `sage_modules.py` | `test_bilinear_forms.py` | T208 |
-| FR-010 | `fields.py` | `sage_symbolic.py` | `test_fields.py` | T209 |
-| FR-011 | `module_rank.py` | `sage_modules.py` | `test_module_rank.py` | T210 |
-| FR-012 | `module_kernels.py` | — | `test_module_kernels.py` | T211 |
-| FR-013 | `formed_modules.py` | `sage_bilinear_lift.py` | `test_formed_modules.py` | T212 |
-| FR-014 | the programs of FR-001–FR-013; `calculus.py` gains series | — | the tests of those programs | T213 |
-| FR-015 | `group_kernels.py` (GAP) | `gap_groups.py` | `test_group_kernels.py` | T214 |
-| FR-016 | `boolean_algebras.py` | — | `test_boolean_algebras.py` | T215 |
-| FR-017 | `integral_lattices.py` | `gap_groups.py`, `sage_modules.py` | `test_integral_lattices.py` | T216 |
-| FR-018 | `set_constructions.py` (Sage; Catlab.jl) | — | `test_set_constructions.py` | T217 |
-| FR-019 | `well_orders.py` (SymPy, Sage) | — | `test_well_orders.py` | T218 |
-| FR-020 | `algebraic_structures.py` (Sage, GAP) | — | `test_algebraic_structures.py` | T219 |
-| FR-021 | `algebras.py` | — | `test_algebras.py` | T220 |
-| FR-022 | `schemes.py` | — | `test_schemes.py` | T221 |
-| FR-023 | `module_constructions.py` (Sage; Macaulay2 by `sage.interfaces.macaulay2`) | — | `test_module_constructions.py` | T222 |
-| FR-024 | `forms_over_rings.py` (Sage); `forms_over_rings_hecke.py` (Oscar/Hecke, no Sage import) | — | `test_forms_over_rings.py` | T223 |
-| FR-025 | `lattices.py` (Sage, PARI); `lattices_hecke.py` (Oscar/Hecke, no Sage import) | — | `test_lattices.py` | T224 |
-| FR-037 | `rings.py` (GAP `Units` through `libgap`) | — | `test_rings.py` (unit-group scenarios) | T155 |
+| Directory | Category | V1 rows | of which the catalogue lacks | V2 rows | Registrations V1 | Registrations V2 | Kernel tasks |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| [`002-cardinals`](../002-cardinals/spec.md) | `cat.cardinals` | 2 | 1 | 0 | 0 | 0 | "Implement Cardinals Spec V1" (`cat.cardinals`) |
+| [`003-sets`](../003-sets/spec.md) | `cat.sets` | 74 | 2 | 0 | 31 | 0 | "Implement Sets Spec V1" (`cat.sets`) |
+| [`004-core-sets`](../004-core-sets/spec.md) | `cat.core_sets` | 6 | 0 | 0 | 13 | 0 | "Implement Core Sets Spec V1" (`cat.core_sets`) |
+| [`005-finite-sets`](../005-finite-sets/spec.md) | `cat.finite_sets` | 3 | 0 | 2 | 0 | 2 | "Implement Finite Sets Spec V1" (`cat.finite_sets`); "Implement Finite Sets Spec V2" (`cat.finite_sets`) |
+| [`006-linear-orders`](../006-linear-orders/spec.md) | `cat.linear_orders` | 9 | 0 | 0 | 0 | 0 | "Implement Linear Orders Spec V1" (`cat.linear_orders`) |
+| [`007-additive-monoids`](../007-additive-monoids/spec.md) | `cat.additive_monoids` | 4 | 0 | 0 | 0 | 0 | "Implement Additive Monoids Spec V1" (`cat.additive_monoids`) |
+| [`008-magmas`](../008-magmas/spec.md) | `cat.magmas` | 3 | 0 | 0 | 0 | 0 | "Implement Magmas Spec V1" (`cat.magmas`) |
+| [`009-additive-commutative-monoids`](../009-additive-commutative-monoids/spec.md) | `cat.additive_commutative_monoids` | 1 | 0 | 0 | 0 | 0 | "Implement Additive Commutative Monoids Spec V1" (`cat.additive_commutative_monoids`) |
+| [`010-semigroups`](../010-semigroups/spec.md) | `cat.semigroups` | 2 | 0 | 0 | 0 | 0 | "Implement Semigroups Spec V1" (`cat.semigroups`) |
+| [`011-monoids`](../011-monoids/spec.md) | `cat.monoids` | 7 | 0 | 0 | 2 | 0 | "Implement Monoids Spec V1" (`cat.monoids`) |
+| [`012-groups`](../012-groups/spec.md) | `cat.groups` | 10 | 0 | 8 | 6 | 6 | "Implement Groups Spec V1" (`cat.groups`); "Implement Groups Spec V2" (`cat.groups`) |
+| [`013-semirings`](../013-semirings/spec.md) | `cat.semirings` | 7 | 0 | 0 | 0 | 0 | "Implement Semirings Spec V1" (`cat.semirings`) |
+| [`014-additive-groups`](../014-additive-groups/spec.md) | `cat.additive_groups` | 2 | 0 | 0 | 0 | 0 | "Implement Additive Groups Spec V1" (`cat.additive_groups`) |
+| [`015-rings`](../015-rings/spec.md) | `cat.rings` | 16 | 0 | 0 | 2 | 0 | "Implement Rings Spec V1" (`cat.rings`) |
+| [`016-commutative-rings`](../016-commutative-rings/spec.md) | `cat.commutative_rings` | 50 | 6 | 2 | 13 | 1 | "Implement Commutative Rings Spec V1" (`cat.commutative_rings`); "Implement Commutative Rings Spec V2" (`cat.commutative_rings`) |
+| [`017-hausdorff-topological-commutative-monoids`](../017-hausdorff-topological-commutative-monoids/spec.md) | `cat.hausdorff_topological_commutative_monoids` | 4 | 0 | 0 | 0 | 0 | "Implement Hausdorff Topological Commutative Monoids Spec V1" (`cat.hausdorff_topological_commutative_monoids`) |
+| [`018-modules-total`](../018-modules-total/spec.md) | `cat.modules_total` | 3 | 0 | 0 | 0 | 0 | "Implement Total Modules Spec V1" (`cat.modules_total`) |
+| [`019-modules-r`](../019-modules-r/spec.md) | `cat.modules_r` | 11 | 3 | 1 | 2 | 0 | "Implement Modules Spec V1" (`cat.modules_r`); "Implement Modules Spec V2" (`cat.modules_r`) |
+| [`020-bil-wform`](../020-bil-wform/spec.md) | `cat.bil_wform` | 3 | 0 | 3 | 5 | 5 | "Implement Bilinear Forms Spec V1" (`cat.bil_wform`); "Implement Bilinear Forms Spec V2" (`cat.bil_wform`) |
+| [`021-fields`](../021-fields/spec.md) | `cat.fields` | 5 | 0 | 0 | 1 | 0 | "Implement Fields Spec V1" (`cat.fields`) |
+| [`022-core-modules-r`](../022-core-modules-r/spec.md) | `cat.core_modules_r` | 1 | 0 | 2 | 0 | 5 | "Implement Core Modules Spec V1" (`cat.core_modules_r`); "Implement Core Modules Spec V2" (`cat.core_modules_r`) |
+| [`023-subobjects-sets`](../023-subobjects-sets/spec.md) | `cat.subobjects_sets` | 1 | 0 | 0 | 0 | 0 | "Implement Subobjects of Sets Spec V1" (`cat.subobjects_sets`) |
+| [`024-arrows-modules-r`](../024-arrows-modules-r/spec.md) | `cat.arrows_modules_r` | 3 | 0 | 0 | 0 | 0 | "Implement Arrows of Modules Spec V1" (`cat.arrows_modules_r`) |
+| [`025-core-subobjects-modules-r`](../025-core-subobjects-modules-r/spec.md) | `cat.core_subobjects_modules_r` | 1 | 0 | 0 | 0 | 0 | "Implement Core Subobjects of Modules Spec V1" (`cat.core_subobjects_modules_r`) |
+| [`026-bilin-module`](../026-bilin-module/spec.md) | `cat.bilin_module` | 15 | 0 | 1 | 0 | 0 | "Implement Formed Modules Spec V1" (`cat.bilin_module`); "Implement Formed Modules Spec V2" (`cat.bilin_module`) |
+| [`027-arrows-bilin-module`](../027-arrows-bilin-module/spec.md) | `cat.arrows_bilin_module` | 2 | 0 | 0 | 4 | 0 | "Implement Arrows of Formed Modules Spec V1" (`cat.arrows_bilin_module`) |
+| [`028-subobjects-groups`](../028-subobjects-groups/spec.md) | `cat.subobjects_groups` | 0 | 0 | 2 | 0 | 11 | "Implement Subobjects of Groups Spec V2" (`cat.subobjects_groups`) |
+| [`029-arrows-groups`](../029-arrows-groups/spec.md) | `cat.arrows_groups` | 0 | 0 | 2 | 0 | 2 | "Implement Arrows of Groups Spec V2" (`cat.arrows_groups`) |
+| [`030-boolean-algebras`](../030-boolean-algebras/spec.md) | `cat.boolean_algebras` | 7 | 0 | 0 | 0 | 0 | "Implement Boolean Algebras Spec V1" (`cat.boolean_algebras`) |
+| [`031-integral-lattice`](../031-integral-lattice/spec.md) | `cat.integral_lattice` | 0 | 0 | 2 | 0 | 4 | "Implement Integral Lattices Spec V2" (`cat.integral_lattice`) |
+| [`032-enumerated-sets`](../032-enumerated-sets/spec.md) | `cat.enumerated_sets` | 2 | 1 | 0 | 0 | 0 | "Implement Enumerated Sets Spec V1" (`cat.enumerated_sets`) |
+| [`033-subsets-subset-predicates`](../033-subsets-subset-predicates/spec.md) | `cat.subsets.subset_predicates` | 1 | 0 | 0 | 0 | 0 | "Implement Subset Predicates Spec V1" (`cat.subsets.subset_predicates`) |
+| [`034-ideals-r`](../034-ideals-r/spec.md) | `cat.ideals_r` | 2 | 1 | 0 | 0 | 0 | "Implement Ideals Spec V1" (`cat.ideals_r`) |
+| Total | 33 categories | 257 | 14 | 25 | 79 | 36 | |
 
-Every program imports `backends/engine.py` and the SDK, and no other program. A program that
-needs an operation of another category asks the kernel (LV8); research R7 gives the rule.
+## Categories with no spec
+
+These categories have no row in V1 or V2: no computed statement of V1 or V2 needs a row whose
+home is the category at catalogue `3f8aedf`. Each enters V3 of its own spec by the membership rule
+when kernel tasks T140 to T147 produce rows for it. The engine and the upstream inputs are those
+that the former milestone of the kernel plan named; the survey of the future spec starts from
+them.
+
+| Former milestone | Categories | Engine of the former milestone | Notes |
+| --- | --- | --- | --- |
+| Sets | `cat.cardinalities` | Sage | — |
+| Orders | `cat.preorders`, `cat.partial_orders` | Sage posets (`Poset`, `is_lequal`, `is_less_than`, `is_chain`); GAP Digraphs `IsPreorderDigraph` through `libgap` for preorders, because Sage has no preorder category in the survey's index | lean-categories T041 (#195) registers the order categories |
+| Rings | `cat.additive_magmas`, `cat.additive_semigroups` | GAP and Sage | not structural steps at catalogue `3f8aedf`; lean-categories T005 (#193) registers the additive chain |
+| Group automorphisms | `cat.core_groups` | GAP `AutomorphismGroup`, `ConjugatorAutomorphism`, `InverseGeneralMapping` | on the routes of V1 statements as the core named by rows whose home is `cat.groups` (spec 012) |
+| Commutative rings | `cat.commutative_monoids` | Sage | — |
+| Module kernels | `cat.subobjects_modules_r` | Sage module `hom`, `kernel()`, `submodule` | owner of rows whose homes are specs 024 and 025 |
+| Boolean algebras | `cat.join_semilattices`, `cat.meet_semilattices`, `cat.order_lattices`, `cat.bounded_order_lattices` | Sage `posets.BooleanLattice`, `LatticePoset` `meet`, `join`, `complements` | not structural steps at catalogue `3f8aedf`; lean-categories T041 (#195) |
+| Set constructions | `cat.arrows_sets`, `cat.slice_sets`, `cat.coslice_sets`, `cat.endofunctors_sets`, `cat.walking_pair`, `cat.sets.pair_diagrams`, `cat.pointed_sets`, `cat.core_pointed_sets`, `cat.countable_sets`, `cat.core_subobjects_sets`, `cat.subsets.point_predicates`, `cat.crystals` | Sage sets with a stored base point, `EnumeratedSets`, `crystals`; Catlab.jl slices, coslices and diagrams | crystals are not in the engine survey and are surveyed from their Sage source first; lean-categories T043, T044 (#201) give crystals their structural functor; `cat.core_subobjects_sets` owns `meth.set_eq`, whose home is spec 033 |
+| Well orders | `cat.well_ordered_sets`, `cat.core_well_ordered_sets`, `cat.enumerated_monotone_sets`, `cat.ordinals` | SymPy `sympy.sets.ordinals` (`Ordinal`, `OmegaPower`); Sage posets for finite well orders | lean-categories T041 (#195) |
+| Algebraic structures | `cat.magmaswithtwooperations`, `cat.division_rings` | Sage `QuaternionAlgebra`; GAP `MagmaByMultiplicationTable` | lean-categories T005 (#193) |
+| Algebras | `cat.algebras` | Sage `Algebras(R)`, `FreeAlgebra`, `GroupAlgebra` | read only by typing judgements at catalogue `3f8aedf` |
+| Schemes | `cat.schemes`, `cat.schemes_over`, `cat.schemes_over_ring` | Sage `sage.schemes` (`Spec`, `AffineSpace`, `ProjectiveSpace`) | not in the engine survey; surveyed from its Sage source first; lean-categories T023 (#198) and T045, T046 (#202); `cat.schemes_over_ring` is read only by typing judgements |
+| Module constructions | `cat.module_points`, `cat.based_module`, `cat.based_module_indexed`, `cat.coord`, `cat.coord_indexed`, `cat.finite_projective_lattice`, `cat.finitelygeneratedmodules`, `cat.finiterankmodules`, `cat.free_cover`, `cat.free_cover_indexed`, `cat.freemodules`, `cat.quotients_modules_r`, `cat.torsion_free_modules` | Sage `fg_pid` modules and quotient modules; Macaulay2 1.24.11 through `sage.interfaces.macaulay2`, a separate process, for modules over polynomial rings (Oscar inside the Sage process is rejected: Oscar loads its own GAP, Singular and FLINT, untested beside Sage's copies) | lean-categories T047, T048 (#203); `cat.ideals_r` has spec 034 |
+| Forms over rings | `cat.modules_over_rings_ext`, `cat.bilin_forms_over_rings`, `cat.quad_forms_over_rings`, `cat.integral_forms`, `cat.lattices_over_rings`, `cat.finite_projective_lattices_over_rings`, `cat.finite_free_lattices_over_rings`, `cat.unimodular_lattices_over_rings`, `cat.integral_lattices`, `cat.even_integral_lattices`, `cat.cusps` | Sage `QuadraticForm`; Hecke 0.39.22 through Oscar 1.8.2 in a program that loads Oscar through `juliacall` and imports no Sage module | the cusps of `sage.modular` are surveyed from their Sage source first; lean-categories T049 to T058 (#204 to #208) |
+| Lattices and quadratic modules | `cat.quad_module`, `cat.quad_wform`, `cat.alternating_forms`, `cat.lattice`, `cat.subobjects_bilin_module`, `cat.coord_lattice`, `cat.fraction_field_perfect_finite_projective_lattice`, `cat.definite_lattice`, `cat.indefinite_lattice`, `cat.even_lattice`, `cat.finite_free_lattice`, `cat.unimodular_lattice` | Sage `IntegralLattice`, `TorsionQuadraticModule`; Hecke through Oscar for genus and isometry, in a program with no Sage import; PARI `qfauto` for definite lattices | the gap of generators of $O(L)$ for an indefinite $L$ of rank at least 3 keeps the survey's searches; lean-categories T059 to T062 (#209, #210) |
+
+| Quantity | Count |
+| --- | ---: |
+| Categories with a spec | 33 |
+| Categories with no spec | 70 |
 
 ## Tests of each program
 
-Each `tests/test_<program>.py` starts the program under `/sage/.venv/bin/python3` with the SDK
+Each `tests/test_<slug>.py` starts the program under `/sage/.venv/bin/python3` with the SDK
 of `.deps/` on `PYTHONPATH` and runs `cas-peer run SCENARIO -- COMMAND` for each scenario. The
-scenarios are built from the generated interface of the program's categories. Each test checks:
+scenarios are built from the generated interface of the program's category. Each test checks:
 
 1. negotiation with the four protocol-2 features and `routine-observations/1`;
 2. for each port: a reply at the generated result layout, with the routine observation of the
@@ -151,11 +198,14 @@ No test asserts a mathematical value (LV18).
 1. Before F: FR-033 (contract findings) and FR-036 (findings to an issue). They need no release.
 2. At contract `v2.0.0` (kernel F): setup, harness, shared engine module, manifest in v2 form
    (FR-026, FR-029–FR-032, FR-034 at the shared level).
-3. FR-001 to FR-013 in the kernel order T200–T212; each starts with its survey record (FR-028).
-4. At kernel T105: the dependency moves to `v2.0.1`; the public-only check (SC-007) and the
-   specimens (FR-035).
-5. FR-014 to FR-025 in the kernel order T213–T224, then FR-037 at the position of kernel T155.
+3. The V1 versions of the category specs 002 to 034 in the structural order, each starting with
+   its survey record (FR-028); the public-only check (SC-007) after Sets V1.
+4. At kernel T105: the dependency moves to `v2.0.1`.
+5. The V2 versions of the specs that have one, in the structural order; then the removal of the
+   engine fallbacks (FR-031) and the specimens (FR-035).
 6. Timing triage (LV24) after all functionality.
+
+The [feature order](tasks.md#feature-order) of the task list is the binding sequence.
 
 ## Complexity Tracking
 

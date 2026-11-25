@@ -1,4 +1,4 @@
-# Research: Category implementations for the computational milestones
+# Research: Category implementations — the shared foundation and the spec list
 
 Each decision names its source. The facts about engines and the container come from the engine
 survey of 2026-11-25 (lean-cas-dsl `specs/001-categorical-research-language/research/engine-survey.md`,
@@ -8,7 +8,7 @@ repository's registrations come from `leaves.json` at `8b181d7`, equal to `efecc
 ## Decisions
 
 **R1. Interpreter and SDK.** Decision: every backend runs as
-`/sage/.venv/bin/python3 -m backends.<program>`, in the repository root. `just setup` installs
+`/sage/.venv/bin/python3 -m backends.<slug>`, in the repository root (R3). `just setup` installs
 the locked dependencies of `pyproject.toml` (the contract package at tag `v2.0.0`, with the
 SDK and its `pydantic`) for that interpreter into `.deps/`:
 `uv export --frozen --no-dev --format requirements-txt | uv pip install --python /sage/.venv/bin/python3 --target .deps -r -`.
@@ -22,57 +22,60 @@ shows Sage only in `/sage/.venv` and a derived environment's access to its site 
 not established by any record.
 
 **R2. Julia packages.** Decision: `Project.toml` and `Manifest.toml` at the repository root
-declare Catlab.jl 0.17.7 and Oscar.jl 1.8.2; `just setup` runs
+declare Catlab.jl 0.17.7, which the pullback of `cat.sets` uses (spec 003); a Julia package
+enters the project with the first row whose routine needs it (Oscar.jl with Hecke for the
+categories of forms and lattices; plan, "Categories with no spec"); `just setup` runs
 `julia --project=. -e 'using Pkg; Pkg.instantiate()'`. `backends/engine.py` sets
 `PYTHON_JULIACALL_EXE=/usr/local/bin/julia` and `PYTHON_JULIACALL_PROJECT` to the repository
-root in its own process before it imports `juliacall`. Sources: kernel plan row T200 (Catlab.jl
+root in its own process before it imports `juliacall`. Sources: kernel plan at `4be2a02`, row of the Sets milestone (Catlab.jl
 "declared in the Julia project of the leaf repository"); survey: `juliacall` 0.9.36 and Julia
 1.12.7 [C], Catlab source in the depot but not in the default project [C], `juliacall` can use an
 existing Julia through those two variables [W S44].
 
-**R3. One program per milestone.** Decision: each requirement FR-001 to FR-025 has one backend
-program (two where a second engine must not share the Sage process, R6). Reasons: the kernel
-consumes a milestone as a unit; one process keeps one engine session; a tier 1 test of one
-milestone starts one program (LV16). C23 requires no process per category.
+**R3. One module and program per category implementation.** Decision: the category
+implementation of `cat.<id>` is the module `backends/<slug>.py` and its program
+`/sage/.venv/bin/python3 -m backends.<slug>`, one backend row of `leaves.json`. Reasons: the
+category is the unit of responsibility (LV3) and of a spec (FR-038); a tier 1 test of one category
+starts one program (LV16); a module imports another category module only where its plan declares
+the code dependency (LV8, second option). C23 requires no process per category; the engine
+start-up of each process is a measured cost for the timing triage (LV24, LV25), and grouping
+several category modules in one process is a remedy that the triage may select after
+functionality.
 
 **R4. The v1 programs leave the manifest at setup.** Decision: the setup task rewrites
 `leaves.json` to the protocol-2 form with only protocol-2 programs. The v1 programs stay in
-`backends/` as the source of their moves and are trashed by the task that moves their last
-registration (plan, milestone map). Reasons: the contract admits a manifest all or none and
-requires `preferredRoutes` on every registration (contract FR-004, T005); a v1 `ready` frame
-fails negotiation (contract FR-002).
+`backends/` as the source of their moves. The move task of the category spec version that moves
+the last registration of a v1 program trashes it:
 
-**R5. `lim.sets.product` moves with sets.** Decision: FR-001 moves it, not FR-008. Reason: the
-kernel moves the projections of a product into its sets milestone (kernel plan row T200), and
-the projections are the legs of the product cone of `lim.sets.product`; `cat.sets` owns the
-operation (LV3).
+| v1 program | Trashed by the move task of |
+| --- | --- |
+| `backends/gap_backend.py` | 015-rings V1 |
+| `backends/gap_groups.py` | 031-integral-lattice V2 |
+| `backends/sage_backend.py` | 005-finite-sets V2 |
+| `backends/sage_bilinear_lift.py` | 027-arrows-bilin-module V1 |
+| `backends/sage_discriminant.py` | 020-bil-wform V1 |
+| `backends/sage_fin_rev.py` | 003-sets V1 |
+| `backends/sage_modules.py` | 031-integral-lattice V2 |
+| `backends/sage_power_set.py` | 004-core-sets V1 |
+| `backends/sage_presentations.py` | 016-commutative-rings V1 |
+| `backends/sage_set_limits.py` | 004-core-sets V1 |
+| `backends/sage_symbolic.py` | 016-commutative-rings V2 |
 
-**R6. Engines by milestone.** The engine of each requirement is the kernel plan row and the
-survey recommendation for its family ("Recommendation summary"). Three choices are made here:
+Reasons: the contract admits a manifest all or none and requires `preferredRoutes` on every
+registration (contract FR-004, T005); a v1 `ready` frame fails negotiation (contract FR-002).
 
-- Preorders (FR-003): GAP Digraphs (`IsPreorderDigraph`, loadable [C]); Sage has no preorder
-  category in the survey's index.
-- Modules over polynomial rings (FR-023): Macaulay2 1.24.11 through `sage.interfaces.macaulay2`,
-  a separate process. Rejected: Oscar inside the Sage process, because Oscar loads its own GAP,
-  Singular and FLINT, untested beside Sage's copies (survey, constraint 5).
-- Hecke (FR-024, FR-025): `forms_over_rings_hecke.py` and `lattices_hecke.py` load Oscar through
-  `juliacall` and import no Sage module, for the same reason. Catlab.jl loads none of those
-  libraries, so it stays in the Sage process of FR-001 and FR-018.
+**R7. Operations of another category.** Decision: a module computes the operations of its own
+category. For an operation of another category it either imports the code of that category's
+module, where its plan declares the code dependency (LV8, second option; for example the lowering
+table of `backends/sets.py`), or asks the kernel by an adaptive suspension or a deferred program
+(LV8, third option; contract FR-009, FR-010). The column "Dependent inputs" of each routine table
+names the choice. A module never imports a module of a later category in the structural order.
 
-**R7. Operations of another category.** Decision: a program computes the operations of its own
-categories; for an operation of another category it asks the kernel by an adaptive suspension
-(LV8, third option; contract FR-010). Rejected: importing another program's code, because each
-program would then carry the engine closure of the other (LV16).
-
-**R8. Lowering tables.** Decision: each program has one table from the named-object
-descriptors of its categories to engine constructors (for example `obj.sets.integers` to `ZZ`,
-`obj.bil_wform.root_lattice_a` at $n$ to Sage's root lattice of type $A_n$ with the sign of the
-catalogue row). The literal Gram matrices of $A_n$, the literal ranks of $A_n$ and $E_8$, the two
-tables from named sets to parents and the two countability tables are deleted (FR-034). They are in `backends/` at `8b181d7`:
-`sage_discriminant.py:33`, `sage_modules.py:60-61`, `gap_groups.py:61-62` (Gram matrix of $A_n$);
-`sage_modules.py:50-52`, `gap_groups.py:55-57` (ranks); `sage_backend.py:36-46`,
-`sage_power_set.py:38-48`, `sage_set_limits.py:63-68` (parents); `sage_backend.py:51-52`,
-`sage_set_limits.py:75-83` (countability).
+**R8. Lowering tables.** Decision: each category module has one table from the named-object
+descriptors of its category to engine constructors (LV1). A named object whose defining data no
+engine constructor builds reads them from the unfolded definition of the request (K:C22). Each
+category spec names the v1 tables and literal data that its moves delete, with their source lines
+at `8b181d7`.
 
 **R9. Protocol peer for tests.** Decision: `just setup` checks that the contract checkout
 `/repos/lean-cas-dsl-leaf-contracts` is at the declared tag (`git describe --exact-match`) and
@@ -92,166 +95,79 @@ research container; `test-push` runs `just test` there through the host launcher
 container guide (`AGENTS.md`); `test-commit` and CI keep the manifest and compilation check,
 because the CI runner has no research container. Sources: LV17, LV20, LV21.
 
-**R12. Undeclared wire forms.** Decision: the registrations whose answers need a form that the
-contract does not declare (FR-033) are not registered until the contract declares the form.
-Affected moves: `mor.sets.complex_abs`, `mor.sets.complex_bar`, `mor.sets.complex_im`,
-`mor.sets.complex_re`, `mor.sets.real_sqrt`, `bind.sets.integral`, `bind.sets.limit`,
-`bind.sets.limit_at_infinity` (FR-004); `mor.sets.polynomial_degree`,
-`mor.sets.polynomial_differential`, `mor.sets.companion_matrix`, `mor.sets.polynomial_roots`
-(FR-006); `mor.sets.span` (FR-010); `lim.sets.product` with an infinite factor (FR-001).
-Source: `DEFECTS.md`, section of 2026-10-21; LV14; RC8. The forms are the ten items of
+**R12. Undeclared wire forms.** Decision: a row whose answer needs a form that the contract does
+not declare (FR-033) is not registered until the contract declares the form. The forms are the
+ten items of
 [lean-cas-dsl-leaf-contracts#14](https://github.com/dzackgarza/lean-cas-dsl-leaf-contracts/issues/14);
-contract task T021 declares them before the release `v2.0.0`, and T034 registers these moves with
-those forms.
+contract task T021 declares them before the release `v2.0.0`. Each routine table names contract
+T021 in the column "Inputs before it" of each row that needs one of them. Source: `DEFECTS.md`,
+section of 2026-10-21; LV14; RC8.
 
-**R13. Cardinals.** Decision: the cardinal implementation of FR-001 reads a cardinality from the
-engine: a finite set gives Sage `cardinality()`, an integer; a set for which Sage gives
-`cardinality()` $= +\infty$ and which is in `EnumeratedSets` gives $\aleph_0$. It computes the
-arithmetic of finite cardinals and $\aleph_0$ (sums, products and finite powers, for example
-$|\mathbb{Z}^2| = \aleph_0 \cdot \aleph_0 = \aleph_0$) by the known method, with Mathlib's
-cardinal arithmetic (`Mathlib.SetTheory.Cardinal.Arithmetic`) as its cited reference. A set that
-Sage presents as infinite and not as an enumerated set determines no cardinal from which the
-implementation computes; its request is `status:"unsupported"`. Sources: kernel plan,
-"Engines" (no surveyed engine has infinite cardinal arithmetic; the workloads use finite cardinals
-and $\aleph_0$; Sage does not put $\mathbb{Z}^2$ in `EnumeratedSets`); kernel constitution
-4.0.1, policy "Established computational implementations"; LV6.
+**R15. Placement and version of the existing registrations.** Decision: a registration belongs to
+the latest category, in the structural order, among the category that the roadmap record assigns
+to it, the home of its operation row and the home of its input row (a field address `row#field`
+counts as its row). Its version is the later of the versions of its operation row and its input
+row, where each is a row of the roadmap, and not earlier than the first version of its spec.
+Reasons: a registration answers its operation at its input form, and the lowering of that input
+is in the implementation of the input row's home (LV1, one lowering table); a registration moves
+when its rows are implemented. Consequence: `meth.cardinality` and `prop.is_finite` at
+`obj.sets.units` move to Monoids (spec 011), not to Core Sets and Sets, because `obj.sets.units`
+has its home in `cat.monoids`. Every registration has exactly one place (FR-039).
 
-**R14. Unit groups.** Decision: FR-037 implements the actions of `fun.monoids.units` in
-`backends/rings.py`, the program of FR-004, with GAP `Units` through Sage `libgap` in that
-process. Reasons: the functor's source is `cat.monoids`, whose category implementation is FR-004,
-and a functor action belongs to the implementation of its source category (K:C23, "functor
-actions construct their targets"; R3); the program already holds the libgap session of the ring
-chain; `gap_groups.py` is trashed by T043 when its last registration moves (R4). This keeps the
-out-of-process Python leaf that hosts libgap (lean-cas-dsl#3). Sources: kernel T155 (after kernel
-T203 and T105); LV16 (one engine session per program).
+**R16. Categories, rows and versions.** Decision: the categories, their structural order, their
+rows, the version of each row and the home rule are those of the roadmap record of lean-cas-dsl
+at `0e6ccbd` (`specs/001-categorical-research-language/research/category-scope.json`, read on
+2026-11-25). That record is the planner's input; it holds statement identifiers of the
+acceptance corpus and is not an input of a leaf author (LV14). The category specs hold its rows
+and versions and none of its statements. A category whose record has no row has no spec
+(plan, "Categories with no spec"). A non-structural functor belongs to the later of its two
+ends (for example `fun.monoids.units` belongs to `cat.groups`). The rows that a computation needs
+and the catalogue lacks are assigned by the same home rule to the category whose rows they
+extend; their assignment is a reading of their descriptions, since the catalogue has no row for
+them yet.
+
+**R17. Feature order.** Decision: the feature order of [tasks.md](tasks.md#feature-order) runs the
+V1 versions of the specs 002 to 034 in their structural order, then the move to the release
+`v2.0.1`, then the V2 versions in their structural order. Reasons: V2 holds the full-B0 statements,
+which follow kernel T105 as the full-B0 milestone did; each V1 version follows the V1 versions of
+the categories that its rows reach (LV13). A leaf task names a lean-categories task only where a
+row of the task consumes a declaration that the lean-categories task adds or changes; the other
+upstream tasks of the kernel's milestones are inputs of the kernel tasks, not of the leaf tasks.
 
 ## Survey record
 
-LV7 fixes the content. Each milestone task completes its section before its implementation:
-one row for each part of the generated interface of its categories, with the routine, the
-engine version or revision, the decision (use, fallback, reject) and the reasons, and one row
-for each gap with its searches. The starting facts of each family are those of the kernel
-survey, cited by section; they are not repeated here.
+LV7 fixes the content. Each version of each category spec completes the survey record in the
+spec's `research.md` before its implementation tasks: one row for each part of the generated
+interface that its rows need, with the routine, the engine version or revision, the decision
+(use, fallback, reject) and the reasons, and one row for each gap with its searches. The starting
+facts of each family are those of the kernel survey, cited by section in the plan of the spec;
+they are not repeated.
 
 Row format:
 
 | Part (generated interface) | Engine and routine | Version or revision | Decision | Reasons | Gap searches |
 | --- | --- | --- | --- | --- | --- |
 
-| FR | Survey sections that start the record |
-| --- | --- |
-| FR-001 | Sets; Cardinals; Cross-cutting layer (Catlab.jl) |
-| FR-002 | Finite sets, countable sets, enumerated sets |
-| FR-003 | Order structures |
-| FR-004 | Magmas, semigroups, monoids; Groups; Semirings; Rings and commutative rings; Calculus |
-| FR-005 | Groups; Group-valued constructions |
-| FR-006 | Rings and commutative rings; Polynomial rings; Linear algebra |
-| FR-007 | Polynomial rings (power series) |
-| FR-008 | Modules; Linear algebra |
-| FR-009 | Bilinear and quadratic modules; Lattices (quadratic forms) |
-| FR-010 | Fields; Linear algebra |
-| FR-011 | Modules |
-| FR-012 | Modules; Linear algebra |
-| FR-013 | Bilinear and quadratic modules |
-| FR-014 | Calculus |
-| FR-015 | Groups |
-| FR-016 | Boolean algebras and power sets; Order structures |
-| FR-017 | Lattices (quadratic forms) |
-| FR-018 | Sets; Pointed sets; Cross-cutting layer; crystals are not in the survey and are surveyed first |
-| FR-019 | Order structures; Cardinals (SymPy ordinals) |
-| FR-020 | Magmas, semigroups, monoids; Algebras |
-| FR-021 | Algebras |
-| FR-022 | none: `sage.schemes` is not in the survey and is surveyed first |
-| FR-023 | Modules |
-| FR-024 | Bilinear and quadratic modules; cusps of `sage.modular` are surveyed first |
-| FR-025 | Bilinear and quadratic modules; Lattices (quadratic forms); Group-valued constructions |
-
 ## Registrations that move
 
-One row for each `(operation, backend)` of `leaves.json` at `8b181d7`, with its input forms and
-the requirement that moves it. The total is 115.
+The 115 registrations of `leaves.json` at `8b181d7` move into the category specs by R15. The plan
+of each spec lists its registrations with their versions and decisions.
 
-| FR | Operation | v1 backend | Count | Input forms |
-| --- | --- | --- | --- | --- |
-| FR-001 | `colim.sets.coproduct` | `sage-set-limits` | 1 | `cat.sets` |
-| FR-001 | `lim.sets.product` | `sage-set-limits` | 1 | `cat.sets` |
-| FR-001 | `lim.sets.pullback` | `sage-set-limits` | 1 | `cat.sets` |
-| FR-001 | `meth.cardinality` | `gap` | 2 | `obj.sets.integers_mod`, `obj.sets.integers_mod_power` |
-| FR-001 | `meth.cardinality` | `gap-groups` | 1 | `obj.sets.permutations` |
-| FR-001 | `meth.cardinality` | `sage` | 6 | `obj.sets.fin`, `obj.sets.naturals`, `obj.sets.positive_naturals`, `obj.sets.primes`, `obj.sets.integers`, `obj.sets.rationals` |
-| FR-001 | `meth.cardinality` | `sage-power-set` | 1 | `obj.sets.power_set` |
-| FR-001 | `meth.cardinality` | `sage-presentations` | 2 | `obj.sets.f9_x`, `obj.sets.f9_y` |
-| FR-001 | `meth.cardinality` | `sage-set-limits` | 1 | `cat.sets` |
-| FR-001 | `mor.sets.equality` | `sage-symbolic` | 1 | `mor.sets.equality` |
-| FR-001 | `mor.sets.fin_rev` | `sage-fin-rev` | 1 | `mor.sets.fin_rev` |
-| FR-001 | `prop.is_finite` | `gap` | 2 | `obj.sets.integers_mod`, `obj.sets.integers_mod_power` |
-| FR-001 | `prop.is_finite` | `gap-groups` | 1 | `obj.sets.permutations` |
-| FR-001 | `prop.is_finite` | `sage` | 8 | `obj.sets.fin`, `obj.sets.naturals`, `obj.sets.positive_naturals`, `obj.sets.primes`, `obj.sets.integers`, `obj.sets.rationals`, `obj.sets.reals`, `obj.sets.complexes` |
-| FR-001 | `prop.is_finite` | `sage-presentations` | 2 | `obj.sets.f9_x`, `obj.sets.f9_y` |
-| FR-002 | `meth.cardinality` | `sage` | 1 | `obj.finite_sets.fin` |
-| FR-002 | `prop.is_finite` | `sage` | 1 | `obj.finite_sets.fin` |
-| FR-004 | `bind.sets.integral` | `sage-symbolic` | 1 | `cat.sets` |
-| FR-004 | `bind.sets.limit` | `sage-symbolic` | 1 | `cat.sets` |
-| FR-004 | `bind.sets.limit_at_infinity` | `sage-symbolic` | 1 | `cat.sets` |
-| FR-004 | `meth.cardinality` | `gap` | 1 | `obj.rings.integers_mod` |
-| FR-004 | `meth.cardinality` | `gap-groups` | 4 | `obj.groups.symmetric`, `obj.groups.cyclic`, `obj.groups.units`, `obj.sets.units` |
-| FR-004 | `mor.sets.complex_abs` | `sage-symbolic` | 1 | `obj.sets.complexes` |
-| FR-004 | `mor.sets.complex_bar` | `sage-symbolic` | 1 | `obj.sets.complexes` |
-| FR-004 | `mor.sets.complex_im` | `sage-symbolic` | 1 | `obj.sets.complexes` |
-| FR-004 | `mor.sets.complex_re` | `sage-symbolic` | 1 | `obj.sets.complexes` |
-| FR-004 | `mor.sets.nat_prime_factors` | `sage-symbolic` | 1 | `obj.sets.positive_naturals` |
-| FR-004 | `mor.sets.real_sqrt` | `sage-symbolic` | 1 | `obj.sets.reals` |
-| FR-004 | `prop.is_abelian` | `gap-groups` | 3 | `obj.groups.symmetric`, `obj.groups.cyclic`, `obj.groups.units` |
-| FR-004 | `prop.is_commutative` | `gap-groups` | 3 | `obj.groups.symmetric`, `obj.groups.cyclic`, `obj.groups.units` |
-| FR-004 | `prop.is_finite` | `gap` | 1 | `obj.rings.integers_mod` |
-| FR-004 | `prop.is_finite` | `gap-groups` | 4 | `obj.groups.symmetric`, `obj.groups.cyclic`, `obj.groups.units`, `obj.sets.units` |
-| FR-006 | `cmp.f9.translation` | `sage-presentations` | 2 | `obj.commutative_rings.f9_x`, `obj.commutative_rings.f9_y` |
-| FR-006 | `meth.cardinality` | `sage-presentations` | 2 | `obj.commutative_rings.f9_x`, `obj.commutative_rings.f9_y` |
-| FR-006 | `mor.sets.companion_matrix` | `sage-symbolic` | 1 | `obj.sets.monics` |
-| FR-006 | `mor.sets.f9_x_constants` | `sage-presentations` | 2 | `mor.sets.f9_x_constants`, `obj.sets.integers_mod` |
-| FR-006 | `mor.sets.f9_y_constants` | `sage-presentations` | 2 | `mor.sets.f9_y_constants`, `obj.sets.integers_mod` |
-| FR-006 | `mor.sets.mv_total_degree` | `sage-symbolic` | 1 | `obj.sets.mv_polynomials` |
-| FR-006 | `mor.sets.polynomial_degree` | `sage-symbolic` | 1 | `obj.sets.polynomials` |
-| FR-006 | `mor.sets.polynomial_derivative` | `sage-symbolic` | 1 | `obj.sets.polynomials` |
-| FR-006 | `mor.sets.polynomial_differential` | `sage-symbolic` | 1 | `obj.sets.polynomials` |
-| FR-006 | `mor.sets.polynomial_factors` | `sage-symbolic` | 1 | `obj.sets.nonzero_polynomials` |
-| FR-006 | `mor.sets.polynomial_map` | `sage-symbolic` | 1 | `obj.sets.polynomials` |
-| FR-006 | `mor.sets.polynomial_roots` | `sage-symbolic` | 1 | `obj.sets.nonzero_polynomials` |
-| FR-006 | `prop.is_finite` | `sage-presentations` | 2 | `obj.commutative_rings.f9_x`, `obj.commutative_rings.f9_y` |
-| FR-008 | `meth.cardinality` | `sage-modules` | 2 | `obj.modules.regular`, `obj.modules.vectors` |
-| FR-009 | `colim.bil_w_form.cokernel` | `sage-discriminant` | 1 | `cat.bil_wform` |
-| FR-009 | `meth.cardinality` | `sage-discriminant` | 1 | `obj.bil_wform.root_lattice_a_discriminant` |
-| FR-009 | `meth.cardinality` | `sage-modules` | 2 | `obj.bil_wform.root_lattice_a`, `obj.bil_wform.root_lattice_a_dual` |
-| FR-009 | `prop.is_abelian` | `gap-groups` | 3 | `obj.bil_wform.root_lattice_a`, `obj.bil_wform.root_lattice_a_dual`, `obj.bil_wform.root_lattice_a_discriminant` |
-| FR-009 | `prop.is_commutative` | `gap-groups` | 3 | `obj.bil_wform.root_lattice_a`, `obj.bil_wform.root_lattice_a_dual`, `obj.bil_wform.root_lattice_a_discriminant` |
-| FR-010 | `mor.sets.span` | `sage-symbolic` | 1 | `obj.sets.power_set` |
-| FR-011 | `meth.rank` | `sage-modules` | 5 | `obj.modules.regular`, `obj.modules.vectors`, `obj.bil_wform.root_lattice_a`, `obj.bil_wform.root_lattice_a_dual`, `obj.bil_wform.root_lattice_a_discriminant` |
-| FR-013 | `lift.bilin_module.restrict#backward` | `sage-bilinear-lift` | 1 | `lift.bilin_module.restrict#input` |
-| FR-013 | `lift.bilin_module.restrict#forward` | `sage-bilinear-lift` | 1 | `lift.bilin_module.restrict#input` |
-| FR-013 | `lift.bilin_module.restrict#hom` | `sage-bilinear-lift` | 1 | `lift.bilin_module.restrict#input` |
-| FR-013 | `lift.bilin_module.restrict#obj` | `sage-bilinear-lift` | 1 | `lift.bilin_module.restrict#input` |
-| FR-015 | `fun.arrows_groups.kernel` | `gap-groups` | 1 | `cat.arrows_groups` |
-| FR-015 | `meth.cardinality` | `gap-groups` | 3 | `obj.subgroups.alternating`, `obj.subgroups.kernel`, `cat.subobjects_groups` |
-| FR-015 | `meth.group_arrow_kernel` | `gap-groups` | 1 | `cat.arrows_groups` |
-| FR-015 | `prop.is_abelian` | `gap-groups` | 2 | `obj.subgroups.kernel`, `cat.subobjects_groups` |
-| FR-015 | `prop.is_commutative` | `gap-groups` | 3 | `obj.subgroups.alternating`, `obj.subgroups.kernel`, `cat.subobjects_groups` |
-| FR-015 | `prop.is_finite` | `gap-groups` | 3 | `obj.subgroups.alternating`, `obj.subgroups.kernel`, `cat.subobjects_groups` |
-| FR-017 | `meth.cardinality` | `sage-modules` | 1 | `obj.integral_lattice.e8` |
-| FR-017 | `meth.rank` | `sage-modules` | 1 | `obj.integral_lattice.e8` |
-| FR-017 | `prop.is_abelian` | `gap-groups` | 1 | `obj.integral_lattice.e8` |
-| FR-017 | `prop.is_commutative` | `gap-groups` | 1 | `obj.integral_lattice.e8` |
-
-| FR | Registrations |
-| --- | --- |
-| FR-001 | 31 |
-| FR-002 | 2 |
-| FR-004 | 25 |
-| FR-006 | 18 |
-| FR-008 | 2 |
-| FR-009 | 10 |
-| FR-010 | 1 |
-| FR-011 | 5 |
-| FR-013 | 4 |
-| FR-015 | 13 |
-| FR-017 | 4 |
-| Total | 115 |
+| Spec | Category | V1 | V2 |
+| --- | --- | ---: | ---: |
+| 003-sets | `cat.sets` | 31 | 0 |
+| 004-core-sets | `cat.core_sets` | 13 | 0 |
+| 005-finite-sets | `cat.finite_sets` | 0 | 2 |
+| 011-monoids | `cat.monoids` | 2 | 0 |
+| 012-groups | `cat.groups` | 6 | 6 |
+| 015-rings | `cat.rings` | 2 | 0 |
+| 016-commutative-rings | `cat.commutative_rings` | 13 | 1 |
+| 019-modules-r | `cat.modules_r` | 2 | 0 |
+| 020-bil-wform | `cat.bil_wform` | 5 | 5 |
+| 021-fields | `cat.fields` | 1 | 0 |
+| 022-core-modules-r | `cat.core_modules_r` | 0 | 5 |
+| 027-arrows-bilin-module | `cat.arrows_bilin_module` | 4 | 0 |
+| 028-subobjects-groups | `cat.subobjects_groups` | 0 | 11 |
+| 029-arrows-groups | `cat.arrows_groups` | 0 | 2 |
+| 031-integral-lattice | `cat.integral_lattice` | 0 | 4 |
+| Total | | 79 | 36 |

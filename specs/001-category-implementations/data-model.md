@@ -1,4 +1,4 @@
-# Data model: Category implementations for the computational milestones
+# Data model: Category implementations
 
 ## Manifest (`leaves.json`)
 
@@ -7,18 +7,18 @@ The shape is the contract's (contract FR-004): exactly the root arrays `backends
 
 | Entity | Fields | Rules |
 | --- | --- | --- |
-| Backend | `name`, `command`, `args` | `name` is the program name of the plan's milestone map; `command` is `/sage/.venv/bin/python3`; `args` is `["-m", "backends.<program>"]` (research R1). |
+| Backend | `name`, `command`, `args` | `name` is the module slug of the plan's table "Category specs"; `command` is `/sage/.venv/bin/python3`; `args` is `["-m", "backends.<slug>"]` (research R1, R3). |
 | Registration | `operation`, `input`, `backend`, `preferredRoutes` | `operation` and `input` are published addresses; `preferredRoutes` is present, `[]` unless a C6 route is declared (LV10). No priority, order or cost field. |
 
 ## Category implementation
 
 | Field | Content |
 | --- | --- |
-| Categories | The `cat.*` ids of its requirement (spec FR-001 to FR-025) |
+| Category | The `cat.*` id of its category spec (spec FR-038) |
 | Ports | One registration for each implemented part of the generated interface |
 | Lowering table | Named-object descriptor to engine constructor, one per program (LV1, research R8) |
 | Routine table | For each port: engine, routine, version; written in the survey record and sent as routine observations |
-| Survey record | Its section of [research.md](research.md) (LV7) |
+| Survey record | The section "Survey record" of its spec's `research.md`, in the row format of [research.md](research.md) (LV7) |
 | Gaps | Parts with no engine routine and no admissible hand-rolled algorithm, with their searches |
 
 ## Survey record row
@@ -49,7 +49,7 @@ One JSON object per line in `tests/timing/records.jsonl`. Committed.
 ## Backend log line
 
 One line on standard error per handled request:
-`<UTC> <program> request=<id> op=<op> input=<input> routine=<engine>:<routine> elapsed_s=<s> status=<status>`.
+`<UTC> <slug> request=<id> op=<op> input=<input> routine=<engine>:<routine> elapsed_s=<s> status=<status>`.
 The SDK's own frame, handler, export, suspension, resume and disposal lines (contract FR-023)
 come in the same stream.
 

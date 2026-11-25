@@ -24,10 +24,12 @@ All commands run inside the research container (`ghcr.io/dzackgarza/sage:develop
 ## Add a category implementation
 
 1. Load the interface: `cas_interfaces.load_interfaces(<generated api>).category("cat.<id>")`.
-2. Complete the survey section of the category in `research.md` (LV7).
-3. Write the program as glue over the chosen routines, with one lowering table (LV1, LV5).
+2. Complete the survey record of the version in the category spec's `research.md` (LV7; spec
+   FR-028).
+3. Write `backends/<slug>.py` as glue over the routines of the spec's routine table, with one
+   lowering table (LV1, LV5).
 4. Register each port in `leaves.json` with `preferredRoutes: []`.
-5. Write `tests/test_<program>.py` and its scenarios; run `just test-category <program>`.
+5. Write `tests/test_<slug>.py` and its scenarios; run `just test-category <slug>`.
 6. Commit with the survey section cited in the body.
 
 ## Check the public-only path (SC-007)
