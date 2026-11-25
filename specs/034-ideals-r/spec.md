@@ -56,7 +56,7 @@ The edge cases of 001 apply. This category adds:
 ### Functional Requirements — V1
 
 - **FR-001 — `meth.annihilator`** (operation, V1). The implementation MUST answer the method at its actual domain; an inherited request carries the receiver, one descriptor for each residual action and the method functor, and the implementation realizes that composite (contract FR-017).
-- **FR-002 — `missing.module_annihilator_value`** (row that the catalogue lacks, V1): objects of `cat.ideals_r`, such as the principal ideal $(4) \subseteq \mathbb{Z}$. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: kernel T341, the lean-categories task that declares `missing.module_annihilator_value` (issue not yet filed).
+- **FR-002 — `missing.module_annihilator_value`** (row that the catalogue lacks, V1): objects of `cat.ideals_r`, such as the principal ideal $(4) \subseteq \mathbb{Z}$. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T078 (#225), which declares `missing.module_annihilator_value` as `obj.ideals.principal` (kernel T341).
 
 ### Key Entities
 

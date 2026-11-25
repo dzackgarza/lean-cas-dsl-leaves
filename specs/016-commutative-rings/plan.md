@@ -93,19 +93,19 @@ The starting choice of each row. The survey record of its version confirms it in
 | FR-035 | `mor.sets.matrix_rank` | operation | Sage `Matrix.rank()` | request operands at the generated layout | — |
 | FR-036 | `mor.sets.matrix_ker` | operation | Sage `Matrix.right_kernel()`, as a subset in the power-object form of contract T021 | request operands at the generated layout | lean-categories T013 (#191), contract T021 |
 | FR-037 | `mor.sets.matrix_charpoly` | operation | Sage `Matrix.charpoly()` | request operands at the generated layout | — |
-| FR-038 | `mor.sets.companion_matrix` | operation | Sage `companion_matrix(p, format=...)` with the format of the catalogue row's declaration, fixed by the survey record of T001 | request operands at the generated layout | contract T021 |
+| FR-038 | `mor.sets.companion_matrix` | operation | Sage `companion_matrix(p, format='right')`: ones on the subdiagonal and $-p_0, \ldots, -p_{n-1}$ in the last column, the convention of the catalogue declaration (plan, "Engine conventions") | request operands at the generated layout | contract T021 |
 | FR-039 | `obj.rings.power_series` | object constructor | Sage `LazyPowerSeriesRing(K, 't')` | the parameter commutative ring at the generated layout | — |
 | FR-040 | `obj.sets.power_series` | object constructor | Sage `LazyPowerSeriesRing(K, 't')` as a set | the parameter commutative ring at the generated layout | — |
 | FR-041 | `mor.sets.power_series_coefficient` | operation | the coefficient `f[k]` of a Sage lazy power series, computed when a request demands it (LV25) | request operands at the generated layout | — |
 | FR-042 | `mor.sets.power_series_of_coefficients` | operation | Sage `LazyPowerSeriesRing(K, 't')(c)` from the coefficient function `c` of the request | request operands at the generated layout | — |
-| FR-043 | `mor.sets.successor_power_series_terms` | operation | the terms `f[k] * t**k` of a Sage lazy power series, as a lazy family; the survey record of T001 checks the layout of the catalogue row | request operands at the generated layout | — |
+| FR-043 | `mor.sets.successor_power_series_terms` | operation | Sage `Family(NonNegativeIntegers(), lambda n: R(n + 1) * t**n, lazy=True)` with `t` the generator of `LazyPowerSeriesRing(R, 't')`: the set map $n \mapsto (n + 1) t^n$ of the catalogue declaration; a term is computed when a request demands it (LV25; plan, "Engine conventions") | the ring $R$ at the generated layout | — |
 | FR-044 | `obj.sets.mv_polynomials` | object constructor | Sage `PolynomialRing(K, names)` as a set (Singular inside Sage) | the parameter commutative ring at the generated layout | lean-categories T021 (#189) |
-| FR-045 | `missing.ufd_factorization` | row that the catalogue lacks | Sage `Integer.factor()` with `Factorization.unit()` | the integer operand | kernel T329, the lean-categories task that declares `missing.ufd_factorization` (issue not yet filed) |
-| FR-046 | `missing.ufd_prime` | row that the catalogue lacks | Sage `ZZ.ideal(x).is_prime()` with the nonzero condition of the catalogue row | the integer operand | kernel T330, the lean-categories task that declares `missing.ufd_prime` (issue not yet filed) |
-| FR-047 | `missing.root_multiset` | row that the catalogue lacks | Sage `Polynomial.roots(multiplicities=True)` | the polynomial operand | kernel T334, the lean-categories task that declares `missing.root_multiset` (issue not yet filed) |
-| FR-048 | `missing.series_truncation` | row that the catalogue lacks | Sage lazy power series `truncate(n)` and `add_bigoh(n)` | the series and the exponent | kernel T335, the lean-categories task that declares `missing.series_truncation` (issue not yet filed) |
-| FR-049 | `missing.power_series_inclusion` | row that the catalogue lacks | Sage coercion `LazyPowerSeriesRing(AA, 't').coerce_map_from(LazyPowerSeriesRing(QQ, 't'))` | the two coefficient rings | kernel T336, the lean-categories task that declares `missing.power_series_inclusion` (issue not yet filed) |
-| FR-050 | `missing.matrix_inverse_domain` | row that the catalogue lacks | Sage `Matrix.is_invertible()` | the matrix operand | kernel T337, the lean-categories task that declares `missing.matrix_inverse_domain` (issue not yet filed) |
+| FR-045 | `missing.ufd_factorization` | row that the catalogue lacks | Sage `Integer.factor()` with `Factorization.unit()` | the integer operand | lean-categories T068 (#213), which declares `missing.ufd_factorization` as `mor.sets.ufd_factorization` (kernel T329) |
+| FR-046 | `missing.ufd_prime` | row that the catalogue lacks | Sage `ZZ.ideal(x).is_prime()` with the nonzero condition of the catalogue row | the integer operand | lean-categories T069 (#214), which declares `missing.ufd_prime` as `mor.sets.is_prime` (kernel T330) |
+| FR-047 | `missing.root_multiset` | row that the catalogue lacks | Sage `Polynomial.roots(multiplicities=True)` | the polynomial operand | lean-categories T070 (#218), which declares `missing.root_multiset` as `mor.sets.polynomial_root_multiset` (kernel T334) |
+| FR-048 | `missing.series_truncation` | row that the catalogue lacks | Sage lazy power series `truncate(n)` and `add_bigoh(n)` | the series and the exponent | lean-categories T071 (#219), which declares `missing.series_truncation` as `mor.sets.power_series_truncation` (kernel T335) |
+| FR-049 | `missing.power_series_inclusion` | row that the catalogue lacks | Sage coercion `LazyPowerSeriesRing(AA, 't').coerce_map_from(LazyPowerSeriesRing(QQ, 't'))` | the two coefficient rings | lean-categories T072 (#220), which declares `missing.power_series_inclusion` as `incl.sets.power_series_map` (kernel T336) |
+| FR-050 | `missing.matrix_inverse_domain` | row that the catalogue lacks | Sage `Matrix.is_invertible()` | the matrix operand | lean-categories T073 (#221), which declares `missing.matrix_inverse_domain` as `mor.sets.matrix_is_unit` (kernel T337) |
 
 ### V2
 
@@ -155,6 +155,27 @@ No row of this plan needs hand-rolled mathematics: each routine is an engine rou
 ## Engine survey
 
 The survey record of each version starts from these sections of the kernel engine survey of 2026-11-25: "Rings and commutative rings"; "Polynomial rings"; "Linear algebra: vectors, matrices, kernels, determinants"; "Fields".
+
+### Engine conventions
+
+**Companion matrix.** Decision: Sage `companion_matrix(p, format='right')`. Source: the catalogue
+declaration `companion` (lean-categories
+`LeanCategories/Catalogue/Semantics/Algebra/LinearAlgebra.lean:276-280` at `fc549baa`): the entry
+$(i, j)$ is $-p_i$ for $j = n - 1$, $1$ for $i = j + 1$, and $0$ otherwise. The Sage reference
+`sage.matrix.special.companion_matrix` puts the negated coefficients in the last column for the
+format `'right'`; in the research container on 2026-11-25,
+`companion_matrix(x^3 + 2*x^2 + 3*x + 5, format='right')` has the rows $(0, 0, -5)$,
+$(1, 0, -3)$, $(0, 1, -2)$, the matrix of the declaration. Rejected: the formats `'left'`,
+`'top'` and `'bottom'`, which are the transpose or the reversal of that matrix.
+
+**Successor series terms.** Decision: the lazy family $n \mapsto (n + 1) t^n$ over
+`NonNegativeIntegers()`, each term an element of `LazyPowerSeriesRing(R, 't')`. Source: the
+catalogue declaration `successorTerms` (lean-categories
+`LeanCategories/Catalogue/Semantics/Algebra/SuccessorSeries.lean:39-41` at `fc549baa`): a set map
+$\mathbb{N} \to R[[t]]$, $n \mapsto C(n + 1) X^n$, the complete infinite family with no
+truncation parameter, whose only input is the ring $R$. In the research container on 2026-11-25
+the family over $\mathbb{Z}$ gives `4*t^3` at $n = 3$, a `LazyFamily`. Rejected: the terms of a
+given power series, which is not the declaration's input.
 
 ## Complexity Tracking
 

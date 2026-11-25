@@ -89,9 +89,9 @@ and their tasks "Spec V<n> complete" close SC-001 for each version.
 | ---: | --- | --- | --- |
 | 1 | 001 T001–T006 | findings, dependencies, engine bridge, harness, protocol-2 manifest | see each task |
 | 2 | [002-cardinals](../002-cardinals/tasks.md) V1 | `cat.cardinals` V1 | T201 ("Implement Cardinals Spec V1") |
-| 3 | [003-sets](../003-sets/tasks.md) V1 | `cat.sets` V1 | T202 ("Implement Sets Spec V1"); T253 (V2, no rows here) |
+| 3 | [003-sets](../003-sets/tasks.md) V1 | `cat.sets` V1 | T202 ("Implement Sets Spec V1"), which also accepts the V2 statements whose rows are V1 rows of this spec |
 | 4 | 001 T009 | public-only check on the Sets implementation (SC-007) | T202 |
-| 5 | [004-core-sets](../004-core-sets/tasks.md) V1 | `cat.core_sets` V1 | T203 ("Implement Core of sets Spec V1"); T254 (V2, no rows here) |
+| 5 | [004-core-sets](../004-core-sets/tasks.md) V1 | `cat.core_sets` V1 | T203 ("Implement Core of sets Spec V1"), which also accepts the V2 statements whose rows are V1 rows of this spec |
 | 6 | [005-finite-sets](../005-finite-sets/tasks.md) V1 | `cat.finite_sets` V1 | T204 ("Implement Finite sets Spec V1") |
 | 7 | [006-linear-orders](../006-linear-orders/tasks.md) V1 | `cat.linear_orders` V1 | T207 ("Implement Linear orders Spec V1") |
 | 8 | [007-additive-monoids](../007-additive-monoids/tasks.md) V1 | `cat.additive_monoids` V1 | T210 ("Implement Additive monoids Spec V1") |
@@ -102,7 +102,7 @@ and their tasks "Spec V<n> complete" close SC-001 for each version.
 | 13 | [012-groups](../012-groups/tasks.md) V1 | `cat.groups` V1 | T215 ("Implement Groups Spec V1") |
 | 14 | [013-semirings](../013-semirings/tasks.md) V1 | `cat.semirings` V1 | T216 ("Implement Semirings Spec V1") |
 | 15 | [014-additive-groups](../014-additive-groups/tasks.md) V1 | `cat.additive_groups` V1 | T217 ("Implement Additive groups Spec V1") |
-| 16 | [015-rings](../015-rings/tasks.md) V1 | `cat.rings` V1 | T218 ("Implement Rings Spec V1"); T257 (V2, no rows here) |
+| 16 | [015-rings](../015-rings/tasks.md) V1 | `cat.rings` V1 | T218 ("Implement Rings Spec V1"), which also accepts the V2 statements whose rows are V1 rows of this spec |
 | 17 | [016-commutative-rings](../016-commutative-rings/tasks.md) V1 | `cat.commutative_rings` V1 | T221 ("Implement Commutative rings Spec V1") |
 | 18 | [017-hausdorff-topological-commutative-monoids](../017-hausdorff-topological-commutative-monoids/tasks.md) V1 | `cat.hausdorff_topological_commutative_monoids` V1 | T222 ("Implement Hausdorff topological commutative monoids Spec V1") |
 | 19 | [018-modules-total](../018-modules-total/tasks.md) V1 | `cat.modules_total` V1 | T223 ("Implement Modules (total) Spec V1") |

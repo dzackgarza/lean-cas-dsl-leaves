@@ -94,7 +94,8 @@ at the generated result layout.
 - Each computation MUST name the engine and the routine that it calls, in the routine table of
   the feature specification and in the routine observations of its replies (contract FR-013;
   K:C15).
-- A leaf MUST NOT rewrite an engine (kernel tasks T200 to T224, common definition).
+- A leaf MUST NOT rewrite an engine (the common definition of the kernel category tasks, which
+  the mapping table of the kernel task list names, one task for each category version).
 
 ### LV6. Known mathematics with no engine is implemented with its reference
 
@@ -347,15 +348,18 @@ this file, its version and its amendment date in the same change, and it reconci
 documents. Versions are major for incompatible changes to an obligation, minor for additions,
 patch for editorial corrections. Article identifiers are never renumbered.
 
-Work order is the task list of the active feature under `specs/`. Its unchecked tasks are executed
-in document order; the first unchecked task is active. A wait on an unavailable input blocks only
+Work order is the feature order of the shared feature `specs/001-category-implementations/`
+(`tasks.md`, "Feature order"): its shared tasks and the versions of the category specs
+`specs/002-cardinals/` to `specs/034-ideals-r/`, one feature for each category. Within a
+feature, the unchecked tasks of its `tasks.md` are executed in document order; the first step of
+the feature order with an unchecked task is active. A wait on an unavailable input blocks only
 the task that needs it, and the work continues with the next task whose inputs are present
 (K:C16, K:C21). A change of order is a committed edit of the task list that states its reason.
 
 Work records, diagnostics and evidence go to the owning GitHub issue, not to a repository file
-(K: "Authority and scope"). The checklist of the computational milestones is lean-cas-dsl#93.
+(K: "Authority and scope"). The checklist of the V1 category tasks is lean-cas-dsl#93.
 
-**Version**: 2.0.0 | **Ratified**: 2026-11-25 | **Last Amended**: 2026-11-25
+**Version**: 2.0.1 | **Ratified**: 2026-11-25 | **Last Amended**: 2026-11-25
 
 [K]: https://github.com/dzackgarza/lean-cas-dsl/blob/main/.specify/memory/constitution.md
 [RC]: https://github.com/dzackgarza/lean-cas-dsl-leaf-contracts/blob/main/.specify/memory/constitution.md

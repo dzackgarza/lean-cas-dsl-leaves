@@ -25,7 +25,7 @@ This document is an input of a leaf author (LV14). It names catalogue rows, engi
 
 **V3.** The classified Sage coverage of lean-cas-dsl #20, #21 and #23 adds rows to V3 by the same membership rule: a row joins the first version of a computed statement that needs it, and it belongs to the latest category, in the structural order, among its catalogue owners and the categories of its declared parameters. When kernel tasks T140 to T147 produce the classified statements, the rows whose home is `cat.core_sets` join V3 of this spec. This spec plans nothing more for V3.
 
-**V2 of the kernel.** Kernel T254 ("Implement Core of sets Spec V2") assesses the V2 statements whose last route category is `cat.core_sets`. No row of `cat.core_sets` is in V2, so this spec has no V2: the earlier versions of this spec serve that kernel task.
+**V2 statements.** No row of `cat.core_sets` is in V2, so this spec has no V2. The full-B0 statements of lean-cas-dsl #19 whose rows have their latest home in `cat.core_sets` need only V1 rows; kernel T203 ("Implement Core of sets Spec V1") accepts them with the V1 statements.
 
 ## User Scenarios & Testing *(mandatory)*
 

@@ -57,7 +57,7 @@ The starting choice of each row. The survey record of its version confirms it in
 | FR | Row | Kind | Engine and routine | Dependent inputs (C22) | Inputs before it |
 | --- | --- | --- | --- | --- | --- |
 | FR-001 | `forget[clf.sets.enumerated]` | classifier forget | object action: the carrier to the public constructor of `cat.sets`; morphism action: the map of sets at the two image endpoints | the source arrow and both image endpoints (contract FR-018); descriptors lowered by the lowering table of `backends/sets.py` (LV8, second option) | — |
-| FR-002 | `missing.denumerable_enumeration` | row that the catalogue lacks | the known method: the `Denumerable` instances of $\mathbb{Z}$ and $\mathbb{Q}$ in Mathlib (`Mathlib.Logic.Denumerable`, `Mathlib.Data.Rat.Denumerable`) as the cited reference, with Sage integer and rational arithmetic for each step | the set and the index | kernel T340, the lean-categories task that declares `missing.denumerable_enumeration` (issue not yet filed), lean-categories T039 (#199) |
+| FR-002 | `missing.denumerable_enumeration` | row that the catalogue lacks | the known method: the `Denumerable` instances of $\mathbb{Z}$ and $\mathbb{Q}$ in Mathlib (`Mathlib.Logic.Denumerable`, `Mathlib.Data.Rat.Denumerable`) as the cited reference, with Sage integer and rational arithmetic for each step | the set and the index | lean-categories T077 (#224), which declares `missing.denumerable_enumeration` as `obj.enumerated_sets.naturals`, `obj.enumerated_sets.integers`, `obj.enumerated_sets.rationals` and `mor.sets.enumeration_at` (kernel T340), lean-categories T039 (#199) |
 
 ## Hand-rolled code
 

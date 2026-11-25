@@ -56,7 +56,7 @@ The edge cases of 001 apply. This category adds:
 ### Functional Requirements — V1
 
 - **FR-001 — `forget[clf.sets.enumerated]`** (classifier forget, V1). The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018).
-- **FR-002 — `missing.denumerable_enumeration`** (row that the catalogue lacks, V1): the enumeration $\mathbb{N} \to X$ of a denumerable set in the adopted `Denumerable.ofNat` order, its evaluation $X[k]$, and the objects of `cat.enumerated_sets` for $\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$ and the progressions. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: kernel T340, the lean-categories task that declares `missing.denumerable_enumeration` (issue not yet filed), lean-categories T039 (#199).
+- **FR-002 — `missing.denumerable_enumeration`** (row that the catalogue lacks, V1): the enumeration $\mathbb{N} \to X$ of a denumerable set in the adopted `Denumerable.ofNat` order, its evaluation $X[k]$, and the objects of `cat.enumerated_sets` for $\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$ and the progressions. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T077 (#224), which declares `missing.denumerable_enumeration` as `obj.enumerated_sets.naturals`, `obj.enumerated_sets.integers`, `obj.enumerated_sets.rationals` and `mor.sets.enumeration_at` (kernel T340), lean-categories T039 (#199).
 
 ### Key Entities
 

@@ -35,4 +35,3 @@ Format: `- [ ] ID [Story] description`.
 | Kernel task | Tasks here |
 | --- | --- |
 | kernel T218 ("Implement Rings Spec V1") | T001–T005 |
-| kernel T257 ("Implement Rings Spec V2"; no row of this spec is in V2) | T001–T005 |

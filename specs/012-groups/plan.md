@@ -57,8 +57,8 @@ The starting choice of each row. The survey record of its version confirms it in
 | FR | Row | Kind | Engine and routine | Dependent inputs (C22) | Inputs before it |
 | --- | --- | --- | --- | --- | --- |
 | FR-001 | `cat.groups` | category structure | GAP group homomorphisms through `libgap`: identity `IdentityMapping`, composition `CompositionMapping`, application `Image`; the selected intermediate group of a composite from the request | the selected data that the request carries (LV4) | contract T021 |
-| FR-002 | `obj.groups.cyclic` | object constructor | GAP `CyclicGroup(n)` through `libgap` | request operands at the generated layout | — |
-| FR-003 | `obj.groups.cyclic_quotient` | object constructor | Sage `AdditiveAbelianGroup([n])` or GAP `CyclicGroup(n)` as the quotient of $\mathbb{Z}$; the survey record of T001 fixes one | request operands at the generated layout | — |
+| FR-002 | `obj.groups.cyclic` | object constructor | GAP `CyclicGroup(n)` through `libgap` for $n \geq 1$ and `CyclicGroup(infinity)` at $n = 0$ (plan, "Cyclic groups") | request operands at the generated layout | — |
+| FR-003 | `obj.groups.cyclic_quotient` | object constructor | GAP `CyclicGroup(n)` through `libgap` for $n \geq 1$ and `CyclicGroup(infinity)` at $n = 0$, with $[a] \mapsto g^a$ for the generator $g$ (plan, "Cyclic groups") | request operands at the generated layout | — |
 | FR-004 | `obj.groups.units` | object constructor | GAP `Units(R)` through `libgap` for the monoids that spec 011 lowers | descriptors lowered by the lowering table of `backends/monoids.py` (LV8, second option) | — |
 | FR-005 | `fun.groups.monoid` | functor | object action: the group to the public constructor of `cat.monoids`; morphism action: the homomorphism at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | — |
 | FR-006 | `con.automorphisms` | construction | GAP `AutomorphismGroup(G)` through `libgap` | request operands at the generated layout | — |
@@ -120,6 +120,28 @@ No row of this plan needs hand-rolled mathematics: each routine is an engine rou
 ## Engine survey
 
 The survey record of each version starts from these sections of the kernel engine survey of 2026-11-25: "Groups"; "Group-valued constructions: orthogonal groups, automorphism groups, stabilizers".
+
+### Cyclic groups
+
+Decision: `obj.groups.cyclic` and `obj.groups.cyclic_quotient` lower to GAP `CyclicGroup(n)`
+through `libgap` for $n \geq 1$ and to `CyclicGroup(infinity)` at $n = 0$, the infinite cyclic
+group. A residue class $[a]$ is $g^a$ for the generator $g$.
+
+Sources: the kernel engine survey, "Groups" and "Recommendation summary" (family Groups: GAP
+through Sage is primary); the GAP 4.16.1 reference manual, §50.1-2 `CyclicGroup`
+(`CyclicGroup(infinity)` is the free group on one generator, with the filter `IsFpGroup`); the
+catalogue declarations `cyclic n := GrpCat.of (Multiplicative (ZMod n))` (lean-categories
+`LeanCategories/Catalogue/Semantics/Algebra/FiniteGroups.lean:46` at `fc549baa`) and
+`obj.groups.cyclic_quotient`, the group on $\mathbb{Z}/n\mathbb{Z}$ (`CyclicQuotients.lean:196`),
+with Mathlib's definition `ZMod 0 = ℤ`; in the research container on 2026-11-25,
+`libgap.CyclicGroup(libgap.eval('infinity'))` has `Size` `infinity` and `IsAbelian` `true`, and
+`CyclicGroup(0)` raises "no method found".
+
+Reasons: the case $n = 0$ is the declaration's own value $\mathbb{Z}$, so the lowering reads it
+from the request, not from a rule of the leaf (LV1); one engine serves both rows and the
+comparison `cmp.groups.cyclic_quotient_residue` between them. Rejected: Sage
+`AdditiveAbelianGroup([n])` for `obj.groups.cyclic_quotient`, an engine outside the survey's
+primary engine for groups; `FreeGroup(1)` written in the leaf at $n = 0$.
 
 ## Complexity Tracking
 
