@@ -95,7 +95,9 @@ container guide (`AGENTS.md`); `test-commit` and CI keep the manifest and compil
 because the CI runner has no research container. Sources: LV17, LV20, LV21.
 
 **R12. Undeclared wire forms.** Decision: a row whose answer needs a form that the contract does
-not declare (FR-033) is not registered until the contract declares the form. The forms are the
+not declare (FR-033) follows contract task T021, which declares the form; the workstream of the
+row finishes T021 first, in the contract role of lean-cas-dsl-leaf-contracts, and then registers
+the row. The forms are the
 ten items of
 [lean-cas-dsl-leaf-contracts#14](https://github.com/dzackgarza/lean-cas-dsl-leaf-contracts/issues/14);
 contract task T021 declares them before the release `v2.0.0`. Each routine table names contract

@@ -6,7 +6,7 @@ deliberately bad replacement packages under `specimens/` (`README.md`). A catego
 implementation computes the operations that the formal mathematics of lean-categories
 specifies, through the released contract of lean-cas-dsl-leaf-contracts.
 
-The [kernel constitution][K] (lean-cas-dsl, v4.0.1) governs the whole programme. The
+The [kernel constitution][K] (lean-cas-dsl, v5.0.0) governs the whole programme. The
 [contract constitution][RC] governs the released interface that a leaf implements. This file
 states the obligations of those two constitutions that bind a leaf, and the rules of this
 repository's own governing documents (`AGENTS.md`, `README.md`, `INTENT.md`). Article
@@ -217,11 +217,13 @@ outcomes (K: "Independent authorship and permitted inputs"; RC9; kernel FR-015).
   inputs. A task names a kernel task by its identifier, to state which kernel work it serves; the
   text of that kernel task is not an input and is not copied here.
 - A missing mathematical declaration is a lean-categories task. The task list names it before its
-  consumer, with its issue, and a formalization author does it. The leaf author of the consumer
-  does not formalize what its code implements (K: authorship rule; kernel specification,
+  consumer, with its issue. The workstream of the consumer does it first, in lean-categories, as a
+  formalization author: from the mathematics and its sources, not shaped to its code. In the leaf
+  role it does not formalize what its code implements (K: authorship rule; kernel specification,
   clarifications of 2026-11-07 and 2026-11-25).
-- A missing contract form is a finding against the contract and goes to its owner. A leaf MUST
-  NOT invent a wire encoding (RC1, RC8).
+- A missing contract form is a task of lean-cas-dsl-leaf-contracts. The workstream of the consumer
+  does it first, in the contract role of that repository, and then returns. A leaf MUST NOT invent
+  a wire encoding (RC1, RC8).
 - A leaf that exposes a deficiency of the contract, the kernel or lean-categories names it in its
   commit (`AGENTS.md`, "Litmus role").
 
@@ -352,14 +354,19 @@ Work order is the feature order of the shared feature `specs/001-category-implem
 (`tasks.md`, "Feature order"): its shared tasks and the versions of the category specs
 `specs/002-cardinals/` to `specs/034-ideals-r/`, one feature for each category. Within a
 feature, the unchecked tasks of its `tasks.md` are executed in document order; the first step of
-the feature order with an unchecked task is active. A wait on an unavailable input blocks only
-the task that needs it, and the work continues with the next task whose inputs are present
-(K:C16, K:C21). A change of order is a committed edit of the task list that states its reason.
+the feature order with an unchecked task is active. No task waits. An input of a task is the
+result of a named task: a task of this repository, a contract task, a kernel task or a
+lean-categories task. The workstream that needs the input does that task first, in its repository
+and in the role that it names, and then returns (K:C16, K:C21): a lean-categories task as a
+formalization author (LV14), a contract task in the contract role, an environment gap in the
+repository that owns the environment (dzackgarza/sage for the research image). When no task
+produces the input, the change that finds the need adds the task, with its issue in the owning
+repository. A change of order is a committed edit of the task list that states its reason.
 
 Work records, diagnostics and evidence go to the owning GitHub issue, not to a repository file
 (K: "Authority and scope"). The checklist of the V1 category tasks is lean-cas-dsl#93.
 
-**Version**: 2.0.1 | **Ratified**: 2026-11-25 | **Last Amended**: 2026-11-25
+**Version**: 3.0.0 | **Ratified**: 2026-11-25 | **Last Amended**: 2026-11-27
 
 [K]: https://github.com/dzackgarza/lean-cas-dsl/blob/main/.specify/memory/constitution.md
 [RC]: https://github.com/dzackgarza/lean-cas-dsl-leaf-contracts/blob/main/.specify/memory/constitution.md

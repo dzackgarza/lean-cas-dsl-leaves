@@ -56,7 +56,7 @@ The edge cases of 001 apply. This category adds:
 ### Functional Requirements — V1
 
 - **FR-001 — `meth.annihilator`** (operation, V1). The implementation MUST answer the method at its actual domain; an inherited request carries the receiver, one descriptor for each residual action and the method functor, and the implementation realizes that composite (contract FR-017).
-- **FR-002 — `obj.ideals.principal`** (object constructor that lean-categories T078 declares, V1): the principal ideals of $\mathbb{Z}$ as objects of `cat.ideals_r`. The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T078 (#225), which declares `obj.ideals.principal` (kernel T341).
+- **FR-002 — `obj.ideals.principal`** (object constructor that lean-categories T078 declares, V1): the principal ideals of $\mathbb{Z}$ as objects of `cat.ideals_r`. The implementation MUST compute it (LV1, LV14). Inputs before it: lean-categories T078 (#225), which declares `obj.ideals.principal` (kernel T341); the workstream of this spec finishes that task first, as a formalization author, and then implements the row.
 
 ### Key Entities
 

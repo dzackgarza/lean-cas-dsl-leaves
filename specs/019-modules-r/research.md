@@ -4,7 +4,7 @@ Decisions of this feature, and the survey record of its versions. The shared dec
 
 ## Decisions
 
-**R1. The V1 scalar action is the row of one universe.** The row `op.modules.scalar_action` of the catalogue at `3f8aedf` takes a ring and a module of one universe, and V1 implements it. lean-categories T064 (#211) declares it for independent universes for the construction classification of lean-cas-dsl #23 (kernel T146, first consumer T143); no V1 row consumes that change, so no V1 task waits for it (001 research R17).
+**R1. The V1 scalar action is the row of one universe.** The row `op.modules.scalar_action` of the catalogue at `3f8aedf` takes a ring and a module of one universe, and V1 implements it. lean-categories T064 (#211) declares it for independent universes for the construction classification of lean-cas-dsl #23 (kernel T146, first consumer T143); no V1 row consumes that change, so it is an input of no V1 task (001 research R17).
 
 ## Survey record
 

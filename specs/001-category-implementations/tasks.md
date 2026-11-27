@@ -7,9 +7,9 @@
 ## Execution order
 
 The unchecked tasks of this file run at their steps of the [feature order](#feature-order); within
-a step, in the order of this file (constitution, Governance). A wait on an unavailable input blocks only its task; work continues
-with the next task whose inputs are present, and the waiting task keeps its position (K:C16,
-K:C21). Each task names its **Files**, its **Acceptance**, its inputs (**After**: a task of this
+a step, in the order of this file (constitution, Governance). No task waits: an input is the result
+of a named task, and the workstream that needs it does that task first, in its repository and in
+the role that it names, then returns (constitution, Governance; K:C16, K:C21). Each task names its **Files**, its **Acceptance**, its inputs (**After**: a task of this
 file, a contract task as "contract T0nn", a kernel task as "kernel T0nn") and the kernel task that
 it serves (**Kernel**). A kernel task ID is a reference, not an input of the leaf author (LV14).
 
@@ -80,9 +80,9 @@ Format: `- [ ] ID [P?] [Story] description`.
 ## Feature order
 
 The features run in this order; within a feature, its tasks run in document order (constitution,
-Governance). The first step with an unchecked task is active. A wait on an unavailable input
-blocks only its task, and the work continues with the next task whose inputs are present
-(research R17). The category specs are the features of FR-038; their move tasks carry out FR-039,
+Governance). The first step with an unchecked task is active. An input task of another
+repository is done first by the workstream of the step that needs it (constitution, Governance;
+research R17). The category specs are the features of FR-038; their move tasks carry out FR-039,
 and their tasks "Spec V<n> complete" close SC-001 for each version.
 
 | Step | Task or feature | Content | Kernel task |

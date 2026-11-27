@@ -34,7 +34,7 @@ category with `just test-category NAME`; `just test-commit` (manifest and compil
 **Performance Goals**: tier 1 of one category under five minutes (SC-004).
 **Constraints**: permitted inputs only (LV14); a computation that no engine provides is the known
 method with its cited reference (LV6); no field computed that no request demands (LV25).
-**Scale/Scope**: 33 category specs (257 V1 rows, of which 14 wait for a catalogue declaration;
+**Scale/Scope**: 33 category specs (257 V1 rows, of which 14 follow a lean-categories task that declares their catalogue row;
 25 V2 rows), 115 moved registrations, one backend program for each category implementation.
 
 ## Constitution Check
@@ -52,6 +52,7 @@ method with its cited reference (LV6); no field computed that no request demands
 | LV13 | The feature order of [tasks.md](tasks.md#feature-order) follows the structural order, after F; each version names its kernel task. |
 | LV16, LV21 | One interpreter; `pyproject.toml`, `uv.lock`, `Project.toml`, `Manifest.toml`; `lakefile.toml` deleted; each category module imports only the engines and the category modules that its plan declares. |
 | LV17–LV23 | `tests/conftest.py` writes logs and timing records; scenarios drive real processes. |
+| Governance (work order) | No task waits: each input is a named task that the workstream of the consumer does first, in its repository and role; the 14 rows that the catalogue lacks follow lean-categories T065–T078, and the undeclared forms follow contract T021. |
 
 Gate result: pass. No violation needs a justification.
 
@@ -104,9 +105,10 @@ category spec version that moves their last registration (research R4); `engine_
 ## Category specs
 
 One feature for each category with a row in V1 or V2 (research R16); the [feature order](tasks.md#feature-order) is the sequence (research R17).
-A row count includes the rows that the catalogue lacks; each of those waits for the lean-categories
-task that declares it: lean-categories T065 to T078 (#212 to #225, the kernel upstream tasks T328 to
-T341), whose plan gives each row its catalogue ID. The registrations are those of research R15. A
+A row count includes the rows that the catalogue lacks. Before each of those rows, the workstream
+of its spec finishes the lean-categories task that declares it, as a formalization author:
+lean-categories T065 to T078 (#212 to #225, the kernel upstream tasks T328 to T341), whose plan
+gives each row its catalogue ID. The registrations are those of research R15. A
 spec with no V2 row has no V2: the full-B0 statements whose rows have their latest home in its
 category need only V1 rows, and its V1 kernel task accepts them.
 

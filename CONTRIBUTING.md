@@ -8,8 +8,9 @@ gets the next free identifier in its category. Identifiers are never reused.
 
 **INP001 — The assignment's input list binds (LV14).** Defective: a contract-only assignment
 reads catalogue source files of lean-categories because a standing rule permits the catalogue in
-general. Replacement: read only the inputs that the assignment names; a missing input is a
-finding for its owner, and the work that needs it waits.
+general. Replacement: read only the inputs that the assignment names; a missing input is the
+result of a task of its owner, which the workstream does first, in that repository and its role,
+and then returns (constitution, Governance).
 
 **INP002 — No acceptance material in leaf documents (LV2, LV14).** Defective: a findings file of
 this repository lists acceptance-specific requirements, kernel source references and harness
@@ -53,8 +54,10 @@ reply `status:"unsupported"` or `status:"error"`, naming the input that is not s
 
 **DAT003 — No leaf-invented encoding (LV14).** Defective: $p/q$ is answered as an
 `operationExpression` of `mor.sets.divide`, and a Kähler differential as a point of
-`mor.sets.kaehler_from_coordinate`, when the contract declares no such form. Replacement: a
-finding against the contract; the request is unsupported until the contract declares the form.
+`mor.sets.kaehler_from_coordinate`, when the contract declares no such form. Replacement: the
+contract task that declares the form (contract T021 for the forms of contract issue #14), which the
+workstream finishes first in the contract role (constitution, Governance); then the leaf answers
+in that form.
 
 ## Category implementations (CAT)
 

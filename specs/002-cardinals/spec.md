@@ -56,7 +56,7 @@ The edge cases of 001 apply. This category adds:
 
 - **FR-001 — `lit.cardinals`** (operation, V1). Catalogue: A cardinal as the language writes it: a numeral or `ℵ₀`. The implementation MUST return the value of the literal or numeral descriptor at the generated layout.
 - **FR-002 — Arithmetic of finite cardinals and $\aleph_0$** (V1). The module MUST supply the sum, the product and the finite power of finite cardinals and $\aleph_0$ as code that the cardinality implementation of `cat.core_sets` (spec 004) calls (LV8, second option). It is the known method, with Mathlib `Mathlib.SetTheory.Cardinal.Arithmetic` as its cited reference (LV6). It is not a port: the catalogue declares no operation of `cat.cardinals` other than `lit.cardinals`. A reply whose computation uses it names this implementation and its reference in its routine observations (contract FR-013).
-- **FR-003 — `op.cardinals.power`** (operation that lean-categories T065 declares, V1): exponentiation of cardinals $2^{\kappa}$ (Mathlib `Cardinal.power`). The implementation MUST compute it once lean-categories declares the row; until then no port answers it (LV1, LV14). Inputs before it: lean-categories T065 (#216), which declares `op.cardinals.power` (kernel T332).
+- **FR-003 — `op.cardinals.power`** (operation that lean-categories T065 declares, V1): exponentiation of cardinals $2^{\kappa}$ (Mathlib `Cardinal.power`). The implementation MUST compute it (LV1, LV14). Inputs before it: lean-categories T065 (#216), which declares `op.cardinals.power` (kernel T332); the workstream of this spec finishes that task first, as a formalization author, and then implements the row.
 
 ### Key Entities
 

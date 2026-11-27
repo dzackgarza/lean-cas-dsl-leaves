@@ -4,7 +4,7 @@
 **Created**: 2026-11-25
 **Status**: Planned
 **Governing text**: [constitution](../../.specify/memory/constitution.md) (LV1–LV25); the
-[kernel constitution][KC] v4.0.1; the [contract constitution][RC] and the released contract
+[kernel constitution][KC] v5.0.0; the [contract constitution][RC] and the released contract
 feature [`001-released-contract-v2`][CS].
 
 **Input**: what every category implementation of this repository shares — the move to protocol 2
@@ -107,7 +107,7 @@ package in their place is admitted, and each specimen's failure reaches its dist
 | Situation | Required behaviour | Source |
 | --- | --- | --- |
 | An operation of the generated interface has no engine routine | The leaf implements the known method and cites its reference; only mathematically new work is a gap of the survey record, with its searches, and needs a separately authorized research assignment | LV6, LV7 |
-| A result needs a wire form that the contract does not declare | No registration answers it until contract T021 declares the form (contract issue #14; FR-033) | LV14; RC8 |
+| A result needs a wire form that the contract does not declare | lean-cas-dsl-leaf-contracts T021 declares the form (contract issue #14; FR-033); the workstream of the row finishes that task first, in the contract role, and then registers the row | LV14; RC8 |
 | A named object arrives as its descriptor | One lowering table of the category implementation maps it to the engine constructor | LV1 |
 | A named object has defining data that no engine constructor builds (a defining polynomial, a Gram matrix) | The implementation reads the data from the unfolded definition that the request carries (K:C22); a request that carries only the name is `status:"unsupported"` and a finding against the contract | LV1; CONTRIBUTING MTH001 |
 | An engine returns an unevaluated form | A branch to the second engine that the routine table names, as control logic | LV8, LV11 |
