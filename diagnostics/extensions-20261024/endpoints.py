@@ -1,0 +1,361 @@
+"""Computational views of the existing declared callable endpoints.
+
+These views select existing native readers from the public full signatures. They
+never replace a request endpoint, choose a different callable, or supply a finite
+inventory. Every Callable continues to retain the exact original descriptors.
+"""
+
+from cas_port import cartesian_map, morphism_endpoint, object_product, typed_map
+from wire import (Callable, Unsupported, fields, inventory, key, node,
+                  power_object_map, retained_endpoint, same)
+
+
+class EndpointInterfaces:
+    def scalar_element_carrier(self, selected):
+        """Private scalar-codec context, keeping every selected action in place.
+
+        This only reads the layout of explicit supported carrier actions. It
+        never compares native parents or rewrites an endpoint or point packet.
+        """
+        tag = self.tag(selected)
+        if tag == "valueData":
+            return self.scalar_element_carrier(fields(selected, tag, 1)[0])
+        if tag == "finiteData":
+            original, _ = fields(selected, tag, 2)
+            inventory(selected)
+            return self.scalar_element_carrier(original)
+        if tag == "morphismEndpoint":
+            return self.scalar_element_carrier(self.endpoint_view(selected))
+        if tag == "functorAction":
+            action, receiver = fields(selected, tag, 2)
+            if not self.carrier_action(action):
+                raise Unsupported("this selected scalar view has no implemented carrier decoder")
+            return self.scalar_element_carrier(receiver)
+        families = ((self.rational_ids, "obj.sets.rationals"),
+                    (self.integer_ids, "obj.sets.integers"),
+                    (self.dual_x_ids, "obj.sets.rational_dual_x"),
+                    (self.dual_y_ids, "obj.sets.rational_dual_y"),
+                    (getattr(self, "modular_ids", set()), "obj.sets.integers_mod"))
+        for names, carrier in families:
+            if tag in names:
+                return node(carrier, *fields(selected, tag))
+        return selected
+
+    def check_element_target(self, target, selected):
+        # The released scalar examples retain a ring in element(...) and its
+        # carrier in apply(...). Keep both original fields: this check reads
+        # their known codec layout, never equality of native parents or maps.
+        if target is None or key(target) == key(selected):
+            return
+        same(self.scalar_element_carrier(target), self.scalar_element_carrier(selected),
+             "element's complete scalar target")
+
+    def check_structure_target(self, target, selected):
+        """Keep an operation's selected structure through explicit carrier views.
+
+        Unlike a scalar-codec check, this never erases the selected structure or
+        opens an owned object to compare its native representation or source.
+        """
+        if target is None:
+            return
+        while key(target) != key(selected):
+            tag = self.tag(target)
+            if tag == "valueData":
+                target, = fields(target, tag, 1)
+            elif tag == "finiteData":
+                inventory(target)
+                target, _ = fields(target, tag, 2)
+            elif tag == "morphismEndpoint":
+                target = self.endpoint_view(target)
+            elif tag == "functorAction":
+                action, receiver = fields(target, tag, 2)
+                if not self.carrier_action(action):
+                    break
+                target = receiver
+            else:
+                break
+        same(target, selected, "point's complete selected structure")
+
+    def retained_map_endpoint(self, arrow, side):
+        """Read actual callable fields through wrappers and stored projections."""
+        actual = retained_endpoint(arrow, side, self.session)
+        if actual is not None:
+            return actual
+        tag = self.tag(arrow)
+        if tag in {"valueData", "point"}:
+            return self.retained_map_endpoint(fields(arrow, tag, 1)[0], side)
+        if tag == "element":
+            return self.retained_map_endpoint(fields(arrow, tag, 2)[1], side)
+        if tag == "compose":
+            first, second = fields(arrow, tag, 2)
+            return self.retained_map_endpoint(first if side == "source" else second, side)
+        if tag in {"arrowHom", "subobjectInclusion", "constructionField", "constructionLeg"}:
+            return self.endpoint_view(node("morphismEndpoint", arrow, side))
+        return None
+
+    def uninventoried_endpoint(self, selected):
+        """A structural view does not turn an endpoint field into graph keys."""
+        tag = self.tag(selected)
+        if tag == "finiteData":
+            inventory(selected)
+            return False
+        if tag == "morphismEndpoint":
+            return True
+        if tag == "valueData":
+            return self.uninventoried_endpoint(fields(selected, tag, 1)[0])
+        if tag == "functorAction":
+            return self.uninventoried_endpoint(fields(selected, tag, 2)[1])
+        if tag == "objectProduct":
+            return any(self.uninventoried_endpoint(factor) for factor in fields(selected, tag, 2))
+        return False
+
+    def power_endpoints(self, arrow):
+        """Native decoding context from the complete public power-field types."""
+        _, field, parameters = power_object_map(arrow)
+        terminal = node("obj.sets.fin", 1)
+        truth = node("obj.sets.truth_values")
+        if field == "truth":
+            return terminal, truth
+        selected = parameters[0]
+        if field == "terminal":
+            return selected, terminal
+        if field == "member":
+            return node("objectProduct", selected, node("obj.sets.power_set", selected)), truth
+        ambient = parameters[1] if field == "image" else selected
+        return terminal, node("obj.sets.power_set", ambient)
+
+    def component_endpoint(self, arrow, side):
+        actual = self.retained_map_endpoint(arrow, side)
+        if actual is not None:
+            return actual
+        return self.endpoint_view(node("morphismEndpoint", arrow, side))
+
+    def endpoint_view(self, selected):
+        """Read native input context while leaving ``selected`` attached verbatim."""
+        arrow, side = morphism_endpoint(selected)
+        tag = self.tag(arrow)
+        if tag in {"valueData", "point"}:
+            return self.endpoint_view(node("morphismEndpoint", fields(arrow, tag, 1)[0], side))
+        if tag == "typedMap":
+            # Use the actual retained field for native decoding. This helper
+            # neither emits nor substitutes a new wrapper around a typed map.
+            source, target, _ = typed_map(arrow)
+            return source if side == "source" else target
+        if tag == "opaqueData":
+            actual = self.session.get(arrow)
+            if not isinstance(actual, Callable):
+                raise ValueError("the endpoint's owned datum is not a callable")
+            return actual.source if side == "source" else actual.target
+        if tag in {"arrowHom", "subobjectInclusion"}:
+            actual_source, actual_target, _ = self.arrow_record(fields(arrow, tag, 1)[0])
+            return actual_source if side == "source" else actual_target
+        if tag in {"constructionField", "constructionLeg"}:
+            actual_source, actual_target, _ = typed_map(self.project_field(arrow))
+            return actual_source if side == "source" else actual_target
+        if tag == "pointView":
+            target, _, domain = fields(arrow, tag, 3)
+            return domain if side == "source" else target
+        if tag in {"admittedPoint", "constrainedPoint"}:
+            from cas_port import admitted_point, constrained_point
+            if tag == "admittedPoint":
+                _, _, domain, _, target, _ = admitted_point(arrow)
+            else:
+                _, domain, _, target, _ = constrained_point(arrow)
+            return domain if side == "source" else target
+        if tag in {"identity", "zero"}:
+            source, target = fields(arrow, tag, 2)
+            if tag == "identity":
+                same(source, target, "endpoint identity's selected objects")
+            return source if side == "source" else target
+        if tag == "compose":
+            first, second = fields(arrow, tag, 2)
+            return self.component_endpoint(first if side == "source" else second, side)
+        if tag == "mediator":
+            left, right = fields(arrow, tag, 2)
+            if side == "source":
+                actual = self.component_endpoint(left, "source")
+                same(self.component_endpoint(right, "source"), actual,
+                     "mediator's complete shared domain")
+                return actual
+            return node("objectProduct", self.component_endpoint(left, "target"),
+                        self.component_endpoint(right, "target"))
+        if tag == "element":
+            original, expression = fields(arrow, tag, 2)
+            actual = self.retained_map_endpoint(expression, side)
+            if actual is not None:
+                if side == "target":
+                    self.check_element_target(actual, original)
+                return actual
+            return node("obj.sets.fin", 1) if side == "source" else original
+        if tag == "powerObjectMap":
+            source, target = self.power_endpoints(arrow)
+            return source if side == "source" else target
+        if tag == "map":
+            action, original = fields(arrow, tag, 2)
+            if self.carrier_action(action):
+                return node("functorAction", action, self.component_endpoint(original, side))
+            if self.tag(action) in {"con.automorphisms", "fun.core_sets.automorphisms",
+                                    "fun.core_groups.automorphisms", "fun.core_sets.two_subsets"}:
+                source, target, _, _ = self.core_comparison(original)
+                return node("functorAction", action,
+                            node("coreObject", source if side == "source" else target))
+            if self.tag(action) == "fun.modules.reindex":
+                fields(action, "fun.modules.reindex", 1)
+                return node("functorAction", action, self.component_endpoint(original, side))
+            raise Unsupported("the selected mapped endpoint has no implemented native reader")
+        if tag == "cellComponent":
+            cell, parameters, receiver, inverse = fields(arrow, tag, 4)
+            if cell == self.additive_cell:
+                same(parameters, [], "the endpoint component's declaration parameters")
+                if type(inverse) is not bool:
+                    raise ValueError("the endpoint component requires a Boolean orientation")
+                left, right = self.additive_carrier_routes(receiver)
+                return (right if inverse else left) if side == "source" else (left if inverse else right)
+        if tag == "cartesianMap":
+            reindex, parameters, receiver = cartesian_map(arrow)
+            if reindex == "fun.modules.reindex":
+                if len(parameters) != 1:
+                    raise ValueError("the cartesian endpoint requires its complete selected base map")
+                return node("functorAction", node(reindex, *parameters), receiver) if side == "source" else receiver
+        if tag == "presentation":
+            comparison, parameters, inverse = fields(arrow, tag, 3)
+            if not isinstance(parameters, list) or type(inverse) is not bool:
+                raise ValueError("a comparison endpoint requires ordered parameters and Boolean direction")
+            if comparison == "cmp.rational_dual.translation":
+                same(parameters, [], "the comparison endpoint's declaration parameters")
+                use_y = (side == "source") == inverse
+                return node("obj.sets.rational_dual_y" if use_y else "obj.sets.rational_dual_x")
+            if comparison == "cmp.sets.singleton_terminal":
+                same(parameters, [], "the comparison endpoint's declaration parameters")
+                return (node("obj.sets.fin", 1) if (side == "source") != inverse
+                        else node("obj.sets.terminal"))
+            if comparison in {"cmp.sets.fin_reversal", "cmp.groups.cyclic_quotient_residue"}:
+                if len(parameters) != 1:
+                    raise ValueError("the comparison endpoint requires its selected size parameter")
+                size = self.natural(parameters[0], "the comparison endpoint size")
+                if comparison == "cmp.sets.fin_reversal":
+                    return node("obj.sets.fin", size)
+                quotient = (side == "source") != inverse
+                return node("obj.groups.cyclic_quotient" if quotient else "obj.groups.cyclic", size)
+
+        if tag in {"op.rings.add", "op.rings.mul", "op.rings.neg", "op.rings.pow"}:
+            parameters = fields(arrow, tag, 2 if tag == "op.rings.pow" else 1)
+            selected_ring = parameters[0]
+            if tag == "op.rings.pow":
+                self.natural(parameters[1], "the selected endpoint exponent")
+            if side == "source" and tag in {"op.rings.add", "op.rings.mul"}:
+                return node("objectProduct", selected_ring, selected_ring)
+            return selected_ring
+        if tag in {"op.monoids.mul", "op.additive_monoids.add"}:
+            monoid, = fields(arrow, tag, 1)
+            return node("objectProduct", monoid, monoid) if side == "source" else monoid
+        if tag == "op.monoids.one":
+            monoid, = fields(arrow, tag, 1)
+            # This is native decoding context from the published signature,
+            # not an inventory or a replacement for the supplied comparison.
+            return node("obj.sets.fin", 1) if side == "source" else monoid
+        if tag == "op.groups.inverse":
+            return fields(arrow, tag, 1)[0]
+        if tag in {"mor.sets.equality", "op.linear_orders.le", "op.linear_orders.lt"}:
+            receiver, = fields(arrow, tag, 1)
+            return node("objectProduct", receiver, receiver) if side == "source" else node("obj.sets.truth_values")
+        if tag == "op.modules.scalar_action":
+            ring, module = fields(arrow, tag, 2)
+            return node("objectProduct", ring, module) if side == "source" else module
+        if tag == "mor.sets.bilin_module_pairing":
+            _, values, formed = fields(arrow, tag, 3)
+            return node("objectProduct", formed, formed) if side == "source" else values
+        if tag == "mor.commutative_rings.integer_coefficients":
+            ring, = fields(arrow, tag, 1)
+            return node("obj.commutative_rings.integers") if side == "source" else ring
+        if tag in {"mor.sets.rational_dual_x_constants", "mor.sets.rational_dual_y_constants"}:
+            fields(arrow, tag, 0)
+            if side == "source":
+                return node("obj.sets.rationals")
+            return node("obj.sets.rational_dual_x" if tag.endswith("_x_constants") else "obj.sets.rational_dual_y")
+        if tag == "mor.sets.direct_image":
+            source, target, _ = fields(arrow, tag, 3)
+            return node("obj.sets.power_set", source if side == "source" else target)
+        if tag in {"obj.sets.group_morphisms#application", "obj.sets.module_morphisms#application"}:
+            object_id = tag.removesuffix("#application")
+            parameters = fields(arrow, tag, self.morphism_objects[object_id])
+            return (node("objectProduct", node(object_id, *parameters), parameters[-2])
+                    if side == "source" else parameters[-1])
+        if tag == "mor.sets.power_series_coefficient":
+            ring, = fields(arrow, tag, 1)
+            return (node("objectProduct", node("obj.sets.power_series", ring), node("obj.sets.naturals"))
+                    if side == "source" else ring)
+        if tag == "mor.sets.successor_power_series_terms":
+            ring, = fields(arrow, tag, 1)
+            return node("obj.sets.naturals") if side == "source" else node("obj.sets.power_series", ring)
+        if tag == "mor.sets.fin_rev":
+            dimension, = fields(arrow, tag, 1)
+            return node("obj.sets.fin", self.natural(dimension, "the selected endpoint dimension"))
+        if tag == "mor.sets.cyclic_quotient_map":
+            modulus, = fields(arrow, tag, 1)
+            self.natural(modulus, "the selected endpoint modulus")
+            return node("obj.sets.integers") if side == "source" else node("obj.sets.cyclic_quotient", modulus)
+        if tag == "mor.groups.cyclic_quotient_aut_by_unit" and side == "target":
+            modulus, = fields(arrow, tag, 1)
+            self.natural(modulus, "the selected endpoint modulus")
+            return node("functorAction", node("fun.core_groups.automorphisms"),
+                        node("coreObject", node("obj.groups.cyclic_quotient", modulus)))
+        if tag in {"mor.sets.automorphism_forward", "mor.sets.automorphism_backward",
+                   "mor.groups.automorphism_forward", "mor.groups.automorphism_backward"}:
+            receiver, _ = fields(arrow, tag, 2)
+            return receiver
+        raise Unsupported("this complete declared endpoint has no additional native view")
+
+    def product_factors(self, selected, components=None):
+        """Consume either public product form without rewriting its descriptor."""
+        tag = self.tag(selected)
+        if tag == "valueData":
+            return self.product_factors(fields(selected, tag, 1)[0], components)
+        if tag == "functorAction":
+            action, receiver = fields(selected, tag, 2)
+            if self.carrier_action(action):
+                return self.product_factors(receiver, components)
+            raise Unsupported("this selected product view has no implemented carrier decoder")
+        if tag == "objectProduct":
+            return object_product(selected)
+        if tag == "finiteData":
+            original, _ = fields(selected, tag, 2)
+            return self.product_factors(original, components)
+        if tag in {"constructionField", "constructionApex"}:
+            return self.product_factors(self.project_field(selected), components)
+        if tag == "morphismEndpoint":
+            actual = self.endpoint_view(selected)
+            if key(actual) == key(selected):
+                raise Unsupported("the endpoint has no independently retained product context")
+            factors = self.product_factors(actual)
+            if components is None:
+                return factors
+            # An unnamed endpoint supplies no extra component spelling. Keep
+            # actual typed/owned component fields, when supplied, instead of
+            # replacing them by a native carrier view of a declaration parameter.
+            retained = [self.retained_map_endpoint(component, "target")
+                        for component in components]
+            return tuple(factor if endpoint is None else endpoint
+                         for factor, endpoint in zip(factors, retained))
+        raise Unsupported("the selected endpoint is not a supported public product")
+
+    def same_endpoint(self, actual, explicit, arrow, side, label):
+        """Accept the exact declaration endpoint or an explicitly supplied field."""
+        if explicit is not None and key(actual) == key(explicit):
+            return
+        if self.tag(actual) == "finiteData":
+            original, _ = fields(actual, "finiteData", 2)
+            inventory(actual)
+            return self.same_endpoint(original, explicit, arrow, side, label)
+        if self.tag(actual) == "morphismEndpoint":
+            selected_arrow, selected_side = morphism_endpoint(actual)
+            if key(selected_arrow) != key(arrow) and self.tag(selected_arrow) in {
+                    "compose", "mediator", "point", "valueData", "typedMap"}:
+                # Structural endpoint projections retain the original packet;
+                # only their supplied field is used for this internal check.
+                return self.same_endpoint(self.endpoint_view(actual), explicit,
+                                          arrow, side, label)
+            same(selected_arrow, arrow, label + " callable")
+            same(selected_side, side, label + " selector")
+        else:
+            same(actual, explicit, label)

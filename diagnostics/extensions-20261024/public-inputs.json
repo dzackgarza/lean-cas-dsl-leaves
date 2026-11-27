@@ -1,0 +1,1134 @@
+{
+  "publicApiSha256": "eecf444f9a3f007684c2c494085b02cbe6945b1add5ea90db2da5ad9a33c7612",
+  "publicApiProvenance": {
+    "protocolRevision": "a131843a8c4cd8222814ca3949a27dc41dd7a29e",
+    "mathematicsRevision": "4acd7aff0350c5a84ce695e42eaadfd583ac343d",
+    "exporterSha256": "938fcb03f47fce885c2661d3b5135e3c9dec0b999563887087fffe897ccff9c9",
+    "kernelRevision": "546cffae249e1d53c66cc7d62aeba74e426c6592",
+    "admissionSourceSha256": "14af9de07036bd0f11000e2bd88a6dfed7edc6bf47690b1fa49b3f97e00d19c3",
+    "addressExporterSha256": "e4936bf3a71dfd145635816e4e2c0fe269b5790a0d34d1ee7dc05f6216edf4b8",
+    "additionalImports": [
+      "LeanCategories.Catalogue.Semantics.Foundation.FiniteOrders",
+      "LeanCategories.Catalogue.Semantics.Foundation.TwoSubsets",
+      "LeanCategories.Catalogue.Semantics.Foundation.IntegerSquareBounds",
+      "LeanCategories.Catalogue.Semantics.Algebra.CyclicQuotients",
+      "LeanCategories.Catalogue.Semantics.Independent.ScalarAndFormExtensions"
+    ],
+    "declarationProbeSha256": "6d9af2678190cb4a439dfb3c0a8e97690f416306cbbd97735904a9fb17a7d8da",
+    "addressProbeSha256": "9017be76727d196bc8fe0ba8edb604add6ecf088bca703ddb11e0b7e74487b71"
+  },
+  "publicContractRevision": "6cf4cda6eb34169a7c34dba4d269bd0212f78383",
+  "implementationInputs": [
+    "CasContract/Port.lean documentation",
+    "api/README.md",
+    "api/manifest.md",
+    "api/wire-examples.md",
+    "python/cas_port.py",
+    "Fresh public declared-port export signatures and docstrings",
+    "Sage 10.8 public documentation",
+    "Public InterfaceCompletion.md mathematical interface documentation",
+    "Explicitly authorized public generic AutomorphismArrows interface documentation at mathematics revision 4ea82e7cf6f5fd75234fd2ce18255a45ad851379"
+  ],
+  "sourceBoundary": "Only this diagnostic subtree, repository instructions, supplied public protocol and declaration exports, and referenced engine/interface documentation were consulted. No kernel implementation, acceptance assertion, expected-answer fixture, frozen trial or downstream execution report was accessed.",
+  "additionalPublicMathematicalDocumentation": [
+    {
+      "path": "LeanCategories/Catalogue/Semantics/Independent/InterfaceCompletion.md",
+      "publishedRevision": "93e1a738",
+      "sha256": "8a53c2ca3c4ef2ba64ce6c6df2f167bd2c13b0637b29b5c5cbdfdcffe4c2887f",
+      "scope": "Complete selected change-value comparison and category-sensitive automorphism arrows"
+    },
+    {
+      "path": "LeanCategories/Catalogue/Semantics/Algebra/AutomorphismArrows.lean",
+      "publishedRevision": "4ea82e7cf6f5fd75234fd2ce18255a45ad851379",
+      "sha256": "42494a964a198c8df24c229c68c8a69ed3ccdf85b09bb70db2ffaf9ca5644bd0",
+      "scope": "Only the authorized generic public forward/backward and Aut multiplication convention; no test or neighboring source inspected"
+    }
+  ],
+  "completionReview": {
+    "baseSourceCommit": "03a0a3dc834455afe898da1c4839f123578f3812",
+    "publicContractPublishedRevision": "98794d1ac255a51d2396b59f041650f4d564a998",
+    "publicContractLocalRevision": "c74abb724fd1424d590efc5fd0e21d67aaa55034",
+    "publicContractTree": "8fdf6a4e6b60f98017f6b967babb0cc180156b39",
+    "publicApiSha256": "7bccaf5e7bcfaa682f14ce429bcae158d9c899a66daec214e5ac5a9ad885d615",
+    "scope": "Complete callable requests, retained native computations, selected parameter framing, exact native equality and standalone protocol checks.",
+    "priorPublicContracts": [
+      {
+        "publicContractPublishedRevision": "c6e24107ec84481a8240bb3cae5c31f67a098a71",
+        "publicContractLocalRevision": "c97110dbef75cb77d249ae3a51a95cdc8f90af19",
+        "publicContractTree": "c08793f7c1bb4843ad0f6131ad8c32d9db9c928d"
+      },
+      {
+        "publicContractPublishedRevision": "80bf36d2131e00e78cba2c8461db7b32d98a86f4",
+        "publicContractLocalRevision": "aa8477de4aebc83823b88ac4885225e8fc13d9c5",
+        "publicContractTree": "7de02aec2fd5d89d13683561ee92055909c28eb7"
+      }
+    ],
+    "firstSourceCheckpoint": "d04b96c4a57081a9877fae1cfec41631a965e973",
+    "newRegistrationAddresses": [
+      "op.monoids.mul",
+      "op.monoids.one",
+      "mor.sets.direct_image",
+      "obj.sets.group_morphisms#application",
+      "obj.sets.module_morphisms#application"
+    ],
+    "contractUpdate": "Documentation-only Aut multiplication convention; candidate API provenance retains its original protocol revision.",
+    "engineeringChecks": {
+      "runtime": "/workspace/scratch/17aab8431d78/recovery/engines/passagemath-10.8.13/bin/python",
+      "originalSmokeRequests": 74,
+      "completionSmokePrimaryRequests": 99,
+      "completionSmokeForeignOwnerRequests": 1,
+      "completionSmokeGroups": 14,
+      "genericSmokeRequests": 36,
+      "registrationPairs": 63,
+      "uniqueRegistrationPairs": 63,
+      "missingPublicAddresses": [],
+      "pythonSourcesCompiled": 11,
+      "evidenceBoundary": "Standalone framing, complete parameter consumption, ownership and ordinary result-shape checks only; no expected mathematical answer or acceptance assertion."
+    }
+  },
+  "priorPublicApis": [
+    {
+      "sha256": "691d2b80c2ff4fd6a0e99745beee82117a5f110a288674bb9b58fc930034c22a",
+      "provenance": {
+        "protocolRevision": "8397df15042598f5ce9a75cdb22675c65b06fc89",
+        "mathematicsRevision": "7e848db36ff74faf62b00304cc0186a8bac641b7",
+        "exporterSha256": "938fcb03f47fce885c2661d3b5135e3c9dec0b999563887087fffe897ccff9c9",
+        "kernelRevision": "58735c5a16caea1754dab6d5e00fc769c4692ce4",
+        "admissionSourceSha256": "d1bcbfcd86ef3e0d0881d4293cd0f184410d9822b444684e2c41a610fe162cc6",
+        "addressExporterSha256": "e4936bf3a71dfd145635816e4e2c0fe269b5790a0d34d1ee7dc05f6216edf4b8",
+        "additionalImports": [
+          "LeanCategories.Catalogue.Semantics.Foundation.FiniteOrders",
+          "LeanCategories.Catalogue.Semantics.Foundation.TwoSubsets",
+          "LeanCategories.Catalogue.Semantics.Foundation.IntegerSquareBounds",
+          "LeanCategories.Catalogue.Semantics.Algebra.CyclicQuotients",
+          "LeanCategories.Catalogue.Semantics.Independent.ScalarAndFormExtensions"
+        ],
+        "declarationProbeSha256": "6d9af2678190cb4a439dfb3c0a8e97690f416306cbbd97735904a9fb17a7d8da",
+        "addressProbeSha256": "9017be76727d196bc8fe0ba8edb604add6ecf088bca703ddb11e0b7e74487b71"
+      }
+    },
+    {
+      "sha256": "7bccaf5e7bcfaa682f14ce429bcae158d9c899a66daec214e5ac5a9ad885d615",
+      "provenance": {
+        "protocolRevision": "80bf36d2131e00e78cba2c8461db7b32d98a86f4",
+        "mathematicsRevision": "4ea82e7cf6f5fd75234fd2ce18255a45ad851379",
+        "exporterSha256": "938fcb03f47fce885c2661d3b5135e3c9dec0b999563887087fffe897ccff9c9",
+        "kernelRevision": "1dbcaf3af7718d4e7f347eb3bfa1d0aa55a18330",
+        "admissionSourceSha256": "14af9de07036bd0f11000e2bd88a6dfed7edc6bf47690b1fa49b3f97e00d19c3",
+        "addressExporterSha256": "e4936bf3a71dfd145635816e4e2c0fe269b5790a0d34d1ee7dc05f6216edf4b8",
+        "additionalImports": [
+          "LeanCategories.Catalogue.Semantics.Foundation.FiniteOrders",
+          "LeanCategories.Catalogue.Semantics.Foundation.TwoSubsets",
+          "LeanCategories.Catalogue.Semantics.Foundation.IntegerSquareBounds",
+          "LeanCategories.Catalogue.Semantics.Algebra.CyclicQuotients",
+          "LeanCategories.Catalogue.Semantics.Independent.ScalarAndFormExtensions"
+        ],
+        "declarationProbeSha256": "6d9af2678190cb4a439dfb3c0a8e97690f416306cbbd97735904a9fb17a7d8da",
+        "addressProbeSha256": "9017be76727d196bc8fe0ba8edb604add6ecf088bca703ddb11e0b7e74487b71"
+      }
+    }
+  ],
+  "publicApiStatus": "candidate supplied by the public-interface owner; not a final freeze",
+  "additiveFollowupReview": {
+    "baseSourceCheckpoint": "818f82d606b65f302f10ce120e82bc1d15e0d299",
+    "publicApiSha256": "eecf444f9a3f007684c2c494085b02cbe6945b1add5ea90db2da5ad9a33c7612",
+    "publicApiStatus": "candidate supplied by the public-interface owner; not a final freeze",
+    "publicContractPublishedRevision": "6cf4cda6eb34169a7c34dba4d269bd0212f78383",
+    "publicContractLocalRevision": "89f514d7a496e3867f24efefc7f71bbda88fba7f",
+    "publicContractTree": "0cbfe994b2aeb4edf2564b216a3194598eef1443",
+    "scope": "Only the three new related public additive addresses; existing native ring/module decoders, complete selections, point/whole-domain invocation and actual live result reuse.",
+    "inputBoundary": "Public candidate API, public contract and the owned diagnostic subtree only. No additional mathematical implementation, kernel implementation, external mathematical test assertion or downstream execution report was read.",
+    "newRegistrations": [
+      {
+        "operation": "op.additive_monoids.add",
+        "input": "cat.additive_monoids"
+      },
+      {
+        "operation": "fun.additive_groups.additive_monoid",
+        "input": "cat.additive_groups"
+      },
+      {
+        "operation": "cell.additive_groups.carrier#component",
+        "input": "cell.additive_groups.carrier#component"
+      }
+    ],
+    "publicInventory": {
+      "operations": 326,
+      "inputForms": 566,
+      "objects": 132,
+      "functors": 96,
+      "lifts": 3
+    },
+    "engineeringChecks": {
+      "runtime": "/workspace/scratch/17aab8431d78/recovery/engines/passagemath-10.8.13/bin/python",
+      "additiveSmokePrimaryRequests": 66,
+      "additiveSmokeForeignOwnerRequests": 1,
+      "genericSmokeRequests": 36,
+      "completionSmokePrimaryRequests": 99,
+      "completionSmokeForeignOwnerRequests": 1,
+      "completionSmokeGroups": 14,
+      "registrationPairs": 66,
+      "uniqueRegistrationPairs": 66,
+      "missingPublicAddresses": [],
+      "pythonSourcesCompiled": 13,
+      "evidenceBoundary": "Standalone framing, selected parameters, complete callable data, ownership and ordinary result-shape checks only. No expected mathematical answer or mathematical acceptance assertion."
+    },
+    "publicContractDeficiency": null,
+    "nativeLimits": "Only explicit supported ring/module additive-group images and their actual returned monoids. Other additive monoids, the separate additive-vectors family, alternate carrier-route encodings and arbitrary infinite whole-map equality without an existing native model remain unsupported."
+  },
+  "endpointConsumptionReview": {
+    "baseSourceLocalCommit": "d8a24f94205407f1c0d7c20272f230e7f1515458",
+    "baseSourcePublishedCommit": "5b2ce9e5a2da78227d43a01297874667bd6f436e",
+    "baseSourceSubtree": "f3439d485b4d8a529af6e38c16eace2f40b95ee0",
+    "scope": "Bounded completion of existing public endpoint and whole-callable consumption; no new registration or native algorithm.",
+    "sourceInputFiles": [
+      {
+        "path": "diagnostics/extensions-20261024/README.md",
+        "sha256": "a4ae6d605f2e62614206d65c6f4fc02c7b250f81ad4b213fc5651e0b2839d11d"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/additive_interfaces.py",
+        "sha256": "97b1a5dfd249d1bdfbe361bab1c6be2bc685b9d7cd4d8cd955cc9064c5087c74"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/additive_smoke.py",
+        "sha256": "0bbb38db0ed66022908d646023cca6caa60c1f904d150617525576a317f8d196"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/backend.py",
+        "sha256": "329cadcc09bc200f09530f4a7887cb60599c25efdad5a507d235d052b55ea292"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/completion_smoke.py",
+        "sha256": "371abf6be4a7619d6c6b3baa9e1dc12bad759166eb0fa2c7d5992d0adf5db41e"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/engine.py",
+        "sha256": "7357327aced3f5afa36578153c608192d5f685fdd4f3ac4b1d04e00e9b09ea51"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/extensions.py",
+        "sha256": "e53b4f2914b6fa22f1557cc9d59a1f9fa2beaf1bd45ee96973b3db2cf1b1a1b3"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/generic_interfaces.py",
+        "sha256": "59ff9ea0cf237c37be801e3044b6a43556ea9eec8bf00573d4ec8063544a28c1"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/generic_smoke.py",
+        "sha256": "4e132c4f065e4a4c68cd5c11091919d9b31f9647bd73dfdbb70b9a7779347c47"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/leaves.json",
+        "sha256": "0af9314a206ca8fb7028da77f75c5adeb4b0c4a04c309d06594aa532a4d3597d"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/lifts.py",
+        "sha256": "5e9111b0360ba86f44fe63aacdccb23ef1c48a33d12b36249f18b209eb666c26"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/native_linear.py",
+        "sha256": "42c70582440942d632d6b4e529baf78c2cdc0b21d676a82beb4f2ae7d19f12cf"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/native_polynomial.py",
+        "sha256": "1c79b79fd33908e3eff802f02829e62805186c79e6085b57e9d1cf726608d033"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/public-inputs.json",
+        "sha256": "cff6f558f7fca892963a7d3e2dc0c3be1e0cc4963895cdf61a0522085ff4c457"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/smoke.py",
+        "sha256": "81182e57ee94c8bb5210451b75153193d3ee23c611e6c9dad69e78dc4f711063"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/wire.py",
+        "sha256": "5a9ec61a92b1fdd04ca1ef91842610dc3eecf0c16f83e19e49211040a36a89e9"
+      }
+    ],
+    "publicContractObservedRevisions": [
+      "706b353f6cc58d204cbbd8e47cea038ccaa0a9d3",
+      "23f1e8190ba472fd99f7ee83b78f6e8357530e7f"
+    ],
+    "publicContractCurrentRevision": "23f1e8190ba472fd99f7ee83b78f6e8357530e7f",
+    "publicContractCurrentTree": "8203d550c8d1e4719c84eaa3f9ca263cf0836fda",
+    "contractRevisionNote": "The second observed revision changes the mathematics dependency lock only; the consulted protocol, wire, helper and checked-in API bytes are unchanged.",
+    "publicContractInputFiles": [
+      {
+        "path": "AGENTS.md",
+        "sha256": "844f7c441354a6fbe0a626439e7253438371dab5f3cfcc6884ca5e7dc365131b"
+      },
+      {
+        "path": "INTENT.md",
+        "sha256": "a92d8299a42d9d05158eac9fdfafc1f38b0959028f60ed88377ebc9eff605981"
+      },
+      {
+        "path": "CasContract/Port.lean",
+        "sha256": "1d2093178736f4c8c76bb578e8ee1ab5846da0f916f4b5e50d11752903266be3"
+      },
+      {
+        "path": "api/README.md",
+        "sha256": "6fc24c988722d8e66f2cf8227975e015893a5700a971a4cd4fc7c7c786fc9a15"
+      },
+      {
+        "path": "api/manifest.md",
+        "sha256": "4fefaf5ae2fc8dd8bb2a1556274e1aa49347c288a61897b6804870a413d53314"
+      },
+      {
+        "path": "api/wire-examples.md",
+        "sha256": "ca78531697169e84909cbde4cedd06837ff27b607c64ba307c17597ee3a94ed9"
+      },
+      {
+        "path": "api/declared-ports.json",
+        "sha256": "f3a17fd1d2fa98d72513fbe9ac333834f64b6b160a9ccd5206b97a5991802b19"
+      },
+      {
+        "path": "python/cas_port.py",
+        "sha256": "5f2c330047725cd429eec42ac0dbf0ca6f5933b723857d44859f1954a7e98e19"
+      }
+    ],
+    "extensionApi": {
+      "path": "/tmp/kernel-mvp-public-api-candidate-546cffae-20261024.json",
+      "sha256": "eecf444f9a3f007684c2c494085b02cbe6945b1add5ea90db2da5ad9a33c7612",
+      "status": "earlier public candidate; not a final freeze",
+      "provenance": {
+        "protocolRevision": "a131843a8c4cd8222814ca3949a27dc41dd7a29e",
+        "mathematicsRevision": "4acd7aff0350c5a84ce695e42eaadfd583ac343d",
+        "exporterSha256": "938fcb03f47fce885c2661d3b5135e3c9dec0b999563887087fffe897ccff9c9",
+        "kernelRevision": "546cffae249e1d53c66cc7d62aeba74e426c6592",
+        "admissionSourceSha256": "14af9de07036bd0f11000e2bd88a6dfed7edc6bf47690b1fa49b3f97e00d19c3",
+        "addressExporterSha256": "e4936bf3a71dfd145635816e4e2c0fe269b5790a0d34d1ee7dc05f6216edf4b8",
+        "additionalImports": [
+          "LeanCategories.Catalogue.Semantics.Foundation.FiniteOrders",
+          "LeanCategories.Catalogue.Semantics.Foundation.TwoSubsets",
+          "LeanCategories.Catalogue.Semantics.Foundation.IntegerSquareBounds",
+          "LeanCategories.Catalogue.Semantics.Algebra.CyclicQuotients",
+          "LeanCategories.Catalogue.Semantics.Independent.ScalarAndFormExtensions"
+        ],
+        "declarationProbeSha256": "6d9af2678190cb4a439dfb3c0a8e97690f416306cbbd97735904a9fb17a7d8da",
+        "addressProbeSha256": "9017be76727d196bc8fe0ba8edb604add6ecf088bca703ddb11e0b7e74487b71"
+      }
+    },
+    "checkedInApi": {
+      "path": "api/declared-ports.json",
+      "sha256": "f3a17fd1d2fa98d72513fbe9ac333834f64b6b160a9ccd5206b97a5991802b19",
+      "status": "earlier checked-in public candidate; not a final freeze",
+      "provenance": {
+        "protocolRevision": "aac22724a34c198f5d5b1d309565aca79393a146",
+        "mathematicsRevision": "dbab309f2ee6a4da2c19e970f4d5d6460d8665a4",
+        "exporterSha256": "9c292396d56c46a445e71bcf7f60356d7420728857ab97937eae5b54b8c0766f",
+        "kernelRevision": "9630f544f0b82581ba0083f7bbd49831ef5967e2",
+        "admissionSourceSha256": "43966977d75305e86b7de9879b53b8731c4eb4c52a5b2a14a0996d5fb2d06db3",
+        "addressExporterSha256": "aa28d707f425ff40f7cdf0bdf6e52169bfa674745b5b091e0c4e4042d40517a9"
+      }
+    },
+    "registrationInventory": {
+      "pairs": 66,
+      "uniquePairs": 66,
+      "unchangedSha256": "0af9314a206ca8fb7028da77f75c5adeb4b0c4a04c309d06594aa532a4d3597d",
+      "missingExtensionOperationAddresses": [],
+      "missingExtensionInputForms": []
+    },
+    "inputBoundary": "Only the supplied immutable diagnostic subtree, repository instructions, public contract documentation/helper, and explicitly authorized generated public candidates were consulted. No kernel implementation, acceptance question/assertion, expected-answer fixture, trial driver, private mathematics or downstream execution report was accessed. No additional external source was consulted.",
+    "engineeringChecks": {
+      "syntaxCompiledSources": 15,
+      "protocolOnlyBoundaryGroups": 13,
+      "engineStatus": "completed; all listed standalone engineering controls exited 0",
+      "evidenceBoundary": "Framing, complete parameter consumption, exact descriptors, retained packets/callables, explicit inventories and session ownership only. No mathematical correctness or acceptance evidence.",
+      "runtime": "/tmp/kernel-runtime-20261024/passagemath-10.8.13/bin/python",
+      "observedReady": {
+        "protocol": 1,
+        "backend_version": "10.8.13",
+        "adapter_version": "2026-10-24.6"
+      },
+      "executionSourceCommit": "eab9e3aac978087295d5ef9ab0e300edf8096bb2",
+      "executionSourceTree": "0f3e51bb5cbbc60103630a2e1ff37754061926f4",
+      "endpointPrimaryRequests": 33,
+      "endpointForeignOwnerRequests": 2,
+      "genericRequests": 36,
+      "completionPrimaryRequests": 99,
+      "completionForeignOwnerRequests": 1,
+      "completionGroups": 14,
+      "nativeProcessScheduling": "At most one native engine at a time. The endpoint script already checks owners sequentially; the original completion foreign-token request was deferred until its primary owner closed. All existing completion requests and expected engineering statuses were retained.",
+      "additionalNativeRuns": "None. The prior additive and original smoke results remain earlier-checkpoint records.",
+      "logs": [
+        {
+          "path": "/tmp/kernel-public-leaf-endpoints-20261024-checks/endpoint-smoke.log",
+          "sha256": "993725c162dc38c1bba21ad60f05eb4f45b6c838b35227d4e86707b353adc37a",
+          "exitCode": 0,
+          "command": "env CAS_LEAF_CONTRACT_PATH=/tmp/kernel-public-api-final-producer-20261024/contract PYTHONPATH=/tmp/kernel-public-api-final-producer-20261024/contract/python python diagnostics/extensions-20261024/endpoint_smoke.py --sage-python /tmp/kernel-runtime-20261024/passagemath-10.8.13/bin/python",
+          "cwd": "/tmp/kernel-public-leaf-endpoints-20261024",
+          "stdout": "protocol boundary groups: 13\nprimary requests: 33\nforeign-owner requests: 2\nEngineering framing/retention results only; no mathematical acceptance claim.\n"
+        },
+        {
+          "path": "/tmp/kernel-public-leaf-endpoints-20261024-checks/generic-smoke.log",
+          "sha256": "6297fe66c244718463b4d9994bcbb081556ace55f6ebe1f449bf072e55159cf5",
+          "exitCode": 0,
+          "command": "env CAS_LEAF_CONTRACT_PATH=/tmp/kernel-public-api-final-producer-20261024/contract CAS_SAGE_PYTHON=/tmp/kernel-runtime-20261024/passagemath-10.8.13/bin/python PYTHONPATH=/tmp/kernel-public-api-final-producer-20261024/contract/python python diagnostics/extensions-20261024/generic_smoke.py",
+          "cwd": "/tmp/kernel-public-leaf-endpoints-20261024",
+          "stdout": "{\"completedRequests\": 36, \"checks\": \"public framing, selected structures and live callable reuse only\"}\n"
+        },
+        {
+          "path": "/tmp/kernel-public-leaf-endpoints-20261024-checks/completion-smoke.log",
+          "sha256": "5ec4c3276fb60b2dd6cdfc4da3268deba0799f1e9476aed6f510c0006f78460c",
+          "exitCode": 0,
+          "command": "env CAS_LEAF_CONTRACT_PATH=/tmp/kernel-public-api-final-producer-20261024/contract CAS_SAGE_PYTHON=/tmp/kernel-runtime-20261024/passagemath-10.8.13/bin/python PYTHONPATH=/tmp/kernel-public-api-final-producer-20261024/contract/python python /tmp/kernel-public-leaf-endpoints-20261024-checks/completion-sequential.py",
+          "cwd": "/tmp/kernel-public-leaf-endpoints-20261024",
+          "stdout": "{\"runtimeReady\": {\"protocol\": 1, \"backend_version\": \"10.8.13\", \"adapter_version\": \"2026-10-24.6\"}}\n{\"runtimeReady\": {\"protocol\": 1, \"backend_version\": \"10.8.13\", \"adapter_version\": \"2026-10-24.6\"}}\n{\n  \"engineering_groups_completed\": 14,\n  \"engineering_groups_requested\": 14,\n  \"primary_connection_requests\": 99,\n  \"foreign_connection_requests\": 1,\n  \"engineering_exceptions\": [],\n  \"scheduling\": \"original owner closes before the foreign owner starts\"\n}\n"
+        }
+      ],
+      "completionSequentialRunner": {
+        "path": "/tmp/kernel-public-leaf-endpoints-20261024-checks/completion-sequential.py",
+        "sha256": "a59af6e28a6f5ca63f15090519fd34a62c07725301c6c48688c4d41e0ab042ba",
+        "source": "\"\"\"Run the existing completion controls with one native process at a time.\"\"\"\n\nimport json\nimport os\nfrom pathlib import Path\nimport sys\n\nsys.path.insert(0, \"/tmp/kernel-public-leaf-endpoints-20261024/diagnostics/extensions-20261024\")\nimport completion_smoke as controls\n\nread_frame = controls.read_frame\n\n\ndef observe_ready(stream):\n    frame = read_frame(stream)\n    if isinstance(frame, dict) and frame.get(\"op\") == \"ready\":\n        print(json.dumps({\"runtimeReady\": {key: frame.get(key) for key in\n                                         (\"protocol\", \"backend_version\", \"adapter_version\")}}))\n    return frame\n\n\ncontrols.read_frame = observe_ready\nenvironment = dict(os.environ, PYTHONDONTWRITEBYTECODE=\"1\")\nbackend = Path(controls.__file__).with_name(\"backend.py\")\nwith controls.Port(backend, environment) as port:\n    for dimension in (0, 1, 4):\n        for typed in (False, True):\n            controls.finite_checks(port, dimension, typed)\n    controls.dual_and_polynomial_checks(port)\n    controls.series_checks(port)\n    controls.aut_wrapper_checks(port)\n    controls.named_aut_checks(port, False)\n    controls.named_aut_checks(port, True)\n    controls.category_descriptor_checks(port)\n    selected = controls.node(\"obj.sets.fin\", 4)\n    value = controls.owned(port.request(\n        \"ownership/original whole map\", \"mor.sets.fin_rev\",\n        controls.invoke(\"mor.sets.fin_rev\", [4], selected, selected, selected,\n                        controls.identity(selected))))\n    controls.cartesian_check(port)\n    primary_requests = port.requests\n\nwith controls.Port(backend, environment) as foreign:\n    foreign.request(\"ownership/foreign session reuse\", \"mor.sets.fin_rev\",\n                    controls.invoke(\"mor.sets.fin_rev\", [4], selected, selected, selected, value),\n                    expected=\"unsupported\")\n    foreign_requests = foreign.requests\n\nprint(json.dumps({\"engineering_groups_completed\": 14, \"engineering_groups_requested\": 14,\n                  \"primary_connection_requests\": primary_requests,\n                  \"foreign_connection_requests\": foreign_requests,\n                  \"engineering_exceptions\": [],\n                  \"scheduling\": \"original owner closes before the foreign owner starts\"}, indent=2))\n"
+      }
+    },
+    "sourceCheckpoints": [
+      {
+        "commit": "57c1c0fd53fd39fe8bbd802b92f7b54fa5d3803a",
+        "tree": "90adeeaeb9a8c4b19e3834d1ee9fd7ab65855fb4",
+        "publishedCommit": "5e5bd0c5b59d0297ab5fc11aac5bef87e8aada5c"
+      },
+      {
+        "commit": "eab9e3aac978087295d5ef9ab0e300edf8096bb2",
+        "tree": "0f3e51bb5cbbc60103630a2e1ff37754061926f4",
+        "scope": "Exact implementation source used by all follow-up native controls."
+      }
+    ],
+    "implementationSourceFiles": [
+      {
+        "path": "diagnostics/extensions-20261024/additive_interfaces.py",
+        "sha256": "881a55b16d26430995a946465105b7730978dce11c2a6e72da8e75b764146813"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/additive_smoke.py",
+        "sha256": "0bbb38db0ed66022908d646023cca6caa60c1f904d150617525576a317f8d196"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/backend.py",
+        "sha256": "d50e23198bcf21bf3390d16924052aecaaa092ba59ddcffdbc7e81a3794608dd"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/completion_smoke.py",
+        "sha256": "371abf6be4a7619d6c6b3baa9e1dc12bad759166eb0fa2c7d5992d0adf5db41e"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/endpoint_smoke.py",
+        "sha256": "5719e3b0a0b30a8b87c6fe036c9457eb3714f71b07b4a89e4304c097af0602fc"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/endpoints.py",
+        "sha256": "02d1dcaa25c2dbf14c41d9d4e944a4f2fe14715e0737ab6b346c3c05cff11c23"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/engine.py",
+        "sha256": "6f2251ed15fb4f431d2b76670e92496ff251b33739dbd0c240c82e4fb26fa09e"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/extensions.py",
+        "sha256": "b38ad2049cbec4de159232d561d187783cfd4ed93d710642cc2ea872b58de79b"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/generic_interfaces.py",
+        "sha256": "3a0743deffb101bcc4534e13286cac82ca3abec86e8d883180df9c33d185b614"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/generic_smoke.py",
+        "sha256": "4e132c4f065e4a4c68cd5c11091919d9b31f9647bd73dfdbb70b9a7779347c47"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/lifts.py",
+        "sha256": "5e9111b0360ba86f44fe63aacdccb23ef1c48a33d12b36249f18b209eb666c26"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/native_linear.py",
+        "sha256": "42c70582440942d632d6b4e529baf78c2cdc0b21d676a82beb4f2ae7d19f12cf"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/native_polynomial.py",
+        "sha256": "1c79b79fd33908e3eff802f02829e62805186c79e6085b57e9d1cf726608d033"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/smoke.py",
+        "sha256": "81182e57ee94c8bb5210451b75153193d3ee23c611e6c9dad69e78dc4f711063"
+      },
+      {
+        "path": "diagnostics/extensions-20261024/wire.py",
+        "sha256": "d8b081b9042a0e4b463d0c7c7528ece656907c960dfacb2b100882903a574827"
+      }
+    ],
+    "implementationSourcesSha256": "0e5f37870c432c66d268737711ccf5e49379f5322c6e9f2a5f2393cbf3dbee37",
+    "publicContractDeficiency": null,
+    "implementationLimits": "Existing native implementation limits remain. Endpoint wrappers supply no finite inventory; arbitrary unnamed arrows without an implemented complete native reader remain unsupported. No new registration, native algorithm or wire tag was added."
+  },
+  "callableFormsCompletion": {
+    "baseLeafCommit": "d33bec4433f39582824f6b2846c4f4ec4b9f7e13",
+    "publicContractRevision": "90d7d3f1833cff39b77024dcee2dc43213e623ad",
+    "publicFiles": {
+      "CasContract/Port.lean": "1d2093178736f4c8c76bb578e8ee1ab5846da0f916f4b5e50d11752903266be3",
+      "python/cas_port.py": "5f2c330047725cd429eec42ac0dbf0ca6f5933b723857d44859f1954a7e98e19",
+      "api/README.md": "6fc24c988722d8e66f2cf8227975e015893a5700a971a4cd4fc7c7c786fc9a15",
+      "api/wire-examples.md": "ca78531697169e84909cbde4cedd06837ff27b607c64ba307c17597ee3a94ed9",
+      "api/manifest.md": "4fefaf5ae2fc8dd8bb2a1556274e1aa49347c288a61897b6804870a413d53314",
+      "api/declared-ports.json": "f3a17fd1d2fa98d72513fbe9ac333834f64b6b160a9ccd5206b97a5991802b19"
+    },
+    "scope": "Consume the existing five published powerObjectMap fields through existing registrations; complete composition/mediator endpoint context and retained finite subset reuse. No new operation or registration.",
+    "sourceBoundary": "Only the frozen leaf repository, its instructions, the supplied public contract/API/docs/reference helper, and the installed local runtime setup were inspected. No kernel implementation, acceptance questions, expected-answer fixtures or downstream runtime reports were consulted.",
+    "validation": {
+      "syntax": "All 17 diagnostic Python sources parsed successfully.",
+      "protocolFieldGroups": 5,
+      "targetedPrimaryRequests": 35,
+      "foreignOwnerRequests": 3,
+      "script": "callable_forms_smoke.py",
+      "runtimeSetup": "/tmp/kernel-runtime-20261024/engines.sh",
+      "scope": "Engineering packet framing, retained callable data, endpoint/parameter/session checks and result shapes only. No mathematical expected answers or acceptance claims.",
+      "existingConsumerRegressions": {
+        "endpointProtocolGroups": 13,
+        "endpointPrimaryRequests": 33,
+        "endpointForeignOwnerRequests": 2,
+        "genericRequests": 36,
+        "result": "All completed successfully; one native process at a time."
+      },
+      "sourceHashes": {
+        "wire.py": "d71b389e88973556242a70b8d55888f58fb8c93dd35e6fee5daaaa08b9827afd",
+        "endpoints.py": "6de642a74be58e58a75589ce1faabae5bed1e613aff5adcf57b866922b23ca81",
+        "engine.py": "7ac13f3c42db2b2f86ec288fefaf8f4add3f4247b2d4cc5870d3de33cff42a0d",
+        "generic_interfaces.py": "684cdef1b29f632e82ce9b78dfa7060225174af58296d5291b4b2d954f912c74",
+        "extensions.py": "49c1ab7a080199fe42c80360690c24364808416390d03cf4eaf6f3f041f5e25f",
+        "power_interfaces.py": "d9a4368d599a630981845693b19295d14835f7c3e264708c7c093e72ceb212a5",
+        "callable_forms_smoke.py": "521454f34a8784dbab4573c1328c49e112ad7cfed3542f503cb7c5a77da4297a"
+      }
+    },
+    "firstSourceCheckpoint": "258508a368c853f72d577c0c24580570ad22655c",
+    "sourceCheckpoints": [
+      "258508a368c853f72d577c0c24580570ad22655c",
+      "a6a9901eda45a001804c083c303c7b25edb23f9b"
+    ],
+    "manifestSha256": "0af9314a206ca8fb7028da77f75c5adeb4b0c4a04c309d06594aa532a4d3597d",
+    "registrationPairsUnchanged": 66
+  },
+  "publicConformance20261025": {
+    "baseLeafCommit": "fa0856dfc365c497a25e4a94019a1cb08b79c4d1",
+    "publicContractCommit": "90d7d3f1833cff39b77024dcee2dc43213e623ad",
+    "publicApiSha256": "43392ae1c6636276519113d07c4cdc3ce8f8eeead1b4336db574c57269216079",
+    "publicApiProvenance": {
+      "protocolRevision": "90d7d3f1833cff39b77024dcee2dc43213e623ad",
+      "mathematicsRevision": "82d1370de372a00a86391b74fc2566c9547dfcb6",
+      "exporterSha256": "938fcb03f47fce885c2661d3b5135e3c9dec0b999563887087fffe897ccff9c9",
+      "kernelRevision": "da6af543a8e71e9400f5438ee40a4e395af2f299",
+      "admissionSourceSha256": "14af9de07036bd0f11000e2bd88a6dfed7edc6bf47690b1fa49b3f97e00d19c3",
+      "addressExporterSha256": "e4936bf3a71dfd145635816e4e2c0fe269b5790a0d34d1ee7dc05f6216edf4b8",
+      "additionalImports": [
+        "LeanCategories.Catalogue.Semantics.Foundation.FiniteOrders",
+        "LeanCategories.Catalogue.Semantics.Foundation.TwoSubsets",
+        "LeanCategories.Catalogue.Semantics.Foundation.IntegerSquareBounds",
+        "LeanCategories.Catalogue.Semantics.Algebra.CyclicQuotients",
+        "LeanCategories.Catalogue.Semantics.Independent.ScalarAndFormExtensions"
+      ],
+      "declarationProbeSha256": "6d9af2678190cb4a439dfb3c0a8e97690f416306cbbd97735904a9fb17a7d8da",
+      "addressProbeSha256": "9017be76727d196bc8fe0ba8edb604add6ecf088bca703ddb11e0b7e74487b71"
+    },
+    "publicProvenanceFileSha256": "0f16ecbe95dffd19b7328bfb76310ef967c6793f448cf4576dc414c86caec7ea",
+    "publicContractFiles": {
+      "CasContract/Port.lean": "1d2093178736f4c8c76bb578e8ee1ab5846da0f916f4b5e50d11752903266be3",
+      "python/cas_port.py": "5f2c330047725cd429eec42ac0dbf0ca6f5933b723857d44859f1954a7e98e19",
+      "api/README.md": "6fc24c988722d8e66f2cf8227975e015893a5700a971a4cd4fc7c7c786fc9a15",
+      "api/manifest.md": "4fefaf5ae2fc8dd8bb2a1556274e1aa49347c288a61897b6804870a413d53314",
+      "api/wire-examples.md": "ca78531697169e84909cbde4cedd06837ff27b607c64ba307c17597ee3a94ed9"
+    },
+    "unchangedExtensionManifestSha256": "0af9314a206ca8fb7028da77f75c5adeb4b0c4a04c309d06594aa532a4d3597d",
+    "unchangedRootManifestSha256": "318403323bfd15af750ac0fc7a726bbb08d74487e4496c337a70b4cdef8c6ea7",
+    "registrationPairs": 66,
+    "missingPublicAddresses": [],
+    "inputBoundary": "Only the exact independent leaf and its own engineering material, the exact public contract and reference helper, the explicitly supplied generated public API/provenance, and the installed runtime setup were consulted. No kernel source, protected mathematical question, expected answer, acceptance record, other agent directory, CI result or downstream runtime finding was read.",
+    "scope": "Common forms of existing registrations only: complete nullary/monoid expressions, global versus generalized results, actual returned object/map/Arrow reuse, complete endpoint contexts, explicit graph inventories, and live session ownership. No manifest change, new operation, new native mathematics algorithm, Lean code or certificate.",
+    "engineeringChecks": {
+      "freshPublicCases": {
+        "primaryRequests": 27,
+        "foreignOwnerRequests": 3,
+        "graphControls": 3,
+        "result": "completed"
+      },
+      "completion": {
+        "primaryRequests": 99,
+        "foreignOwnerRequests": 1,
+        "groups": 14,
+        "result": "completed"
+      },
+      "generic": {
+        "requests": 36,
+        "result": "completed"
+      },
+      "additive": {
+        "primaryRequests": 66,
+        "foreignOwnerRequests": 1,
+        "result": "completed"
+      },
+      "endpoint": {
+        "primaryRequests": 33,
+        "foreignOwnerRequests": 2,
+        "protocolGroups": 13,
+        "result": "completed"
+      },
+      "callableForms": {
+        "primaryRequests": 35,
+        "foreignOwnerRequests": 3,
+        "protocolGroups": 5,
+        "result": "completed"
+      },
+      "syntaxSources": 17,
+      "boundary": "Engineering framing, complete supplied data passage, successive native reuse, result shape and owner rejection only. No computed mathematical answer is asserted and no mathematical acceptance claim is made."
+    },
+    "publicInterfaceGap": null,
+    "implementationLimits": "The existing README Deliberate limits table remains authoritative for this diagnostic: arbitrary categories/functors, unsupported carriers, general-ring kernels, arbitrary infinite subsets/functions/series and arbitrary structured projection/creation actions remain unsupported."
+  },
+  "liftImageMetadata20261028": {
+    "baseLeafRevision": "2f35244884649c9268567bb9968840a34559a11c",
+    "publicContractRevision": "34bb8abbdbb49699015f63840cf86ed67f438003",
+    "publicContractBranch": "work/complete-method-request-20261027",
+    "publicContractFiles": {
+      "python/cas_port.py": "917acdccb6c099c018d9d0dd843c83c20a41de314aa3c4eab301a541790c1318",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/README.md": "f049769df1acc29f58d1a013f6a20041898bde3ba8bbac99d8b4701767cc47fb"
+    },
+    "unchangedExtensionManifestSha256": "0af9314a206ca8fb7028da77f75c5adeb4b0c4a04c309d06594aa532a4d3597d",
+    "scope": "Actual lift image metadata at the two existing bilinear-module lift field/factor registrations. Preserve supplied endpoints; use the existing native image adapters when forward supplies its image; retain the explicitly admitted legacy omission form. No new mathematical algorithm or registration.",
+    "inputBoundary": "Only the existing independent leaf package and its own engineering material, repository guidance, the public contract, and installed engine setup were consulted. No kernel implementation, expected answer, acceptance test or downstream runtime report was read.",
+    "engineVersion": "Sage/passagemath 10.8.13",
+    "engineeringChecks": {
+      "liftImages": {
+        "primaryConnectionRequests": 48,
+        "separateConnectionRequests": 5,
+        "completeFieldFactorReuseCycles": 6,
+        "malformedMetadataControls": 12,
+        "foreignOwnerControls": 3,
+        "result": "completed"
+      },
+      "existingExtensionSmoke": {
+        "requests": 74,
+        "result": "completed"
+      },
+      "boundary": "Public framing, exact endpoint retention, successive consumption and ownership only. Boolean observation shape is checked without asserting its value. No mathematical correctness or acceptance claim."
+    }
+  },
+  "ordinaryRingObjectAction20261029": {
+    "baseLeafRevision": "1fc1ee8b438aa6f1c78f21e99359c0408f8233e7",
+    "publicContractPublication": "fcefc8ba8296bd4d771cabd8b805c9061ada7513",
+    "publicContractFiles": {
+      "CasContract/Port.lean": "4082a8525f92ad945accd37935add2c31e8fda3e85d52328eb4b9a7b1339f777",
+      "python/cas_port.py": "1a061bfbc3dc40dadc157deaeb11dbd838d7f2710e53f1fe8f369bd60d43e6f5",
+      "api/manifest.md": "18a61df15642a9963c643df784352de91e2809cabdb1ef6d11d2761acdf1177f",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/declared-ports.json": "f3a17fd1d2fa98d72513fbe9ac333834f64b6b160a9ccd5206b97a5991802b19"
+    },
+    "registration": {
+      "operation": "fun.commutative_rings.ring",
+      "input": "cat.commutative_rings"
+    },
+    "scope": "The ordinary underlying-ring object action reuses the existing Sage native ring readers. Its owned image retains the same native parent, complete supplied receiver and original request; existing ring/scalar helpers consume it. No new native algorithm, mathematics, Lean code, map registration or contract change.",
+    "inputBoundary": "Only this leaf repository, its applicable instructions, the specified published public contract and declaration metadata were inspected. The supplied installed engine executable was used directly. No kernel implementation, mathematical proof source, acceptance assertion/result, other workspace report or another agent's history was inspected.",
+    "engineVersion": "Sage/passagemath 10.8.13",
+    "engineeringChecks": {
+      "script": "ring_image_smoke.py",
+      "objectRepresentations": 8,
+      "primaryConnectionRequests": 48,
+      "foreignOwnerRequests": 2,
+      "result": "completed",
+      "scope": "Published object/source-category address presence, request framing, actual owned ring/callable/scalar consumption, wrappers, selected presentation mismatch and closed-session ownership. No computed mathematical answer or law is asserted; no mathematical acceptance claim."
+    },
+    "publicAdmissionSnapshotGap": {
+      "missingOperation": "fun.commutative_rings.ring#map",
+      "missingInput": "fun.commutative_rings.ring#input",
+      "description": "The published Port, Python helper and wire guide describe registered functor map framing, but api/declared-ports.json omits this operation/input pair. api/manifest.md says the address rules do not substitute for actual admission inventories. The ordinary object operation and cat.commutative_rings input are present.",
+      "boundedResponse": "Register the ordinary object action only. Defer map registration until the contract owner publishes a coherent admission inventory; do not infer a downstream admission result.",
+      "resolvedByPublicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6"
+    },
+    "implementationLimits": "Only the existing native ring readers are supported. Arbitrary commutative-ring representations and the ordinary map port remain outside this addition."
+  },
+  "ringProtocolConformance20261029": {
+    "baseLeafRevision": "719a1321f6c964db052b9fee96a996accb82bc99",
+    "baseLeafTree": "429ec639c84b9dc007d56f0dee0b4ca18e145f19",
+    "publicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6",
+    "publicContractTree": "968ea95a5f8e7f76de95461999e8bafee74f2d39",
+    "publicContractFiles": {
+      "CasContract/Port.lean": "4082a8525f92ad945accd37935add2c31e8fda3e85d52328eb4b9a7b1339f777",
+      "python/cas_port.py": "1a061bfbc3dc40dadc157deaeb11dbd838d7f2710e53f1fe8f369bd60d43e6f5",
+      "api/manifest.md": "18a61df15642a9963c643df784352de91e2809cabdb1ef6d11d2761acdf1177f",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/declared-ports.json": "642b7290d5441d7409fa6992732a97166907de8e69eafeb9e6df468aa7d73c4c"
+    },
+    "unchangedManifestSha256": "ac9ad362b840702b96db513f00195ccc4e53ad30f2c2495a1d0b30e6f4985d33",
+    "unchangedRegistrationPairs": 67,
+    "scope": "Existing ring-operation point, endpoint, callable and composition readers, including ordinary structural-action descriptors and actual owned RingImage outputs. No new registrations, native mathematics algorithms, Lean code or protocol tags.",
+    "readerCorrections": [
+      "Read the retained scalar codec through exact supported structural-action descriptors, finiteData/valueData wrappers and actual RingImage source data without rewriting request endpoints or identifying native parents.",
+      "Read wrapped product factors while preserving the original product and callable endpoint descriptors.",
+      "Consume complete closed point arrows inside generalized data using their own retained or declared source; unary ring callbacks retain the actual source codec.",
+      "Preserve supplied finite graph keys before point decoding, including valueData keys, paired keys and mixed retained/native finite products. Reuse the existing finite-ring and product readers; no inventory is inferred for an unenumerated morphismEndpoint."
+    ],
+    "inputBoundary": "Only this leaf repository, its applicable instructions, the public contract documentation/reference helper and published declaration inventories were inspected. The supplied installed engine was used directly. No kernel source, mathematical proof source, external test or acceptance assertion/result, downstream report or another agent's history was inspected. No Lean, Lake or compiler was run.",
+    "engineVersion": "Sage/passagemath 10.8.13",
+    "engineeringChecks": {
+      "script": "ring_protocol_smoke.py",
+      "completedGroups": 31,
+      "primaryConnectionRequests": 103,
+      "foreignOwnerRequests": 2,
+      "result": "completed",
+      "ordinaryObjectRegression": {
+        "script": "ring_image_smoke.py",
+        "objectRepresentations": 8,
+        "primaryConnectionRequests": 48,
+        "foreignOwnerRequests": 2,
+        "result": "completed"
+      },
+      "boundary": "Public packet framing, response shapes, complete descriptor and parameter retention, actual returned-data consumption, original graph keys and ownership only. No expected arithmetic value, equation, functor law or mathematical acceptance outcome is asserted."
+    },
+    "publicInterfaceGap": null,
+    "implementationLimits": "The existing supported native ring representations and README limits remain. The public map addresses are now published, but ordinary ring map registration is outside this conformance change."
+  },
+  "ownedResultComposability20261029": {
+    "baseLeafRevision": "f7ed66d96670fc588e87a0c478d77bde867c50f7",
+    "baseLeafTree": "6f7c0db6c026b0d4f9f01bd00ce45159a1f79017",
+    "publicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6",
+    "publicContractTree": "968ea95a5f8e7f76de95461999e8bafee74f2d39",
+    "publicContractFiles": {
+      "CasContract/Port.lean": "4082a8525f92ad945accd37935add2c31e8fda3e85d52328eb4b9a7b1339f777",
+      "python/cas_port.py": "1a061bfbc3dc40dadc157deaeb11dbd838d7f2710e53f1fe8f369bd60d43e6f5",
+      "api/manifest.md": "18a61df15642a9963c643df784352de91e2809cabdb1ef6d11d2761acdf1177f",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/declared-ports.json": "642b7290d5441d7409fa6992732a97166907de8e69eafeb9e6df468aa7d73c4c"
+    },
+    "unchangedManifestSha256": "ac9ad362b840702b96db513f00195ccc4e53ad30f2c2495a1d0b30e6f4985d33",
+    "unchangedRegistrationPairs": 67,
+    "scope": "Composition of existing registered ports and actual owned results, including ordinary RingImage coefficients, modules, additive monoids, complete Arrow/cone results and retained finite graphs. Private callable and point readers only; no new registration, native algorithm, Lean code or public wire field.",
+    "readerCorrections": [
+      "Retain each callable's point-input reader: graphs check exact original keys before outer valueData unwraps; native actions keep their existing point decoding. No codec is selected by the dispatched operation id.",
+      "Propagate the actual reader through composition, mediator branches, owned Invocation copies, closed point/callable-argument evaluation, comparisons and transparent structural/admission wrappers while preserving complete endpoints, requests and ownership.",
+      "Existing direct-image, power image/predicate and hom-application consumers pass original data to the actual inner callable reader; hom points preserve complete element/point framing. Returned product projections retain original component packets through the same product-frame reader.",
+      "Keep the caller's target while decoding nested monoid/additive expressions. Permit explicit supported forward carrier views of that exact selected structure without opening owned objects or equating native codecs."
+    ],
+    "inputBoundary": "Only this leaf source, its applicable instructions and the published public contract documentation, reference helper and generated declarations were inspected. Protocol cases were selected independently from those inputs. No kernel, mathematical proof source, external test or acceptance assertion/result, downstream report or another agent's history was inspected. No Lean, Lake or compiler was run; no remote reference was written.",
+    "engineVersion": "Sage/passagemath 10.8.13",
+    "engineeringChecks": {
+      "script": "composability_smoke.py",
+      "primaryConnectionRequests": 103,
+      "foreignOwnerRequests": 2,
+      "result": "completed",
+      "regressions": [
+        {
+          "script": "ring_protocol_smoke.py",
+          "primaryConnectionRequests": 103,
+          "foreignOwnerRequests": 2,
+          "result": "completed"
+        },
+        {
+          "script": "generic_smoke.py",
+          "primaryConnectionRequests": 36,
+          "result": "completed"
+        },
+        {
+          "script": "additive_smoke.py",
+          "primaryConnectionRequests": 66,
+          "foreignOwnerRequests": 1,
+          "result": "completed"
+        }
+      ],
+      "pythonSourcesAstParsed": 9,
+      "boundary": "Public packet framing, complete selected descriptors and parameters, result shapes, actual owned-result consumption, retained exact graph keys and ownership only. No expected arithmetic value, equality truth, cardinality, equation, law or mathematical acceptance outcome is asserted."
+    },
+    "independentSourceReview": {
+      "scope": "Static review of the concrete leaf diff and public-only conformance cases, including final focused reinspection of the nullary selection check.",
+      "result": "Completed with all concrete findings resolved; no remaining concrete defect identified in the bounded reviewed changes.",
+      "boundary": "The reviewer executed no code and made no mathematical correctness or downstream acceptance claim."
+    },
+    "publicInterfaceGap": null,
+    "implementationLimits": "The existing native representations and README limits remain. This is bounded conformance of the supplied cases, not an implementation claim for all category objects. Ordinary ring map registration remains outside this change."
+  },
+  "envelopeConsumerReview20261029": {
+    "baseLeafRevision": "0480ea755d82e16cc06ad5d148be89c524c5f073",
+    "baseLeafTree": "5a1e915be13a57a2f173af09e30c1089eac21fb0",
+    "publicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6",
+    "publicContractTree": "968ea95a5f8e7f76de95461999e8bafee74f2d39",
+    "publicContractFiles": {
+      "CasContract/Port.lean": "4082a8525f92ad945accd37935add2c31e8fda3e85d52328eb4b9a7b1339f777",
+      "python/cas_port.py": "1a061bfbc3dc40dadc157deaeb11dbd838d7f2710e53f1fe8f369bd60d43e6f5",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/declared-ports.json": "642b7290d5441d7409fa6992732a97166907de8e69eafeb9e6df468aa7d73c4c"
+    },
+    "unchangedManifestSha256": "ac9ad362b840702b96db513f00195ccc4e53ad30f2c2495a1d0b30e6f4985d33",
+    "unchangedRegistrationPairs": 67,
+    "coverageInventory": "envelope-coverage.json",
+    "coverageInventoryScope": "All unchanged registrations in nine request-frame groups and fourteen envelope families. Static source occurrence is distinguished from executed protocol coverage; it is not mathematical or admission evidence.",
+    "publicSnapshotGaps": {
+      "missingOperationAddresses": 25,
+      "missingInputAddresses": 19,
+      "exactLists": "envelope-coverage.json:publicSnapshotAddressGaps",
+      "methodBoundary": "meth.two_subsets and its linked-functor declaration are absent from the current public snapshot. The existing historical reader is unchanged; no complete-method binding is guessed."
+    },
+    "readerCorrections": [
+      "Use actual callable point readers in existing finite-map/automorphism consumers; preserve original product components and returned direction readers.",
+      "Check complete graph outputs in the actual target codec while retaining the exact supplied output packets. Native finite indexing preserves exact keys before wrapper removal or point decoding.",
+      "Consume complete typed Core comparisons and actual owned construction images, check exact image category/receiver data, and retain the supplied target native context and original selected action/comparison.",
+      "Read complete owner-category requests for the three publicly linked cardinality/kernel methods, retaining explicit parameters and rejecting missing parameters or residual source actions.",
+      "Validate nested finite element targets and consume repeated outer valueData envelopes on complete cone receivers."
+    ],
+    "inputBoundary": "Only this leaf repository and its own engineering material, applicable instructions, and the published public contract documentation/reference helper/generated inventory were inspected. No kernel, external acceptance file/result, downstream runtime report, mathematical proof source or another agent's history was inspected. No Lean/compiler or remote publication was run.",
+    "engineVersion": "Sage/passagemath 10.8.13",
+    "engineeringChecks": {
+      "script": "envelope_smoke.py",
+      "primaryConnectionRequests": 64,
+      "foreignOwnerRequests": 3,
+      "result": "completed",
+      "regressions": [
+        {
+          "script": "composability_smoke.py",
+          "primaryConnectionRequests": 103,
+          "foreignOwnerRequests": 2,
+          "result": "completed"
+        },
+        {
+          "script": "ring_protocol_smoke.py",
+          "primaryConnectionRequests": 103,
+          "foreignOwnerRequests": 2,
+          "result": "completed"
+        },
+        {
+          "script": "completion_smoke.py",
+          "primaryConnectionRequests": 99,
+          "foreignOwnerRequests": 1,
+          "result": "completed"
+        },
+        {
+          "script": "smoke.py",
+          "primaryConnectionRequests": 74,
+          "result": "completed; two older construction-map inputs now retain the published typed Core frame"
+        }
+      ],
+      "pythonSourcesAstParsed": 7,
+      "boundary": "Response shapes/statuses, actual selected records and fields, exact point framing, declared parameter consumption and supplier ownership only. No arithmetic answer, equality truth, cardinality answer, equation, law or mathematical acceptance outcome is asserted."
+    },
+    "independentSourceReview": "Bounded static review completed; final focused reinspection confirmed both the nested Core-map framing guard and exact-first Aut output indexing fixes. No remaining concrete finding was identified in the reviewed changes; the reviewer executed no code.",
+    "remainingCoverageLimits": [
+      "No positive constrainedPoint instance is supplied by the permitted concrete constructor/type data. Only malformed framing is exercised.",
+      "Existing native representations and README limitations remain; this inventory does not claim every envelope combination or every object in a registered category is implemented.",
+      "Registrations and the public contract remain unchanged; no algorithms, mathematical declarations or new semantic rows were added."
+    ]
+  },
+  "moduleFunctorActions20261029": {
+    "baseLeafRevision": "11201337b491b9a354cd3385984f8a494fc83a88",
+    "baseLeafTree": "ab9ee61288ee0d52e426666f4c1099301defecfa",
+    "publicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6",
+    "publicContractTree": "968ea95a5f8e7f76de95461999e8bafee74f2d39",
+    "publicContractFiles": {
+      "api/manifest.md": "18a61df15642a9963c643df784352de91e2809cabdb1ef6d11d2761acdf1177f",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/declared-ports.json": "642b7290d5441d7409fa6992732a97166907de8e69eafeb9e6df468aa7d73c4c",
+      "python/cas_port.py": "1a061bfbc3dc40dadc157deaeb11dbd838d7f2710e53f1fe8f369bd60d43e6f5"
+    },
+    "priorArt": "diagnostics/module_functor_actions at the base leaf revision; public framing and native interface discipline only",
+    "newRegistrationPairs": 4,
+    "totalRegistrationPairs": 71,
+    "scope": "The existing module fibre-inclusion and underlying object/map actions in the extension backend session. Existing native Module/Callable readers, complete selected request and actual-image data, no new mathematical algorithm or public encoding.",
+    "inputBoundary": "Only this leaf repository, its instructions and prior art, the pinned public contract documentation/reference helper/generated inventories, and the installed engine were inspected. No kernel, acceptance suite or expected-answer fixture, HANDOFF, downstream runtime report or other author workspace was inspected. No Lean or compiler was run. A separate reviewer inspected only this leaf diff and the same public contract.",
+    "engineVersion": "Sage/passagemath 10.8.13",
+    "engineeringChecks": {
+      "script": "module_functor_smoke.py",
+      "primaryConnectionRequests": 122,
+      "foreignOwnerRequests": 3,
+      "result": "completed",
+      "coverage": [
+        "Four published operation/input addresses and exact parameter arity",
+        "Portable finite module/source-graph input, ordinary rational modules and zero-dimensional vectors",
+        "Existing owned coefficient rings, actual returned kernel/inclusion data and scalar-restriction modules",
+        "Whole and generalized callable reuse with exact original and actual-image endpoints",
+        "Repeated valueData image/callable wrappers, original typed/untyped nested symbolic carrier-map readers",
+        "Changed ordered parameters, action identity, original/image/callable endpoints and expired nested owners"
+      ],
+      "regressions": [
+        {
+          "script": "generic_smoke.py",
+          "primaryConnectionRequests": 36,
+          "result": "completed"
+        },
+        {
+          "script": "additive_smoke.py",
+          "primaryConnectionRequests": 66,
+          "foreignOwnerRequests": 1,
+          "result": "completed"
+        }
+      ],
+      "boundary": "Public framing, result shapes, parameter/endpoint retention, consumption of actual returned data and owner handling only. No arithmetic result, equality truth, functor law or mathematical acceptance outcome is asserted."
+    },
+    "independentSourceReview": {
+      "scope": "Leaf-only static review and focused reinspection; no execution or mathematical acceptance claim",
+      "findingResolved": "The new map adapter initially intercepted previously supported nested symbolic carrier maps. Strict actual-image validation now belongs to the new registered #map boundary; existing nested readers remain available. The focused protocol check exercises both typed and untyped prior nested descriptors.",
+      "remainingConcreteFindings": "None identified within the reviewed change."
+    },
+    "publicInterfaceGap": null,
+    "implementationLimits": "Existing supported native module and callable representations only. Both finite and infinite object images are returned as owned native data. The new map port requires actual native ModuleImage results; unsupported portable image encodings, arbitrary foreign native values and unsupported module/callable readers remain computation gaps."
+  },
+  "structuralCarrierActions20261029": {
+    "baseLeafRevision": "7113a646bba4cd52cab4a7f1eb9c731f8a653566",
+    "baseLeafTree": "fb932513f1c8a6da5016fda647fa0528bde23058",
+    "publicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6",
+    "publicContractTree": "968ea95a5f8e7f76de95461999e8bafee74f2d39",
+    "publicContractFiles": {
+      "api/manifest.md": "18a61df15642a9963c643df784352de91e2809cabdb1ef6d11d2761acdf1177f",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/declared-ports.json": "642b7290d5441d7409fa6992732a97166907de8e69eafeb9e6df468aa7d73c4c",
+      "python/cas_port.py": "1a061bfbc3dc40dadc157deaeb11dbd838d7f2710e53f1fe8f369bd60d43e6f5"
+    },
+    "namedFunctors": [
+      "fun.modules.additive_group",
+      "fun.additive_groups.to_groups",
+      "fun.groups.monoid",
+      "fun.monoids.semigroup",
+      "fun.rings.additive_commutative_monoid",
+      "fun.additive_commutative_monoids.additive_monoid",
+      "fun.additive_monoids.underlying",
+      "fun.rings.multiplicative_monoid"
+    ],
+    "classifierForgetIds": [
+      "clf.magmas.associative",
+      "clf.sets.binary_operation"
+    ],
+    "newRegistrationPairs": 20,
+    "totalRegistrationPairs": 91,
+    "scope": "Ten existing structural actions and their paired map ports, using supported native ring/module carrier adapters in the same extension session. Shared framing hooks preserve complete actual image/source data and exact ordinary or derived action parameters.",
+    "inputBoundary": "Only the existing leaf source, applicable instructions, the same pinned public contract documentation/reference helper/generated catalogue and the installed engine were used. No kernel, acceptance suite or expected-answer fixture, HANDOFF, downstream runtime report or other author workspace was inspected. No Lean/compiler was run; the frozen base commit was not amended.",
+    "nativeCalls": "Existing Module.add/zero/negate and point codecs, native regular-module readers, native monoid callbacks and original complete callables. Sage performs the scalar and linear computations. No new mathematical algorithm or public encoding.",
+    "engineVersion": "Sage/passagemath 10.8.13",
+    "engineeringChecks": {
+      "script": "carrier_functor_smoke.py",
+      "primaryConnectionRequests": 217,
+      "foreignOwnerRequests": 3,
+      "result": "completed",
+      "coverage": [
+        "Twenty concrete operation/input pairs present in public inventories; exact classifierForget descriptors",
+        "Successive module-to-Set, ring-additive-to-Set and ring-multiplicative-to-Set object and map actions",
+        "Actual returned kernel inclusion through the complete module carrier route",
+        "Owned coefficient rings and finite carrier consumers",
+        "Existing additive, group-inverse and monoid consumers on returned native images",
+        "Whole and generalized callable reuse with retained source and target images",
+        "Repeated valueData wrappers, explicit supported portable carrier descriptors and infinite scalar-addition callable models",
+        "Invalid ordered/nested parameters, action identities, original/image/callable interfaces and closed nested owners"
+      ],
+      "regressions": [
+        {
+          "script": "module_functor_smoke.py",
+          "primaryConnectionRequests": 122,
+          "foreignOwnerRequests": 3,
+          "result": "completed"
+        },
+        {
+          "script": "generic_smoke.py",
+          "primaryConnectionRequests": 36,
+          "result": "completed"
+        },
+        {
+          "script": "additive_smoke.py",
+          "primaryConnectionRequests": 66,
+          "foreignOwnerRequests": 1,
+          "result": "completed"
+        }
+      ],
+      "boundary": "Protocol statuses, framing, result shapes, selected data retention, actual native result/callable consumption and ownership only. No arithmetic result, equality truth, cardinality answer, functor law or mathematical acceptance outcome is asserted."
+    },
+    "independentSourceReview": {
+      "scope": "Bounded leaf-only static review with focused reinspections; no execution, edits or mathematical acceptance claim",
+      "resolvedFindings": [
+        "Preserve the existing scalar_addition native model on ring-additive group paths rather than replacing it with the generic module_addition model.",
+        "Inspect repeated valueData wrappers in the private operation-tuple reader while retaining the complete original receiver and request."
+      ],
+      "remainingConcreteFindings": "None identified in the final focused reinspection."
+    },
+    "publicInterfaceGap": null,
+    "implementationLimits": "Ring/module-backed native carriers only, including supported existing symbolic carrier inputs and actual owned images. Arbitrary cyclic/automorphism-group/monoid/magma object-action readers are not added. Actual image records are required at the new map boundaries. Opaque dependencies retain their original live supplier."
+  },
+  "bilinearForgetActions20261030": {
+    "baseLeafRevision": "33cd4cd9d0deed5138c7b50dc8724c870f1e7174",
+    "baseLeafTree": "343b1c6b269d1053f4aa83f45d665417c0403a80",
+    "publicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6",
+    "publicContractTree": "968ea95a5f8e7f76de95461999e8bafee74f2d39",
+    "publicContractFiles": {
+      "api/manifest.md": "18a61df15642a9963c643df784352de91e2809cabdb1ef6d11d2761acdf1177f",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/declared-ports.json": "642b7290d5441d7409fa6992732a97166907de8e69eafeb9e6df468aa7d73c4c",
+      "python/cas_port.py": "1a061bfbc3dc40dadc157deaeb11dbd838d7f2710e53f1fe8f369bd60d43e6f5"
+    },
+    "operations": [
+      "fun.bilin_module.forget",
+      "fun.bilin_module.forget#map"
+    ],
+    "input": "fun.bilin_module.forget#input",
+    "newRegistrationPairs": 2,
+    "totalRegistrationPairs": 93,
+    "scope": "Ordinary object and morphism actions using the existing native Form, Module, ModuleImage and Callable readers. Complete [R,W], original source Form, actual native carrier and value module, original callable, actual returned image endpoints and owners remain retained.",
+    "inputBoundary": "Only this leaf repository, its instructions, the published contract documentation/reference helper/generated catalogue and the installed engine were used. No kernel source, acceptance question or outcome, expected-answer fixture, downstream runtime report or sibling workspace was inspected. No public mathematics source was fetched or changed; no Lean/compiler was run.",
+    "nativeCalls": "Existing native Form.module, Module read/write/scale callbacks and original Callable actions; Sage retains responsibility for scalar and matrix computations. No new mathematical algorithm or wire encoding.",
+    "engineeringChecks": {
+      "script": "bilinear_forget_smoke.py",
+      "primaryConnectionRequests": 179,
+      "foreignOwnerRequests": 5,
+      "result": "completed",
+      "coverage": [
+        "Both exact complete-request registration pairs present in the public inventories",
+        "All four existing named forms, portable change-value/morphism-endpoint/subobject-apex descriptors, repeated valueData and actual owned lifted Forms",
+        "Complete scalar and value-module parameters, including native owned value-module data",
+        "Whole and generalized callable reuse with the exact original domains and returned image endpoints",
+        "Actual returned module/map consumption by fibre inclusion, underlying, scalar_action and the existing native kernel consumer",
+        "Actual returned lift Form and hom callable mapped by the new ordinary action",
+        "Malformed arity, parameter copies, action identities, source/callable/image endpoints and unavailable nested owners"
+      ],
+      "regressions": [
+        {
+          "script": "module_functor_smoke.py",
+          "primaryConnectionRequests": 122,
+          "foreignOwnerRequests": 3,
+          "result": "completed"
+        },
+        {
+          "script": "carrier_functor_smoke.py",
+          "primaryConnectionRequests": 217,
+          "foreignOwnerRequests": 3,
+          "result": "completed"
+        }
+      ],
+      "boundary": "Protocol statuses, result shapes, complete selection retention, native result/callable reuse and live ownership only. No pairing value, arithmetic answer, equality truth, functor law or mathematical acceptance outcome is asserted."
+    },
+    "resolvedEngineeringFindings": [
+      "Selected points at a supported formed morphismEndpoint keep that complete endpoint as their native codec context, rather than relying on the generic scalar endpoint resolver.",
+      "The original callable at_point reader remains intact; no eager normalization can erase a wrapped finite-graph key."
+    ],
+    "publicInterfaceGap": null,
+    "implementationLimits": "Only the existing supported native Form readers are used. The generic obj.bilin_module.bilinear_form constructor has no native reader in this diagnostic and is not added. Full dependent source-family typing remains with the public formal caller. The map boundary requires actual returned image records; all opaque dependencies keep their supplying live connection.",
+    "independentSourceReview": {
+      "scope": "Public-contract and bounded leaf-only static review; no source edits, engine runs, acceptance inputs or outcomes",
+      "resolvedFindings": [
+        "Keep the retained original callable point reader intact; use the existing Form reader for supported complete morphism-endpoint codec descriptors."
+      ],
+      "remainingConcreteFindings": "None identified in the final focused review.",
+      "boundary": "Engineering source review only; no mathematical correctness or acceptance evidence."
+    }
+  },
+  "singletonTerminalComparison20261030": {
+    "baseLeafRevision": "7fec4bf690a368d250769397a7c8489ceedb0c9e",
+    "baseLeafTree": "0d3cea36e7adcbe7ba9675b6f8a984cba39c8589",
+    "publicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6",
+    "publicContractTree": "968ea95a5f8e7f76de95461999e8bafee74f2d39",
+    "publicContractFiles": {
+      "api/manifest.md": "18a61df15642a9963c643df784352de91e2809cabdb1ef6d11d2761acdf1177f",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/declared-ports.json": "642b7290d5441d7409fa6992732a97166907de8e69eafeb9e6df468aa7d73c4c",
+      "python/cas_port.py": "1a061bfbc3dc40dadc157deaeb11dbd838d7f2710e53f1fe8f369bd60d43e6f5",
+      "CasContract/Port.lean": "4082a8525f92ad945accd37935add2c31e8fda3e85d52328eb4b9a7b1339f777"
+    },
+    "operation": "cmp.sets.singleton_terminal",
+    "input": "cmp.sets.singleton_terminal",
+    "newRegistrationPairs": 1,
+    "totalRegistrationPairs": 94,
+    "scope": "The existing parameter-free comparison in both directions, with complete presentationApply/common-apply requests, exact actual endpoint and inventory data, and reusable whole/generalized callables.",
+    "publicTypeInputs": "The accepted comparison signature is an Iso from obj.sets.fin(1) to obj.sets.terminal. The exported terminal type alias is PUnit and its public datatype has one nullary constructor. CasContract/Port.lean supplies the existing empty data-field array codec for this record.",
+    "nativeCalls": "Sage FiniteSetMaps.from_dict, native finite-set cardinality/an_element, and the existing finite_object, point_index, Callable, comparison application and Invocation interfaces. No new mathematical algorithm or wire encoding.",
+    "inputBoundary": "Only the existing leaf repository, applicable instructions, published contract documentation/reference helper/generated catalogue and native engine interfaces were used. No kernel source, runtime-consumer report, acceptance question/result, expected-answer fixture, sibling workspace or external mathematical source was accessed. No Lean/compiler was run.",
+    "engineeringChecks": {
+      "script": "singleton_terminal_smoke.py",
+      "primaryConnectionRequests": 84,
+      "foreignOwnerRequests": 3,
+      "result": "completed",
+      "coverage": [
+        "Exact published operation/own-input pair and empty declaration parameters",
+        "Both comparison directions, raw/selected/wrapped point results and actual returned point reuse",
+        "Existing named Fin(1) global-point scalar convention without a synthesized replacement domain",
+        "Whole callables on supplied finiteData and ordinary Terminal domains through presentationApply and common apply",
+        "Retained wrapped keys, valueData endpoints, complete morphismEndpoint fields and actual callable composition",
+        "Finite and infinite generalized domains, actual returned callable reuse and a closed point consumer",
+        "Malformed field counts, parameters, direction, endpoint inventories/literals and retained callable endpoints",
+        "Closed returned callables, nested endpoint owners and infinite-family owners"
+      ],
+      "regressions": [
+        {
+          "script": "completion_smoke.py",
+          "primaryConnectionRequests": 99,
+          "engineeringGroupsCompleted": 14,
+          "engineeringGroupsRequested": 14,
+          "engineeringExceptions": []
+        },
+        {
+          "script": "endpoint_smoke.py",
+          "protocolBoundaryGroups": 13,
+          "primaryConnectionRequests": 33,
+          "foreignOwnerRequests": 2,
+          "result": "completed"
+        }
+      ],
+      "boundary": "Protocol statuses, representation shapes, full retained requests/endpoints/inventories, reusable actual callables and live ownership only. No computed arithmetic value, equality truth, inverse equation or mathematical acceptance outcome is asserted."
+    },
+    "resolvedEngineeringFindings": [
+      "The existing finite consumer now reads a valueData-wrapped selected endpoint while retaining its complete outer callable endpoints and point keys.",
+      "The native finite endpoint reader consumes an existing callable field; graph inputs at a bare endpoint still require their separately supplied inventory."
+    ],
+    "publicInterfaceGap": null,
+    "implementationLimits": "Only the published comparison and the existing supported native finite endpoint/point/callable readers are added. The comparison does not identify arbitrary singleton representations or replace a supplied comparison. All opaque dependencies retain their original live supplier.",
+    "independentSourceReview": {
+      "scope": "Bounded public-contract and leaf-only static review; no engine, compiler or acceptance process",
+      "remainingConcreteFindings": "None identified in the final focused review.",
+      "boundary": "Engineering interface review only; no mathematical correctness or acceptance evidence."
+    }
+  },
+  "publicTupleConstructors20261030": {
+    "baseLeafRevision": "5b43304b3dee60aa5c19c681dbf82dcab65fb1b2",
+    "baseLeafTree": "07927d72e2abc7bc7a655c8967aec59b745299b3",
+    "publicContractPublication": "5db631a34c9d4f65a535fad61b6f76af39fb56f6",
+    "publicContractTree": "968ea95a5f8e7f76de95461999e8bafee74f2d39",
+    "publicContractFiles": {
+      "AGENTS.md": "844f7c441354a6fbe0a626439e7253438371dab5f3cfcc6884ca5e7dc365131b",
+      "INTENT.md": "a92d8299a42d9d05158eac9fdfafc1f38b0959028f60ed88377ebc9eff605981",
+      "api/manifest.md": "18a61df15642a9963c643df784352de91e2809cabdb1ef6d11d2761acdf1177f",
+      "api/wire-examples.md": "241adb83eb81a6a83e92d879d75b0ea9b9b5a4b8415ff17af32fdbaae1effcb1",
+      "api/declared-ports.json": "642b7290d5441d7409fa6992732a97166907de8e69eafeb9e6df468aa7d73c4c",
+      "python/cas_port.py": "1a061bfbc3dc40dadc157deaeb11dbd838d7f2710e53f1fe8f369bd60d43e6f5"
+    },
+    "operationsAndInputs": [
+      "mor.sets.tuple_empty",
+      "mor.sets.tuple_cons"
+    ],
+    "newRegistrationPairs": 2,
+    "totalRegistrationPairs": 96,
+    "publicMeaning": "The exported declarations give the empty tuple in X^0 at parameters [X], and (x,v) mapped to (x,v_0,...) from X times X^n to X^(n+1) at parameters [X,n]. Both addresses are present independently in operations and inputForms.",
+    "nativeCalls": "Python tuple() and tuple concatenation; existing complete Callable.at_point, framed_callable, point, product_point, endpoint, Invocation and Session readers. No new arithmetic algorithm, private wire tag, native carrier identification or global inventory enumeration.",
+    "engineVersion": "Sage/passagemath 10.8.13; Python 3.12.14",
+    "engineDocumentation": {
+      "source": "Installed public Python built-in tuple.__doc__ and tuple.__add__.__doc__",
+      "reference": "https://docs.python.org/3/library/stdtypes.html#tuples",
+      "access": "The installed public built-in docstrings were read. External documentation retrieval was unavailable."
+    },
+    "scope": "Both ordinary public tuple constructors, their complete finite-coordinate point data, selected endpoint wrappers, whole/generalized callables and actual returned-value reuse. Complete head data are copied unchanged. Tail callables use the existing supported native/public readers on every Fin(n) coordinate.",
+    "inputBoundary": "Source reads were limited to this owned diagnostic subtree, repository instructions, the pinned public contract documentation/generated inventories/reference helper and public native-engine docstrings. No kernel implementation, mathematical question, acceptance test or outcome, expected-answer fixture, sibling leaf source/inventory or downstream execution report was inspected. No Lean/compiler was run. Source authorship remained in this isolated worktree.",
+    "engineeringChecks": {
+      "script": "tuple_protocol_smoke.py",
+      "primaryConnectionRequests": 87,
+      "stoppedOwnerRequests": 5,
+      "result": "completed",
+      "coverage": [
+        "Both exact operation/own-input registration pairs in the published inventories",
+        "Seven native/public entry models, nested tuples, empty base carriers and all finite-coordinate indices",
+        "Complete finite graphs, actual owned coordinate functions and typed/composed callable representations",
+        "Named, wrapped, declaration-endpoint and actual retained callable-endpoint descriptors",
+        "Original whole, empty, distinct-singleton, finite and infinite generalized domains and scalar/callable reply roles",
+        "Original wrapped inventory keys, actual returned scalar/coordinate/tuple/whole-map data and native owners",
+        "Malformed arity, ordered parameters, dimensions, endpoint selections and finite-coordinate graphs",
+        "Owned scalar/callable role mismatch and stopped owners nested in callable, coordinate, scalar and selected parameter data"
+      ],
+      "boundary": "Protocol statuses, framing, representation shapes, complete selected-data consumption, actual returned-data reuse and live ownership only. No tuple entry, arithmetic answer, equality truth, constructor equation or mathematical acceptance outcome is asserted."
+    },
+    "resolvedEngineeringFindings": [
+      "Treat complete Fin(n)-indexed callables as tuple points instead of generalized arrows from the invocation domain.",
+      "Read actual retained endpoint fields without changing the public endpoint wrapper or its opaque owner.",
+      "Copy the complete head packet directly; a generic point normalization could erase a supplied wrapped graph key, and the tuple constructor need not enumerate X."
+    ],
+    "publicInterfaceGap": null,
+    "implementationLimits": "Tail and generalized-argument callables must have one of the existing supported complete native/public representations. Unknown native/symbolic maps remain unsupported. No native linear/polynomial metadata for infinite whole-map equality or new global tuple-object inventory algorithm is added. Every opaque dependency retains its original live supplier."
+  }
+}

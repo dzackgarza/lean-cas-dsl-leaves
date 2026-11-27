@@ -1,0 +1,108 @@
+{
+  "backends": [
+    {
+      "name": "sage-v1-diagnostic",
+      "command": "python3",
+      "args": [
+        "sage_backend.py"
+      ]
+    }
+  ],
+  "registrations": [
+    {
+      "operation": "mor.sets.matrix_rows",
+      "input": "mor.sets.matrix_rows",
+      "backend": "sage-v1-diagnostic"
+    },
+    {
+      "operation": "mor.sets.matrix_charpoly",
+      "input": "mor.sets.matrix_charpoly",
+      "backend": "sage-v1-diagnostic"
+    },
+    {
+      "operation": "obj.sets.matrices#application",
+      "input": "obj.sets.matrices#application",
+      "backend": "sage-v1-diagnostic"
+    },
+    {
+      "operation": "mor.sets.polynomial_derivative",
+      "input": "mor.sets.polynomial_derivative",
+      "backend": "sage-v1-diagnostic"
+    },
+    {
+      "operation": "mor.sets.polynomial_degree",
+      "input": "mor.sets.polynomial_degree",
+      "backend": "sage-v1-diagnostic"
+    },
+    {
+      "operation": "mor.sets.polynomial_own_evaluation",
+      "input": "mor.sets.polynomial_own_evaluation",
+      "backend": "sage-v1-diagnostic"
+    },
+    {
+      "operation": "obj.sets.polynomials#application",
+      "input": "obj.sets.polynomials#application",
+      "backend": "sage-v1-diagnostic"
+    },
+    {
+      "operation": "op.rings.add",
+      "input": "cat.rings",
+      "backend": "sage-v1-diagnostic"
+    },
+    {
+      "operation": "op.rings.mul",
+      "input": "cat.rings",
+      "backend": "sage-v1-diagnostic"
+    },
+    {
+      "operation": "op.rings.pow",
+      "input": "cat.rings",
+      "backend": "sage-v1-diagnostic"
+    },
+    {
+      "operation": "op.rings.neg",
+      "input": "cat.rings",
+      "backend": "sage-v1-diagnostic"
+    },
+    {
+      "operation": "mor.sets.equality",
+      "input": "mor.sets.equality",
+      "backend": "sage-v1-diagnostic"
+    },
+    {
+      "operation": "lim.sets.product",
+      "input": "cat.sets",
+      "backend": "sage-v1-diagnostic"
+    },
+    {
+      "operation": "mor.sets.divide",
+      "input": "mor.sets.divide",
+      "backend": "sage-v1-diagnostic"
+    },
+    {
+      "operation": "mor.sets.f9_x_constants",
+      "input": "mor.sets.f9_x_constants",
+      "backend": "sage-v1-diagnostic"
+    },
+    {
+      "operation": "mor.sets.f9_y_constants",
+      "input": "mor.sets.f9_y_constants",
+      "backend": "sage-v1-diagnostic"
+    },
+    {
+      "operation": "mor.sets.tuple_empty",
+      "input": "mor.sets.tuple_empty",
+      "backend": "sage-v1-diagnostic"
+    },
+    {
+      "operation": "mor.sets.tuple_cons",
+      "input": "mor.sets.tuple_cons",
+      "backend": "sage-v1-diagnostic"
+    },
+    {
+      "operation": "cmp.f9.translation",
+      "input": "cmp.f9.translation",
+      "backend": "sage-v1-diagnostic"
+    }
+  ]
+}
