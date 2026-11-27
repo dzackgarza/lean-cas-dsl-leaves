@@ -131,7 +131,7 @@ The edge cases of 001 apply. This category adds:
 
 - **FR-052 — `obj.rings.mv_polynomials`** (object constructor, V2). Catalogue: `R[x₀, …, xₙ₋₁]` as a ring. The implementation MUST construct the object from the request at the generated layout, with the complete interface that its category declares. Inputs before it: lean-categories T021 (#189).
 - **FR-053 — `mor.sets.mv_total_degree`** (operation, V2). Catalogue: The total degree. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. Inputs before it: lean-categories T021 (#189), contract T021.
-- **FR-054 — Existing registrations of V2** (1). The implementation MUST move the 1 registrations of `leaves.json` at `8b181d7` that the plan's table "Registrations that move" lists for V2 into `backends/commutative_rings.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in that table: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
+- **FR-054 — Existing registrations of V2** (1). The implementation MUST move the one registration of `leaves.json` at `8b181d7` that the plan's table "Registrations that move" lists for V2 into `backends/commutative_rings.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in that table: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
 
 ### Key Entities
 
@@ -147,7 +147,7 @@ The edge cases of 001 apply. This category adds:
 - **SC-003** (V1): tier 1 of `commutative_rings` runs in under five minutes in the research container and writes one log and one timing record per test.
 - **SC-004** (V1): kernel T221 ("Implement Commutative rings Spec V1") consumes the version with no kernel-side evaluation of a row of this version.
 - **SC-005** (V2): each of the 2 requirements FR-052 and FR-053 is met: each row has a registered port whose tier 1 scenario passes, or an LV7 gap record of mathematically new work with its searches.
-- **SC-006** (V2): the 1 registrations of FR-054 are served by `backends/commutative_rings.py` on protocol 2, and no v1 program serves any of them.
+- **SC-006** (V2): the one registration of FR-054 is served by `backends/commutative_rings.py` on protocol 2, and no v1 program serves it.
 - **SC-007** (V2): tier 1 of `commutative_rings` runs in under five minutes in the research container and writes one log and one timing record per test.
 - **SC-008** (V2): kernel T258 ("Implement Commutative rings Spec V2") consumes the version with no kernel-side evaluation of a row of this version.
 

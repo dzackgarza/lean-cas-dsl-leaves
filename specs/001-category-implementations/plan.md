@@ -28,7 +28,7 @@ Oscar.jl with Hecke enter with the first V3 row that needs them (table "Categori
 spec").
 **Storage**: committed files only: `leaves.json`, `tests/logs/`, `tests/timing/records.jsonl`.
 **Testing**: `just test` (tier 1, `uv run --frozen pytest tests`) after `just setup`; one
-category with `just test-category NAME`; `just test-commit` (manifest and compilation) at commit.
+category with `just test-category NAME`; the cases of one task with `just test-category NAME CASES`; `just test-commit` (manifest and compilation) at commit.
 **Target Platform**: the research container `ghcr.io/dzackgarza/sage:develop` (LV21).
 **Project Type**: provider package: a manifest and backend programs.
 **Performance Goals**: tier 1 of one category under five minutes (SC-004).
@@ -185,7 +185,9 @@ from them.
 
 Each `tests/test_<slug>.py` starts the program under `/sage/.venv/bin/python3` with the SDK
 of `.deps/` on `PYTHONPATH` and runs `cas-peer run SCENARIO -- COMMAND` for each scenario. The
-scenarios are built from the generated interface of the program's category. Each test checks:
+scenarios are built from the generated interface of the program's category. Each task of a category
+spec names its cases: the scenarios `tests/scenarios/<slug>-<CASES>-*.json`, which
+`just test-category <slug> <CASES>` runs. Each test checks:
 
 1. negotiation with the four protocol-2 features and `routine-observations/1`;
 2. for each port: a reply at the generated result layout, with the routine observation of the

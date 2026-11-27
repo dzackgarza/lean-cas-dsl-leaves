@@ -142,8 +142,8 @@ upstream tasks of the kernel's milestones are inputs of the kernel tasks, not of
 
 LV7 fixes the content. Each version of each category spec completes the survey record in the
 spec's `research.md` before its implementation tasks: one row for each part of the generated
-interface that its rows need, with the routine, the engine version or revision, the decision
-(use, fallback, reject) and the reasons, and one row for each gap with its searches. The starting
+interface that its rows need, with the routine, the command that runs the routine in the research
+container, the engine version or revision, the decision (use, fallback, reject) and the reasons, and one row for each gap with its searches. The starting
 facts of each family are those of the kernel engine survey, cited by section in the plan of the
 spec. That survey (lean-cas-dsl `specs/001-categorical-research-language/research/engine-survey.md`)
 holds engine and container facts only, with no workload statement, expected answer or kernel
@@ -152,10 +152,10 @@ the planning survey from which each survey record starts.
 
 Row format:
 
-| Part (generated interface) | Engine and routine | Version or revision | Decision | Reasons | Gap searches |
-| --- | --- | --- | --- | --- | --- |
+| Part (generated interface) | Engine and routine | Container command | Version or revision | Decision | Reasons | Gap searches |
+| --- | --- | --- | --- | --- | --- | --- |
 
-A gap row has the engine column empty and names each search.
+A gap row has the engine and command columns empty and names each search.
 
 ## Registrations that move
 

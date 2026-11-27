@@ -61,7 +61,7 @@ The edge cases of 001 apply. This category adds:
 - **FR-003 — `forget[clf.commutative_rings.field]`** (classifier forget, V1). The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018). Inputs before it: lean-categories T033 (#197).
 - **FR-004 — `mor.sets.span`** (operation, V1). Catalogue: The span of a set of vectors over the selected field. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. Inputs before it: lean-categories T013 (#191), contract T021.
 - **FR-005 — `mor.sets.span_dim`** (operation, V1). Catalogue: The dimension of the span over the selected field, using its compatible field structure. The implementation MUST compute the operation at its actual domain and reply at the generated result layout.
-- **FR-006 — Existing registrations of V1** (1). The implementation MUST move the 1 registrations of `leaves.json` at `8b181d7` that the plan's table "Registrations that move" lists for V1 into `backends/fields.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in that table: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
+- **FR-006 — Existing registrations of V1** (1). The implementation MUST move the one registration of `leaves.json` at `8b181d7` that the plan's table "Registrations that move" lists for V1 into `backends/fields.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in that table: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
 
 ### Key Entities
 
@@ -73,7 +73,7 @@ The edge cases of 001 apply. This category adds:
 ### Measurable Outcomes
 
 - **SC-001** (V1): each of the 5 requirements FR-001 to FR-005 is met: each row has a registered port whose tier 1 scenario passes, or an LV7 gap record of mathematically new work with its searches.
-- **SC-002** (V1): the 1 registrations of FR-006 are served by `backends/fields.py` on protocol 2, and no v1 program serves any of them.
+- **SC-002** (V1): the one registration of FR-006 is served by `backends/fields.py` on protocol 2, and no v1 program serves it.
 - **SC-003** (V1): tier 1 of `fields` runs in under five minutes in the research container and writes one log and one timing record per test.
 - **SC-004** (V1): kernel T236 ("Implement Fields Spec V1") consumes the version with no kernel-side evaluation of a row of this version.
 

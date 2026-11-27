@@ -59,7 +59,7 @@ this repository, the contract release or the research image.
 **Acceptance Scenarios**:
 
 1. **Given** the generated interface, **When** the author calls
-   `cas_interfaces.load_interfaces(...).category("cat.sets")`, **Then** the object constructors,
+   `cas_interfaces.load_interfaces("/repos/lean-cas-dsl-leaf-contracts/api/declared-ports.json").category("cat.sets")`, **Then** the object constructors,
    morphism constructors, operations and functor actions of `cat.sets` are listed, and the
    implementation registers a port for each part, or the survey record names the part as a gap.
 2. **Given** a category implementation that needs an operation of another category, **When** it

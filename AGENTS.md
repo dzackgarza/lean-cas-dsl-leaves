@@ -6,6 +6,8 @@ file is corrected. Work order is the [feature order](specs/001-category-implemen
 of the shared feature `specs/001-category-implementations/`; each category implementation has its
 own spec, `specs/002-cardinals/` to `specs/034-ideals-r/`, listed in the
 [plan of 001](specs/001-category-implementations/plan.md#category-specs).
+`.specify/feature.json` names the feature whose first unchecked task comes first in that feature
+order; set it with `jq` when that feature changes.
 
 Use the [shared math container](https://github.com/dzackgarza/ai-review-ci/blob/main/SAGE-CONTAINER.md#use-the-image)
 (`ghcr.io/dzackgarza/sage:develop`) for Lean/elan, Sage with mypy, GAP,
@@ -123,7 +125,8 @@ its answers cross, and they are checked against the formal side, `lean-cas-dsl`'
 never believed.
 
 **A leaf implements a prescribed category interface.** Obtain its complete interface
-from the released declared API and `cas_port.load_interfaces`; no kernel internals
+from the released declared API (`api/declared-ports.json` of the contract) and
+`cas_interfaces.load_interfaces`; no kernel internals
 or another provider's private representation is required.
 - **Complete category implementations.** Supply the prescribed object and morphism
   constructor families, operations at their actual domains, immediate functor actions,

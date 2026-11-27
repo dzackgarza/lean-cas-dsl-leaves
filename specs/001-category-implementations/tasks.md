@@ -58,19 +58,30 @@ Format: `- [ ] ID [P?] [Story] description`.
   features with `routine-observations/1`; the handler table of a program; the per-request log
   line and timing of [data-model.md](data-model.md); the routine-observation helper; the
   suspension helper that returns `NoImplementation` to the handler; the `juliacall` variables of
-  R2. **Files**: `backends/engine.py`. **Acceptance**: T005's engine tests pass. **After**: T003.
+  R2. Write the programs `tests/programs/empty.py` (no ports) and `tests/programs/absent_engine.py`
+  (requires an uninstalled module) on `backends/engine.py`, and their scenarios
+  `tests/scenarios/engine-empty.json` and `tests/scenarios/engine-absent.json`. **Files**:
+  `backends/engine.py`, `tests/programs/empty.py`, `tests/programs/absent_engine.py`,
+  `tests/scenarios/engine-empty.json`, `tests/scenarios/engine-absent.json`. **Acceptance**: in
+  the research container, with the `cas-peer` binary that `just setup` builds in the contract
+  checkout (research R9), `cas-peer run tests/scenarios/engine-empty.json -- env PYTHONPATH=.deps
+  /sage/.venv/bin/python3 -m tests.programs.empty` exits 0 after a negotiation with the five
+  features, and `cas-peer run tests/scenarios/engine-absent.json -- env PYTHONPATH=.deps
+  /sage/.venv/bin/python3 -m tests.programs.absent_engine` reports the exit of the program before
+  the ready frame. **After**: T003; contract T003.
   **Kernel**: T202 ("Implement Sets Spec V1"), the first version of the feature order.
 - [ ] T005 Write the tier 1 harness (FR-029, FR-030; LV17, LV18; research R10, R11):
   `tests/conftest.py` (run log, timing records), `tests/harness.py` (starts a program under
   `/sage/.venv/bin/python3` with `.deps` on `PYTHONPATH`, runs `cas-peer run`), the recipes
-  `test`, `test-category` and `test-push` in `justfile`, and `tests/test_engine.py` with the
-  programs `tests/programs/empty.py` (no ports) and `tests/programs/absent_engine.py` (requires an
-  uninstalled module). **Files**: `tests/conftest.py`, `tests/harness.py`,
-  `tests/test_engine.py`, `tests/programs/empty.py`, `tests/programs/absent_engine.py`,
-  `tests/scenarios/engine-*.json`, `tests/logs/`, `tests/timing/records.jsonl`, `justfile`.
+  `test`, `test-category SLUG CASES` (the scenarios `tests/scenarios/<SLUG>-<CASES>-*.json` of
+  `tests/test_<SLUG>.py`; all scenarios of `<SLUG>` when CASES is absent) and `test-push` in
+  `justfile`, and `tests/test_engine.py`, which runs the engine scenarios of T004 through the
+  harness. **Files**: `tests/conftest.py`, `tests/harness.py`, `tests/test_engine.py`,
+  `tests/logs/`, `tests/timing/records.jsonl`, `justfile`.
   **Acceptance**: `just test-category engine` shows a negotiation with the five features and an
-  exit before the ready frame for the absent engine; the run writes one log and one timing record
-  per test; it finishes in under five minutes (SC-004). **After**: T004; contract T003.
+  exit before the ready frame for the absent engine, and `just test-category engine empty` runs
+  only `tests/scenarios/engine-empty.json`; the run writes one log and one timing record per test;
+  it finishes in under five minutes (SC-004). **After**: T004.
   **Kernel**: T202 ("Implement Sets Spec V1"), the first version of the feature order.
 - [ ] T006 Rewrite `leaves.json` in the protocol-2 form with no v1 backend (research R4;
   FR-026), and make `test-commit` decode it with `cas-peer manifest`. **Files**: `leaves.json`,
@@ -82,7 +93,8 @@ Format: `- [ ] ID [P?] [Story] description`.
 The features run in this order; within a feature, its tasks run in document order (constitution,
 Governance). The first step with an unchecked task is active. An input task of another
 repository is done first by the workstream of the step that needs it (constitution, Governance;
-research R17). The category specs are the features of FR-038; their move tasks carry out FR-039,
+research R17). The category specs are the features of FR-038; their move tasks carry out FR-027,
+FR-034 and FR-039 with the decisions of the table "Registrations that move" of each spec plan,
 and their tasks "Spec V<n> complete" close SC-001 for each version.
 
 | Step | Task or feature | Content | Kernel task |
@@ -152,7 +164,11 @@ and their tasks "Spec V<n> complete" close SC-001 for each version.
 - [ ] T044 Trash `backends/engine_python.py` and `backends/wire.py`, and remove the
   `CAS_SAGE_PYTHON`, `CAS_GAP_PYTHON` and modular-entrypoint paragraphs of `README.md` and
   `AGENTS.md` (FR-031). **Files**: `backends/engine_python.py`, `backends/wire.py`, `README.md`,
-  `AGENTS.md`. **Acceptance**: SC-002, SC-003 and SC-005 hold. **After**: 031 "Spec V2 complete"
+  `AGENTS.md`, `tests/logs/`, `tests/timing/records.jsonl`. **Acceptance**: `git ls-files
+  backends/engine_python.py backends/wire.py`, the `git grep` of SC-003 and `git grep -n
+  'CAS_SAGE_PYTHON\|CAS_GAP_PYTHON' README.md AGENTS.md` return nothing, and `just test` passes in
+  the research container; the move tasks of the category specs give SC-002 and SC-005.
+  **After**: 031 "Spec V2 complete"
   (its move task moves the last registrations of the v1 programs). **Kernel**: T093, which
   republishes the delivery tuple of T105 after the V2 versions.
 - [ ] T061 [US2] Move the four specimen packages to protocol 2 (FR-035), keeping their bad
@@ -162,9 +178,11 @@ and their tasks "Spec V<n> complete" close SC-001 for each version.
   implementation for `missing`, a well-framed reply for `wrong`, `malformed` for `malformed` and
   `unavailable` for `unavailable`. **After**: T044. **Kernel**: T108.
 - [ ] T062 Write the timing triage table of LV24 from `tests/timing/records.jsonl` into
-  [research.md](research.md), and do the optimization that it selects. **Files**: `research.md`
-  and the programs that the table selects. **Acceptance**: the table has every LV24 column and
-  each optimization row has its remaining measured cost. **After**: T061. **Kernel**: T103.
+  [research.md](research.md), and do the optimization that it selects. **Files**: `research.md`,
+  `tests/logs/`, `tests/timing/records.jsonl` and the programs that the table selects.
+  **Acceptance**: after the optimization, `just test` passes in the research container, the table
+  has every LV24 column, and the records of that run give the remaining measured cost of each
+  optimization row. **After**: T061. **Kernel**: T103.
 
 ## Dependencies
 
@@ -173,7 +191,7 @@ and their tasks "Spec V<n> complete" close SC-001 for each version.
 | T001 | — |
 | T002 | T001 |
 | T003 | kernel F; contract T019 |
-| T004–T006 | each the previous task; T005 also contract T003, T006 also contract T005 |
+| T004–T006 | each the previous task; T004 also contract T003, T006 also contract T005 |
 | 002 V1 to 034 V1 | T006 and the predecessors named in each spec's tasks |
 | T009 | 003 "Spec V1 complete" |
 | T035 | 034 "Spec V1 complete"; contract T020 |
