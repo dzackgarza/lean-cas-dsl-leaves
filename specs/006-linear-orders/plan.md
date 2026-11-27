@@ -56,15 +56,15 @@ Each row names its engine routine. The survey record of its version verifies the
 
 | FR | Row | Kind | Engine and routine | Dependent inputs (C22) | Inputs before it |
 | --- | --- | --- | --- | --- | --- |
-| FR-001 | `cat.linear_orders` | category structure | monotone maps as Sage `SetMorphism`s of the carriers; identity and composition of `Hom` in `Sets()` | the selected data that the request carries (LV4) | lean-categories T041 (#195) |
-| FR-002 | `obj.linear_orders.fin_ordinary` | object constructor | Sage `posets.ChainPoset(n)` | request operands at the generated layout | lean-categories T041 (#195) |
-| FR-003 | `obj.linear_orders.fin_reverse` | object constructor | Sage `posets.ChainPoset(n).dual()` | request operands at the generated layout | lean-categories T041 (#195) |
-| FR-004 | `obj.linear_orders.integers` | object constructor | Sage `ZZ` with its comparison | request operands at the generated layout | lean-categories T041 (#195) |
-| FR-005 | `obj.linear_orders.naturals` | object constructor | Sage `NonNegativeIntegers()` with its comparison | request operands at the generated layout | lean-categories T041 (#195) |
-| FR-006 | `obj.linear_orders.reals` | object constructor | Sage `RealSet.real_line()` with the comparison of `AA` and `SR` values | request operands at the generated layout | lean-categories T041 (#195) |
-| FR-007 | `op.linear_orders.le` | operation | Sage `Poset.is_lequal` for a finite order; `<=` of `ZZ`, `QQ`, `AA` elements; `bool(x <= y)` in `SR` with the decision packet `none` when neither `x <= y` nor `x > y` is proved | request operands at the generated layout | lean-categories T041 (#195) |
-| FR-008 | `op.linear_orders.lt` | operation | Sage `Poset.is_less_than` for a finite order; `<` of `ZZ`, `QQ`, `AA` elements; `bool(x < y)` in `SR` with the decision packet `none` when neither is proved | request operands at the generated layout | lean-categories T041 (#195) |
-| FR-009 | `fun.linear_orders.forget` | functor | object action: the carrier to the public constructor of `cat.sets`; morphism action: the monotone map as a map of sets at the two image endpoints | the source arrow and both image endpoints (contract FR-018); descriptors lowered by the lowering table of `backends/sets.py` (LV8, second option) | lean-categories T041 (#195) |
+| FR-001 | `cat.linear_orders` | category structure | monotone maps as Sage `SetMorphism`s of the carriers; identity and composition of `Hom` in `Sets()` | the selected data that the request carries (LV4) | lean-categories 001 T041 (#195) |
+| FR-002 | `obj.linear_orders.fin_ordinary` | object constructor | Sage `posets.ChainPoset(n)` | request operands at the generated layout | lean-categories 001 T041 (#195) |
+| FR-003 | `obj.linear_orders.fin_reverse` | object constructor | Sage `posets.ChainPoset(n).dual()` | request operands at the generated layout | lean-categories 001 T041 (#195) |
+| FR-004 | `obj.linear_orders.integers` | object constructor | Sage `ZZ` with its comparison | request operands at the generated layout | lean-categories 001 T041 (#195) |
+| FR-005 | `obj.linear_orders.naturals` | object constructor | Sage `NonNegativeIntegers()` with its comparison | request operands at the generated layout | lean-categories 001 T041 (#195) |
+| FR-006 | `obj.linear_orders.reals` | object constructor | Sage `RealSet.real_line()` with the comparison of `AA` and `SR` values | request operands at the generated layout | lean-categories 001 T041 (#195) |
+| FR-007 | `op.linear_orders.le` | operation | Sage `Poset.is_lequal` for a finite order; `<=` of `ZZ`, `QQ`, `AA` elements; `bool(x <= y)` in `SR` with the decision packet `none` when neither `x <= y` nor `x > y` is proved | request operands at the generated layout | lean-categories 001 T041 (#195) |
+| FR-008 | `op.linear_orders.lt` | operation | Sage `Poset.is_less_than` for a finite order; `<` of `ZZ`, `QQ`, `AA` elements; `bool(x < y)` in `SR` with the decision packet `none` when neither is proved | request operands at the generated layout | lean-categories 001 T041 (#195) |
+| FR-009 | `fun.linear_orders.forget` | functor | object action: the carrier to the public constructor of `cat.sets`; morphism action: the monotone map as a map of sets at the two image endpoints | the source arrow and both image endpoints (contract FR-018); descriptors lowered by the lowering table of `backends/sets.py` (LV8, second option) | lean-categories 001 T041 (#195) |
 
 ## Computations that move in from the kernel
 

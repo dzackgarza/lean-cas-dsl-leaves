@@ -57,7 +57,7 @@ Each row names its engine routine. The survey record of its version verifies the
 | FR | Row | Kind | Engine and routine | Dependent inputs (C22) | Inputs before it |
 | --- | --- | --- | --- | --- | --- |
 | FR-001 | `meth.annihilator` | operation | Sage `annihilator()` of the finitely generated module over a PID, as the ideal `ZZ.ideal(n)` | the receiver module and the method functor (contract FR-017); descriptors lowered by the lowering table of `backends/modules_r.py` (LV8, second option) | — |
-| FR-002 | `obj.ideals.principal` | object constructor that lean-categories T078 declares | Sage `ZZ.ideal(n)` | the generator | lean-categories T078 (#225), which declares `obj.ideals.principal` (kernel T341) |
+| FR-002 | `obj.ideals.principal` | object constructor that lean-categories 001 T078 declares | Sage `ZZ.ideal(n)` | the generator | lean-categories 001 T078 (#225), which declares `obj.ideals.principal` (kernel T341) |
 
 ## Hand-rolled code
 

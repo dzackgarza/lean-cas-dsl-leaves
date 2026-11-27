@@ -56,7 +56,7 @@ The edge cases of 001 apply. This category adds:
 
 ### Functional Requirements — V1
 
-- **FR-001 — `meth.set_eq`** (operation, V1). The implementation MUST answer the method at its actual domain; an inherited request carries the receiver, one descriptor for each residual action and the method functor, and the implementation realizes that composite (contract FR-017). Inputs before it: lean-categories T007 (#200), lean-categories T013 (#191), contract T021.
+- **FR-001 — `meth.set_eq`** (operation, V1). The implementation MUST answer the method at its actual domain; an inherited request carries the receiver, one descriptor for each residual action and the method functor, and the implementation realizes that composite (contract FR-017). Inputs before it: lean-categories 001 T007 (#200), lean-categories 001 T013 (#191), contract T021.
 
 ### Key Entities
 

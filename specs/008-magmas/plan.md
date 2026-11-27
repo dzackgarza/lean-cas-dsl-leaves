@@ -56,9 +56,9 @@ Each row names its engine routine. The survey record of its version verifies the
 
 | FR | Row | Kind | Engine and routine | Dependent inputs (C22) | Inputs before it |
 | --- | --- | --- | --- | --- | --- |
-| FR-001 | `cat.magmas` | category structure | operation-preserving maps as Sage `SetMorphism`s of the carriers; identity and composition of `Hom` in `Sets()` | the selected data that the request carries (LV4) | lean-categories T005 (#193) |
-| FR-002 | `clf.magmas.associative` | classifier | Sage category membership `M in Semigroups()` of the engine parent; GAP `IsAssociative` for a magma given by a finite table | the selected data that the request carries (LV4) | lean-categories T033 (#197) |
-| FR-003 | `forget[clf.sets.binary_operation]` | classifier forget | object action: the carrier to the public constructor of `cat.sets`; morphism action: the map of sets at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | lean-categories T033 (#197) |
+| FR-001 | `cat.magmas` | category structure | operation-preserving maps as Sage `SetMorphism`s of the carriers; identity and composition of `Hom` in `Sets()` | the selected data that the request carries (LV4) | lean-categories 001 T005 (#193) |
+| FR-002 | `clf.magmas.associative` | classifier | Sage category membership `M in Semigroups()` of the engine parent; GAP `IsAssociative` for a magma given by a finite table | the selected data that the request carries (LV4) | lean-categories 001 T033 (#197) |
+| FR-003 | `forget[clf.sets.binary_operation]` | classifier forget | object action: the carrier to the public constructor of `cat.sets`; morphism action: the map of sets at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | lean-categories 001 T033 (#197) |
 
 ## Hand-rolled code
 

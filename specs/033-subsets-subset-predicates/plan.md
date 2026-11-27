@@ -56,7 +56,7 @@ Each row names its engine routine. The survey record of its version verifies the
 
 | FR | Row | Kind | Engine and routine | Dependent inputs (C22) | Inputs before it |
 | --- | --- | --- | --- | --- | --- |
-| FR-001 | `meth.set_eq` | operation | Sage `Set` equality of the two extents; for presented subsets, equality of the power-object values; otherwise the decision packet `none` | the receiver subset, the compared subset and the method functor (contract FR-017); descriptors lowered by the lowering table of `backends/sets.py` (LV8, second option) | lean-categories T007 (#200), lean-categories T013 (#191), contract T021 |
+| FR-001 | `meth.set_eq` | operation | Sage `Set` equality of the two extents; for presented subsets, equality of the power-object values; otherwise the decision packet `none` | the receiver subset, the compared subset and the method functor (contract FR-017); descriptors lowered by the lowering table of `backends/sets.py` (LV8, second option) | lean-categories 001 T007 (#200), lean-categories 001 T013 (#191), contract T021 |
 
 ## Hand-rolled code
 

@@ -55,9 +55,9 @@ The edge cases of 001 apply. This category adds:
 
 ### Functional Requirements — V1
 
-- **FR-001 — `cat.magmas`** (category structure, V1). The implementation MUST realize the identities, the composition and the application of the morphisms of the category at the generated layout. Inputs before it: lean-categories T005 (#193).
-- **FR-002 — `clf.magmas.associative`** (classifier, V1). Catalogue: Associative classifier. The implementation MUST answer the classifier's decision at the supplied object with the decision packet of contract FR-012, and retain the selected structure of the request. Inputs before it: lean-categories T033 (#197).
-- **FR-003 — `forget[clf.sets.binary_operation]`** (classifier forget, V1). The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018). Inputs before it: lean-categories T033 (#197).
+- **FR-001 — `cat.magmas`** (category structure, V1). The implementation MUST realize the identities, the composition and the application of the morphisms of the category at the generated layout. Inputs before it: lean-categories 001 T005 (#193).
+- **FR-002 — `clf.magmas.associative`** (classifier, V1). Catalogue: Associative classifier. The implementation MUST answer the classifier's decision at the supplied object with the decision packet of contract FR-012, and retain the selected structure of the request. Inputs before it: lean-categories 001 T033 (#197).
+- **FR-003 — `forget[clf.sets.binary_operation]`** (classifier forget, V1). The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018). Inputs before it: lean-categories 001 T033 (#197).
 
 ### Key Entities
 

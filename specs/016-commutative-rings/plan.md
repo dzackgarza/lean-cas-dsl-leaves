@@ -61,20 +61,20 @@ Each row names its engine routine. The survey record of its version verifies the
 | FR-003 | `obj.commutative_rings.rationals` | object constructor | Sage `QQ` | request operands at the generated layout | — |
 | FR-004 | `obj.commutative_rings.integers_mod` | object constructor | Sage `Zmod(n)` | request operands at the generated layout | — |
 | FR-005 | `fun.commutative_rings.ring` | functor | object action: the same Sage ring to the public constructor of `cat.rings`; morphism action: the homomorphism at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | — |
-| FR-006 | `clf.commutative_rings.field` | classifier | Sage `R.is_field()`; the decision packet `none` where the engine raises `NotImplementedError` | request operands at the generated layout | lean-categories T033 (#197) |
+| FR-006 | `clf.commutative_rings.field` | classifier | Sage `R.is_field()`; the decision packet `none` where the engine raises `NotImplementedError` | request operands at the generated layout | lean-categories 001 T033 (#197) |
 | FR-007 | `mor.commutative_rings.integer_coefficients` | operation | Sage `R.coerce_map_from(ZZ)` | the parameter commutative ring at the generated layout | — |
 | FR-008 | `obj.commutative_rings.f9_x` | object constructor | Sage `PolynomialRing(GF(3), 't').quotient(f)`, with `f` from the unfolded definition that the request carries (K:C22) | request operands at the generated layout | — |
 | FR-009 | `obj.commutative_rings.f9_y` | object constructor | Sage `PolynomialRing(GF(3), 't').quotient(f)`, with `f` from the unfolded definition that the request carries (K:C22) | request operands at the generated layout | — |
 | FR-010 | `cmp.f9.translation` | comparison | Sage quotient-ring homomorphisms `F.hom([g], E)` in both directions, with the generator image `g` from the unfolded definition that the request carries; native composition of the selected comparisons | the selected data that the request carries (LV4) | — |
 | FR-011 | `obj.rings.polynomials` | object constructor | Sage `PolynomialRing(K, 'x')` | the parameter commutative ring at the generated layout; descriptors lowered by the lowering table of `backends/rings.py` (LV8, second option) | — |
 | FR-012 | `obj.sets.polynomials` | object constructor | Sage `PolynomialRing(K, 'x')` as a set | the parameter commutative ring at the generated layout | — |
-| FR-013 | `obj.sets.nonzero_polynomials` | object constructor | the nonzero elements of `PolynomialRing(K, 'x')`, admitted by `p != 0` | the parameter commutative ring at the generated layout | lean-categories T023 (#198) |
+| FR-013 | `obj.sets.nonzero_polynomials` | object constructor | the nonzero elements of `PolynomialRing(K, 'x')`, admitted by `p != 0` | the parameter commutative ring at the generated layout | lean-categories 001 T023 (#198) |
 | FR-014 | `obj.sets.monics` | object constructor | the monic elements of `PolynomialRing(K, 'x')`, admitted by `p.is_monic()` | the parameter commutative ring at the generated layout | — |
 | FR-015 | `mor.sets.polynomial_own_evaluation` | operation | Sage evaluation `p(a)` at an element of the coefficient ring | request operands at the generated layout | — |
 | FR-016 | `mor.sets.polynomial_map` | operation | Sage `Polynomial.change_ring(S)` along the selected ring homomorphism | the selected data that the request carries (LV4) | — |
 | FR-017 | `mor.sets.polynomial_degree` | operation | Sage `Polynomial.degree()`; the value in $\mathbb{N} \cup \{-\infty\}$ as the native constructor packet of contract T021 | request operands at the generated layout | contract T021 |
 | FR-018 | `mor.sets.polynomial_derivative` | operation | Sage `Polynomial.derivative()` | request operands at the generated layout | — |
-| FR-019 | `mor.sets.krull_dimension` | operation | Sage `R.krull_dimension()` | request operands at the generated layout | lean-categories T021 (#189) |
+| FR-019 | `mor.sets.krull_dimension` | operation | Sage `R.krull_dimension()` | request operands at the generated layout | lean-categories 001 T021 (#189) |
 | FR-020 | `obj.sets.polynomial_factorization_data` | object constructor | Sage `Factorization` values: the unit and the irreducible factors with their multiplicities | request operands at the generated layout | — |
 | FR-021 | `mor.sets.polynomial_factorization` | operation | Sage `Polynomial.factor()` | request operands at the generated layout | — |
 | FR-022 | `mor.sets.polynomial_factorization_unit` | operation | Sage `Factorization.unit()` | request operands at the generated layout | — |
@@ -91,7 +91,7 @@ Each row names its engine routine. The survey record of its version verifies the
 | FR-033 | `mor.sets.matrix_det` | operation | Sage `Matrix.det()` | request operands at the generated layout | — |
 | FR-034 | `mor.sets.matrix_trace` | operation | Sage `Matrix.trace()` | request operands at the generated layout | — |
 | FR-035 | `mor.sets.matrix_rank` | operation | Sage `Matrix.rank()` | request operands at the generated layout | — |
-| FR-036 | `mor.sets.matrix_ker` | operation | Sage `Matrix.right_kernel()`, as a subset in the power-object form of contract T021 | request operands at the generated layout | lean-categories T013 (#191), contract T021 |
+| FR-036 | `mor.sets.matrix_ker` | operation | Sage `Matrix.right_kernel()`, as a subset in the power-object form of contract T021 | request operands at the generated layout | lean-categories 001 T013 (#191), contract T021 |
 | FR-037 | `mor.sets.matrix_charpoly` | operation | Sage `Matrix.charpoly()` | request operands at the generated layout | — |
 | FR-038 | `mor.sets.companion_matrix` | operation | Sage `companion_matrix(p, format='right')`: ones on the subdiagonal and $-p_0, \ldots, -p_{n-1}$ in the last column, the convention of the catalogue declaration (plan, "Engine conventions") | request operands at the generated layout | contract T021 |
 | FR-039 | `obj.rings.power_series` | object constructor | Sage `LazyPowerSeriesRing(K, 't')` | the parameter commutative ring at the generated layout | — |
@@ -99,20 +99,20 @@ Each row names its engine routine. The survey record of its version verifies the
 | FR-041 | `mor.sets.power_series_coefficient` | operation | the coefficient `f[k]` of a Sage lazy power series, computed when a request demands it (LV25) | request operands at the generated layout | — |
 | FR-042 | `mor.sets.power_series_of_coefficients` | operation | Sage `LazyPowerSeriesRing(K, 't')(c)` from the coefficient function `c` of the request | request operands at the generated layout | — |
 | FR-043 | `mor.sets.successor_power_series_terms` | operation | Sage `Family(NonNegativeIntegers(), lambda n: R(n + 1) * t**n, lazy=True)` with `t` the generator of `LazyPowerSeriesRing(R, 't')`: the set map $n \mapsto (n + 1) t^n$ of the catalogue declaration; a term is computed when a request demands it (LV25; plan, "Engine conventions") | the ring $R$ at the generated layout | — |
-| FR-044 | `obj.sets.mv_polynomials` | object constructor | Sage `PolynomialRing(K, names)` as a set (Singular inside Sage) | the parameter commutative ring at the generated layout | lean-categories T021 (#189) |
-| FR-045 | `mor.sets.ufd_factorization` | operation that lean-categories T068 declares | Sage `Integer.factor()` with `Factorization.unit()` | the integer operand | lean-categories T068 (#213), which declares `mor.sets.ufd_factorization` (kernel T329) |
-| FR-046 | `mor.sets.is_prime` | operation that lean-categories T069 declares | Sage `ZZ.ideal(x).is_prime()` with the nonzero condition of the catalogue row | the integer operand | lean-categories T069 (#214), which declares `mor.sets.is_prime` (kernel T330) |
-| FR-047 | `mor.sets.polynomial_root_multiset` | operation that lean-categories T070 declares | Sage `Polynomial.roots(multiplicities=True)` | the polynomial operand | lean-categories T070 (#218), which declares `mor.sets.polynomial_root_multiset` (kernel T334) |
-| FR-048 | `mor.sets.power_series_truncation` | operation that lean-categories T071 declares | Sage lazy power series `truncate(n)` and `add_bigoh(n)` | the series and the exponent | lean-categories T071 (#219), which declares `mor.sets.power_series_truncation` (kernel T335) |
-| FR-049 | `incl.sets.power_series_map` | operation that lean-categories T072 declares | Sage coercion `LazyPowerSeriesRing(AA, 't').coerce_map_from(LazyPowerSeriesRing(QQ, 't'))` | the two coefficient rings | lean-categories T072 (#220), which declares `incl.sets.power_series_map` (kernel T336) |
-| FR-050 | `mor.sets.matrix_is_unit` | operation that lean-categories T073 declares | Sage `Matrix.is_invertible()` | the matrix operand | lean-categories T073 (#221), which declares `mor.sets.matrix_is_unit` (kernel T337) |
+| FR-044 | `obj.sets.mv_polynomials` | object constructor | Sage `PolynomialRing(K, names)` as a set (Singular inside Sage) | the parameter commutative ring at the generated layout | lean-categories 001 T021 (#189) |
+| FR-045 | `mor.sets.ufd_factorization` | operation that lean-categories 001 T068 declares | Sage `Integer.factor()` with `Factorization.unit()` | the integer operand | lean-categories 001 T068 (#213), which declares `mor.sets.ufd_factorization` (kernel T329) |
+| FR-046 | `mor.sets.is_prime` | operation that lean-categories 001 T069 declares | Sage `ZZ.ideal(x).is_prime()` with the nonzero condition of the catalogue row | the integer operand | lean-categories 001 T069 (#214), which declares `mor.sets.is_prime` (kernel T330) |
+| FR-047 | `mor.sets.polynomial_root_multiset` | operation that lean-categories 001 T070 declares | Sage `Polynomial.roots(multiplicities=True)` | the polynomial operand | lean-categories 001 T070 (#218), which declares `mor.sets.polynomial_root_multiset` (kernel T334) |
+| FR-048 | `mor.sets.power_series_truncation` | operation that lean-categories 001 T071 declares | Sage lazy power series `truncate(n)` and `add_bigoh(n)` | the series and the exponent | lean-categories 001 T071 (#219), which declares `mor.sets.power_series_truncation` (kernel T335) |
+| FR-049 | `incl.sets.power_series_map` | operation that lean-categories 001 T072 declares | Sage coercion `LazyPowerSeriesRing(AA, 't').coerce_map_from(LazyPowerSeriesRing(QQ, 't'))` | the two coefficient rings | lean-categories 001 T072 (#220), which declares `incl.sets.power_series_map` (kernel T336) |
+| FR-050 | `mor.sets.matrix_is_unit` | operation that lean-categories 001 T073 declares | Sage `Matrix.is_invertible()` | the matrix operand | lean-categories 001 T073 (#221), which declares `mor.sets.matrix_is_unit` (kernel T337) |
 
 ### V2
 
 | FR | Row | Kind | Engine and routine | Dependent inputs (C22) | Inputs before it |
 | --- | --- | --- | --- | --- | --- |
-| FR-052 | `obj.rings.mv_polynomials` | object constructor | Sage `PolynomialRing(K, names)` (Singular inside Sage) | the parameter commutative ring at the generated layout | lean-categories T021 (#189) |
-| FR-053 | `mor.sets.mv_total_degree` | operation | Sage `MPolynomial.total_degree()`; the value at $0$ is the value that the catalogue row declares, in the form of contract T021 | request operands at the generated layout | lean-categories T021 (#189), contract T021 |
+| FR-052 | `obj.rings.mv_polynomials` | object constructor | Sage `PolynomialRing(K, names)` (Singular inside Sage) | the parameter commutative ring at the generated layout | lean-categories 001 T021 (#189) |
+| FR-053 | `mor.sets.mv_total_degree` | operation | Sage `MPolynomial.total_degree()`; the value at $0$ is the value that the catalogue row declares, in the form of contract T021 | request operands at the generated layout | lean-categories 001 T021 (#189), contract T021 |
 
 ## Registrations that move
 

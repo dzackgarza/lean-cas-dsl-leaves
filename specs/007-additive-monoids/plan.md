@@ -58,7 +58,7 @@ Each row names its engine routine. The survey record of its version verifies the
 | --- | --- | --- | --- | --- | --- |
 | FR-001 | `obj.additive_monoids.vectors` | object constructor | Sage `cartesian_product([M] * n)` of the additive parent `M`, in `AdditiveMonoids()` | the parameter additive monoid at the generated layout | — |
 | FR-002 | `mor.sets.vectors_zero` | operation | the zero element `cartesian_product([M] * n).zero()` | the parameter additive monoid at the generated layout | — |
-| FR-003 | `op.additive_monoids.add` | operation | Sage element `+` of the additive parent | request operands at the generated layout | lean-categories T005 (#193), contract T021 |
+| FR-003 | `op.additive_monoids.add` | operation | Sage element `+` of the additive parent | request operands at the generated layout | lean-categories 001 T005 (#193), contract T021 |
 | FR-004 | `fun.additive_monoids.underlying` | functor | object action: the carrier to the public constructor of `cat.sets`; morphism action: the homomorphism as a map of sets at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | — |
 
 ## Hand-rolled code

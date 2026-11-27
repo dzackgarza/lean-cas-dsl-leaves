@@ -56,8 +56,8 @@ Each row names its engine routine. The survey record of its version verifies the
 
 | FR | Row | Kind | Engine and routine | Dependent inputs (C22) | Inputs before it |
 | --- | --- | --- | --- | --- | --- |
-| FR-001 | `lift.bilin_module.restrict` | lift | `#obj`: Sage `submodule` of the supplied inclusion image with `gram_matrix()` of the restricted form; `#hom`: the Sage inclusion homomorphism; `#forward` and `#backward`: the Sage homomorphisms between the restricted object and the base apex, built from the supplied inclusion | the four fields with the outputs of the preceding fields that the request supplies; descriptors lowered by the lowering table of `backends/bilin_module.py` (LV8, second option) | lean-categories T029 (#192) |
-| FR-002 | `lift.bilin_module.change_value_restriction` | lift | the routines of `lift.bilin_module.restrict` applied to the form that `fun.bilin_module.change_value` returns | the selected change of values and the fields of the lift; asks the kernel for the action of `fun.bilin_module.change_value` (LV8, third option); receives the result or `NoImplementation` | lean-categories T029 (#192) |
+| FR-001 | `lift.bilin_module.restrict` | lift | `#obj`: Sage `submodule` of the supplied inclusion image with `gram_matrix()` of the restricted form; `#hom`: the Sage inclusion homomorphism; `#forward` and `#backward`: the Sage homomorphisms between the restricted object and the base apex, built from the supplied inclusion | the four fields with the outputs of the preceding fields that the request supplies; descriptors lowered by the lowering table of `backends/bilin_module.py` (LV8, second option) | lean-categories 001 T029 (#192) |
+| FR-002 | `lift.bilin_module.change_value_restriction` | lift | the routines of `lift.bilin_module.restrict` applied to the form that `fun.bilin_module.change_value` returns | the selected change of values and the fields of the lift; asks the kernel for the action of `fun.bilin_module.change_value` (LV8, third option); receives the result or `NoImplementation` | lean-categories 001 T029 (#192) |
 
 ## Registrations that move
 

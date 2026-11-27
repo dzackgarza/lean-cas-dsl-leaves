@@ -56,7 +56,7 @@ The edge cases of 001 apply. This category adds:
 ### Functional Requirements — V1
 
 - **FR-001 — `fun.additive_groups.additive_monoid`** (functor, V1). Catalogue: Forgetting additive inverses retains the actual additive operation. The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018).
-- **FR-002 — `fun.additive_groups.to_groups`** (functor, V1). Catalogue: An additive group read multiplicatively. The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018). Inputs before it: lean-categories T005 (#193).
+- **FR-002 — `fun.additive_groups.to_groups`** (functor, V1). Catalogue: An additive group read multiplicatively. The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018). Inputs before it: lean-categories 001 T005 (#193).
 
 ### Key Entities
 

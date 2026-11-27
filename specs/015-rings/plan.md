@@ -62,10 +62,10 @@ Each row names its engine routine. The survey record of its version verifies the
 | FR-004 | `obj.rings.reals` | object constructor | Sage `AA` for algebraic values and `SR` for transcendental values, as the exact real ring of the requests (the lowering of spec 003, plan "The set $\mathbb{C}$", at its real points) | request operands at the generated layout | — |
 | FR-005 | `obj.rings.complexes` | object constructor | Sage `QQbar` for algebraic values and `SR` for transcendental values (spec 003, plan "The set $\mathbb{C}$") | request operands at the generated layout | — |
 | FR-006 | `obj.rings.integers_mod` | object constructor | Sage `Zmod(n)` | request operands at the generated layout | — |
-| FR-007 | `num.rings` | operation | the element `R(k)` for the numeral `k` (Sage coercion from `ZZ`) | request operands at the generated layout | lean-categories T017 (#194) |
-| FR-008 | `op.rings.add` | operation | Sage element `+` | request operands at the generated layout | lean-categories T005 (#193), contract T021 |
-| FR-009 | `op.rings.mul` | operation | Sage element `*` | request operands at the generated layout | lean-categories T005 (#193), contract T021 |
-| FR-010 | `op.rings.neg` | operation | Sage element unary `-` | request operands at the generated layout | lean-categories T005 (#193), contract T021 |
+| FR-007 | `num.rings` | operation | the element `R(k)` for the numeral `k` (Sage coercion from `ZZ`) | request operands at the generated layout | lean-categories 001 T017 (#194) |
+| FR-008 | `op.rings.add` | operation | Sage element `+` | request operands at the generated layout | lean-categories 001 T005 (#193), contract T021 |
+| FR-009 | `op.rings.mul` | operation | Sage element `*` | request operands at the generated layout | lean-categories 001 T005 (#193), contract T021 |
+| FR-010 | `op.rings.neg` | operation | Sage element unary `-` | request operands at the generated layout | lean-categories 001 T005 (#193), contract T021 |
 | FR-011 | `op.rings.pow` | operation | Sage element `**` with a natural exponent | request operands at the generated layout | contract T021 |
 | FR-012 | `fun.rings.additive_group` | functor | object action: the additive parent to the public constructor of `cat.additive_groups`; morphism action: the homomorphism at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | — |
 | FR-013 | `fun.rings.multiplicative_monoid` | functor | object action: the multiplicative parent to the public constructor of `cat.monoids`; morphism action: the homomorphism at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | — |

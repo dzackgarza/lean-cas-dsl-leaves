@@ -56,9 +56,9 @@ Each row names its engine routine. The survey record of its version verifies the
 
 | FR | Row | Kind | Engine and routine | Dependent inputs (C22) | Inputs before it |
 | --- | --- | --- | --- | --- | --- |
-| FR-001 | `cat.monoids` | category structure | monoid homomorphisms as Sage `SetMorphism`s of the carriers; identity and composition of `Hom` in `Sets()` | the selected data that the request carries (LV4) | lean-categories T005 (#193) |
-| FR-002 | `op.monoids.mul` | operation | Sage element `*` of the multiplicative parent | request operands at the generated layout | lean-categories T005 (#193), contract T021 |
-| FR-003 | `op.monoids.one` | operation | Sage `M.one()` | request operands at the generated layout | lean-categories T005 (#193) |
+| FR-001 | `cat.monoids` | category structure | monoid homomorphisms as Sage `SetMorphism`s of the carriers; identity and composition of `Hom` in `Sets()` | the selected data that the request carries (LV4) | lean-categories 001 T005 (#193) |
+| FR-002 | `op.monoids.mul` | operation | Sage element `*` of the multiplicative parent | request operands at the generated layout | lean-categories 001 T005 (#193), contract T021 |
+| FR-003 | `op.monoids.one` | operation | Sage `M.one()` | request operands at the generated layout | lean-categories 001 T005 (#193) |
 | FR-004 | `mor.sets.monoid_power` | operation | Sage element `**` with a natural exponent | the parameter monoid at the generated layout | — |
 | FR-005 | `fun.monoids.semigroup` | functor | object action: the same engine parent to the public constructor of `cat.semigroups`; morphism action: the homomorphism at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | — |
 | FR-006 | `obj.sets.units` | object constructor | GAP `Units(R)` through `libgap` of the monoid that the lowering table gives ($\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{Z}/n$ and their matrix monoids); the carrier of the unit group as a set | the parameter monoid at the generated layout | — |

@@ -58,7 +58,7 @@ Each row names its engine routine. The survey record of its version verifies the
 | --- | --- | --- | --- | --- | --- |
 | FR-001 | `lit.cardinals` | operation | Sage `Integer(k)` for a finite literal; the literal packet of $\aleph_0$ at the generated layout for the countable cardinal (known method; Mathlib `Cardinal.aleph0`) | the literal descriptor of the request | — |
 | FR-002 | Arithmetic of finite cardinals and $\aleph_0$ | code used by other implementations | known method with its Mathlib reference; Sage `Integer` arithmetic for the finite part | the operand cardinals | — |
-| FR-003 | `op.cardinals.power` | operation that lean-categories T065 declares | Sage `Integer` power for finite cardinals; a finite power of $\aleph_0$ by the known method of FR-002; $2^{\aleph_0}$ is `unsupported` | the two cardinal operands | lean-categories T065 (#216), which declares `op.cardinals.power` (kernel T332) |
+| FR-003 | `op.cardinals.power` | operation that lean-categories 001 T065 declares | Sage `Integer` power for finite cardinals; a finite power of $\aleph_0$ by the known method of FR-002; $2^{\aleph_0}$ is `unsupported` | the two cardinal operands | lean-categories 001 T065 (#216), which declares `op.cardinals.power` (kernel T332) |
 
 ## Hand-rolled code
 

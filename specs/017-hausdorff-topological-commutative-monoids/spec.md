@@ -57,7 +57,7 @@ The edge cases of 001 apply. This category adds:
 
 - **FR-001 — `cat.hausdorff_topological_commutative_monoids`** (category structure, V1). Catalogue: The Hausdorff commutative topological monoids, as an object of the categories. The implementation MUST realize the identities, the composition and the application of the morphisms of the category at the generated layout.
 - **FR-002 — `obj.hausdorff_topological_monoids.power_series`** (object constructor, V1). Catalogue: `R[[t]]` with its `(t)`-adic topology, a Hausdorff commutative topological monoid. The implementation MUST construct the object from the request at the generated layout, with the complete interface that its category declares.
-- **FR-003 — `obj.sets.summable_families`** (object constructor, V1). Catalogue: `Σ(N, Y)`, the summable families `N → Y`. The implementation MUST construct the object from the request at the generated layout, with the complete interface that its category declares. Inputs before it: lean-categories T027 (#190).
+- **FR-003 — `obj.sets.summable_families`** (object constructor, V1). Catalogue: `Σ(N, Y)`, the summable families `N → Y`. The implementation MUST construct the object from the request at the generated layout, with the complete interface that its category declares. Inputs before it: lean-categories 001 T027 (#190).
 - **FR-004 — `fun.hausdorff_topological_commutative_monoids.additive_commutative_monoid`** (functor, V1). Catalogue: The underlying additive commutative monoid of a Hausdorff commutative topological monoid. The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018).
 
 ### Key Entities

@@ -57,7 +57,7 @@ The edge cases of 001 apply. This category adds:
 
 - **FR-001 — `obj.additive_monoids.vectors`** (object constructor, V1). Catalogue: The finite product of the selected additive monoid, with pointwise addition. The implementation MUST construct the object from the request at the generated layout, with the complete interface that its category declares.
 - **FR-002 — `mor.sets.vectors_zero`** (operation, V1). Catalogue: `0 ∈ Aⁿ`, the unit of the additive monoid `Aⁿ`, the `n`-fold product of the additive monoid `A` (Mathlib `Pi.addMonoid`, the product in `AddMonCat`): the point `(0, …, 0)`. The implementation MUST compute the operation at its actual domain and reply at the generated result layout.
-- **FR-003 — `op.additive_monoids.add`** (operation, V1). Catalogue: The full binary addition of the selected additive monoid. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. Inputs before it: lean-categories T005 (#193), contract T021.
+- **FR-003 — `op.additive_monoids.add`** (operation, V1). Catalogue: The full binary addition of the selected additive monoid. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. Inputs before it: lean-categories 001 T005 (#193), contract T021.
 - **FR-004 — `fun.additive_monoids.underlying`** (functor, V1). Catalogue: Forgetting an additive monoid retains its actual carrier and maps. The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018).
 
 ### Key Entities

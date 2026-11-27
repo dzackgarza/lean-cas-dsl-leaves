@@ -56,12 +56,12 @@ Each row names its engine routine. The survey record of its version verifies the
 
 | FR | Row | Kind | Engine and routine | Dependent inputs (C22) | Inputs before it |
 | --- | --- | --- | --- | --- | --- |
-| FR-001 | `obj.boolean_algebras.power_set` | object constructor | Sage `Subsets(S)` for a finite `S`; for an infinite `S` the power-object values of contract T021 | descriptors lowered by the lowering table of `backends/sets.py` (LV8, second option) | lean-categories T013 (#191), contract T021 |
-| FR-002 | `op.boolean_algebras.union` | operation | Sage `Set.union` of finite extents; the power-object rows for presented infinite subsets | request operands at the generated layout | lean-categories T013 (#191), contract T021 |
-| FR-003 | `op.boolean_algebras.inter` | operation | Sage `Set.intersection` of finite extents; the power-object rows for presented infinite subsets | request operands at the generated layout | lean-categories T013 (#191), contract T021 |
-| FR-004 | `op.boolean_algebras.diff` | operation | Sage `Set.difference` of finite extents; the power-object rows for presented infinite subsets | request operands at the generated layout | lean-categories T013 (#191), contract T021 |
-| FR-005 | `op.boolean_algebras.symm_diff` | operation | Sage `Set.symmetric_difference` of finite extents | request operands at the generated layout | lean-categories T013 (#191), contract T021 |
-| FR-006 | `op.boolean_algebras.subset` | operation | Sage `Set.issubset` of finite extents; membership tests of the power-object rows for a finite subset of a presented infinite subset; otherwise the decision packet `none` | request operands at the generated layout | lean-categories T013 (#191), contract T021 |
+| FR-001 | `obj.boolean_algebras.power_set` | object constructor | Sage `Subsets(S)` for a finite `S`; for an infinite `S` the power-object values of contract T021 | descriptors lowered by the lowering table of `backends/sets.py` (LV8, second option) | lean-categories 001 T013 (#191), contract T021 |
+| FR-002 | `op.boolean_algebras.union` | operation | Sage `Set.union` of finite extents; the power-object rows for presented infinite subsets | request operands at the generated layout | lean-categories 001 T013 (#191), contract T021 |
+| FR-003 | `op.boolean_algebras.inter` | operation | Sage `Set.intersection` of finite extents; the power-object rows for presented infinite subsets | request operands at the generated layout | lean-categories 001 T013 (#191), contract T021 |
+| FR-004 | `op.boolean_algebras.diff` | operation | Sage `Set.difference` of finite extents; the power-object rows for presented infinite subsets | request operands at the generated layout | lean-categories 001 T013 (#191), contract T021 |
+| FR-005 | `op.boolean_algebras.symm_diff` | operation | Sage `Set.symmetric_difference` of finite extents | request operands at the generated layout | lean-categories 001 T013 (#191), contract T021 |
+| FR-006 | `op.boolean_algebras.subset` | operation | Sage `Set.issubset` of finite extents; membership tests of the power-object rows for a finite subset of a presented infinite subset; otherwise the decision packet `none` | request operands at the generated layout | lean-categories 001 T013 (#191), contract T021 |
 | FR-007 | `fun.boolean_algebras.forget` | functor | object action: the carrier to the public constructor of `cat.sets`; morphism action: the homomorphism as a map of sets at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | — |
 
 ## Hand-rolled code

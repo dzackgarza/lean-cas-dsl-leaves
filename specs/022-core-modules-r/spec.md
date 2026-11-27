@@ -81,7 +81,7 @@ The edge cases of 001 apply. This category adds:
 ### Functional Requirements — V2
 
 - **FR-002 — `meth.rank`** (operation, V2). The implementation MUST answer the method at its actual domain; an inherited request carries the receiver, one descriptor for each residual action and the method functor, and the implementation realizes that composite (contract FR-017).
-- **FR-003 — `fun.modules.rank`** (functor, V2). Catalogue: `rank : Core(Mod_R) ⥤ Disc(Card)`. The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018). Inputs before it: lean-categories T037 (#182).
+- **FR-003 — `fun.modules.rank`** (functor, V2). Catalogue: `rank : Core(Mod_R) ⥤ Disc(Card)`. The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018). Inputs before it: lean-categories 001 T037 (#182).
 - **FR-004 — Existing registrations of V2** (5). The implementation MUST move the 5 registrations of `leaves.json` at `8b181d7` that the plan's table "Registrations that move" lists for V2 into `backends/core_modules_r.py` on protocol 2 and the generated interface (LV12; 001 FR-026), with the decision of each row in that table: a hand-rolled, partial or lookup answer is replaced by an engine routine, a leaf-held datum is deleted, and a kept routine moves with its registration.
 
 ### Key Entities

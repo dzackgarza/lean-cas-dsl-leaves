@@ -56,8 +56,8 @@ Each row names its engine routine. The survey record of its version verifies the
 
 | FR | Row | Kind | Engine and routine | Dependent inputs (C22) | Inputs before it |
 | --- | --- | --- | --- | --- | --- |
-| FR-001 | `forget[clf.sets.finite]` | classifier forget | object action: the carrier of the finite set to the public constructor of `cat.sets`; morphism action: the same Sage map in `Sets()` at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | lean-categories T033 (#197) |
-| FR-002 | `obj.finite_sets.integer_square_bound` | object constructor | Sage `IntegerRange(-r, r + 1)` with `r = Integer(b).isqrt()`, in `FiniteEnumeratedSets()` | request operands at the generated layout | lean-categories T033 (#197) |
+| FR-001 | `forget[clf.sets.finite]` | classifier forget | object action: the carrier of the finite set to the public constructor of `cat.sets`; morphism action: the same Sage map in `Sets()` at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | lean-categories 001 T033 (#197) |
+| FR-002 | `obj.finite_sets.integer_square_bound` | object constructor | Sage `IntegerRange(-r, r + 1)` with `r = Integer(b).isqrt()`, in `FiniteEnumeratedSets()` | request operands at the generated layout | lean-categories 001 T033 (#197) |
 | FR-003 | `graph.finite_sets` | operation | the graph of a Sage `FiniteSetMaps(A, B)` element over `A.list()` | the selected data that the request carries (LV4) | — |
 
 ### V2

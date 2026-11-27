@@ -55,12 +55,12 @@ The edge cases of 001 apply. This category adds:
 
 ### Functional Requirements — V1
 
-- **FR-001 — `obj.boolean_algebras.power_set`** (object constructor, V1). Catalogue: `𝒫(X)` as a Boolean algebra. The implementation MUST construct the object from the request at the generated layout, with the complete interface that its category declares. Inputs before it: lean-categories T013 (#191), contract T021.
-- **FR-002 — `op.boolean_algebras.union`** (operation, V1). Catalogue: `∪`, the join. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. Inputs before it: lean-categories T013 (#191), contract T021.
-- **FR-003 — `op.boolean_algebras.inter`** (operation, V1). Catalogue: `∩`, the meet. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. Inputs before it: lean-categories T013 (#191), contract T021.
-- **FR-004 — `op.boolean_algebras.diff`** (operation, V1). Catalogue: `\`, the difference. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. Inputs before it: lean-categories T013 (#191), contract T021.
-- **FR-005 — `op.boolean_algebras.symm_diff`** (operation, V1). Catalogue: `△`, the symmetric difference. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. Inputs before it: lean-categories T013 (#191), contract T021.
-- **FR-006 — `op.boolean_algebras.subset`** (operation, V1). Catalogue: `⊆`, the order, into `Ω`. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. Inputs before it: lean-categories T013 (#191), contract T021.
+- **FR-001 — `obj.boolean_algebras.power_set`** (object constructor, V1). Catalogue: `𝒫(X)` as a Boolean algebra. The implementation MUST construct the object from the request at the generated layout, with the complete interface that its category declares. Inputs before it: lean-categories 001 T013 (#191), contract T021.
+- **FR-002 — `op.boolean_algebras.union`** (operation, V1). Catalogue: `∪`, the join. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. Inputs before it: lean-categories 001 T013 (#191), contract T021.
+- **FR-003 — `op.boolean_algebras.inter`** (operation, V1). Catalogue: `∩`, the meet. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. Inputs before it: lean-categories 001 T013 (#191), contract T021.
+- **FR-004 — `op.boolean_algebras.diff`** (operation, V1). Catalogue: `\`, the difference. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. Inputs before it: lean-categories 001 T013 (#191), contract T021.
+- **FR-005 — `op.boolean_algebras.symm_diff`** (operation, V1). Catalogue: `△`, the symmetric difference. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. Inputs before it: lean-categories 001 T013 (#191), contract T021.
+- **FR-006 — `op.boolean_algebras.subset`** (operation, V1). Catalogue: `⊆`, the order, into `Ω`. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. Inputs before it: lean-categories 001 T013 (#191), contract T021.
 - **FR-007 — `fun.boolean_algebras.forget`** (functor, V1). Catalogue: The underlying set of a Boolean algebra. The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018).
 
 ### Key Entities

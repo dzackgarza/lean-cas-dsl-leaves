@@ -63,7 +63,7 @@ Each row names its engine routine. The survey record of its version verifies the
 | FR | Row | Kind | Engine and routine | Dependent inputs (C22) | Inputs before it |
 | --- | --- | --- | --- | --- | --- |
 | FR-002 | `meth.rank` | operation | Sage `rank()` of the engine module; for a finitely generated module over a PID, the rank of Sage's module | the receiver with one descriptor for each residual action and the method functor (contract FR-017); descriptors lowered by the lowering table of `backends/modules_r.py`, `backends/bil_wform.py` (LV8, second option) | — |
-| FR-003 | `fun.modules.rank` | functor | object action: Sage `rank()` to the public constructor `lit.cardinals`; morphism action: the identity of the image cardinal at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | lean-categories T037 (#182) |
+| FR-003 | `fun.modules.rank` | functor | object action: Sage `rank()` to the public constructor `lit.cardinals`; morphism action: the identity of the image cardinal at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | lean-categories 001 T037 (#182) |
 
 ## Registrations that move
 

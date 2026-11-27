@@ -15,7 +15,7 @@ Format: `- [ ] ID [Story] description`.
 **Kernel**: kernel T204 ("Implement Finite sets Spec V1").
 
 - [ ] T001 [US1] Survey record of V1 (FR-028 of 001; LV7). List the parts of the generated interface of `cat.finite_sets` with `cas_interfaces.load_interfaces("/repos/lean-cas-dsl-leaf-contracts/api/declared-ports.json").category("cat.finite_sets")`. Write one row for each requirement FR-001 to FR-003 and for the routine of each registration of this version: the engine and routine of the plan's routine table, the command that runs the routine in the research container, its version, the decision and the reasons; one row for each gap with its searches. **Files**: `specs/005-finite-sets/research.md`. **Acceptance**: `research.md` "Survey record" has a row for each requirement of V1, for each moved registration of V1 and for each part of the `cat.finite_sets` entry of `categoryInterfaces` in `/repos/lean-cas-dsl-leaf-contracts/api/declared-ports.json` that V1 needs; the command in the column "Container command" of each row that names a routine exits 0 in the research container. **After**: 001 T006, 003 "Spec V1 complete".
-- [ ] T002 [US1] Implement Refinement and graphs (G1: FR-001, FR-002, FR-003) in `backends/finite_sets.py` with the routines of the plan's routine table, register each port in `leaves.json` with `preferredRoutes: []`, and add the scenarios of these ports. **Files**: `backends/finite_sets.py`, `leaves.json`, `tests/test_finite_sets.py`, `tests/scenarios/finite_sets-g1-*.json`, `tests/logs/`, `tests/timing/records.jsonl`. **Acceptance**: `just test-category finite_sets g1` passes the six checks of 001 plan "Tests of each program" for the ports of FR-001, FR-002, FR-003; each reply names the routine of the routine table; the run writes its log and one timing record per test and per handled request. **After**: T001, lean-categories T033 (#197).
+- [ ] T002 [US1] Implement Refinement and graphs (G1: FR-001, FR-002, FR-003) in `backends/finite_sets.py` with the routines of the plan's routine table, register each port in `leaves.json` with `preferredRoutes: []`, and add the scenarios of these ports. **Files**: `backends/finite_sets.py`, `leaves.json`, `tests/test_finite_sets.py`, `tests/scenarios/finite_sets-g1-*.json`, `tests/logs/`, `tests/timing/records.jsonl`. **Acceptance**: `just test-category finite_sets g1` passes the six checks of 001 plan "Tests of each program" for the ports of FR-001, FR-002, FR-003; each reply names the routine of the routine table; the run writes its log and one timing record per test and per handled request. **After**: T001, lean-categories 001 T033 (#197).
 - [ ] T003 [US1] Spec V1 complete. Check that every task of V1 above is checked, that each requirement of V1 has a registered port or an LV7 gap record of mathematically new work, and run `just test-category finite_sets`. **Files**: `tests/logs/`, `tests/timing/records.jsonl`. **Acceptance**: `just test-category finite_sets` passes in under five minutes and its log and timing records are committed. **After**: T002.
 
 ## Phase 2: User Story 2 — V2
@@ -32,7 +32,7 @@ Format: `- [ ] ID [Story] description`.
 | Task | After |
 | --- | --- |
 | T001 | 001 T006, 003 "Spec V1 complete" |
-| T002 | T001, lean-categories T033 (#197) |
+| T002 | T001, lean-categories 001 T033 (#197) |
 | T003 | T002 |
 | T004 | 001 T035, T003, 003 "Spec V1 complete" |
 | T005 | T004 |

@@ -57,9 +57,9 @@ Each row names its engine routine. The survey record of its version verifies the
 | FR | Row | Kind | Engine and routine | Dependent inputs (C22) | Inputs before it |
 | --- | --- | --- | --- | --- | --- |
 | FR-001 | `obj.semirings.naturals` | object constructor | Sage `NonNegativeIntegerSemiring()` | request operands at the generated layout | — |
-| FR-002 | `num.semirings` | operation | the element `S(k)` of the semiring for the numeral `k` | request operands at the generated layout | lean-categories T017 (#194) |
-| FR-003 | `op.semirings.add` | operation | Sage element `+` | request operands at the generated layout | lean-categories T005 (#193), contract T021 |
-| FR-004 | `op.semirings.mul` | operation | Sage element `*` | request operands at the generated layout | lean-categories T005 (#193), contract T021 |
+| FR-002 | `num.semirings` | operation | the element `S(k)` of the semiring for the numeral `k` | request operands at the generated layout | lean-categories 001 T017 (#194) |
+| FR-003 | `op.semirings.add` | operation | Sage element `+` | request operands at the generated layout | lean-categories 001 T005 (#193), contract T021 |
+| FR-004 | `op.semirings.mul` | operation | Sage element `*` | request operands at the generated layout | lean-categories 001 T005 (#193), contract T021 |
 | FR-005 | `op.semirings.pow` | operation | Sage element `**` with a natural exponent | request operands at the generated layout | contract T021 |
 | FR-006 | `fun.semirings.forget` | functor | object action: the carrier to the public constructor of `cat.sets`; morphism action: the homomorphism as a map of sets at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | — |
 | FR-007 | `fun.semirings.monoid` | functor | object action: the multiplicative parent to the public constructor of `cat.monoids`; morphism action: the homomorphism at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | — |

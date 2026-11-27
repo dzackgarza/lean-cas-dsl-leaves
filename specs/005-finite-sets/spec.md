@@ -73,8 +73,8 @@ The edge cases of 001 apply. This category adds:
 
 ### Functional Requirements — V1
 
-- **FR-001 — `forget[clf.sets.finite]`** (classifier forget, V1). The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018). Inputs before it: lean-categories T033 (#197).
-- **FR-002 — `obj.finite_sets.integer_square_bound`** (object constructor, V1). Catalogue: For `r : ℕ`, the finite-set object with the same carrier `{n : ℤ // n ^ 2 ≤ (r : ℤ) ^ 2}` as `extent r`, equipped with finiteness from `squareBound_finite`. The implementation MUST construct the object from the request at the generated layout, with the complete interface that its category declares. Inputs before it: lean-categories T033 (#197).
+- **FR-001 — `forget[clf.sets.finite]`** (classifier forget, V1). The implementation MUST realize the object action through a public constructor of the target category and the morphism action at the two image endpoints that the request supplies (K:C23; contract FR-018). Inputs before it: lean-categories 001 T033 (#197).
+- **FR-002 — `obj.finite_sets.integer_square_bound`** (object constructor, V1). Catalogue: For `r : ℕ`, the finite-set object with the same carrier `{n : ℤ // n ^ 2 ≤ (r : ℤ) ^ 2}` as `extent r`, equipped with finiteness from `squareBound_finite`. The implementation MUST construct the object from the request at the generated layout, with the complete interface that its category declares. Inputs before it: lean-categories 001 T033 (#197).
 - **FR-003 — `graph.finite_sets`** (operation, V1). Catalogue: The map of finite sets `X → Y` with graph `l`, which lists each element of `X` exactly once. The implementation MUST compute the operation at its actual domain and reply at the generated result layout. It takes over from the kernel: the list of the elements of a finite carrier.
 
 ### Functional Requirements — V2

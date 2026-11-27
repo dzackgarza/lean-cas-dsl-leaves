@@ -58,7 +58,7 @@ Each row names its engine routine. The survey record of its version verifies the
 | --- | --- | --- | --- | --- | --- |
 | FR-001 | `cat.hausdorff_topological_commutative_monoids` | category structure | continuous homomorphisms of Sage lazy power series rings; identity and composition | the selected data that the request carries (LV4) | — |
 | FR-002 | `obj.hausdorff_topological_monoids.power_series` | object constructor | Sage `LazyPowerSeriesRing(K, 't')` with the $t$-adic topology | the parameter commutative ring at the generated layout; descriptors lowered by the lowering table of `backends/commutative_rings.py` (LV8, second option) | — |
-| FR-003 | `obj.sets.summable_families` | object constructor | families of Sage lazy power series whose valuations tend to infinity; the sum by Sage lazy `sum` | the parameter topological monoid at the generated layout | lean-categories T027 (#190) |
+| FR-003 | `obj.sets.summable_families` | object constructor | families of Sage lazy power series whose valuations tend to infinity; the sum by Sage lazy `sum` | the parameter topological monoid at the generated layout | lean-categories 001 T027 (#190) |
 | FR-004 | `fun.hausdorff_topological_commutative_monoids.additive_commutative_monoid` | functor | object action: the same Sage ring to the public constructor of `cat.additive_commutative_monoids`; morphism action: the homomorphism at the two image endpoints | the source arrow and both image endpoints (contract FR-018) | — |
 
 ## Hand-rolled code
