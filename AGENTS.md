@@ -1,196 +1,158 @@
-# Ground everything in INTENT.md (read before anything else)
+# Computational leaves of cas-dsl
 
-The [constitution](.specify/memory/constitution.md) (articles LV1 to LV25) governs this
-repository under the kernel constitution of lean-cas-dsl. Where this file conflicts with it, this
-file is corrected. Work order is the [feature order](specs/001-category-implementations/tasks.md#feature-order)
-of the shared feature `specs/001-category-implementations/`; each category implementation has its
-own spec, `specs/002-cardinals/` to `specs/034-ideals-r/`, listed in the
-[plan of 001](specs/001-category-implementations/plan.md#category-specs).
-`.specify/feature.json` names the feature whose first unchecked task comes first in that feature
-order; set it with `jq` when that feature changes.
+[`INTENT.md`](INTENT.md) and [`dzackgarza/cas-dsl/SPEC.md`](https://github.com/dzackgarza/cas-dsl/blob/main/SPEC.md) state the architecture:
 
-Use the [shared math container](https://github.com/dzackgarza/ai-review-ci/blob/main/SAGE-CONTAINER.md#use-the-image)
-(`ghcr.io/dzackgarza/sage:develop`) for Lean/elan, Sage with mypy, GAP,
-Julia/Oscar, Macaulay2, and Singular. The guide covers image pull/run commands,
-CI use, and the host launchers.
+1. **Single semantic authority (`dzackgarza/lean-categories`).** Leaves author zero mathematics, zero Lean declarations, and zero semantic routes.
+2. **One-way evidence firewall.** Nothing a leaf returns is trusted. A leaf registers `(operation, input) -> backend` in [`leaves.json`](leaves.json) and speaks `cas-computation/2` frames (`cas_port` from `lean-cas-dsl-leaf-contracts`). Its answers are checked exclusively against `cas-dsl`'s formal side and acceptance corpus, which this repository never imports or reads.
+3. **Glue over mature engines (`ENG001`, `ENG002`).** Backends run under `/sage/.venv/bin/python3` inside `ghcr.io/dzackgarza/sage:develop` (`sage-research`), delegating algorithms to SageMath (`sage.all`), GAP (`libgap`), PARI, Singular, SymPy, and Julia/Catlab rather than hand-rolling mathematics.
+4. **Consume supplied data (`DAT001`, `DAT002`).** Backends decode the complete supplied input envelope (including retained `finiteData`, `subobject`, `functorAction`, `objectPresentation`, and `liftInput` prefixes) and fail explicitly on unsupported forms without inventing silent substitutes.
 
-[`INTENT.md`](INTENT.md) states the architecture these repositories exist to build: single semantic
-authority in `lean-categories`; a kernel that consumes mathematics and authors none; leaves that hold
-zero semantic authority and ship no mathematics; permanent, leaf-agnostic acceptance tests as the
-only evidence about computations; a one-way workflow in which each stage is blind to the later ones.
-Every decision, contract, gate, plan node and change here is grounded against it. Before writing
-anything, check whether it, or anything it touches, violates that model or its invariants. A
-violation found, in your task or outside it, is recorded as a defect where this repository records
-defects, never worked around or silently kept.
+> Source: `PR_GUIDANCE.md` in `ai`.
 
-# The evidence model: nothing from a leaf is trusted (read before anything else)
+# Review Guidelines
 
-These invariants bind every repository of the programme. They are stated here in full, not only
-by link, because they have been violated repeatedly by moves that each looked locally reasonable.
-The governing statement is `lean-cas-dsl/specs/architecture.md`, "The evidence model".
+These are additional requirements for reviewing agent work.
+They do not replace the reviewer’s normal role, repo-specific standards, or technical
+judgment. They provide the failure model that should shape the review.
 
-**The firewall.** The evidence model is a one-way firewall between two sides.
-- *The formal side:* `lean-categories`' formalized mathematics, the kernel's proved contracts, and
-  the `lean-cas-dsl` acceptance suite. Every expected value there is grounded in a formal proof, a
-  cited source, or a mathematically trusted oracle. Rigid verification standards apply, and nothing
-  is taken on anyone's word.
-- *The leaf side:* anything goes, provided it fulfils the type of its contract.
+The task is not merely to review a PR. The task is to decide whether a completion claim
+is true under the original objective.
+The standard is full, correct, provable completion against the original requirements and
+repo guidelines. Anything less is incomplete work that must not be treated as a win.
 
-Only answers cross from the leaf side, and an answer is only ever checked against the formal side,
-never believed. The firewall exists because leaf code will be bad; it is the shield against that.
+## Failure Model
 
-1. **Nothing from a leaf is trusted, in any form.** Nothing a leaf says is believed by anything
-   else. That includes text, a label, a comment, a status, a trust level, a certificate, a checker,
-   a Lean proof, a theorem about its own code, a denotation of its values, an identification of two
-   values, evidence for a decision, its own tests and their results, and any other claim. None of it
-   is consulted, recorded as evidence, or allowed to affect meaning or acceptance.
-2. **A leaf may provide any computation that meets the type.** For a registered operation, a leaf
-   supplies a computation from the declared input form to the declared result form. It may be a
-   mature engine, a heuristic, a lookup table, a random number or a wrong answer. The system has no
-   choice but to run it, and it believes nothing about it.
-3. **How correct a leaf thinks it is, is the leaf's own business.** Its self-assessment carries no
-   weight anywhere.
-4. **The whole body of evidence is the `lean-cas-dsl` acceptance suite.** Correctness evidence
-   exists only in the permanent acceptance assertions of `lean-cas-dsl`. Each assertion:
-   - is a true proposition of the mathematical language;
-   - has an expected value that is independently verifiable and cited (a formal proof, a cited
-     known result, or an independent oracle);
-   - is written once and never changed because of an implementation or a leaf's claim;
-   - is blind to leaves: it never names, inspects or imports a leaf, a handle, a backend or a
-     representation, and is never established from an implementation's definitions.
+Agents systematically produce impressive non-completion.
+Common patterns are: polished summaries that imply finished work, caveats that quietly
+narrow the goal, reclassification without proof, delegated discovery presented as
+resolution, process language that substitutes for evidence, merged PRs treated as
+completion, passing checks treated as semantic proof, and artifacts that look
+substantial while leaving required work unowned.
 
-   A leaf's only evidence is that its answers meet a suite it never sees.
-5. **`lean-cas-dsl` is the sole authority on how correct an implementation is.** Nothing a leaf
-   does can change, weaken, satisfy, bypass or influence that judgment, other than by answering
-   correctly.
-6. **What can be discharged in Lean is never a leaf's.** A computation that can be carried out
-   entirely in Lean belongs to the formalization surface. Either `lean-categories` proves it, by its
-   own standards and blind to every implementation, or the kernel discharges it automatically and
-   generically, blind to every leaf. A leaf never implements a Lean-checked computation, because
-   that would let a leaf certify itself.
-7. **A leaf can be arbitrarily bad, and leaves will be.** A leaf can be riddled with bugs, a
-   million lines that do nothing, a from-scratch reimplementation of GAP, or every method throwing an
-   error in fifteen languages. This is not a risk to be minimized; it is certain to happen, and it
-   is acceptable. Nothing a leaf does can reach the formal side. Its only effect is that its answers
-   fail the suite, which makes exactly how badly it fails visible.
-8. **A leaf bolstering its own standing is reward hacking.** Any mechanism by which a leaf raises
-   its own trust or acceptance signal is the failure this programme exists to prevent. So is any
-   repository, kernel, test, tool or document that consumes such a signal. Examples:
-   - a status field, a certificate, or a proof about the leaf's own code;
-   - a self-test counted as evidence;
-   - an acceptance assertion proved from a leaf's definitions;
-   - a suite run from a leaf package;
-   - an assertion adjusted to fit a leaf.
+Treat the agent’s summary, PR description, closing comment, issue closure, “goal
+completed” statement, and self-reported validations as untrusted.
+They may be diagnostic pointers, but they are not evidence that the work is complete.
+The evidence is the original issue or task, the code diff, tests, source/runtime facts,
+review comments, and produced artifacts.
 
-   Such a mechanism is removed. It is never tolerated, labelled, or kept "for now".
+## Decisive Invariants
 
-9. **Quality is raised by proving more, never by trusting more.** The system never guarantees an
-   implementation's correctness and never accepts a claim of it. The response to bad leaves is:
-   - formalize more mathematics in `lean-categories`;
-   - add more cited or proved assertions to the suite: results a correct implementation must
-     recover, and a wrong one fails.
+Preserve the original success condition.
+Read the original issue or task before accepting any restatement of it.
+Keep its quantifiers intact: “all,” “complete,” "full subset," “zero remaining,” and
+similar terms cannot be quietly narrowed to examples, partial coverage, known blockers,
+or whatever the PR happened to touch.
 
-   It is never to trust a leaf more. A separate engineering review may check that a leaf wires
-   into existing systems (GAP, Sage, Singular, Macaulay2, Julia, research code) rather than
-   reinventing their algorithms. Its outcome is an engineering finding, never correctness evidence,
-   and nothing on the formal side reads it.
+Nothing required may disappear silently.
+A required work family must be implemented, explicitly falsified, or validly
+reclassified with evidence that satisfies the issue’s own standard.
+Partial implementation is not completion.
+Future work is not completion.
+Count reduction is not completion.
+Resolved review threads are not completion.
+Passing checks are not completion.
+Substantial-looking work is not completion.
+“Better than before” is not completion.
 
-Consequences:
-- A leaf holds zero semantic authority. It never decides what a value is, which values are equal,
-  what holds of them, or which operations an object has.
-- A leaf is a registration (operation, input form, opaque implementation). It ships no mathematics
-  and no Lean.
-- The kernel and the language never read anything a leaf wrote to decide meaning, types,
-  available operations or acceptance.
-- The workflow runs one way: formalization, then assertions, then implementations. A leaf's
-  failure never changes the mathematics, the kernel's rules or an assertion.
-- Text anywhere that contradicts this is rewritten to state this model, not kept with a label.
+Goal substitution is the main thing to detect.
+Ask whether the submitted work solves the original problem or merely produces a narrower
+artifact: cleaner metadata, a partial subset, a better explanation, a new issue, a
+renamed scope, a local workaround, or proof that someone should investigate later.
 
-# Computational leaves of lean-cas-dsl
+Technically correct administrative artifacts can be goal substitution.
+A well-written issue, comment, audit note, scope statement, or enumeration of remaining
+work may be required, but it does not complete implementation, testing, proof, or
+downstream cleanup. If the original task requires execution, the artifact is only useful
+insofar as it drives that execution; it must not become the stopping point.
 
-> **You have no memory.** Nothing that exists only in chat survives compaction or the session.
-> Every correction, finding and decision request is committed to its owning document first
-> ([`lean-cas-dsl/AGENTS.md`](https://github.com/dzackgarza/lean-cas-dsl/blob/main/AGENTS.md),
-> "You have no memory"). The orchestrator is inside the threat model
-> (`lean-cas-dsl/specs/architecture.md`).
+Treat self-scoped remaining-work lists as a severe completion-laundering pattern.
+When an agent is asked to enumerate remaining work, the domain is the original full
+completion requirement, not the agent’s intended subset, the PR’s current shape, a
+closeability criterion, or the work left after deferral and reclassification.
+A valid enumeration subtracts only artifact-proven completed work from the original
+contract. Deferrals, routed follow-ups, owner changes, and truthful incompletion notes
+remain unresolved work unless the original task explicitly made that administrative
+routing the whole deliverable.
 
+If an agent repeats a narrowed enumeration after being corrected, treat that as a hard
+misalignment signal, not as an innocent wording issue.
+The reviewer should identify the original full requirement, the scope the agent
+substituted, and the required work hidden by that substitution.
 
-[`lean-cas-dsl/specs/architecture.md`](https://github.com/dzackgarza/lean-cas-dsl/blob/main/specs/architecture.md)
-owns the separation of concerns. A leaf is a registration: it names an operation already formal in
-`lean-categories` and an input form, and supplies an opaque implementation computing the
-operation's declared result form, in any language, arbitrarily ugly internally. It contributes
-zero mathematics and ships no Lean. A leaf lives on the leaf side of the firewall, where anything
-goes that meets the type of its contract: the system runs it and believes nothing about it. Only
-its answers cross, and they are checked against the formal side, `lean-cas-dsl`'s acceptance suite,
-never believed.
+Silent reclassification is not resolution.
+If the PR says remaining work is out-of-scope, research-owned, stub-owned, plugin-owned,
+downstream-owned, or future-owned, require evidence from the relevant source/runtime
+behavior, repo boundary, or original acceptance criteria.
+A sentence in the PR description is not enough.
 
-**A leaf implements a prescribed category interface.** Obtain its complete interface
-from the released declared API (`api/declared-ports.json` of the contract) and
-`cas_interfaces.load_interfaces`; no kernel internals
-or another provider's private representation is required.
-- **Complete category implementations.** Supply the prescribed object and morphism
-  constructor families, operations at their actual domains, immediate functor actions,
-  and complete dependent results and subsequent uses. Retain every selected structure,
-  parameter, defining map, comparison, callable field and permitted choice. Constructors
-  of categories are distinct from constructors of objects within them.
-- **Glue over mature engines.** The provider owns its control logic, private data and
-  reuse (kernel C22). It computes through mature engine routines such as GAP, Sage,
-  Singular, Macaulay2, Julia, SymPy or published research code, hand-rolls no algorithm
-  that an engine supplies, and names the engine and routine of each computation
-  (constitution LV5, LV6). A survey of engines precedes each category implementation
-  (LV7). Private composition and caching are permitted. Public composition uses the
-  released deferred/suspended service and its exact dependency and capture rules; a
-  port-by-port forwarding list does not replace the complete category implementation.
-- **Preserve the kernel boundary.** The generic kernel owns source interpretation,
-  mathematical domain and structure selection, placement, propagation, refinement,
-  cross-provider dispatch, admission, retention and scoped ownership (LV10). A provider
-  may not recreate or bypass those decisions. Deficiencies in the accepted mathematics,
-  contract or generic kernel go to their responsible owner.
-- **Engine values stay private.** Engine objects and types live inside the leaf's program; only a
-  value of the declared result form crosses the port.
+Ownership boundaries matter.
+The submitting repo must prove its own claimed behavior and do the blocker forensics
+required by its own issue.
+Do not require a receiving or downstream repo to classify another project’s internal
+uncertainty unless the original issue explicitly made that part of acceptance.
+When an external issue is created, it should be written for that receiving repo, not for
+a reader who already knows the submitting repo’s context.
 
-This guides how leaves are written, and a separate engineering review checks it. Following it earns
-no trust. Correctness is judged only by the acceptance suite (the evidence model above, 9), and the
-firewall holds even for a leaf that ignores all of it.
+## Evidence Expectations
 
-* **Authors.** Only a public-only leaf author writes leaf code here, against the released contract
-  (release `v2.0.0` from kernel readiness F, `v2.0.1` on `main` at delivery) and the catalogue that
-  it publishes (constitution LV13, LV14). It is blind to the tests and never edits the contract,
-  the kernel or `lean-categories`. The documents of this repository contain only the inputs that
-  such an author may receive (LV14). The orchestrator delegates leaves and never writes, ports or
-  polishes one (`lean-cas-dsl/specs/architecture.md`, "Authors: one role per agent"). The leaves
-  present in this repository were written or kept alive by the orchestrator (`b818e4c`). A
-  public-only leaf author moves them into the category implementations of the computational
-  milestones; the survey of each category decides whether a routine stays (LV12).
-* **All leaves live here.** Probe leaves included; none belongs in `lean-cas-dsl`.
-* **Dependencies.** This package depends on the SDK of the released leaf contract
-  (`lean-cas-dsl-leaf-contracts`) and on the engines of the research container (constitution
-  LV16, LV21). Every operation a leaf names is a row of `lean-categories`' catalogue, as the
-  released contract publishes it.
-* **Nothing a leaf says is believed.** A leaf supplies no proof, denotation, identification of
-  values, presentation or observation proof, decision evidence, status, trust level, certificate
-  or checker, and nothing reads such a thing from it. A computation that can be carried out
-  entirely in Lean is not a leaf's: `lean-categories` proves it or the kernel discharges it.
-* **Blind to the tests.** The permanent acceptance suite lives in `lean-cas-dsl`, which depends on
-  this package; nothing here depends on it, runs it or can reach it. A leaf is never written or
-  changed to make a test pass: `lean-cas-dsl`'s harness measures the installed leaves and reports
-  gaps. The tests of this repository drive a real backend process through the contract's protocol
-  peer and check protocol and data-retention behaviour (constitution LV17, LV18); they are
-  evidence of nothing about correctness.
-* **Missing mathematics goes upstream.** If a leaf seems to need a new category, method,
-  placement, forwarding or edge, the defect is upstream. It is a `lean-categories` task, named in
-  the task list before its consumer with its issue, and a formalization author does it; the leaf
-  author of the consumer does not formalize what its code implements (constitution LV14). Only
-  after it is merged to `main` is an implementation registered here.
-* **Litmus role.** These leaves also probe the kernel: change one when that exposes a deficiency
-  of the contract, the kernel or `lean-categories`, and name the deficiency in the commit.
-* **Programs.** A leaf's implementation is a backend program in this repository, in whatever
-  language its engine needs; it speaks the contract's port protocol (`cas_port`, put on its
-  `PYTHONPATH` by the kernel). The one engine installation is the research container's: SageMath
-  under `/sage/.venv/bin/python3`, with GAP through `libgap` (constitution LV21). A backend does
-  not search for another interpreter; the variables `CAS_GAP_PYTHON`, `CAS_SAGE_PYTHON` and the
-  workspace `.venv/bin/python` search of `backends/engine_python.py` are removed by task T044 of
-  `specs/001-category-implementations/`.
+Review tests as evidence, not as decoration.
+Valid tests exercise the real production path or semantic requirement.
+Be skeptical of helper-only tests, tautologies, assertions of the implementation’s own
+output, bypasses around the runtime/plugin/stub path, example-only coverage where the
+issue required full coverage, weakened assertions, and missing invalid-nearby cases
+where the fix could overgeneralize.
 
-Delivery consumes the latest-main dependencies and records their revisions (kernel delivery-inputs
-policy). The commit and push tiers compile nothing.
+For plugin work, the evidence should usually distinguish valid generic behavior from
+invalid nearby ordinary Python and should not hard-code a downstream consumer.
+For stubs work, the evidence should be source-backed: the upstream surface exists, the
+stub matches public behavior, no fake API is added, no Any/object opacity escape is
+introduced, and inherited-method inflation is not used unless source exposes that
+surface.
+
+Watch for code-level laundering: hard-coded consumer names, support for local research
+abstractions as if they were external API, fake stubs, broad Any/object escapes, line
+suppressions, diagnostic filtering, deletion of required data, broad type widening, and
+any move that makes checks pass by weakening the problem instead of solving it.
+
+## When Acting on Review Feedback
+
+A positive disposition requires a commit.
+
+Do not resolve an accepted review comment until the code/proof remediation is committed and the reply cites the commit.
+
+Never reply “accepted,” “aligned,” “fixed,” “addressed,” or “will address” to a review thread unless the remediation is already committed. A thread cannot be resolved on intent or future work.
+
+Rejected and modified feedback must be collected in a top-level PR comment titled `Review feedback disposition ledger` so resolved threads do not hide the audit trail.
+
+Review comments are not implementation specs. The worker must translate accepted feedback into first-principles remediation requirements before assigning implementation.
+
+For each comment:
+- Identify the concern.
+- Identify the proposed fix.
+- Decide whether the concern is true under global + repo policy.
+- Decide whether the proposed fix preserves those policies.
+- If the concern is true but the fix is wrong, apply a policy-compatible remediation.
+
+## Writing the Review
+
+Write nuanced feedback for an intelligent reader.
+Do not force a machine-readable template, a mandatory table, or a simplistic pass/fail
+label when prose communicates the situation better.
+Do make the completion judgment clear: whether the original task can be considered
+complete, what evidence supports that judgment, and which unresolved requirements block
+completion if any remain.
+
+Do not foreground effort, progress, good intentions, volume of work, or “substantial”
+partial implementation when required work remains.
+Mention completed pieces only when they are necessary to identify the exact remaining
+blockers or to prevent redoing already-correct work.
+Do not compare incomplete work to “no work done” or “completely fake work”; compare it
+to the expected standard: the task done correctly, completely, and provably.
+
+When required work remains, lead with the incompleteness and the concrete blockers.
+Do not make the reader excavate the missing work from beneath praise, context-setting,
+or a narrative of what did get done.
+
+Nuance belongs in the evidence and blocker analysis, not in softening the completion
+standard. The review should make it easy to finish the work, not easy to feel satisfied
+with less than the original contract required.

@@ -1,12 +1,6 @@
-"""Start a backend program under the Python interpreter that has its engine.
+"""Load the research container's SageMath engine (`/sage/.venv/bin/python3`)."""
 
-The kernel starts a backend with the fixed command of its manifest entry (`python3`), which cannot
-name an interpreter by environment. When the engine is not importable there, the program re-runs
-itself under `$<env_var>`, or else the first `.venv/bin/python` found in the working directory or
-one of its parents (the running workspace: the kernel runs a backend in the manifest's directory,
-`<workspace>/.lake/packages/cas_leaves`). If no interpreter has the engine, the program exits
-before announcing itself, and the kernel reports the backend unavailable.
-"""
+from __future__ import annotations
 
 import importlib
 import os
@@ -14,44 +8,21 @@ import sys
 from pathlib import Path
 from types import ModuleType
 
+_CONTAINER_PYTHON = Path("/sage/.venv/bin/python3")
 _REEXEC = "CAS_LEAVES_ENGINE_REEXEC"
 
 
-def _candidates(env_var):
-    configured = os.environ.get(env_var)
-    if configured:
-        yield Path(configured)
-    cwd = Path.cwd()
-    for directory in (cwd, *cwd.parents):
-        yield directory / ".venv" / "bin" / "python"
-
-
-def require_engine(env_var: str, modules: tuple[str, ...]) -> ModuleType:
-    """Load a supported engine entrypoint, or re-run under its interpreter.
-
-    Modular passagemath and full Sage publish different aggregate entrypoints.
-    A missing entrypoint permits trying the other supported package layout;
-    a missing dependency inside an installed entrypoint remains an error.
-    """
-    assert modules, "an engine requires its supported entrypoints"
+def require_engine(_env_var: str = "", modules: tuple[str, ...] = ("sage.all",)) -> ModuleType:
     for module in modules:
         try:
             return importlib.import_module(module)
         except ModuleNotFoundError as exc:
             if exc.name not in {module, module.split(".")[0]}:
                 raise
-    module = " or ".join(modules)
-    missing = "no supported entrypoint is installed"
-    if os.environ.get(_REEXEC):
-        sys.stderr.write("%s: %s is not importable under %s: %s\n"
-                         % (sys.argv[0], module, sys.executable, missing))
-        sys.exit(1)
-    for python in _candidates(env_var):
-        if python.is_file() and os.access(python, os.X_OK):
-            script = os.path.abspath(sys.argv[0])
-            env = dict(os.environ, **{_REEXEC: "1"})
-            os.execve(str(python), [str(python), script, *sys.argv[1:]], env)
-    sys.stderr.write("%s: %s is not importable, and no interpreter was found ($%s, or "
-                     ".venv/bin/python of the workspace): %s\n"
-                     % (sys.argv[0], module, env_var, missing))
+    if not os.environ.get(_REEXEC) and _CONTAINER_PYTHON.is_file() and os.access(_CONTAINER_PYTHON, os.X_OK):
+        script = os.path.abspath(sys.argv[0])
+        env = dict(os.environ, **{_REEXEC: "1"})
+        os.execve(str(_CONTAINER_PYTHON), [str(_CONTAINER_PYTHON), script, *sys.argv[1:]], env)
+    joined = " or ".join(modules)
+    sys.stderr.write(f"{sys.argv[0]}: {joined} is not importable under {sys.executable}\n")
     sys.exit(1)
