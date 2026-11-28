@@ -39,7 +39,7 @@ review comments, and produced artifacts.
 
 Preserve the original success condition.
 Read the original issue or task before accepting any restatement of it.
-Keep its quantifiers intact: “all,” “complete,” "full subset," “zero remaining,” and
+Keep its quantifiers intact: “all,” “complete,” "full subset," “zero remaining," and
 similar terms cannot be quietly narrowed to examples, partial coverage, known blockers,
 or whatever the PR happened to touch.
 
